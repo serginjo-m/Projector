@@ -36,7 +36,7 @@
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
-		CFB5E205244883F400E304EC /* DetailViewValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailViewValues.swift */; };
+		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
 		CFBB7C0F24574F4D00B14349 /* NewStepCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB7C0E24574F4D00B14349 /* NewStepCategory.swift */; };
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
@@ -78,7 +78,7 @@
 		CFA5878A242883A6006367AE /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
-		CFB5E204244883F400E304EC /* DetailViewValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewValues.swift; sourceTree = "<group>"; };
+		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
 		CFBB7C0E24574F4D00B14349 /* NewStepCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepCategory.swift; sourceTree = "<group>"; };
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 			children = (
 				CFF267D523DC8E5E003A9236 /* MainViewProgress.swift */,
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
-				CFB5E204244883F400E304EC /* DetailViewValues.swift */,
+				CFB5E204244883F400E304EC /* DetailProjectData.swift */,
 				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
 				CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
@@ -345,7 +345,7 @@
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */,
-				CFB5E205244883F400E304EC /* DetailViewValues.swift in Sources */,
+				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CF2C1296237766A700F3132A /* MainViewCell.swift in Sources */,
 				CFBB7C0F24574F4D00B14349 /* NewStepCategory.swift in Sources */,

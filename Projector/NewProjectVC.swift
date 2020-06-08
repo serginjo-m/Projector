@@ -24,6 +24,15 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     // need for indicating a selected image inside PHAsset array
     var selectedImageURLString: String?
     
+    //define current date
+    let createdDate: String = {
+        let calendar = Calendar(identifier: .gregorian)
+        let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
+        guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
+        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
+        return myDate
+    }()
+    
     @IBOutlet weak var selectProjectCategory: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var saveButton: UIButton!
@@ -35,8 +44,6 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var distanceLabel: UILabel!
 
-    var projectList: ProjectList?
-  
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -110,18 +117,20 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         let projectDescription = descriptionTextView.text ?? ""
         let totalProjectCost = Int(round(priceSlider.value))
         let distanceToGo = Int(round(distanceSlider.value))
-
-        // Set the projectList to be passed to ProjectViewController after the unwind segue.
-        projectList = ProjectList()
         
-        projectList?.distance = distanceToGo
-        projectList?.totalCost = totalProjectCost
-        projectList?.name = name
-        projectList?.category = category
-        projectList?.comment = projectDescription
-        projectList?.selectedImagePathUrl = selectedImageURLString
+    
+        //create template of project
+        let projectList = ProjectList()
         
-        ProjectListRepository.instance.createProjectList(list: projectList!)
+        projectList.distance = distanceToGo
+        projectList.totalCost = totalProjectCost
+        projectList.name = name
+        projectList.category = category
+        projectList.comment = projectDescription
+        projectList.selectedImagePathUrl = selectedImageURLString
+        projectList.date = createdDate
+        
+        ProjectListRepository.instance.createProjectList(list: projectList)
     }
     
     

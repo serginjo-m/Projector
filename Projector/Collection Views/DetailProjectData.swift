@@ -21,7 +21,12 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
     private let cellId = "cellId"
     
     //Database
-    var project: ProjectList?
+    var project = ProjectList() {
+        didSet{
+            //define values of a project
+            defineProjectsValues()
+        }
+    }
     
     //contain projects values
     var projectArray = [String]()
@@ -122,6 +127,15 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
         
         return cell
     }
+    
+    //adding values to a project
+    private func defineProjectsValues(){
+        //append each item to array
+        ["\(project.totalCost)$", "\(project.budget)$", "\(project.distance)km", "\(project.spending)$"].forEach {
+            projectArray.append($0)
+        }
+    }
+    
 }
 
 class DataCell: UICollectionViewCell{

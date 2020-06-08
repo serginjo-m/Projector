@@ -377,10 +377,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         var selectedImageFromPicker: UIImage?
         
-        
-       
-        
-        
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage{
             //print("editedImage: \(editedImage)")
             selectedImageFromPicker = editedImage
@@ -400,12 +396,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
                 }
             })
         }
-        
-        
-        
-        
-        
-        
         
         func assignUrl(url: String){
             selectedPhotoURLStringArray.append(url)

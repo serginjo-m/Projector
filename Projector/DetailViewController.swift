@@ -124,16 +124,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //I can write func for this string appending
-        //this is temporary solution, need to refactor this code..........
-        myProjectData.projectArray.append("\(projectDetail!.totalCost)$")
-        myProjectData.projectArray.append("\(projectDetail!.budget)$")
-        myProjectData.projectArray.append("\(projectDetail!.distance)km")
-        myProjectData.projectArray.append("\(projectDetail!.spending)$")
-        
         //Passing selected project to data collection view
-        myProjectData.project = projectDetail
-        
+        if let project = projectDetail{
+            myProjectData.project = project
+        }
         //assign description of the project
         projectDetailDescriptionLabel.text = projectDetail?.comment
         
@@ -179,7 +173,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //create dictionary for deleting purposes
         createStepIdDictionary()
         
+        if let date = projectDetail?.date {
+            dateLabel.text = date
+        }
+        
     }
+    
     
     //perforn all positioning configurations
     private func setupLayout(){
