@@ -19,6 +19,7 @@ class ProjectList: Object {
     @objc dynamic var distance = 1
     @objc dynamic var selectedImagePathUrl: String?
     @objc dynamic var comment = ""
+    @objc dynamic var date = "07/06/2020"
     @objc dynamic var progress: Float {
         //full progress of progressView
         let achievedProject: Float = 1.0

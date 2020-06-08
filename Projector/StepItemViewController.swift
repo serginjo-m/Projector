@@ -18,10 +18,6 @@ class StepItemViewController: UIViewController {
     var stepVC: StepViewController?
     
     //cancel button
-    let closeStackView: UIStackView = {
-        let stack = UIStackView()
-        return stack
-    }()
     let closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "close"), for: .normal)
@@ -37,10 +33,6 @@ class StepItemViewController: UIViewController {
         return label
     }()
     //save button
-    let saveStackView: UIStackView = {
-        let stack = UIStackView()
-        return stack
-    }()
     let saveButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "save"), for: .normal)
@@ -61,7 +53,7 @@ class StepItemViewController: UIViewController {
         title.text = "Something Long"
         title.textAlignment = NSTextAlignment.center
         title.textColor = UIColor.darkGray
-        title.font = UIFont.systemFont(ofSize: 18)
+        title.font = UIFont.systemFont(ofSize: 15)
         return title
     }()
     
@@ -74,7 +66,6 @@ class StepItemViewController: UIViewController {
     }()
     let noteTextView: UITextView = {
         let view = UITextView()
-//        view.backgroundColor = UIColor.yellow
         view.layer.borderColor = UIColor(white: 0.85, alpha: 1).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 4
@@ -86,33 +77,34 @@ class StepItemViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        
-        view.addSubview(titleLabel)
-        view.addSubview(closeStackView)
-        closeStackView.addSubview(closeButton)
-        closeStackView.addSubview(closeButtonTitle)
-        view.addSubview(saveStackView)
-        saveStackView.addSubview(saveButton)
-        saveStackView.addSubview(saveButtonTitle)
-        view.addSubview(noteTitle)
-        view.addSubview(noteTextView)
-        
-        titleLabel.frame = CGRect(x:(view.frame.width - 250) / 2, y: 35, width: 250, height: 30)
-        //close button
-        closeStackView.frame = CGRect(x: 15, y: 35, width: 30, height: 39)
-        closeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 24)
-        closeButtonTitle.frame = CGRect(x:0, y: 24, width: 30, height: 15)
-        //26x20
-        saveStackView.frame = CGRect(x: view.frame.width - 45, y: 35, width: 30, height: 39)
-        saveButton.frame = CGRect(x: 0, y: 0, width: 30, height: 24)
-        saveButtonTitle.frame = CGRect(x:0, y: 24, width: 30, height: 15)
-        
-        noteTitle.frame = CGRect(x: 15, y: 100, width: 170, height: 30)
-        noteTextView.frame = CGRect(x: 15, y: 130, width: view.frame.width - 30, height: 100)
+
+        //perform adding & positioning of views
+        setupLayout()
         
         realm = try! Realm()//create an instance of object
     }
     
+    private func setupLayout(){
+        //calls closure for each item
+        [titleLabel, closeButton, closeButtonTitle, saveButton, saveButtonTitle, noteTitle, noteTextView].forEach {
+            view.addSubview($0)
+        }
+        
+        noteTitle.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 80, left: 16, bottom: 0, right: 0), size: .init(width: 170, height: 30))
+        //note text view
+        noteTextView.anchor(top: noteTitle.bottomAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: nil, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 7, left: 16, bottom: 0, right: 16))
+        noteTextView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        saveButton.anchor(top: nil, leading: nil, bottom: titleLabel.bottomAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 4, right: 16), size: .init(width: 30, height: 24))
+        saveButtonTitle.anchor(top: saveButton.bottomAnchor, leading: nil, bottom: nil, trailing: saveButton.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 30, height: 15))
+        
+        closeButton.anchor(top: nil, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: titleLabel.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 16, bottom: 4, right: 0), size: .init(width: 30, height: 24))
+        closeButtonTitle.anchor(top: closeButton.bottomAnchor, leading: closeButton.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 30, height: 15))
+
+        //title
+        titleLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: .init(width: 250, height: 30))
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
     
     //Dismiss
     @objc func backAction( button: UIButton){
@@ -131,14 +123,43 @@ class StepItemViewController: UIViewController {
         
     }
     
-    /*
-    // MARK: - Navigation
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+//this extension provides constraints
+extension UIView {
+    //fill superview
+    func fillSuperview(){
+        //attantion to call :)
+        anchor(top: superview?.topAnchor, leading: superview?.leadingAnchor, bottom: superview?.bottomAnchor, trailing: superview?.trailingAnchor)
     }
-    */
-
+    //match size of another view
+    func anchorSize( to view: UIView){
+        widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+    }
+    //do basic constraint configurations
+    func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero){
+        //cancel autoresizing :)
+        translatesAutoresizingMaskIntoConstraints = false
+        //constraints configuration
+        if let top = top{
+            topAnchor.constraint(equalTo: top, constant: padding.top).isActive = true
+        }
+        if let leading = leading{
+            leadingAnchor.constraint(equalTo: leading, constant: padding.left).isActive = true
+        }
+        if let bottom = bottom{
+            bottomAnchor.constraint(equalTo: bottom, constant: -padding.bottom).isActive = true//has "-"
+        }
+        if let trailing = trailing{
+            trailingAnchor.constraint(equalTo: trailing, constant: -padding.right).isActive = true//has "-"
+        }
+        //define size
+        if size.width != 0{
+            widthAnchor.constraint(equalToConstant: size.width).isActive = true
+        }
+        if size.height != 0{
+            heightAnchor.constraint(equalToConstant: size.height).isActive = true
+        }
+    }
 }

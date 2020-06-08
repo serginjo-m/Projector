@@ -16,8 +16,8 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     //MARK: Properties
     var realm: Realm!//create a var
-    var newStepCategory = NewStepCategory(frame: CGRect(x: 15, y: 175, width: 345, height: 90))
-    var newStepImages = NewStepImages(frame: CGRect(x: 15, y: 306, width: 345, height: 148))
+    var newStepCategory = NewStepCategory()
+    var newStepImages = NewStepImages()
     
     // need for indicating a selected images inside PHAsset array
     var selectedPhotoURLStringArray = [String]()
@@ -26,12 +26,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     let stepNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter Your Step Name Here"
-        
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.autocorrectionType = UITextAutocorrectionType.yes
         textField.keyboardType = .default
         textField.returnKeyType = UIReturnKeyType.done
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     //Save Button
@@ -42,6 +42,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         button.setTitleColor(.blue , for: .normal)
         button.setTitleColor(UIColor(white: 0.75, alpha: 1), for: .disabled)
         button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     //Cancel button
@@ -50,6 +51,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         let image = UIImage(named: "backArrow")
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(backAction(button:)), for: .touchDown)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     //Date Label
@@ -59,6 +61,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.textAlignment = NSTextAlignment.center
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     //Titles
@@ -67,6 +70,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.text = "Step Name"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let categoryTitle: UILabel = {
@@ -74,6 +78,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.text = "Select Category"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let photoTitle: UILabel = {
@@ -81,20 +86,23 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.text = "Photo"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let priceTitle: UILabel = {
         let label = UILabel()
-        label.text = "Price"
+        label.text = "How Much Can It Cost?"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let stepPriceSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(priceSliderValueChanged(_:)), for: .valueChanged)
-        slider.maximumValue = 1000
+        slider.maximumValue = 99000
         slider.value = 1
+        slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
     let stepPriceValueLabel: UILabel = {
@@ -102,20 +110,23 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.text = "300$"
         label.textColor = UIColor.darkGray
         label.font = UIFont.systemFont(ofSize: 17)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let distanceTitle: UILabel = {
         let label = UILabel()
-        label.text = "Distance"
+        label.text = "How Far To Go?"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let stepDistanceSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(distanceSliderValueChanged(_:)), for: .valueChanged)
-        slider.maximumValue = 1000
+        slider.maximumValue = 9000
         slider.value = 1
+        slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
     let stepDistanceValueLabel: UILabel = {
@@ -123,6 +134,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.text = "300km"
         label.textColor = UIColor.darkGray
         label.font = UIFont.systemFont(ofSize: 17)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -139,39 +151,13 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //add all subviews
+        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
+            view.addSubview($0)
+        }
         
-        view.addSubview(stepNameTextField)
-        view.addSubview(stepSaveButton)
-        view.addSubview(cancelButton)
-        view.addSubview(titleLabel)
-        view.addSubview(nameTitle)
-        view.addSubview(categoryTitle)
-        view.addSubview(newStepCategory)
-        view.addSubview(photoTitle)
-        view.addSubview(newStepImages)
-        //price slider section
-        view.addSubview(priceTitle)
-        view.addSubview(stepPriceSlider)
-        view.addSubview(stepPriceValueLabel)
-        //distance slider section
-        view.addSubview(distanceTitle)
-        view.addSubview(stepDistanceSlider)
-        view.addSubview(stepDistanceValueLabel)
-    
-        stepNameTextField.frame = CGRect(x: 15, y: 106, width: 345, height: 30)
-        stepSaveButton.frame = CGRect(x: 328, y: 26, width: 32, height: 29)
-        cancelButton.frame = CGRect(x: 15, y: 30, width: 36, height: 22)
-        titleLabel.frame = CGRect(x: 112, y: 30, width: 150, height: 22)
-        nameTitle.frame = CGRect(x: 15, y: 75, width: 80, height: 30)
-        categoryTitle.frame = CGRect(x: 15, y: 144, width: 110, height: 30)
-        photoTitle.frame = CGRect(x: 15, y: 271, width: 110, height: 30)
-        priceTitle.frame = CGRect(x: 15, y: 467, width: 110, height: 30)
-        stepPriceSlider.frame = CGRect(x: 15, y: 500, width: 243, height: 30)
-        stepPriceValueLabel.frame = CGRect(x: 270, y: 500, width: 91, height: 30)
-        //distance
-        distanceTitle.frame = CGRect(x: 15, y: 547, width: 110, height: 30)
-        stepDistanceSlider.frame = CGRect(x: 15, y: 580, width: 243, height: 30)
-        stepDistanceValueLabel.frame = CGRect(x: 270, y: 580, width: 91, height: 30)
+        //constraints configuration
+        setupLayout()
         
         // Handle the text field's user input through delegate callback.
         stepNameTextField.delegate = self
@@ -191,6 +177,86 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         //show an actual value of slider
         stepPriceValueLabel.text = "\(Int(round(stepPriceSlider.value))) $"
         stepDistanceValueLabel.text = "\(Int(round(stepDistanceSlider.value))) km"
+    }
+    
+    private func setupLayout(){
+        newStepImages.translatesAutoresizingMaskIntoConstraints = false
+        newStepCategory.translatesAutoresizingMaskIntoConstraints = false
+        
+        stepDistanceValueLabel.centerYAnchor.constraint(equalTo: stepDistanceSlider.centerYAnchor).isActive = true
+        stepDistanceValueLabel.leftAnchor.constraint(equalTo: stepDistanceSlider.rightAnchor, constant:  28).isActive = true
+        stepDistanceValueLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepDistanceValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        stepDistanceSlider.topAnchor.constraint(equalTo: distanceTitle.bottomAnchor, constant:  6).isActive = true
+        stepDistanceSlider.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepDistanceSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -120).isActive = true
+        stepDistanceSlider.heightAnchor.constraint(equalToConstant: 29).isActive = true
+        
+        distanceTitle.topAnchor.constraint(equalTo: stepPriceSlider.bottomAnchor, constant:  12).isActive = true
+        distanceTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        distanceTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        distanceTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        stepPriceValueLabel.centerYAnchor.constraint(equalTo: stepPriceSlider.centerYAnchor).isActive = true
+        stepPriceValueLabel.leftAnchor.constraint(equalTo: stepPriceSlider.rightAnchor, constant:  28).isActive = true
+        stepPriceValueLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepPriceValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        stepPriceSlider.topAnchor.constraint(equalTo: priceTitle.bottomAnchor, constant:  6).isActive = true
+        stepPriceSlider.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepPriceSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -120).isActive = true
+        stepPriceSlider.heightAnchor.constraint(equalToConstant: 29).isActive = true
+
+        priceTitle.topAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant:  12).isActive = true
+        priceTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        priceTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        priceTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        newStepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  4).isActive = true
+        newStepImages.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        newStepImages.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        newStepImages.heightAnchor.constraint(equalToConstant: 148).isActive = true
+        
+        photoTitle.topAnchor.constraint(equalTo: newStepCategory.bottomAnchor, constant:  17).isActive = true
+        photoTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        photoTitle.widthAnchor.constraint(equalToConstant: 110).isActive = true
+        photoTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        categoryTitle.topAnchor.constraint(equalTo: stepNameTextField.bottomAnchor, constant:  17).isActive = true
+        categoryTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        categoryTitle.widthAnchor.constraint(equalToConstant: 110).isActive = true
+        categoryTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        newStepCategory.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant:  4).isActive = true
+        newStepCategory.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        newStepCategory.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        newStepCategory.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        
+        nameTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant:  40).isActive = true
+        nameTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        nameTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        nameTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        stepNameTextField.topAnchor.constraint(equalTo: nameTitle.bottomAnchor, constant:  0).isActive = true
+        stepNameTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepNameTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepNameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+        cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  26).isActive = true
+        cancelButton.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        cancelButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        stepSaveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+        stepSaveButton.leftAnchor.constraint(equalTo: view.rightAnchor, constant:  -58).isActive = true
+        stepSaveButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        stepSaveButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
     }
     
     // MARK: - Navigation
@@ -234,8 +300,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         newStep.category = stepCategory
         newStep.cost = Int(round(stepPriceSlider.value))
         newStep.distance = Int(round(stepDistanceSlider.value))
-        
-        
         
         //add selected images url to step model
         for item in selectedPhotoURLStringArray{
@@ -313,6 +377,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         
         var selectedImageFromPicker: UIImage?
         
+        
+       
+        
+        
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage{
             //print("editedImage: \(editedImage)")
             selectedImageFromPicker = editedImage
@@ -332,6 +400,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
                 }
             })
         }
+        
+        
+        
+        
+        
+        
         
         func assignUrl(url: String){
             selectedPhotoURLStringArray.append(url)

@@ -68,32 +68,40 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //perform all configuration separated by categories
+        performPageConfigurations()
+    }
+    
+    private func performPageConfigurations(){
+        //add items to a view
+        [cancelButton, stepTableView, createdDateLabel, addItemButton, myStepImagesCV, myStackView].forEach {
+            view.addSubview($0)
+        }
         
-        stepTableView.delegate = self
-        stepTableView.dataSource = self
-        stepTableView.register(StepTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        stepTableView.separatorStyle = .none
-        
-        view.addSubview(cancelButton)
-        view.addSubview(stepTableView)
-        view.addSubview(createdDateLabel)
-        view.addSubview(addItemButton)
-        view.addSubview(myStepImagesCV)
-        view.addSubview(myStackView)
-        
-        stepTableView.frame = CGRect(x: 16, y: 334, width: 345, height: 400)
         //setup constraints
         setupLayout()
         //assign values to stack view labels
         configureText()
-        
+        //configure image collection view
+        configureImageCV()
+        //configure stepTableView
+        configureStepTableView()
+    }
+    
+    private func configureStepTableView(){
+        stepTableView.delegate = self
+        stepTableView.dataSource = self
+        stepTableView.register(StepTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        stepTableView.separatorStyle = .none
+    }
+    
+    private func configureImageCV(){
         //append images to collections view array
         if let imageArray = projectStep?.selectedPhotosArray{
             for imageURL in imageArray {
                 myStepImagesCV.photosArray.append(retreaveImageForStep(myUrl: imageURL))
             }
         }
-        
         //define step inside class instance
         myStepImagesCV.step = projectStep
     }
@@ -106,11 +114,18 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //perforn all positioning configurations
     private func setupLayout(){
+        //stepTableView.frame = CGRect(x: 16, y: 334, width: 345, height: 400)
         myStackView.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         createdDateLabel.translatesAutoresizingMaskIntoConstraints = false
         addItemButton.translatesAutoresizingMaskIntoConstraints = false
         myStepImagesCV.translatesAutoresizingMaskIntoConstraints = false
+        stepTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        stepTableView.topAnchor.constraint(equalTo: myStackView.bottomAnchor, constant:  23).isActive = true
+        stepTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         
         myStepImagesCV.topAnchor.constraint(equalTo: createdDateLabel.bottomAnchor, constant:  18).isActive = true
         myStepImagesCV.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
@@ -139,7 +154,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    //return UIImage by URL --- 2 instance of this func ---
+    //return UIImage by URL
     func retreaveImageForStep(myUrl: String) -> UIImage{
         var stepImage: UIImage = UIImage(named: "defaultImage")!
         let url = URL(string: myUrl)

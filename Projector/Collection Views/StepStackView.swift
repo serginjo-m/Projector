@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class StepStackView: UIStackView {
-    
+    //template
     var step: ProjectStep?{
         didSet{
             if let name = step?.name{
@@ -130,14 +130,10 @@ class StepStackView: UIStackView {
     }
     
     func setupStackView(){
-        //
-        addSubview(leftColorBar)
-        addSubview(stepNameLabel)
-        addSubview(categoryLabel)
-        addSubview(valueLabel)
-        addSubview(descriptionLabel)
-        addSubview(doneButton)
-        addSubview(editButton)
+        //adds all listed items to the view
+        [leftColorBar, stepNameLabel, categoryLabel, valueLabel, descriptionLabel, doneButton, editButton].forEach {
+            addSubview($0)
+        }
         
         leftColorBar.topAnchor.constraint(equalTo: self.topAnchor, constant:  0).isActive = true
         leftColorBar.leftAnchor.constraint(equalTo: self.leftAnchor, constant:  0).isActive = true

@@ -51,9 +51,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //setup constraints
         setupLayout()
-        
-        
-        
+    
     }
     
     //perforn all positioning configurations
@@ -98,7 +96,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //Fetches the appropriate project for the data source layout.
         let project = proJects[indexPath.section]//let list = lists[indexPath.row] , Section instead of Row
-        
+        //get image for project
         if let validUrl = project.selectedImagePathUrl {
             cell.pictureView.image = retreaveImageForProject(myUrl: validUrl)
         }else{
@@ -113,8 +111,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.categoryLabel.text = project.category
         cell.dateLabel.text = "\(project.distance) km"
         cell.descriptionLabel.text = project.comment
-        //cell.pictureView.image = project.image
-        
+
         return cell
         
     }

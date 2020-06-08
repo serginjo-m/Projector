@@ -101,7 +101,7 @@ class StepAddItem: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
         return 0
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("selected")
+        
         UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 3.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.blackView.alpha = 0
             
