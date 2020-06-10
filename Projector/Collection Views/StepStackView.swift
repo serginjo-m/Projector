@@ -13,6 +13,7 @@ class StepStackView: UIStackView {
     //template
     var step: ProjectStep?{
         didSet{
+            //name height needs to be dynamic
             if let name = step?.name{
                 stepNameLabel.text = name
                 //this logic makes stepnamelabel size correct

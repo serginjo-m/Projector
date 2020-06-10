@@ -40,7 +40,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addButton.layer.cornerRadius = 33
+        
         
         RestartedTableView.delegate = self
         RestartedTableView.dataSource = self
@@ -67,8 +67,9 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
         addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        addButton.widthAnchor.constraint(equalToConstant: 67).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: 67).isActive = true
+        addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        addButton.layer.cornerRadius = 30
     }
     
     //MARK: Table View Section

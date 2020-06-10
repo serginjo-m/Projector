@@ -63,8 +63,19 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         PIV.image = UIImage(named: "workspace")
         return PIV
     }()
+    let editButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Edit", for: .normal)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setBackgroundImage(UIImage(named: "editButton"), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentHorizontalAlignment = .right
+        return button
+    }()
 
     //Outlets
+    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var projectName: UILabel!
     @IBOutlet weak var projectNameTF: UITextField!
@@ -155,6 +166,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         view.addSubview(myProjectData)
         view.addSubview(stepCategoriesFilter)
         view.addSubview(collectionStackView)
+        view.addSubview(editButton)
+        view.bringSubviewToFront(addButton)
         
         //setup constraints
         setupLayout()
@@ -187,8 +200,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         myProjectData.translatesAutoresizingMaskIntoConstraints = false
         stepCategoriesFilter.translatesAutoresizingMaskIntoConstraints = false
         collectionStackView.translatesAutoresizingMaskIntoConstraints = false
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        editButton.translatesAutoresizingMaskIntoConstraints = false
         
-        //projects main image
+        //edit project button
+        editButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+        editButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -26).isActive = true
+        editButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        editButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        //steps CV
         collectionStackView.topAnchor.constraint(equalTo: stepCategoriesFilter.bottomAnchor, constant:  18).isActive = true
         collectionStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         collectionStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
@@ -208,6 +228,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         stepCategoriesFilter.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         stepCategoriesFilter.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         stepCategoriesFilter.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        //add step button
+        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
+        addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        addButton.layer.cornerRadius = 30
     }
     
     //MARK: Collection View Section
@@ -367,6 +393,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
          */
         createStepIdDictionary()
     }
+    
     //Dictionary that holds position of step in array based on step id
     func createStepIdDictionary(){
         if let stArr = projectDetail?.projectStep{
