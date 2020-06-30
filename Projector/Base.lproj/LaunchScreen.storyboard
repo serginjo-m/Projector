@@ -18,11 +18,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If You Realy Love Ducati - Do Your Work" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MfH-Dg-BnD">
-                                <rect key="frame" x="138.5" y="270" width="98" height="100"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't take everything, but only things that you need" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MfH-Dg-BnD">
+                                <rect key="frame" x="138.5" y="270" width="98" height="101.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="98" id="X2m-oH-QTw"/>
-                                    <constraint firstAttribute="height" constant="100" id="Zzi-kg-8cJ"/>
+                                    <constraint firstAttribute="width" constant="98" id="lVl-Oy-Us3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>

@@ -38,6 +38,15 @@ class ProjectListRepository {
         })
     }
     
+   /*
+    //update - project
+    func updateProjectList(list: ProjectList){
+        try! realm.write ({
+            realm.add(list, update: true)
+        })
+    }
+    */
+    
     func updateProjectName(name: String, list: ProjectList){
         try! realm.write {
             list.name = name

@@ -200,7 +200,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func backAction( button: UIButton){
         dismiss(animated: true, completion: nil)
     }
-    
+    //complete button
     @objc func changeSelectedValue(button: UIButton) {
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected

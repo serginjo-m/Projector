@@ -19,12 +19,11 @@ protocol DetailViewControllerDelegate: class {
 }
 
 class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    
     //If there is no retaining cycles print statment should run!
     deinit {
         print("OS Reclaiming memory for Detail View Controller")
     }
-
-    //MARK: Properties
     
     //most for reload data
     weak var delegate: DetailViewControllerDelegate?
@@ -35,17 +34,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //Project Steps Filter by Categories
     var stepCategoriesFilter = StepCategoriesCollectionView()
     
-    //Instance of Project Selected by User
+    //Instance of Selected Project by User
     var projectDetail: ProjectList? {
         get{
             //Retrieve a single object with unique identifier (projectListIdentifier)
             return ProjectListRepository.instance.getProjectList(id: projectListIdentifier!)
         }
     }
-    
     //Identifier of selected project
     var projectListIdentifier: String?
     //an array of steps
+    
     var stepsArray = [ProjectStep](){
         //great way to see how your var is changing in process
         didSet{
@@ -70,6 +69,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         button.setBackgroundImage(UIImage(named: "editButton"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.adjustsImageWhenHighlighted = false
+        button.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
         button.contentHorizontalAlignment = .right
         return button
     }()
@@ -84,11 +85,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //identifier for collection view
     var cellId = "cellID"
     
-    
-    
     //find steps array position in data base by id for filter
     var stepsIdDictionary = [String: Int]()
-    
     
     //here creates a horizontal collectionView
     let stepsCollectionView: UICollectionView = {
@@ -135,21 +133,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Passing selected project to data collection view
-        if let project = projectDetail{
-            myProjectData.project = project
-        }
-        //assign description of the project
-        projectDetailDescriptionLabel.text = projectDetail?.comment
-        
-        //Passing URL to a func that returns image
-        if let validUrl = projectDetail?.selectedImagePathUrl {
-            //thankfully to my delegate mechanism I can path url of my project image & return image
-            projectImageView.image = self.delegate?.retreaveImageForProject(myUrl: validUrl)
-        }else{
-            //in case image wasn't selected
-            projectImageView.image = UIImage(named: "defaultImage")
-        }
+        //configure detailViewController
+        performAllConfigurations()
         
         //Editing Project Name
         projectNameTF.delegate = self
@@ -158,8 +143,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(labelIsTapped))
         nameTapGesture.numberOfTapsRequired = 1
         projectName.addGestureRecognizer(nameTapGesture)
-        projectName.text = projectDetail?.name
-        
         
         //add subviews
         view.addSubview(projectImageView)
@@ -179,17 +162,39 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         
         // define parents collection view for reload
         stepCategoriesFilter.detailViewController = self
-        //?
+        //creates array for stepsCV based on data source
         updateMyArray()
         //make first pointer ("All") color - orange = selected
         stepCategoriesFilter.performButchUpdates()
-        //create dictionary for deleting purposes
+        //create dictionary for steps deleting purposes
         createStepIdDictionary()
-        
+    }
+    
+    func performAllConfigurations(){
+       
+        //date
         if let date = projectDetail?.date {
             dateLabel.text = date
         }
+        //Passing URL to a func that returns image
+        if let validUrl = projectDetail?.selectedImagePathUrl {
+            //thankfully to my delegate mechanism I can path url of my project image & return image
+            projectImageView.image = self.delegate?.retreaveImageForProject(myUrl: validUrl)
+        }else{
+            //in case image wasn't selected
+            projectImageView.image = UIImage(named: "defaultImage")
+        }
         
+        //set project title
+        projectName.text = projectDetail?.name
+        
+        //assign description of the project
+        projectDetailDescriptionLabel.text = projectDetail?.comment
+        
+        //Passing selected project to data collection view
+        if let project = projectDetail{
+            myProjectData.project = project
+        }
     }
     
     
@@ -246,7 +251,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return stepsArray.count
     }
     
@@ -294,6 +298,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
     }
+    
     //MARK: Functions
     
     //Delete Step Handler
@@ -326,7 +331,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     //Switch handler
     @objc func itemCompleted(button: UIButton){
-        
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected
         //here save .tag of selected switch = selected cell
@@ -347,7 +351,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()// don't know where it was declared
+        textField.resignFirstResponder()
         projectNameTF.isHidden = true
         projectName.isHidden = false
         
@@ -369,6 +373,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //pergorm segue to new step VC
     @IBAction func addStep(_ sender: UIStoryboardSegue) {}
     
+    //This is my save button action!?
+    @objc func editButtonAction(_ sender: Any){
+        print("edit button is pressed!")
+        //performSegue(withIdentifier: "pushToEditProject", sender: editButton)
+    }
+    
     @IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
         //update array, to have a data for new cell
         updateMyArray()
@@ -376,7 +386,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         self.delegate?.reloadTableView()
         //perform all operations step by step with categories CV
         stepCategoriesFilter.updateCategoriesCV()
-        
+        //add new item
         let newIndexPath = IndexPath(row: stepsArray.count - 1, section: 0)
         stepsCollectionView.insertItems(at: [newIndexPath])
     }
@@ -424,7 +434,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
                 //set parentVC for delegate function of completed step
                 controller.parentVC = self
             }
-        // ?
         default: break
         }
     }

@@ -24,8 +24,6 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
     //var myProgressControl = ProgressControl(frame: CGRect(x : 20 , y : 76, width: 360, height: 210))
     var myProgressControl = ProgressControl()
     
-    
-    
     let cellSpacing: CGFloat = 10
     let cellIdentifier = "ProjectTableViewCell"
     
@@ -39,8 +37,6 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         
         RestartedTableView.delegate = self
         RestartedTableView.dataSource = self

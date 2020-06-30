@@ -15,14 +15,21 @@ import Photos
 class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //MARK: Properties
-    
-    //var myCategoryCollection = CategoryCollectionView(frame: CGRect(x : 15 , y : 187, width: 360, height: 66))
     var myCategoryCollection = CategoryCollectionView()
-    
-    //Project Image
-    @IBOutlet weak var projectMainPicture: UIImageView!
     // need for indicating a selected image inside PHAsset array
     var selectedImageURLString: String?
+    
+    let projectMainPicture: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "plusBG")
+        image.contentMode = .scaleAspectFill
+        image.isUserInteractionEnabled = true
+        image.clipsToBounds = true
+        image.layer.cornerRadius = 4
+        image.layer.borderWidth = 1
+        image.layer.borderColor = UIColor(white: 0.75, alpha: 1).cgColor
+        return image
+    }()
     
     //define current date
     let createdDate: String = {
@@ -47,28 +54,24 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-            //description View configuration
-            descriptionTextView.layer.borderWidth = 1
-            descriptionTextView.layer.borderColor = UIColor(white: 0.82, alpha: 1).cgColor
-            descriptionTextView.layer.cornerRadius = 4
+        //description View configuration
+        descriptionTextView.layer.borderWidth = 1
+        descriptionTextView.layer.borderColor = UIColor(white: 0.82, alpha: 1).cgColor
+        descriptionTextView.layer.cornerRadius = 4
+
+        // Handle the text field's user input through delegate callback.
+        nameTextField.delegate = self
+        //Enable the Save button only if the text field has a valid project name.
+        updateSaveButtonState()
         
-            projectMainPicture.layer.cornerRadius = 4
-            projectMainPicture.layer.borderWidth = 1
-            projectMainPicture.layer.borderColor = UIColor(white: 0.75, alpha: 1).cgColor
-        
-            // Handle the text field's user input through delegate callback.
-            nameTextField.delegate = self
-            //Enable the Save button only if the text field has a valid project name.
-            updateSaveButtonState()
-        
-            //Enable User Interaction for UIImageView (tapGesture won't work without this)
-            projectMainPicture.isUserInteractionEnabled = true
-        
-            view.addSubview(myCategoryCollection)
-        
-            setupLayout()
-        
-        
+        view.addSubview(myCategoryCollection)
+        view.addSubview(projectMainPicture)
+
+        //constraints
+        setupLayout()
+        //imageView
+        imageViewConfiguration()
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,14 +80,29 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         distanceLabel.text = "\(Int(round(distanceSlider.value))) km"
     }
     
+    //becouse tap gesture won't work inside constant configurator need to create separate function
+    private func imageViewConfiguration(){
+        //Enable User Interaction for UIImageView (tapGesture won't work without this)
+        projectMainPicture.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        projectMainPicture.addGestureRecognizer(tap)
+    }
+    
     private func setupLayout(){
         
         myCategoryCollection.translatesAutoresizingMaskIntoConstraints = false
+        projectMainPicture.translatesAutoresizingMaskIntoConstraints = false
         
         myCategoryCollection.topAnchor.constraint(equalTo: selectProjectCategory.bottomAnchor, constant: 6).isActive = true
         myCategoryCollection.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        myCategoryCollection.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        myCategoryCollection.rightAnchor.constraint(equalTo: view.rightAnchor, constant:  0).isActive = true
         myCategoryCollection.heightAnchor.constraint(equalToConstant: 66).isActive = true
+        
+        projectMainPicture.topAnchor.constraint(equalTo: myCategoryCollection.bottomAnchor, constant: 17).isActive = true
+        projectMainPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        projectMainPicture.widthAnchor.constraint(equalToConstant: 107).isActive = true
+        projectMainPicture.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        
         
     }
   
@@ -118,19 +136,18 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         let totalProjectCost = Int(round(priceSlider.value))
         let distanceToGo = Int(round(distanceSlider.value))
         
-    
         //create template of project
-        let projectList = ProjectList()
+        let projectTemplate = ProjectList()
         
-        projectList.distance = distanceToGo
-        projectList.totalCost = totalProjectCost
-        projectList.name = name
-        projectList.category = category
-        projectList.comment = projectDescription
-        projectList.selectedImagePathUrl = selectedImageURLString
-        projectList.date = createdDate
-        
-        ProjectListRepository.instance.createProjectList(list: projectList)
+        projectTemplate.distance = distanceToGo
+        projectTemplate.totalCost = totalProjectCost
+        projectTemplate.name = name
+        projectTemplate.category = category
+        projectTemplate.comment = projectDescription
+        projectTemplate.selectedImagePathUrl = selectedImageURLString
+        projectTemplate.date = createdDate
+    
+        ProjectListRepository.instance.createProjectList(list: projectTemplate)
     }
     
     
@@ -190,25 +207,23 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
  
         //it was preaty useful feature to make a breakpoint here
         //print(info)
-    
-    
+
         // Set photoImageView to display the selected image.
         if let selectedImage = selectedImageFromPicker {
             projectMainPicture.image = selectedImage
         }
-    
         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
     
     
-    //
+    //save button
     @IBAction func createNewProjectLabel(_ sender: UIButton) {
-    
+
     }
     
-    
-    @IBAction func tapGestureAction(_ sender: UITapGestureRecognizer) {
+    //add image mechanism
+    @objc func handleTap(_ sender: UITapGestureRecognizer){
         // Hide the keyboard.
         nameTextField.resignFirstResponder()
         //check for libraty authorization, that allows PHAsset option using in picker
@@ -222,13 +237,10 @@ class CreateViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         
         // UIImagePickerController is a view controller that lets a user pick media from their photo library.
         let imagePickerController = UIImagePickerController()
-        
+    
         // Only allow photos to be picked, not taken.
         imagePickerController.sourceType = .photoLibrary
-        
         imagePickerController.allowsEditing = true
-
-        
         // Make sure ViewController is notified when the user picks an image.
         imagePickerController.delegate = self
         
