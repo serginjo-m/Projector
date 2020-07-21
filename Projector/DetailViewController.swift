@@ -25,6 +25,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         print("OS Reclaiming memory for Detail View Controller")
     }
     
+    //instance of project edit mode VC
+    let editProjectViewController = EditProjectViewController()
+    
     //most for reload data
     weak var delegate: DetailViewControllerDelegate?
     
@@ -375,7 +378,36 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     //This is my save button action!?
     @objc func editButtonAction(_ sender: Any){
-        print("edit button is pressed!")
+        //set project name
+        editProjectViewController.nameTextField.text = projectName.text
+        //set project category
+        for (index, item) in editProjectViewController.categoryCollectionView.categories.enumerated() {
+            if projectDetail?.category == item {
+                editProjectViewController.categoryCollectionView.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+            }
+        }
+        if let category = projectDetail?.category{
+            editProjectViewController.categoryCollectionView.categoryName = category
+        }
+        //set project image
+        editProjectViewController.projectMainPicture.image = projectImageView.image
+        //set description text
+        editProjectViewController.descriptionTextView.text = projectDetailDescriptionLabel.text
+        //set project price value
+        if let total = projectDetail?.totalCost{
+            editProjectViewController.priceSlider.value = Float(total)
+        }
+        //set project distance value
+        if let distance = projectDetail?.distance{
+            editProjectViewController.distanceSlider.value = Float(distance)
+        }
+        if let url = projectDetail?.selectedImagePathUrl {
+            editProjectViewController.selectedImageURLString = url
+        }
+        if let id = projectDetail?.id{
+            editProjectViewController.projectId = id
+        }
+        self.show(editProjectViewController, sender: sender)
         //performSegue(withIdentifier: "pushToEditProject", sender: editButton)
     }
     
@@ -390,6 +422,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let newIndexPath = IndexPath(row: stepsArray.count - 1, section: 0)
         stepsCollectionView.insertItems(at: [newIndexPath])
     }
+    
    //creates array for CV based on data source
     func updateMyArray(){
         //clear all step from array

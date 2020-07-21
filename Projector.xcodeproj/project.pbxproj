@@ -41,6 +41,7 @@
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
+		CFEADA9C24ADF2ED00432C50 /* EditProjectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */; };
 		CFF267D623DC8E5E003A9236 /* MainViewProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF267D523DC8E5E003A9236 /* MainViewProgress.swift */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,7 @@
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
+		CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectVC.swift; sourceTree = "<group>"; };
 		CFF267D523DC8E5E003A9236 /* MainViewProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewProgress.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +146,7 @@
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF2C1291237766A700F3132A /* MainViewCell.swift */,
 				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
+				CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
 				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
@@ -344,6 +347,7 @@
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
+				CFEADA9C24ADF2ED00432C50 /* EditProjectVC.swift in Sources */,
 				CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
