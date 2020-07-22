@@ -89,11 +89,13 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
         //--------------- here I need to iterate through project values ------------
         //print(projectArray[indexPath.row])
         let item = projectArray[indexPath.row]
-        let itemSize = item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 30)])
-        
+        var itemSize = item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 30)])
+        //increase height for description label
+        itemSize.height += 20.0
+       
         //becouse if size too small description will be covered
         if itemSize.width < 80 {
-            return CGSize(width: 80.0, height: 35.8)
+            return CGSize(width: 80.0, height: itemSize.height)
         }
         
         return itemSize
@@ -130,6 +132,8 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
     
     //adding values to a project
     private func defineProjectsValues(){
+        //clear old data
+        projectArray.removeAll()
         //append each item to array
         ["\(project.totalCost)$", "\(project.budget)$", "\(project.distance)km", "\(project.spending)$"].forEach {
             projectArray.append($0)
@@ -139,7 +143,8 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
 }
 
 class DataCell: UICollectionViewCell{
-
+    
+    
     //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -157,6 +162,7 @@ class DataCell: UICollectionViewCell{
         label.textColor = UIColor.darkGray
         label.textAlignment = NSTextAlignment.center
         label.font = UIFont.systemFont(ofSize: 30.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -166,15 +172,23 @@ class DataCell: UICollectionViewCell{
         label.textColor = UIColor.darkGray
         label.textAlignment = NSTextAlignment.center
         label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     func setupViews(){
         
-        //backgroundColor = UIColor.blue
+//        backgroundColor = UIColor.yellow
         addSubview(valueLabel)
         addSubview(descriptionLabel)
 
-        descriptionLabel.frame = CGRect(x: 0, y: 35, width: frame.width, height: 15)
-        valueLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: 36)
+        valueLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        valueLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        valueLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        valueLabel.heightAnchor.constraint(equalToConstant: 36).isActive = true
+        
+        descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 0).isActive = true
+        descriptionLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
     }
 }

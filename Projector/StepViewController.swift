@@ -9,7 +9,6 @@
 import UIKit
 import RealmSwift
 
-
 class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //cell identifier

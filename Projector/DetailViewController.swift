@@ -12,13 +12,20 @@ import Photos
 
 //trying to make a call about some changes in child to a parent
 protocol DetailViewControllerDelegate: class {
-    //this function is reload data according of changes make by user
+    //this function is reload data according to changes make by user
     func reloadTableView()
     //General func for retreaving image by URL (BECOUSE Realm can't save images)
     func retreaveImageForProject(myUrl: String) -> UIImage
 }
 
-class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+//delegate for reload after editing project
+protocol EditViewControllerDelegate: class{
+    func performAllConfigurations()
+    func reloadViews()
+}
+
+
+class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditViewControllerDelegate{
     
     //If there is no retaining cycles print statment should run!
     deinit {
@@ -227,12 +234,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         projectImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         projectImageView.heightAnchor.constraint(equalToConstant: 110).isActive = true
         //projects values
-        myProjectData.topAnchor.constraint(equalTo: projectDetailDescriptionLabel.bottomAnchor, constant:  3).isActive = true
+        myProjectData.topAnchor.constraint(equalTo: projectDetailDescriptionLabel.bottomAnchor, constant:  13).isActive = true
         myProjectData.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         myProjectData.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         myProjectData.heightAnchor.constraint(equalToConstant: 65).isActive = true
         //steps filter
-        stepCategoriesFilter.topAnchor.constraint(equalTo: myProjectData.bottomAnchor, constant:  17).isActive = true
+        stepCategoriesFilter.topAnchor.constraint(equalTo: myProjectData.bottomAnchor, constant:  5).isActive = true
         stepCategoriesFilter.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         stepCategoriesFilter.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         stepCategoriesFilter.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -317,10 +324,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             
             //update array for collection veiw
             self.updateMyArray()
-            // reload steps collection view
-            self.stepsCollectionView.reloadData()
-            //reload main view
-            self.delegate?.reloadTableView()
+            //reload views with new data after editing
+            self.reloadViews()
             //perform actions step by step
             self.stepCategoriesFilter.updateCategoriesCV()
             
@@ -332,6 +337,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         present(alertVC, animated: true, completion: nil)
     }
     
+    //perform updates to views after make changes
+    func reloadViews(){
+        //here we call a masters (Boss) delegate function to reload its data
+        self.delegate?.reloadTableView()
+        // reload steps collection view
+        self.stepsCollectionView.reloadData()
+        //project data
+        myProjectData.dataCollectionView.reloadData()
+        
+    }
+    
     //Switch handler
     @objc func itemCompleted(button: UIButton){
         //assign an opposite value to button.isSeleceted
@@ -340,10 +356,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let updatedStep = projectDetail?.projectStep[button.tag]
         //func that change complete bool of the step
         ProjectListRepository.instance.updateStepCompletionStatus(step: updatedStep!, isComplete: button.isSelected)
-        // reload of detail step collection view
-        self.stepsCollectionView.reloadData()
-        //here we call a masters (Boss) delegate function to reload its data
-        self.delegate?.reloadTableView()
+        
+        //update views after data source has been changed
+        reloadViews()
     }
     
     @objc func labelIsTapped(){
@@ -363,7 +378,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             if !text.isEmpty{
                 projectName.text = text
                 ProjectListRepository.instance.updateProjectName(name: text, list: projectDetail!)
-                self.delegate?.reloadTableView()
+                //perform update after data source has been changed
+                reloadViews()
             }else{
                 print("Text Field is Empty!!!")
             }
@@ -378,6 +394,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     //This is my save button action!?
     @objc func editButtonAction(_ sender: Any){
+        //define delegate between edit & detail VC
+        editProjectViewController.delegate = self
         //set project name
         editProjectViewController.nameTextField.text = projectName.text
         //set project category
@@ -407,6 +425,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         if let id = projectDetail?.id{
             editProjectViewController.projectId = id
         }
+        if let steps = projectDetail?.projectStep{
+            editProjectViewController.projectSteps = steps
+        }
         self.show(editProjectViewController, sender: sender)
         //performSegue(withIdentifier: "pushToEditProject", sender: editButton)
     }
@@ -414,8 +435,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     @IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
         //update array, to have a data for new cell
         updateMyArray()
-        //update mainViewController data
-        self.delegate?.reloadTableView()
+        //update views 
+        reloadViews()
         //perform all operations step by step with categories CV
         stepCategoriesFilter.updateCategoriesCV()
         //add new item

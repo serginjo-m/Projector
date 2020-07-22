@@ -18,11 +18,16 @@ class EditProjectViewController: UIViewController, UITextFieldDelegate, UITextVi
     
     var realm: Realm!//create a var
     
+    //most for reload data
+    weak var delegate: EditViewControllerDelegate?
+    
     let categoryCollectionView = CategoryCollectionView()
     // need to indicate selected image inside PHAsset array
     var selectedImageURLString: String?
     //unique project id for updating
     var projectId: String?
+    //becouse project template needs to contain all steps
+    var projectSteps: List<ProjectStep>?
     
     //Cancel button
     let cancelButton: UIButton = {
@@ -313,46 +318,15 @@ class EditProjectViewController: UIViewController, UITextFieldDelegate, UITextVi
         //passing distanceSlider value to the distance label
         distanceValueLabel.text = "\(Int(round(sender.value))) km"
     }
-    
-    //This method lets You configure a view controller before it's presented.
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        super.prepare(for: segue, sender: sender)
-        
-        // Configure the destination view controller only when the save button is pressed.
-        guard let button = sender as? UIButton, button === saveButton else {
-            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-            return
-        }
-        
-        
-        /*let name = nameTextField.text ?? ""
-        let category = myCategoryCollection.categoryName
-        let projectDescription = descriptionTextView.text ?? ""
-        let totalProjectCost = Int(round(priceSlider.value))
-        let distanceToGo = Int(round(distanceSlider.value))
-        
-        //create template of project
-        let projectTemplate = ProjectList()
-        
-        projectTemplate.distance = distanceToGo
-        projectTemplate.totalCost = totalProjectCost
-        projectTemplate.name = name
-        projectTemplate.category = category
-        projectTemplate.comment = projectDescription
-        projectTemplate.selectedImagePathUrl = selectedImageURLString
-        projectTemplate.date = createdDate
-        
-        ProjectListRepository.instance.createProjectList(list: projectTemplate)*/
-    }
+  
     @objc func saveAction(button: UIButton){
         dismiss(animated: true) {
             let project: ProjectList = self.defineProjectTemplate()
             ProjectListRepository.instance.updateProjectList(list: project)
-            
-            /*/clear before dismiss
-            self.noteTextView.text = ""
-            self.stepVC?.stepTableView.reloadData()*/
+            //configure detail VC
+            self.delegate?.performAllConfigurations()
+            //reload parents views
+            self.delegate?.reloadViews()
         }
         
     }
@@ -369,6 +343,11 @@ class EditProjectViewController: UIViewController, UITextFieldDelegate, UITextVi
         projectTemplate.comment = descriptionTextView.text ?? ""
         projectTemplate.totalCost = Int(round(priceSlider.value))
         projectTemplate.distance = Int(round(distanceSlider.value))
+        if let stepsArray = projectSteps{
+            for step in stepsArray{
+                projectTemplate.projectStep.append(step)
+            }
+        }
         return projectTemplate
     }
     
@@ -474,5 +453,4 @@ class EditProjectViewController: UIViewController, UITextFieldDelegate, UITextVi
         
         present(imagePickerController, animated: true, completion: nil)
     }
-    
 }
