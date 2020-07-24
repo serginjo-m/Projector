@@ -12,6 +12,7 @@
 		CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */; };
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
 		CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */; };
+		CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
@@ -53,6 +54,7 @@
 		CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStepCell.swift; sourceTree = "<group>"; };
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
 		CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepStackView.swift; sourceTree = "<group>"; };
+		CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStepVC.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
+				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
 				CF51C05D246968F00064F6C7 /* Assets.xcassets */,
@@ -330,6 +333,7 @@
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CFF267D623DC8E5E003A9236 /* MainViewProgress.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
+				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
 				CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,

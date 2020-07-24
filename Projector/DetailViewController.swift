@@ -392,7 +392,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //pergorm segue to new step VC
     @IBAction func addStep(_ sender: UIStoryboardSegue) {}
     
-    //This is my save button action!?
+    //This is my edit button action!?
     @objc func editButtonAction(_ sender: Any){
         //define delegate between edit & detail VC
         editProjectViewController.delegate = self
@@ -436,7 +436,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //update array, to have a data for new cell
         updateMyArray()
         //update views 
-        reloadViews()
+        self.delegate?.reloadTableView()
         //perform all operations step by step with categories CV
         stepCategoriesFilter.updateCategoriesCV()
         //add new item

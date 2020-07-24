@@ -1,39 +1,26 @@
 //
-//  NewStepViewController.swift
+//  EditStepViewController.swift
 //  Projector
 //
-//  Created by Serginjo Melnik on 23.11.2019.
-//  Copyright © 2019 Serginjo Melnik. All rights reserved.
+//  Created by Serginjo Melnik on 22.07.2020.
+//  Copyright © 2020 Serginjo Melnik. All rights reserved.
 //
-
 import UIKit
 import RealmSwift
 import os.log
 import Photos
 
+class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
-class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
-    
     //MARK: Properties
     var realm: Realm!//create a var
-    var newStepCategory = NewStepCategory()
-    var newStepImages = NewStepImages()
+    var stepCategory = NewStepCategory()
+    var stepImages = NewStepImages()
     
     // need for indicating a selected images inside PHAsset array
     var selectedPhotoURLStringArray = [String]()
     
-    //name text field
-    let stepNameTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Enter Your Step Name Here"
-        textField.borderStyle = UITextField.BorderStyle.roundedRect
-        textField.autocorrectionType = UITextAutocorrectionType.yes
-        textField.keyboardType = .default
-        textField.returnKeyType = UIReturnKeyType.done
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
+    
     //Save Button
     let stepSaveButton: UIButton = {
         let button = UIButton()
@@ -41,7 +28,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.setTitleColor(.blue , for: .normal)
         button.setTitleColor(UIColor(white: 0.75, alpha: 1), for: .disabled)
-        button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -57,7 +44,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     //Date Label
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Add New Step"
+        label.text = "Edit Step"
         label.textAlignment = NSTextAlignment.center
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = UIColor.darkGray
@@ -72,6 +59,18 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.textColor = UIColor.darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    //name text field
+    let stepNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter Your Step Name Here"
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        textField.autocorrectionType = UITextAutocorrectionType.yes
+        textField.keyboardType = .default
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
     let categoryTitle: UILabel = {
         let label = UILabel()
@@ -158,38 +157,39 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //add all subviews
-        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
+        //need to change becouse by default it is black
+        view.backgroundColor = .white
+        
+        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, stepCategory, photoTitle, stepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
             view.addSubview($0)
         }
-        
-        //constraints configuration
+        // constraints configuration
         setupLayout()
         
         // Handle the text field's user input through delegate callback.
         stepNameTextField.delegate = self
+
+/*------------------------- have an issue here becouse delegate can be used only once ---------------------------
         
         // handle image picker appearance, through delegate callback!! :>)
         //it is very important to define, what instances of view controllers are
         //notice that I have this optional delegate var
-        newStepImages.delegate = self
-        
+        stepImages.delegate = self
+  -------------------------------------------------------------------------*/
         //Enable the Save button only if the text field has a valid project name.
         updateSaveButtonState()
-        
-        realm = try! Realm()//create an instance of object
-        
-        newStepCategory.backgroundColor = UIColor(white: 0.97, alpha: 1)
+        // ----------------- maybe not needed --------------------------
+        //realm = try! Realm()//create an instance of object
         
         //show an actual value of slider
         stepPriceValueLabel.text = "\(Int(round(stepPriceSlider.value))) $"
         stepDistanceValueLabel.text = "\(Int(round(stepDistanceSlider.value))) km"
     }
-    
+
     private func setupLayout(){
-        newStepImages.translatesAutoresizingMaskIntoConstraints = false
-        newStepCategory.translatesAutoresizingMaskIntoConstraints = false
-        
+        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, stepCategory, photoTitle, stepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         stepDistanceValueLabel.centerYAnchor.constraint(equalTo: stepDistanceSlider.centerYAnchor).isActive = true
         stepDistanceValueLabel.leftAnchor.constraint(equalTo: stepDistanceSlider.rightAnchor, constant:  28).isActive = true
         stepDistanceValueLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
@@ -214,18 +214,18 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         stepPriceSlider.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         stepPriceSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -120).isActive = true
         stepPriceSlider.heightAnchor.constraint(equalToConstant: 29).isActive = true
-
-        priceTitle.topAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant:  12).isActive = true
+        
+        priceTitle.topAnchor.constraint(equalTo: stepImages.bottomAnchor, constant:  12).isActive = true
         priceTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         priceTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
         priceTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        newStepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  4).isActive = true
-        newStepImages.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        newStepImages.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        newStepImages.heightAnchor.constraint(equalToConstant: 148).isActive = true
+        stepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  4).isActive = true
+        stepImages.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepImages.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepImages.heightAnchor.constraint(equalToConstant: 148).isActive = true
         
-        photoTitle.topAnchor.constraint(equalTo: newStepCategory.bottomAnchor, constant:  17).isActive = true
+        photoTitle.topAnchor.constraint(equalTo: stepCategory.bottomAnchor, constant:  17).isActive = true
         photoTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         photoTitle.widthAnchor.constraint(equalToConstant: 110).isActive = true
         photoTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -235,10 +235,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         categoryTitle.widthAnchor.constraint(equalToConstant: 110).isActive = true
         categoryTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        newStepCategory.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant:  4).isActive = true
-        newStepCategory.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        newStepCategory.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        newStepCategory.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        stepCategory.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant:  4).isActive = true
+        stepCategory.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
+        stepCategory.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+        stepCategory.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
         nameTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant:  40).isActive = true
         nameTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
@@ -265,7 +265,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         titleLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
         titleLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
     }
-    
     // MARK: - Navigation
     
     //Dismiss View Controller
@@ -287,46 +286,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         stepDistanceValueLabel.text = "\(Int(round(sender.value))) km"
     }
     
-    //This method lets You configure a view controller before it's presented.
-    override func prepare(for segue: UIStoryboardSegue, sender: Any? ) {
-        super.prepare(for: segue, sender: sender)
-        
-        // Configure the destination view controller only when the save button is pressed.
-        guard let stepButton = sender as? UIButton, stepButton === stepSaveButton else {
-            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-            return
-        }
-        
-        let stepName = stepNameTextField.text ?? ""
-        let stepCategory = newStepCategory.selectedCategory
-        
-        //Set the projectList to be passed to ProjectViewController after the unwind segue.
-        //an issue is that it creates an individual item in realm
-        let newStep = ProjectStep()
-        newStep.name = stepName
-        newStep.category = stepCategory
-        newStep.cost = Int(round(stepPriceSlider.value))
-        newStep.distance = Int(round(stepDistanceSlider.value))
-        newStep.date = createdDate
-        
-        //add selected images url to step model
-        for item in selectedPhotoURLStringArray{
-            newStep.selectedPhotosArray.append(item)
-        }
-        
-        try! self.realm!.write ({//here we actualy add a new object called projectList
-            self.detailList?.projectStep.append(newStep)
-        })
-    }
-    
-    
     //MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
         textField.resignFirstResponder()
         return true
     }
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateSaveButtonState()
         navigationItem.title = textField.text
@@ -345,6 +310,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         stepSaveButton.isEnabled = !text.isEmpty
     }
     
+    //IMAGE PICKER
     func showImagePicker() {
         // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
@@ -369,8 +335,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    
-    //?? Am I Need It?
     //MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         // Dismiss the picker if the user canceled.
@@ -408,13 +372,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         // Set photoImageView to display the selected image.
         if let selectedImage = selectedImageFromPicker {
             //add new item
-            newStepImages.photoArray.append(selectedImage)
+            stepImages.photoArray.append(selectedImage)
             //reload when picker closes
-            newStepImages.imageCollectionView.reloadData()
+            stepImages.imageCollectionView.reloadData()
         }
-    
+        
         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
-  
 }

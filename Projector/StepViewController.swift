@@ -11,6 +11,8 @@ import RealmSwift
 
 class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //instance of project edit mode VC
+    let editStepViewController = EditStepViewController()
     //cell identifier
     let cellIdentifier = "stepTableViewCell"
     //create an instance of table view
@@ -43,9 +45,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //Date Label
     let createdDateLabel: UILabel = {
         let label = UILabel()
-        label.text = "Created: 23.04.2020"
+        label.text = "23.04.2020"
         label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .center
         label.textColor = UIColor.darkGray
+//        label.backgroundColor = .yellow
         return label
     }()
     //Add Button
@@ -56,7 +60,19 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         button.addTarget(self, action: #selector(addItem(button:)), for: .touchDown)
         return button
     }()
-    
+    //edit step button
+    let editButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Edit", for: .normal)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setBackgroundImage(UIImage(named: "editButton"), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.adjustsImageWhenHighlighted = false
+        button.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
+        button.contentHorizontalAlignment = .right
+        return button
+    }()
     //becouse of lazy var I can access "self"
     //lazy var calls ones, only when var == nil
     lazy var stepAddItem: StepAddItem = {
@@ -73,10 +89,12 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     private func performPageConfigurations(){
         //add items to a view
-        [cancelButton, stepTableView, createdDateLabel, addItemButton, myStepImagesCV, myStackView].forEach {
+        [cancelButton, stepTableView, createdDateLabel, addItemButton, myStepImagesCV, myStackView, editButton].forEach {
             view.addSubview($0)
         }
-        
+        if let stepDate = projectStep?.date {
+            createdDateLabel.text = stepDate
+        }
         //setup constraints
         setupLayout()
         //assign values to stack view labels
@@ -120,6 +138,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         addItemButton.translatesAutoresizingMaskIntoConstraints = false
         myStepImagesCV.translatesAutoresizingMaskIntoConstraints = false
         stepTableView.translatesAutoresizingMaskIntoConstraints = false
+        editButton.translatesAutoresizingMaskIntoConstraints = false
         
         stepTableView.topAnchor.constraint(equalTo: myStackView.bottomAnchor, constant:  23).isActive = true
         stepTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
@@ -143,7 +162,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         createdDateLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
         createdDateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        createdDateLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        createdDateLabel.widthAnchor.constraint(equalToConstant: 90).isActive = true
         createdDateLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
         
         addItemButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
@@ -151,6 +170,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         addItemButton.widthAnchor.constraint(equalToConstant: 14).isActive = true
         addItemButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
         
+        editButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+        editButton.rightAnchor.constraint(equalTo: addItemButton.rightAnchor, constant: -33).isActive = true
+        editButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        editButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
     }
     
     //return UIImage by URL
@@ -162,6 +185,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepImage = UIImage(data: imageData)!
         }
         return stepImage
+    }
+    //This is my edit button action!?
+    @objc func editButtonAction(_ sender: Any){
+        self.show(editStepViewController, sender: sender)
     }
     
     //table view section

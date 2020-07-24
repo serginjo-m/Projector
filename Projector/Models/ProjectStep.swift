@@ -16,6 +16,7 @@ class ProjectStep: Object {
     @objc dynamic var cost = 0
     @objc dynamic var category = "Other"
     @objc dynamic var distance = 0
+    @objc dynamic var date = "07/06/2020"
     //an array of images url
     let selectedPhotosArray = List<String>()//[String]()
     //an array of items in table view
