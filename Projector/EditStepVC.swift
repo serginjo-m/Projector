@@ -6,20 +6,46 @@
 //  Copyright © 2020 Serginjo Melnik. All rights reserved.
 //
 import UIKit
-import RealmSwift
 import os.log
 import Photos
 
-class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+//template for view
+class viewSetting: NSObject{
+    var id: String? = nil
+    var name: String = ""
+    var category = "Other"
+    var index: Int? = nil
+    var photoArr = [UIImage]()
+    var urlArr = [String]()
+    var items = [String]()
+    var price = 0
+    var distance = 0
+    var complete = false
+}
+
+class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate{
 
     //MARK: Properties
-    var realm: Realm!//create a var
     var stepCategory = NewStepCategory()
     var stepImages = NewStepImages()
     
-    // need for indicating a selected images inside PHAsset array
-    var selectedPhotoURLStringArray = [String]()
+    //step id passed by detail VC
+    var stepID: String?
+    //step completion status
+    var stepComplete: Bool?
     
+    // need for indicating a selected images inside PHAsset array
+    var selectedPhotoURLStringArray = [String](){
+        didSet{
+            print("selectedPhotoURLStringArray.count didSet", self.selectedPhotoURLStringArray.count)
+        }
+    }
+    // list of items in step
+    var stepItems = [String]()
+    
+    weak var delegate: StepViewControllerDelegate?
+    
+    var stepViewSetting = viewSetting()
     
     //Save Button
     let stepSaveButton: UIButton = {
@@ -28,7 +54,7 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.setTitleColor(.blue , for: .normal)
         button.setTitleColor(UIColor(white: 0.75, alpha: 1), for: .disabled)
-//        button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -145,15 +171,6 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return myDate
     }()
     
-    //define selected project for adding steps to it
-    var detailList: ProjectList? {
-        get{
-            //Retrieve a single object with unique identifier (projectListIdentifier)
-            return realm.object(ofType: ProjectList.self, forPrimaryKey: uniqueID)
-        }
-    }
-    //is an ID of tapped cell
-    var uniqueID: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,21 +186,46 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
         // Handle the text field's user input through delegate callback.
         stepNameTextField.delegate = self
 
-/*------------------------- have an issue here becouse delegate can be used only once ---------------------------
-        
         // handle image picker appearance, through delegate callback!! :>)
         //it is very important to define, what instances of view controllers are
         //notice that I have this optional delegate var
         stepImages.delegate = self
-  -------------------------------------------------------------------------*/
+
         //Enable the Save button only if the text field has a valid project name.
         updateSaveButtonState()
-        // ----------------- maybe not needed --------------------------
-        //realm = try! Realm()//create an instance of object
+    }
+    
+    //need to update data everytime view appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        //func that updates data everytime view is show
+        configureView()
+    }
+    
+    //configure view from object
+    private func configureView(){
+        
+        stepID = stepViewSetting.id
+        stepNameTextField.text = stepViewSetting.name
+        stepCategory.selectedCategory = stepViewSetting.category
+        //select step category in collecion view
+        for (index, item) in stepCategory.sortedCategories.enumerated() {
+             if stepViewSetting.category == item {
+                stepCategory.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+             }
+        }
+        stepImages.photoArray = stepViewSetting.photoArr
+        selectedPhotoURLStringArray = stepViewSetting.urlArr
+        stepItems = stepViewSetting.items
+        stepPriceSlider.value = Float(stepViewSetting.price)
+        stepDistanceSlider.value = Float(stepViewSetting.distance)
+        stepComplete = stepViewSetting.complete
         
         //show an actual value of slider
         stepPriceValueLabel.text = "\(Int(round(stepPriceSlider.value))) $"
         stepDistanceValueLabel.text = "\(Int(round(stepDistanceSlider.value))) km"
+            
+        stepImages.imageCollectionView.reloadData()
     }
 
     private func setupLayout(){
@@ -223,7 +265,7 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
         stepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  4).isActive = true
         stepImages.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         stepImages.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        stepImages.heightAnchor.constraint(equalToConstant: 148).isActive = true
+        stepImages.heightAnchor.constraint(equalToConstant: 146).isActive = true
         
         photoTitle.topAnchor.constraint(equalTo: stepCategory.bottomAnchor, constant:  17).isActive = true
         photoTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
@@ -269,12 +311,56 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //Dismiss View Controller
     @objc func backAction( button: UIButton){
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            self.stepCategory.categoryCollectionView.reloadData()
+            print(self.selectedPhotoURLStringArray," is dismissed")
+        }
     }
     
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
-        performSegue(withIdentifier: "backToDetailViewController", sender: stepSaveButton)
+        dismiss(animated: true) {
+            //use func for creating object
+            let stepTemplate: ProjectStep = self.defineStepTemplate()
+            //write to database
+            ProjectListRepository.instance.editStep(step: stepTemplate)
+            //delegate for reload
+            self.delegate?.someKindOfFunctionThatPerformRelaod()
+        }
+        
+    }
+    
+    //creates step instance from values :)))))))))
+    func defineStepTemplate() -> ProjectStep{
+        let stepTemplate = ProjectStep()
+        //id
+        if let id = stepID {
+            stepTemplate.id = id
+        }
+        //date
+        stepTemplate.date = createdDate
+        //name
+        stepTemplate.name = stepNameTextField.text ?? ""
+        //category
+        stepTemplate.category = stepCategory.selectedCategory
+        //photos
+        for item in selectedPhotoURLStringArray {
+            stepTemplate.selectedPhotosArray.append(item)
+        }
+        //items
+        for item in stepItems{
+            stepTemplate.itemsArray.append(item)
+        }
+        //price
+        stepTemplate.cost = Int(round(stepPriceSlider.value))
+        //distance
+        stepTemplate.distance = Int(round(stepDistanceSlider.value))
+        //complete
+        if let complete = stepComplete{
+            stepTemplate.complete = complete
+        }
+        
+        return stepTemplate
     }
     
     @objc func priceSliderValueChanged(_ sender: UISlider) {
@@ -308,6 +394,23 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
         //Disable the Save button when text field is empty.
         let text = stepNameTextField.text ?? ""
         stepSaveButton.isEnabled = !text.isEmpty
+    }
+    //delete function
+    func deleteUrl(int: Int){
+        stepViewSetting.photoArr.remove(at: int)
+        stepViewSetting.urlArr.remove(at: int - 1)
+        selectedPhotoURLStringArray.remove(at: int - 1)
+        stepImages.photoArray = stepViewSetting.photoArr
+        stepImages.imageCollectionView.reloadData()
+    }
+    //add function
+    func addUrl(url: String){
+        
+        stepViewSetting.urlArr.append(url)
+        //instead of adding to array, make it always equal to model
+        stepImages.photoArray = stepViewSetting.photoArr
+        selectedPhotoURLStringArray = stepViewSetting.urlArr
+        stepImages.imageCollectionView.reloadData()
     }
     
     //IMAGE PICKER
@@ -352,6 +455,7 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
             //print("originalImage: \(originalImage)")
             selectedImageFromPicker = originalImage
         }
+        print("picker before call addUrl() ",self.stepViewSetting.urlArr.count, self.stepViewSetting.photoArr.count)
         
         if let imgPHAsset = info["UIImagePickerControllerPHAsset"] as? PHAsset{
             //retreave image URL
@@ -359,25 +463,22 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
                 if imgPHAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
                         //print("IMAGE URL: ", strURL)
-                        assignUrl(url: strURL)
+                        self.addUrl(url: strURL)
                     }
                 }
             })
         }
         
-        func assignUrl(url: String){
-            selectedPhotoURLStringArray.append(url)
-        }
-        
         // Set photoImageView to display the selected image.
         if let selectedImage = selectedImageFromPicker {
             //add new item
-            stepImages.photoArray.append(selectedImage)
-            //reload when picker closes
-            stepImages.imageCollectionView.reloadData()
+            //stepImages.photoArray.append(selectedImage)
+            stepViewSetting.photoArr.append(selectedImage)
         }
+        
         
         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
+        
     }
 }

@@ -343,6 +343,7 @@ class EditProjectViewController: UIViewController, UITextFieldDelegate, UITextVi
         projectTemplate.comment = descriptionTextView.text ?? ""
         projectTemplate.totalCost = Int(round(priceSlider.value))
         projectTemplate.distance = Int(round(distanceSlider.value))
+        //adds steps to template
         if let stepsArray = projectSteps{
             for step in stepsArray{
                 projectTemplate.projectStep.append(step)

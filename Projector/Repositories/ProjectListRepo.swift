@@ -56,6 +56,12 @@ class ProjectListRepository {
             step.complete = isComplete
         })
     }
+    //edit step function
+    func editStep(step: ProjectStep){
+        try! self.realm.write({
+            realm.add(step, update: true)
+        })
+    }
     
     func deleteProjectList(list: ProjectList){
         try! realm.write ({

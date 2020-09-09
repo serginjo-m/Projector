@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class StepStackView: UIStackView {
-    //template
+    //after step object is set, perform all configurations
     var step: ProjectStep?{
         didSet{
             //name height needs to be dynamic
@@ -42,6 +42,11 @@ class StepStackView: UIStackView {
             }
             if let category = step?.category{
                 categoryLabel.text = category
+            }
+            if let distance = step?.distance{
+                if distance > 0 {
+                    distanceLabel.text = "\(distance)km"
+                }
             }
             if let complete = step?.complete{
                 doneButton.isSelected = complete
@@ -94,6 +99,14 @@ class StepStackView: UIStackView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    var distanceLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = UIColor(white: 0.5, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     let doneButton: UIButton = {
         let button = UIButton()
@@ -117,6 +130,7 @@ class StepStackView: UIStackView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.contentHorizontalAlignment = .right
+        button.adjustsImageWhenHighlighted = false
         return button
     }()
     //MARK: Initialization
@@ -132,7 +146,7 @@ class StepStackView: UIStackView {
     
     func setupStackView(){
         //adds all listed items to the view
-        [leftColorBar, stepNameLabel, categoryLabel, valueLabel, descriptionLabel, doneButton, editButton].forEach {
+        [leftColorBar, stepNameLabel, categoryLabel, distanceLabel, valueLabel, descriptionLabel, doneButton, editButton].forEach {
             addSubview($0)
         }
         
@@ -145,6 +159,11 @@ class StepStackView: UIStackView {
         categoryLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant:  12).isActive = true
         categoryLabel.heightAnchor.constraint(equalToConstant: 31).isActive = true
         categoryLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        distanceLabel.centerYAnchor.constraint(equalTo: categoryLabel.centerYAnchor).isActive = true
+        distanceLabel.leftAnchor.constraint(equalTo: categoryLabel.rightAnchor, constant:  8).isActive = true
+        distanceLabel.heightAnchor.constraint(equalToConstant: 31).isActive = true
+        distanceLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
         //  realy ADJUSTable...
         valueLabel.topAnchor.constraint(equalTo: self.topAnchor, constant:  0).isActive = true

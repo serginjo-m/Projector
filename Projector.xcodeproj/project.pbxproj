@@ -22,7 +22,7 @@
 		CF2C1298237766A700F3132A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1293237766A700F3132A /* MainViewController.swift */; };
 		CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1294237766A700F3132A /* AppDelegate.swift */; };
 		CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1295237766A700F3132A /* NewProjectVC.swift */; };
-		CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* NewStepImages.swift */; };
+		CF321C15245D43D2005CC10E /* StepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* StepImages.swift */; };
 		CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712CD23740BAE00B2D593 /* Main.storyboard */; };
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
 		CF51C05E246968F00064F6C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF51C05D246968F00064F6C7 /* Assets.xcassets */; };
@@ -38,7 +38,7 @@
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
-		CFBB7C0F24574F4D00B14349 /* NewStepCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB7C0E24574F4D00B14349 /* NewStepCategory.swift */; };
+		CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB7C0E24574F4D00B14349 /* StepCategory.swift */; };
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
@@ -64,7 +64,7 @@
 		CF2C1293237766A700F3132A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CF2C1294237766A700F3132A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF2C1295237766A700F3132A /* NewProjectVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProjectVC.swift; sourceTree = "<group>"; };
-		CF321C14245D43D2005CC10E /* NewStepImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepImages.swift; sourceTree = "<group>"; };
+		CF321C14245D43D2005CC10E /* StepImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImages.swift; sourceTree = "<group>"; };
 		CF3712C623740BAE00B2D593 /* Projector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Projector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF3712CE23740BAE00B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF3712D323740BB200B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
-		CFBB7C0E24574F4D00B14349 /* NewStepCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepCategory.swift; sourceTree = "<group>"; };
+		CFBB7C0E24574F4D00B14349 /* StepCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCategory.swift; sourceTree = "<group>"; };
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
@@ -124,6 +124,7 @@
 			children = (
 				CF3712C823740BAE00B2D593 /* Projector */,
 				CF3712C723740BAE00B2D593 /* Products */,
+				CF9DA834244C479F00DFAEEF /* Sample Files  */,
 				1CBB5DE09D890148DA389C83 /* Pods */,
 				570330C3CAEF4F54E1878C17 /* Frameworks */,
 			);
@@ -140,17 +141,16 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
-				CF9DA834244C479F00DFAEEF /* Sample Files  */,
 				CF9DA835244C499E00DFAEEF /* Collection Views */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF2C1291237766A700F3132A /* MainViewCell.swift */,
-				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
-				CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
 				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
+				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
+				CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
 				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
@@ -190,8 +190,8 @@
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
 				CF279E352464115B00B79978 /* StepAddItemCell.swift */,
-				CFBB7C0E24574F4D00B14349 /* NewStepCategory.swift */,
-				CF321C14245D43D2005CC10E /* NewStepImages.swift */,
+				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
+				CF321C14245D43D2005CC10E /* StepImages.swift */,
 			);
 			path = "Collection Views";
 			sourceTree = "<group>";
@@ -352,11 +352,11 @@
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFEADA9C24ADF2ED00432C50 /* EditProjectVC.swift in Sources */,
-				CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */,
+				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CF2C1296237766A700F3132A /* MainViewCell.swift in Sources */,
-				CFBB7C0F24574F4D00B14349 /* NewStepCategory.swift in Sources */,
+				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,
 				CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */,
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,
@@ -517,7 +517,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -536,7 +536,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

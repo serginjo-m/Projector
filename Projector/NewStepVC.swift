@@ -223,7 +223,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         newStepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  4).isActive = true
         newStepImages.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         newStepImages.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        newStepImages.heightAnchor.constraint(equalToConstant: 148).isActive = true
+        newStepImages.heightAnchor.constraint(equalToConstant: 146).isActive = true
         
         photoTitle.topAnchor.constraint(equalTo: newStepCategory.bottomAnchor, constant:  17).isActive = true
         photoTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
@@ -343,6 +343,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         //Disable the Save button when text field is empty.
         let text = stepNameTextField.text ?? ""
         stepSaveButton.isEnabled = !text.isEmpty
+    }
+    
+    //------------------------ not realy sure ----------------------
+    func deleteUrl(int: Int){
+        selectedPhotoURLStringArray.remove(at: int)
     }
     
     func showImagePicker() {

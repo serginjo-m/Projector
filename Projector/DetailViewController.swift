@@ -18,6 +18,7 @@ protocol DetailViewControllerDelegate: class {
     func retreaveImageForProject(myUrl: String) -> UIImage
 }
 
+//Many protocols in app? is it good? ---------------------------------------
 //delegate for reload after editing project
 protocol EditViewControllerDelegate: class{
     func performAllConfigurations()
@@ -55,12 +56,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     var projectListIdentifier: String?
     //an array of steps
     
-    var stepsArray = [ProjectStep](){
-        //great way to see how your var is changing in process
-        didSet{
-//            print("number of steps: ", stepsArray.count)
-        }
-    }
+    var stepsArray = [ProjectStep]()
 
    //Project Image created programatically
     let projectImageView: UIImageView = {
