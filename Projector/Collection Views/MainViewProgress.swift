@@ -6,7 +6,7 @@
 //  Copyright © 2020 Serginjo Melnik. All rights reserved.
 //
 
-import UIKit
+/*import UIKit
 import RealmSwift
 import Foundation
 
@@ -218,4 +218,4 @@ class ProgressCell: UICollectionViewCell{
         
     }
 }
-
+*/

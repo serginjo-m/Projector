@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import os.log
 import RealmSwift
+import Foundation
+import os
 import Photos
 
 
@@ -21,47 +22,53 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    //var myProgressControl = ProgressControl(frame: CGRect(x : 20 , y : 76, width: 360, height: 210))
-    var myProgressControl = ProgressControl()
+    var mainTitle: UILabel = {
+        let label = UILabel()
+        label.text = "All Projects"
+        label.font = .systemFont(ofSize: 25)
+        return label
+    }()
     
-    let cellSpacing: CGFloat = 10
-    let cellIdentifier = "ProjectTableViewCell"
-    
-    //not sure about this approach of catching image from cell
-    var cellImageView: UIImageView?
+    //I realy don't know how it works, but maybe that is solution
+    //to my issue with camera roll access
+    // seems it speed up loading?
+    let status = PHPhotoLibrary.authorizationStatus()
     
     @IBOutlet weak var addButton: UIButton!// +
     
     @IBOutlet var RestartedTableView: UITableView!
     @IBOutlet weak var tableView: UITableView!
+    let cellIdentifier = "ProjectTableViewCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //don't know if it helps with camera roll access for app
+        if status == .notDetermined  {
+            PHPhotoLibrary.requestAuthorization({status in})
+        }
+        
         RestartedTableView.delegate = self
         RestartedTableView.dataSource = self
-        
-        //print(Realm.Configuration.defaultConfiguration.fileURL!)
-        
-        view.addSubview(myProgressControl)
+
+        view.addSubview(mainTitle)
         
         //setup constraints
         setupLayout()
-    
     }
     
     //perforn all positioning configurations
     private func setupLayout(){
         
-        myProgressControl.translatesAutoresizingMaskIntoConstraints = false
         addButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        myProgressControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  76).isActive = true
-        myProgressControl.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        myProgressControl.widthAnchor.constraint(equalToConstant: 400).isActive = true
-        myProgressControl.heightAnchor.constraint(equalToConstant: 209).isActive = true
-        
-        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
+        mainTitle.translatesAutoresizingMaskIntoConstraints = false
+       
+        mainTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13).isActive = true
+        mainTitle.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+        mainTitle.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        mainTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+   
+        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  16).isActive = true
         addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -99,8 +106,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         }else{
             cell.pictureView.image = UIImage(named: "defaultImage")
         }
-        
-    
+
         cell.pictureView.layer.cornerRadius = 12.0
         cell.pictureView.layer.masksToBounds = true
         
@@ -110,13 +116,13 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.descriptionLabel.text = project.comment
 
         return cell
-        
     }
     
     //control cell spacing height
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return cellSpacing
+        return 10
     }
+    
     // Make the background color show through
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let headerView = UIView()
@@ -142,7 +148,6 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
     // it is a required part of delegate mechanism (Boss)
     func reloadTableView() {
         self.tableView.reloadData()
-        myProgressControl.progressCollectionView.reloadData()
     }
     
     //return UIImage by URL
@@ -175,8 +180,7 @@ class ProjectViewController: UIViewController, UITableViewDelegate, UITableViewD
             tableView.insertRows( at: [newIndexPath] , with: .automatic)
         }, completion: nil)
         
-        let indexPath = IndexPath(row: proJects.count - 1, section: 0)
-        myProgressControl.progressCollectionView.insertItems(at: [indexPath])
+        //here perform some actions...
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

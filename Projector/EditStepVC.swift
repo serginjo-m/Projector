@@ -37,7 +37,7 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
     // need for indicating a selected images inside PHAsset array
     var selectedPhotoURLStringArray = [String](){
         didSet{
-            print("selectedPhotoURLStringArray.count didSet", self.selectedPhotoURLStringArray.count)
+            //print("selectedPhotoURLStringArray.count didSet", self.selectedPhotoURLStringArray.count)
         }
     }
     // list of items in step
@@ -313,7 +313,6 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @objc func backAction( button: UIButton){
         dismiss(animated: true) {
             self.stepCategory.categoryCollectionView.reloadData()
-            print(self.selectedPhotoURLStringArray," is dismissed")
         }
     }
     
@@ -455,7 +454,6 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
             //print("originalImage: \(originalImage)")
             selectedImageFromPicker = originalImage
         }
-        print("picker before call addUrl() ",self.stepViewSetting.urlArr.count, self.stepViewSetting.photoArr.count)
         
         if let imgPHAsset = info["UIImagePickerControllerPHAsset"] as? PHAsset{
             //retreave image URL
