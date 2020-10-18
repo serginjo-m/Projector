@@ -54,8 +54,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }
     //Identifier of selected project
     var projectListIdentifier: String?
-    //an array of steps
     
+    //an array of steps
     var stepsArray = [ProjectStep]()
 
    //Project Image created programatically
