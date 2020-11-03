@@ -28,19 +28,25 @@ protocol EditViewControllerDelegate: class{
 
 class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditViewControllerDelegate{
     
-    //If there is no retaining cycles print statment should run!
-    deinit {
-        print("OS Reclaiming memory for Detail View Controller")
-    }
+    //container for all items on the page
+    var scrollViewContainer = UIScrollView()
+    var contentUIView = UIView()
+    
+    let projectNumbersCV = ProjectNumbersCollectionView()
+    
+    
+    
+    
+    
+    
+    
     
     //instance of project edit mode VC
     let editProjectViewController = EditProjectViewController()
     
     //most for reload data
     weak var delegate: DetailViewControllerDelegate?
-    
-    //Project Statistic Collection View
-    var myProjectData = ProjectData()
+  
     
     //Project Steps Filter by Categories
     var stepCategoriesFilter = StepCategoriesCollectionView()
@@ -63,10 +69,47 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let PIV = UIImageView()
         PIV.contentMode = UIImageView.ContentMode.scaleAspectFill
         PIV.clipsToBounds = true
-        PIV.layer.cornerRadius = 12
+        PIV.layer.cornerRadius = 11
         //leave like so?
         PIV.image = UIImage(named: "workspace")
         return PIV
+    }()
+    let dismissButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        
+        button.adjustsImageWhenHighlighted = false
+        button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
+        
+        return button
+    }()
+    //adds contrast to project title
+    let gradient: CAGradientLayer =  {
+        let gradient = CAGradientLayer()
+        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
+        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.21).cgColor//black 16% opacity
+        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.55).cgColor//black 56% opacity
+        gradient.colors = [topColor, middleColor, bottomColor]
+        gradient.locations = [0.55, 0.75, 1.0]
+        return gradient
+    }()
+    let projectName:UILabel = {
+        let pn = UILabel()
+        pn.text = "Travel to Europe on Motorcycle"
+        pn.textAlignment = NSTextAlignment.left
+        pn.font = UIFont.boldSystemFont(ofSize: 20)
+        pn.textColor = UIColor.white
+        pn.numberOfLines = 3
+        return pn
+    }()
+    var projectNumbersTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Project Numbers"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        return label
     }()
     let editButton: UIButton = {
         let button = UIButton()
@@ -82,11 +125,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }()
 
     //Outlets
-    @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var projectName: UILabel!
-    @IBOutlet weak var projectNameTF: UITextField!
-    @IBOutlet weak var projectDetailDescriptionLabel: UITextView!
+//    @IBOutlet weak var addButton: UIButton!
+//    @IBOutlet weak var dateLabel: UILabel!
+//    @IBOutlet weak var projectName: UILabel!
+//    @IBOutlet weak var projectNameTF: UITextField!
+//    @IBOutlet weak var projectDetailDescriptionLabel: UITextView!
     
     //identifier for collection view
     var cellId = "cellID"
@@ -138,25 +181,38 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //configure detailViewController
-        performAllConfigurations()
+        view.backgroundColor = .white
         
         //Editing Project Name
-        projectNameTF.delegate = self
-        projectNameTF.isHidden = true
-        projectName.isUserInteractionEnabled = true
-        let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(labelIsTapped))
-        nameTapGesture.numberOfTapsRequired = 1
-        projectName.addGestureRecognizer(nameTapGesture)
+        //projectNameTF.delegate = self
+       // projectNameTF.isHidden = true
+//        projectName.isUserInteractionEnabled = true
+//        let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(labelIsTapped))
+//        nameTapGesture.numberOfTapsRequired = 1
+//        projectName.addGestureRecognizer(nameTapGesture)
         
         //add subviews
-        view.addSubview(projectImageView)
-        view.addSubview(myProjectData)
-        view.addSubview(stepCategoriesFilter)
-        view.addSubview(collectionStackView)
-        view.addSubview(editButton)
-        view.bringSubviewToFront(addButton)
+        //temporary location
+        //adjust scroll view
+        view.addSubview(scrollViewContainer)
+        
+        scrollViewContainer.addSubview(contentUIView)
+        contentUIView.addSubview(projectImageView)
+        //adds gradient to image view
+        projectImageView.layer.insertSublayer(gradient, at: 0)
+        contentUIView.addSubview(dismissButton)
+        contentUIView.addSubview(projectName)
+        contentUIView.addSubview(projectNumbersTitle)
+        contentUIView.addSubview(projectNumbersCV)
+        
+        
+        
+        
+//        view.addSubview(myProjectData)
+//        view.addSubview(stepCategoriesFilter)
+//        view.addSubview(collectionStackView)
+//        view.addSubview(editButton)
+//        view.bringSubviewToFront(addButton)
         
         //setup constraints
         setupLayout()
@@ -176,12 +232,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         createStepIdDictionary()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        performAllConfigurations()
+    }
+    
+    //back to previous view
+    @objc func backAction(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     func performAllConfigurations(){
-       
-        //date
-        if let date = projectDetail?.date {
-            dateLabel.text = date
-        }
+        
         //Passing URL to a func that returns image
         if let validUrl = projectDetail?.selectedImagePathUrl {
             //thankfully to my delegate mechanism I can path url of my project image & return image
@@ -191,15 +252,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             projectImageView.image = UIImage(named: "defaultImage")
         }
         
-        //set project title
-        projectName.text = projectDetail?.name
-        
-        //assign description of the project
-        projectDetailDescriptionLabel.text = projectDetail?.comment
-        
         //Passing selected project to data collection view
         if let project = projectDetail{
-            myProjectData.project = project
+            projectNumbersCV.project = project
+            projectName.text = project.name
         }
     }
     
@@ -207,46 +263,93 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //perforn all positioning configurations
     private func setupLayout(){
         
+        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        contentUIView.translatesAutoresizingMaskIntoConstraints = false
+        projectName.translatesAutoresizingMaskIntoConstraints = false
         projectImageView.translatesAutoresizingMaskIntoConstraints = false
-        myProjectData.translatesAutoresizingMaskIntoConstraints = false
+    
         stepCategoriesFilter.translatesAutoresizingMaskIntoConstraints = false
         collectionStackView.translatesAutoresizingMaskIntoConstraints = false
-        addButton.translatesAutoresizingMaskIntoConstraints = false
+//        addButton.translatesAutoresizingMaskIntoConstraints = false
         editButton.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        projectNumbersTitle.translatesAutoresizingMaskIntoConstraints = false
+        projectNumbersCV.translatesAutoresizingMaskIntoConstraints = false
         
-        //edit project button
+        
+        
+        
+        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
+        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
+        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
+        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
+        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        
+        projectImageView.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 20).isActive = true
+        projectImageView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        projectImageView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        projectImageView.heightAnchor.constraint(equalToConstant: 222).isActive = true
+        
+        dismissButton.topAnchor.constraint(equalTo: projectImageView.topAnchor, constant: 7).isActive = true
+        dismissButton.leftAnchor.constraint(equalTo: projectImageView.leftAnchor, constant: 7).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        projectName.bottomAnchor.constraint(equalTo: projectImageView.bottomAnchor, constant: -10).isActive = true
+        projectName.leftAnchor.constraint(equalTo: projectImageView.leftAnchor, constant: 14).isActive = true
+        projectName.rightAnchor.constraint(equalTo: projectImageView.rightAnchor, constant: -14).isActive = true
+        projectName.heightAnchor.constraint(equalToConstant: 49).isActive = true
+        
+        projectNumbersTitle.topAnchor.constraint(equalTo: projectImageView.bottomAnchor, constant: -7).isActive = true
+        projectNumbersTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        projectNumbersTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        projectNumbersTitle.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        projectNumbersCV.topAnchor.constraint(equalTo: projectNumbersTitle.bottomAnchor, constant: -11).isActive = true
+        projectNumbersCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        projectNumbersCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        projectNumbersCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        /*//edit project button
         editButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
         editButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -26).isActive = true
         editButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
         //steps CV
-        collectionStackView.topAnchor.constraint(equalTo: stepCategoriesFilter.bottomAnchor, constant:  18).isActive = true
+        collectionStackView.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  18).isActive = true
         collectionStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         collectionStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         collectionStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        //projects main image
-        projectImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant:  18).isActive = true
-        projectImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        projectImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        projectImageView.heightAnchor.constraint(equalToConstant: 110).isActive = true
+        
         //projects values
-        myProjectData.topAnchor.constraint(equalTo: projectDetailDescriptionLabel.bottomAnchor, constant:  13).isActive = true
+        myProjectData.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  13).isActive = true
         myProjectData.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         myProjectData.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         myProjectData.heightAnchor.constraint(equalToConstant: 65).isActive = true
         //steps filter
-        stepCategoriesFilter.topAnchor.constraint(equalTo: myProjectData.bottomAnchor, constant:  5).isActive = true
+        stepCategoriesFilter.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  5).isActive = true
         stepCategoriesFilter.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         stepCategoriesFilter.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         stepCategoriesFilter.heightAnchor.constraint(equalToConstant: 50).isActive = true
         //add step button
-        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
-        addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        addButton.layer.cornerRadius = 30
+//        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
+//        addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
+//        addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+//        addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+//        addButton.layer.cornerRadius = 30*/
     }
     
+    //perform sublayer configuration after all views sizes and positions are defined
+    override func viewDidLayoutSubviews() {
+        gradient.frame = projectImageView.bounds
+    }
+
     //MARK: Collection View Section
     
     //size
@@ -340,7 +443,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         // reload steps collection view
         self.stepsCollectionView.reloadData()
         //project data
-        myProjectData.dataCollectionView.reloadData()
+        projectNumbersCV.projectNumbersCollectionView.reloadData()
         
     }
     
@@ -357,7 +460,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         reloadViews()
     }
     
-    @objc func labelIsTapped(){
+    /*@objc func labelIsTapped(){
         projectName.isHidden = true
         projectNameTF.isHidden = false
         //projectNameTF.text = projectName.text
@@ -381,7 +484,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             }
         }
         return true
-    }
+    }*/
     
     //MARK: Actions
     
@@ -393,7 +496,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //define delegate between edit & detail VC
         editProjectViewController.delegate = self
         //set project name
-        editProjectViewController.nameTextField.text = projectName.text
+  //      editProjectViewController.nameTextField.text = projectName.text
         //set project category
         for (index, item) in editProjectViewController.categoryCollectionView.categories.enumerated() {
             if projectDetail?.category == item {
@@ -406,7 +509,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //set project image
         editProjectViewController.projectMainPicture.image = projectImageView.image
         //set description text
-        editProjectViewController.descriptionTextView.text = projectDetailDescriptionLabel.text
+      //  editProjectViewController.descriptionTextView.text = projectDetailDescriptionLabel.text
         //set project price value
         if let total = projectDetail?.totalCost{
             editProjectViewController.priceSlider.value = Float(total)
@@ -486,11 +589,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             }
         default: break
         }
-    }
-    
-    //back to previous view
-    @IBAction func backAction(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
     }
     
 }

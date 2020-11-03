@@ -14,6 +14,9 @@ import Photos
 
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
     
+    //an instance of project detail vc
+    let projectDetailViewController = DetailViewController()
+    
     var recentActivitiesCV = RecentActivitiesCollectionView()
     var viewByCategoryCV = ViewByCategoryCollectionView()
     var statisticsStackView = StatisticsStackView()
@@ -132,7 +135,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     let status = PHPhotoLibrary.authorizationStatus()
     
     //Last thing that remain in storyboard
-    @IBOutlet weak var addButton: UIButton!// +
+//    @IBOutlet weak var addButton: UIButton!// +
     
     
     override func viewDidLoad() {
@@ -150,6 +153,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //temporary location
         //adjust scroll view
         view.addSubview(scrollViewContainer)
+        
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(mainTitle)
         contentUIView.addSubview(projectsTitle)
@@ -162,8 +166,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         contentUIView.addSubview(statisticsTitle)
         contentUIView.addSubview(statisticsStackView)
         
+        
         //becouse it in storyboard
-        view.bringSubviewToFront(addButton)
+//        view.bringSubviewToFront(addButton)
         
         //setup constraints
         setupLayout()
@@ -179,8 +184,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //perforn all positioning configurations
     private func setupLayout(){
         
+        //becouse by default it is black
+        view.backgroundColor = .white
+        
         mainTitle.translatesAutoresizingMaskIntoConstraints = false
-        addButton.translatesAutoresizingMaskIntoConstraints = false
+  //      addButton.translatesAutoresizingMaskIntoConstraints = false
         projectsTitle.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
@@ -192,7 +200,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         viewByCategoryCV.translatesAutoresizingMaskIntoConstraints = false
         statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
         statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
+                
         statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 0).isActive = true
         statisticsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         statisticsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
@@ -255,7 +263,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
         recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
         
-        addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
+      /*  addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
         addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         addButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
@@ -266,7 +274,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         addButton.imageView?.contentMode = .scaleAspectFill
         addButton.imageEdgeInsets = UIEdgeInsets(
             top: 7, left: 7, bottom: 6, right: 6
-        )
+        )*/
     }
     
     //number of cells
@@ -278,15 +286,16 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //defining what actually our cell is
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ProjectCell
-        
+        //data for every project cell
         cell.template = proJects[indexPath.item]
         
+        //image configuration
         if let validUrl = proJects[indexPath.item].selectedImagePathUrl{
             cell.projectImage.image = retreaveImageForProject(myUrl: validUrl)
         }else{
             cell.projectImage.image = UIImage(named: "defaultImage")
         }
-        
+        //configure delete feature
         cell.deleteButton.tag = indexPath.item
         cell.deleteButton.addTarget(self, action: #selector(deleteProject(button:)), for: .touchUpInside)
         return cell
@@ -298,9 +307,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     //action when user selects the cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //segue to step details
-        performSegue(withIdentifier: "ShowDetail", sender: nil)
+        //search step by sected item index
+        let selectedProject = proJects[indexPath.row]
+        projectDetailViewController.projectListIdentifier = selectedProject.id
+        projectDetailViewController.delegate = self
         
+        
+        //BUG - need to reset navigation stack everytime navigation controller is changed.
+        navigationController?.pushViewController(projectDetailViewController, animated: true)
     }
     
     //delete project function
@@ -366,7 +380,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             }
         }
     }
-    
 }
 
 class ProjectCell: UICollectionViewCell{

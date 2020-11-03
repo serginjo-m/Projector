@@ -146,13 +146,13 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
         
         
         //here is IMPORTANT part, when I pass settings for every cell
-        cell.imageSetting = cellSettingsArray[indexPath.row]
+        cell.configureCell = cellSettingsArray[indexPath.row]
         
         return cell
         
     }
     
-    //turn cells to be selectable
+    /*turn cells to be selectable
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -169,15 +169,15 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
     //define color of deselected cell
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
-    }
+    }*/
     
 }
 
 class ViewByCategoryCell: UICollectionViewCell {
     
-    var imageSetting: CategoryButtonSetting? {
+    var configureCell: CategoryButtonSetting? {
         didSet{
-            if let setting = imageSetting{
+            if let setting = configureCell{
                 
                 //constraints func , becouse elements needs to be positioned differently
                 configureConstraints(width: setting.imageWidth, height: setting.imageHeight, top: setting.imageTopAnchor, left: setting.imageLeftAnchor, titleLeft: setting.titleLeftAnchor)

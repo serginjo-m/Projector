@@ -17,6 +17,10 @@
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
 		CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF279E352464115B00B79978 /* StepAddItemCell.swift */; };
+		CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */; };
+		CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */; };
+		CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF27A06E254DA091007D06D3 /* Assets.xcassets */; };
+		CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A072254E0158007D06D3 /* ProjectNumbers.swift */; };
 		CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1292237766A700F3132A /* DetailViewController.swift */; };
 		CF2C1298237766A700F3132A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1293237766A700F3132A /* MainViewController.swift */; };
 		CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1294237766A700F3132A /* AppDelegate.swift */; };
@@ -24,7 +28,6 @@
 		CF321C15245D43D2005CC10E /* StepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* StepImages.swift */; };
 		CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712CD23740BAE00B2D593 /* Main.storyboard */; };
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
-		CF51C05E246968F00064F6C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF51C05D246968F00064F6C7 /* Assets.xcassets */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
 		CF594365253215670036641B /* StatisticsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594364253215670036641B /* StatisticsStackView.swift */; };
@@ -60,6 +63,10 @@
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
 		CF279E352464115B00B79978 /* StepAddItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItemCell.swift; sourceTree = "<group>"; };
+		CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SketchShadowExtension.swift; sourceTree = "<group>"; };
+		CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		CF27A06E254DA091007D06D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Projector/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		CF27A072254E0158007D06D3 /* ProjectNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectNumbers.swift; sourceTree = "<group>"; };
 		CF2C1292237766A700F3132A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		CF2C1293237766A700F3132A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CF2C1294237766A700F3132A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +76,6 @@
 		CF3712CE23740BAE00B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF3712D323740BB200B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF3712D523740BB200B2D593 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CF51C05D246968F00064F6C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
 		CF594364253215670036641B /* StatisticsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsStackView.swift; sourceTree = "<group>"; };
@@ -121,6 +127,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CF27A066254AB1E7007D06D3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */,
+				CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		CF3712BD23740BAE00B2D593 = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +158,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF27A066254AB1E7007D06D3 /* Controller */,
 				CF9DA835244C499E00DFAEEF /* Collection Views */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
@@ -157,7 +173,7 @@
 				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
-				CF51C05D246968F00064F6C7 /* Assets.xcassets */,
+				CF27A06E254DA091007D06D3 /* Assets.xcassets */,
 				CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */,
 				CF3712D523740BB200B2D593 /* Info.plist */,
 			);
@@ -167,6 +183,7 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CFB5E204244883F400E304EC /* DetailProjectData.swift */,
 				CFA5878A242883A6006367AE /* CategoryCell.swift */,
 				CF0C17E4242F9790000FB582 /* ProgressModel.swift */,
 				CF24E680242D1BAD00EEA027 /* Restore.swift */,
@@ -184,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
-				CFB5E204244883F400E304EC /* DetailProjectData.swift */,
 				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
 				CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
@@ -195,6 +211,7 @@
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594364253215670036641B /* StatisticsStackView.swift */,
+				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
 			);
 			path = "Collection Views";
 			sourceTree = "<group>";
@@ -277,7 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */,
-				CF51C05E246968F00064F6C7 /* Assets.xcassets in Resources */,
+				CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */,
 				CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +355,7 @@
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
+				CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */,
 				CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
@@ -349,8 +367,10 @@
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
+				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
 				CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */,
+				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
