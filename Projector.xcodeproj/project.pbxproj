@@ -31,6 +31,9 @@
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
 		CF594365253215670036641B /* StatisticsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594364253215670036641B /* StatisticsStackView.swift */; };
+		CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */; };
+		CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */; };
+		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
 		CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72D38F2467E86F007FA034 /* StepItemViewController.swift */; };
 		CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7ECB7524634B47006CC7FF /* StepAddItem.swift */; };
 		CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8792B9247A869C007EBD30 /* ClosureExample.swift */; };
@@ -79,6 +82,9 @@
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
 		CF594364253215670036641B /* StatisticsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsStackView.swift; sourceTree = "<group>"; };
+		CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectViewController.swift; sourceTree = "<group>"; };
+		CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
+		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
 		CF72D38F2467E86F007FA034 /* StepItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemViewController.swift; sourceTree = "<group>"; };
 		CF7ECB7524634B47006CC7FF /* StepAddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItem.swift; sourceTree = "<group>"; };
 		CF8792B9247A869C007EBD30 /* ClosureExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureExample.swift; sourceTree = "<group>"; };
@@ -132,6 +138,7 @@
 			children = (
 				CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */,
 				CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */,
+				CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -164,9 +171,9 @@
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
+				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
 				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
-				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
 				CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
@@ -183,6 +190,7 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
 				CFB5E204244883F400E304EC /* DetailProjectData.swift */,
 				CFA5878A242883A6006367AE /* CategoryCell.swift */,
 				CF0C17E4242F9790000FB582 /* ProgressModel.swift */,
@@ -193,6 +201,7 @@
 				CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */,
 				CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */,
 				CF8792B9247A869C007EBD30 /* ClosureExample.swift */,
+				CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */,
 			);
 			path = "Sample Files ";
 			sourceTree = "<group>";
@@ -357,6 +366,7 @@
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
 				CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */,
 				CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */,
+				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
@@ -379,11 +389,13 @@
 				CFEADA9C24ADF2ED00432C50 /* EditProjectVC.swift in Sources */,
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
+				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,
 				CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */,
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,
+				CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */,
 				CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

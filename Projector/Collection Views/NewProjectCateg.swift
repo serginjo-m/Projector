@@ -14,7 +14,7 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
     
     //MARK: Properties
     //categories array
-    var categories = ["TRAVEL", "FINANCE", "LEARNING", "FUN", "OTHER"]
+    var categories = ["Learn", "Travel", "Buy", "Build", "Other"]
     
     //this property need for cells
     private let cellID = "cellId"
@@ -103,7 +103,7 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
         categoryName = categories[indexPath.row]
         
         //that is how I can call a selected cell !!!
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.red
+        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.lightGray
     }
     //makes cells deselectable
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
@@ -111,7 +111,7 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
     }
     //define color of deselected cell
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
+        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.init(displayP3Red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
     }
 }
 
@@ -120,8 +120,7 @@ class CategoriesCell: UICollectionViewCell {
     //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.cornerRadius = 3
-        //layer.masksToBounds = true
+        
         setupViews()
     }
     required init?(coder aDecoder: NSCoder) {
@@ -131,7 +130,7 @@ class CategoriesCell: UICollectionViewCell {
     //change color for cell selected state
     override var isSelected: Bool{
         didSet{
-            self.backgroundColor = UIColor.purple
+//            self.backgroundColor = UIColor.purple
         }
     }
     
@@ -139,19 +138,25 @@ class CategoriesCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Sample"
         label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 13.0)
-        label.textColor = UIColor.white
-        
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textColor = UIColor.init(displayP3Red: 55/255, green: 55/255, blue: 55/255, alpha: 1)
         return label
     }()
 
     func setupViews(){
         //background color of cells
-        backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
+        backgroundColor = UIColor.init(displayP3Red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
+        layer.cornerRadius = 11
+        //layer.masksToBounds = true
         
         addSubview(cellLabel)
         
-        cellLabel.frame = CGRect(x: 0, y: 15, width: frame.width , height: 35.0)
+        cellLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        cellLabel.topAnchor.constraint(equalTo: topAnchor, constant: 90).isActive = true
+        cellLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        cellLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        cellLabel.heightAnchor.constraint(equalToConstant: 21).isActive = true
     }
     
 }

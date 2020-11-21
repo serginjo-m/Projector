@@ -32,24 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = CustomTabBarController()
-        //let's define root view
-        //let mainViewController = ProjectViewController()
-        
-        //let myNavigationController = UINavigationController(rootViewController: mainViewController)
-        
-//        myNavigationController.setNavigationBarHidden(true, animated: false)
-        
-        //maybe there is better solution, but for now let's move forward
-        //custom tab bar navigation
-        
-        
-//        let customTabBar = CustomTabBar()
-//        customTabBar.navigationController = myNavigationController
-//        customTabBar.viewControllersArray = [mainViewController, newStepViewController]
-//        window?.addSubview(customTabBar)
-        
-        
-        
         
         return true
     }

@@ -29,7 +29,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //MARK: Properties
-    private let cellID = "cellId"
+    let cellID = "cellId"
     
     //here creates a horizontal collectionView inside stackView
     let projectsCollectionView: UICollectionView = {
@@ -79,6 +79,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //stack view for recent projects collection view
     var recentProjectsStackView = UIStackView()
     
+    //Profile Button
     var userProfileButton: UIButton = {
         let button = UIButton()
         button.layer.backgroundColor = UIColor.yellow.cgColor
@@ -134,9 +135,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     // seems it speed up loading?
     let status = PHPhotoLibrary.authorizationStatus()
     
-    //Last thing that remain in storyboard
-//    @IBOutlet weak var addButton: UIButton!// +
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,8 +150,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         //temporary location
         //adjust scroll view
-        view.addSubview(scrollViewContainer)
         
+        view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(mainTitle)
         contentUIView.addSubview(projectsTitle)
@@ -165,11 +163,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         contentUIView.addSubview(viewByCategoryCV)
         contentUIView.addSubview(statisticsTitle)
         contentUIView.addSubview(statisticsStackView)
-        
-        
-        //becouse it in storyboard
-//        view.bringSubviewToFront(addButton)
-        
         //setup constraints
         setupLayout()
         
@@ -181,6 +174,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         statisticsStackView.progressAnimation()
     }
     
+    //open new step VC
+    @objc func addNewProject(_ sender: Any){
+        show(NewProjectViewController(), sender: sender)
+    }
+    
     //perforn all positioning configurations
     private func setupLayout(){
         
@@ -188,7 +186,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         view.backgroundColor = .white
         
         mainTitle.translatesAutoresizingMaskIntoConstraints = false
-  //      addButton.translatesAutoresizingMaskIntoConstraints = false
         projectsTitle.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
@@ -262,19 +259,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         recentProjectsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
         recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
-        
-      /*  addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
-        addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        addButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
-        addButton.layer.cornerRadius = 6
-        addButton.layer.borderColor = UIColor.init(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
-        addButton.layer.borderWidth = 1
-        addButton.setImage(UIImage(named: "addButton"), for: .normal)
-        addButton.imageView?.contentMode = .scaleAspectFill
-        addButton.imageEdgeInsets = UIEdgeInsets(
-            top: 7, left: 7, bottom: 6, right: 6
-        )*/
     }
     
     //number of cells
@@ -342,7 +326,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     func reloadTableView() {
         //projects collection view reload data
         self.projectsCollectionView.reloadData()
-        
+
         //update number of projects in projects CV title
         projectsTitle.text = "Your Projects (\(proJects.count))"
     }
@@ -360,7 +344,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     
     // MARK: Segues
-    @IBAction func unwindToProjectList(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
+    /*@IBAction func unwindToProjectList(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
         //here perform some actions...
         reloadTableView()
     }
@@ -379,7 +363,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
                 controller.delegate = self
             }
         }
-    }
+    }*/
 }
 
 class ProjectCell: UICollectionViewCell{
@@ -444,7 +428,7 @@ class ProjectCell: UICollectionViewCell{
     
     func setupViews(){
         
-        //still can't understand how it declared ???
+        
         backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
         
         //deleteButton.frame = CGRect(x:frame.width - 25, y: 9, width:16, height: 16)

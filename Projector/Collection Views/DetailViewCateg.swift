@@ -14,7 +14,7 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
     //Properties
     
     //Fetch Selected Project for Step CV modifications
-    var project: ProjectList!
+    var project: ProjectList?
     
     
     var cellIdentificator = "cellID"
@@ -25,11 +25,14 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
     // as project id is defined, creates existing categories array
     var projectId = String() {
         didSet{
-            updateCategoriesArray()
+            //as ID defined, retreave project from DB
+            project = ProjectListRepository.instance.getProjectList(id: projectId)
+            //run main func
+            updateCategoriesCV()
         }
     }
     
-    //here we have a pointers for a change color purposes
+    //pointers for a change color purposes
     var categoryPointersArray = [UIView]()
     
     //parent collection view to reload after change
@@ -68,11 +71,13 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
     
     //create array of existing categories in project
     func updateCategoriesArray (){
+        //first check if project exist
+        guard let proj = project else {return}
         // ----------------- maybe a little bit complicated ? -------------------------------
         //"All" is always first item in list of categories
         var array = ["All"]
         //convert selected project to sorted steps Dictionary for Detail Categoies Collection View
-        let stepsDictionary = Dictionary(grouping: self.project.projectStep) { (step) -> String in
+        let stepsDictionary = Dictionary(grouping: proj.projectStep) { (step) -> String in
             return step.category
         }
         //get categories for array
@@ -90,7 +95,7 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
             for item in categoryPointersArray{
                 item.backgroundColor = .white
             }
-            //than set first item ("All") as selected
+            //then set first item ("All") as selected
         }) { (completed: Bool) in
             self.categoryPointersArray.first?.backgroundColor = UIColor(red: 1, green: 0.7, blue: 0.0, alpha: 1)
         }
@@ -98,23 +103,22 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
     
     //as selectedCategory change - func run
     func modifyStepsArray(){
+        //first check if parent view controller exist & project defined
+        guard let detailViewController = detailViewController, let project = project else {return}
         //clear array
-        detailViewController!.stepsArray.removeAll()
+        detailViewController.localStepsArray.removeAll()
         //full list in case "All" is selected
         if selectedCategory == "All"{
-            //safe unwrap
-            if let array = project?.projectStep{
-                // ----------------- Is it clever, add one by one? -----------------
-                for step in array {
-                    detailViewController!.stepsArray.append(step)
-                }
+            // ----------------- Is it clever, add one by one? -----------------
+            for step in project.projectStep {
+                detailViewController.localStepsArray.append(step)
             }
         }else{
             //filter array by selectectedCategory property
-            detailViewController!.stepsArray = project!.projectStep.filter({$0.category == selectedCategory})
+            detailViewController.localStepsArray = project.projectStep.filter({$0.category == selectedCategory})
         }
         
-        detailViewController?.stepsCollectionView.reloadData()
+        detailViewController.stepsCollectionView.reloadData()
     }
     
     //here creates a horizontal collectionView inside stackView
@@ -186,6 +190,7 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
         cell.selectedCategoryPointer.frame = CGRect(x: 0, y: 26, width: Int(cell.frame.width), height: 8)
         //add pointers to array for changing color
         categoryPointersArray.append(cell.selectedCategoryPointer)
+        
         //create CUSTOM tap gesture recognizer that have tag & title properties
         let labelTapGesture = MyGestureRecognizer(target: self, action: #selector(labelTapped))
         labelTapGesture.title = cell.categoryLabel.text!
@@ -234,9 +239,9 @@ class StepsCategoriesCell: UICollectionViewCell{
     let categoryLabel: UILabel = {
         let label = UILabel()
         label.text = "NOTHING"
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.init(white: 0.3, alpha: 1)
         label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 15.0)
+        label.font = UIFont.boldSystemFont(ofSize: 15)
         return label
     }()
     

@@ -162,7 +162,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
             view.addSubview($0)
         }
-        
+        print(uniqueID as Any, "is id from NewStepViewController")
         //constraints configuration
         setupLayout()
         
@@ -187,6 +187,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     private func setupLayout(){
+        view.backgroundColor = .white
         newStepImages.translatesAutoresizingMaskIntoConstraints = false
         newStepCategory.translatesAutoresizingMaskIntoConstraints = false
         
@@ -275,7 +276,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
-        performSegue(withIdentifier: "backToDetailViewController", sender: stepSaveButton)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func priceSliderValueChanged(_ sender: UISlider) {

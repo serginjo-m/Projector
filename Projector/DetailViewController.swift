@@ -28,41 +28,36 @@ protocol EditViewControllerDelegate: class{
 
 class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditViewControllerDelegate{
     
-    //container for all items on the page
+    //most for reload data
+    weak var delegate: DetailViewControllerDelegate?
+    
+    //scroll view container
     var scrollViewContainer = UIScrollView()
     var contentUIView = UIView()
     
+    //project statistics (money, distance..)
     let projectNumbersCV = ProjectNumbersCollectionView()
     
-    
-    
-    
-    
-    
-    
+    //Project Steps Filter by Categories
+    var stepCategoriesFilter = StepCategoriesCollectionView()
+    //find steps array position in data base by id for filter
+    var stepsIdDictionary: [String: Int] = [:]
+    //an array of steps
+    var localStepsArray: [ProjectStep] = []
     
     //instance of project edit mode VC
     let editProjectViewController = EditProjectViewController()
     
-    //most for reload data
-    weak var delegate: DetailViewControllerDelegate?
-  
-    
-    //Project Steps Filter by Categories
-    var stepCategoriesFilter = StepCategoriesCollectionView()
-    
     //Instance of Selected Project by User
-    var projectDetail: ProjectList? {
+    var projectInstance: ProjectList? {
         get{
             //Retrieve a single object with unique identifier (projectListIdentifier)
             return ProjectListRepository.instance.getProjectList(id: projectListIdentifier!)
         }
     }
+    
     //Identifier of selected project
     var projectListIdentifier: String?
-    
-    //an array of steps
-    var stepsArray = [ProjectStep]()
 
    //Project Image created programatically
     let projectImageView: UIImageView = {
@@ -111,6 +106,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
+    var stepsTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Steps To Do (0)"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        return label
+    }()
     let editButton: UIButton = {
         let button = UIButton()
         button.setTitle("Edit", for: .normal)
@@ -124,28 +125,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         return button
     }()
 
-    //Outlets
-//    @IBOutlet weak var addButton: UIButton!
-//    @IBOutlet weak var dateLabel: UILabel!
-//    @IBOutlet weak var projectName: UILabel!
-//    @IBOutlet weak var projectNameTF: UITextField!
-//    @IBOutlet weak var projectDetailDescriptionLabel: UITextView!
     
     //identifier for collection view
     var cellId = "cellID"
-    
-    //find steps array position in data base by id for filter
-    var stepsIdDictionary = [String: Int]()
     
     //here creates a horizontal collectionView
     let stepsCollectionView: UICollectionView = {
         
         //instance for UICollectionView purposes
-        let layout = UICollectionViewFlowLayout()
-        
-        //changing default direction of scrolling
-        layout.scrollDirection = .vertical
-        
+        let layout = PinterestLayout()
+    
         //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -183,68 +172,51 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        //Editing Project Name
-        //projectNameTF.delegate = self
-       // projectNameTF.isHidden = true
-//        projectName.isUserInteractionEnabled = true
-//        let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(labelIsTapped))
-//        nameTapGesture.numberOfTapsRequired = 1
-//        projectName.addGestureRecognizer(nameTapGesture)
         
-        //add subviews
-        //temporary location
-        //adjust scroll view
         view.addSubview(scrollViewContainer)
-        
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(projectImageView)
-        //adds gradient to image view
-        projectImageView.layer.insertSublayer(gradient, at: 0)
         contentUIView.addSubview(dismissButton)
         contentUIView.addSubview(projectName)
         contentUIView.addSubview(projectNumbersTitle)
         contentUIView.addSubview(projectNumbersCV)
+        contentUIView.addSubview(stepsTitle)
+        contentUIView.addSubview(stepCategoriesFilter)
+        contentUIView.addSubview(collectionStackView)
+        
+        //adds gradient to image view
+        projectImageView.layer.insertSublayer(gradient, at: 0)
         
         
-        
-        
-//        view.addSubview(myProjectData)
-//        view.addSubview(stepCategoriesFilter)
-//        view.addSubview(collectionStackView)
-//        view.addSubview(editButton)
-//        view.bringSubviewToFront(addButton)
+        if let layout = stepsCollectionView.collectionViewLayout as? PinterestLayout {
+            layout.delegate = self
+        }
         
         //setup constraints
         setupLayout()
         
-        //define selected project for categories collection view
-        stepCategoriesFilter.project = projectDetail
-        //identifier uses for creating existing step categories array
-        stepCategoriesFilter.projectId = projectListIdentifier!
-        
-        // define parents collection view for reload
-        stepCategoriesFilter.detailViewController = self
-        //creates array for stepsCV based on data source
-        updateMyArray()
-        //make first pointer ("All") color - orange = selected
-        stepCategoriesFilter.performButchUpdates()
-        //create dictionary for steps deleting purposes
-        createStepIdDictionary()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         performAllConfigurations()
     }
     
+    //perform sublayer configuration after all views sizes and positions are defined
+    override func viewDidLayoutSubviews() {
+        gradient.frame = projectImageView.bounds
+    }
+    
     //back to previous view
     @objc func backAction(_ sender: Any) {
+        self.delegate?.reloadTableView()
         navigationController?.popViewController(animated: true)
     }
     
+    //set project image, name, statistics DB
     func performAllConfigurations(){
         
-        //Passing URL to a func that returns image
-        if let validUrl = projectDetail?.selectedImagePathUrl {
+        //IMAGE GET
+        if let validUrl = projectInstance?.selectedImagePathUrl {
             //thankfully to my delegate mechanism I can path url of my project image & return image
             projectImageView.image = self.delegate?.retreaveImageForProject(myUrl: validUrl)
         }else{
@@ -252,31 +224,45 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             projectImageView.image = UIImage(named: "defaultImage")
         }
         
-        //Passing selected project to data collection view
-        if let project = projectDetail{
+        //SET PROJECT DATA TO OBJECTS
+        if let project = projectInstance{
             projectNumbersCV.project = project
             projectName.text = project.name
+            stepsTitle.text = "Steps To Do (\(project.projectStep.count))"
         }
+        
+        //as project ID defined filter start to run
+        stepCategoriesFilter.projectId = projectListIdentifier!
+        
+        // define parents collection view for reload
+        stepCategoriesFilter.detailViewController = self
+        
+        //this two things
+        updateMyArray()
+        
+        //update CV
+        stepsCollectionView.reloadData()
+        
+        //create dictionary for steps deleting purposes
+        createStepIdDictionary()
+        
     }
     
     
     //perforn all positioning configurations
     private func setupLayout(){
         
-        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentUIView.translatesAutoresizingMaskIntoConstraints = false
-        projectName.translatesAutoresizingMaskIntoConstraints = false
-        projectImageView.translatesAutoresizingMaskIntoConstraints = false
-    
-        stepCategoriesFilter.translatesAutoresizingMaskIntoConstraints = false
-        collectionStackView.translatesAutoresizingMaskIntoConstraints = false
-//        addButton.translatesAutoresizingMaskIntoConstraints = false
+        stepCategoriesFilter.translatesAutoresizingMaskIntoConstraints = false//
+        collectionStackView.translatesAutoresizingMaskIntoConstraints = false//
         editButton.translatesAutoresizingMaskIntoConstraints = false
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        projectNumbersTitle.translatesAutoresizingMaskIntoConstraints = false
-        projectNumbersCV.translatesAutoresizingMaskIntoConstraints = false
-        
-        
+        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false//
+        contentUIView.translatesAutoresizingMaskIntoConstraints = false//
+        projectName.translatesAutoresizingMaskIntoConstraints = false//
+        projectImageView.translatesAutoresizingMaskIntoConstraints = false//
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false//
+        projectNumbersTitle.translatesAutoresizingMaskIntoConstraints = false//
+        projectNumbersCV.translatesAutoresizingMaskIntoConstraints = false//
+        stepsTitle.translatesAutoresizingMaskIntoConstraints = false//
         
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -316,40 +302,23 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         projectNumbersCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         projectNumbersCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-        /*//edit project button
-        editButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
-        editButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -26).isActive = true
-        editButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        editButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        //steps CV
-        collectionStackView.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  18).isActive = true
-        collectionStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        collectionStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-        collectionStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        stepsTitle.topAnchor.constraint(equalTo: projectNumbersCV.bottomAnchor, constant: -7).isActive = true
+        stepsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        stepsTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        stepsTitle.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-        //projects values
-        myProjectData.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  13).isActive = true
-        myProjectData.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        myProjectData.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        myProjectData.heightAnchor.constraint(equalToConstant: 65).isActive = true
-        //steps filter
-        stepCategoriesFilter.topAnchor.constraint(equalTo: view.bottomAnchor, constant:  5).isActive = true
-        stepCategoriesFilter.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
-        stepCategoriesFilter.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        stepCategoriesFilter.topAnchor.constraint(equalTo: stepsTitle.bottomAnchor, constant: -27).isActive = true
+        stepCategoriesFilter.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        stepCategoriesFilter.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         stepCategoriesFilter.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        //add step button
-//        addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  -16).isActive = true
-//        addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
-//        addButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-//        addButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-//        addButton.layer.cornerRadius = 30*/
+        
+        collectionStackView.topAnchor.constraint(equalTo: stepCategoriesFilter.bottomAnchor, constant:  18).isActive = true
+        collectionStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  15).isActive = true
+        collectionStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        collectionStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+     
     }
     
-    //perform sublayer configuration after all views sizes and positions are defined
-    override func viewDidLayoutSubviews() {
-        gradient.frame = projectImageView.bounds
-    }
-
     //MARK: Collection View Section
     
     //size
@@ -360,7 +329,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return stepsArray.count
+        return localStepsArray.count
     }
     
     //define the cell
@@ -368,7 +337,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! StepsCell
         cell.layer.cornerRadius = 12
         
-        let step = stepsArray[indexPath.row]
+        let step = localStepsArray[indexPath.row]
         
         cell.stepNameLabel.text = step.name
         cell.doneButton.isSelected = step.complete
@@ -396,7 +365,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //action when user selects the cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //segue to step details
-        performSegue(withIdentifier: "ShowStepViewController", sender: nil)
+        //performSegue(withIdentifier: "ShowStepViewController", sender: nil)
         
     }
     //makes cells deselectable
@@ -407,10 +376,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
     }
-    
-    //MARK: Functions
-    
-    //Delete Step Handler
+ 
+    //DELETE ACTION
     @objc func deleteStep( button: UIButton){
         //create new alert window
         let alertVC = UIAlertController(title: "Delete Step?", message: "Are You sure want delete this step?", preferredStyle: .alert)
@@ -419,7 +386,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //delete button
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             //delete step in data base
-            ProjectListRepository.instance.deleteProjectStep(list: self.projectDetail!, stepAtIndex: button.tag)
+            ProjectListRepository.instance.deleteProjectStep(list: self.projectInstance!, stepAtIndex: button.tag)
             
             //update array for collection veiw
             self.updateMyArray()
@@ -435,24 +402,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //shows an alert window
         present(alertVC, animated: true, completion: nil)
     }
-    
-    //perform updates to views after make changes
-    func reloadViews(){
-        //here we call a masters (Boss) delegate function to reload its data
-        self.delegate?.reloadTableView()
-        // reload steps collection view
-        self.stepsCollectionView.reloadData()
-        //project data
-        projectNumbersCV.projectNumbersCollectionView.reloadData()
-        
-    }
-    
-    //Switch handler
+
+    //COMPLETED ACTION
     @objc func itemCompleted(button: UIButton){
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected
         //here save .tag of selected switch = selected cell
-        let updatedStep = projectDetail?.projectStep[button.tag]
+        let updatedStep = projectInstance?.projectStep[button.tag]
         //func that change complete bool of the step
         ProjectListRepository.instance.updateStepCompletionStatus(step: updatedStep!, isComplete: button.isSelected)
         
@@ -460,38 +416,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         reloadViews()
     }
     
-    /*@objc func labelIsTapped(){
-        projectName.isHidden = true
-        projectNameTF.isHidden = false
-        //projectNameTF.text = projectName.text
-        projectNameTF.becomeFirstResponder()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        projectNameTF.isHidden = true
-        projectName.isHidden = false
-        
-        //update project name
-        if let text = projectNameTF.text {
-            if !text.isEmpty{
-                projectName.text = text
-                ProjectListRepository.instance.updateProjectName(name: text, list: projectDetail!)
-                //perform update after data source has been changed
-                reloadViews()
-            }else{
-                print("Text Field is Empty!!!")
-            }
-        }
-        return true
-    }*/
-    
-    //MARK: Actions
-    
-    //pergorm segue to new step VC
-    @IBAction func addStep(_ sender: UIStoryboardSegue) {}
-    
-    //This is my edit button action!?
+    //EDIT BUTTON ACTION
     @objc func editButtonAction(_ sender: Any){
         //define delegate between edit & detail VC
         editProjectViewController.delegate = self
@@ -499,11 +424,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
   //      editProjectViewController.nameTextField.text = projectName.text
         //set project category
         for (index, item) in editProjectViewController.categoryCollectionView.categories.enumerated() {
-            if projectDetail?.category == item {
+            if projectInstance?.category == item {
                 editProjectViewController.categoryCollectionView.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
             }
         }
-        if let category = projectDetail?.category{
+        if let category = projectInstance?.category{
             editProjectViewController.categoryCollectionView.categoryName = category
         }
         //set project image
@@ -511,26 +436,27 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //set description text
       //  editProjectViewController.descriptionTextView.text = projectDetailDescriptionLabel.text
         //set project price value
-        if let total = projectDetail?.totalCost{
+        if let total = projectInstance?.totalCost{
             editProjectViewController.priceSlider.value = Float(total)
         }
         //set project distance value
-        if let distance = projectDetail?.distance{
+        if let distance = projectInstance?.distance{
             editProjectViewController.distanceSlider.value = Float(distance)
         }
-        if let url = projectDetail?.selectedImagePathUrl {
+        if let url = projectInstance?.selectedImagePathUrl {
             editProjectViewController.selectedImageURLString = url
         }
-        if let id = projectDetail?.id{
+        if let id = projectInstance?.id{
             editProjectViewController.projectId = id
         }
-        if let steps = projectDetail?.projectStep{
+        if let steps = projectInstance?.projectStep{
             editProjectViewController.projectSteps = steps
         }
         self.show(editProjectViewController, sender: sender)
         //performSegue(withIdentifier: "pushToEditProject", sender: editButton)
     }
     
+    //NEW STEP UPDATES
     @IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
         //update array, to have a data for new cell
         updateMyArray()
@@ -539,35 +465,57 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //perform all operations step by step with categories CV
         stepCategoriesFilter.updateCategoriesCV()
         //add new item
-        let newIndexPath = IndexPath(row: stepsArray.count - 1, section: 0)
+        let newIndexPath = IndexPath(row: localStepsArray.count - 1, section: 0)
         stepsCollectionView.insertItems(at: [newIndexPath])
     }
     
-   //creates array for CV based on data source
+    //UPDATES AFTER CHANGINGS
+    func reloadViews(){
+        //here we call a masters (Boss) delegate function to reload its data
+        self.delegate?.reloadTableView()
+        // reload steps collection view
+        self.stepsCollectionView.reloadData()
+        //reload statistics collection view
+        projectNumbersCV.projectNumbersCollectionView.reloadData()
+        
+    }
+    
+    
+    //MARK: FILTER LOGIC
+    
+    //creates array for CV based on data source
     func updateMyArray(){
+        guard let array = projectInstance?.projectStep else {return}
         //clear all step from array
-        stepsArray.removeAll()
+        localStepsArray.removeAll()
+        
         //add all steps to array
-        for item in projectDetail!.projectStep {
-            stepsArray.append(item)
+        for item in array {
+            localStepsArray.append(item)
         }
+        
         /*becouse of dequeue issue have to
-         create dictionary where step id is corresponds to position in projects array
+         create dictionary where step id is corresponds to position in ...
          */
         createStepIdDictionary()
     }
     
+    //DELETE PURPOSES
     //Dictionary that holds position of step in array based on step id
     func createStepIdDictionary(){
-        if let stArr = projectDetail?.projectStep{
+        //clear old data
+        stepsIdDictionary.removeAll()
+        
+        if let stArr = projectInstance?.projectStep{
             for step in stArr{
                 stepsIdDictionary[step.id] = stArr.index(of: step)
             }
         }
     }
     
+    
     //passing tapped cell identifier to NewStepVC
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // becouse prepare can be only 1, switch is needed
         switch segue.identifier{
         case "AddStep":
@@ -589,6 +537,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             }
         default: break
         }
-    }
+    }*/
     
+}
+// Pinterest Layout Configurations
+extension DetailViewController: PinterestLayoutDelegate {
+    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
+        
+        //return photos[indexPath.item].image.size.height
+        let sizesArray: [CGFloat] = [124, 87, 67, 58, 99, 120, 150]
+    
+        return sizesArray[indexPath.item]
+    }
 }

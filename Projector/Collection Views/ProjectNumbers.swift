@@ -202,7 +202,7 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
         ["\(project.totalCost)$", "\(project.budget)$", "\(project.distance)km"].forEach {
             projectValues.append($0)
         }
-        
+        //reload needed when browse btwn projects
         projectNumbersCollectionView.reloadData()
     }
     
@@ -224,7 +224,7 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
 }
 
 class ProjectNumbersCell: UICollectionViewCell {
-    
+    //cell configuration object
     var configureCell: NumberCellSetting? {
         didSet{
             if let setting = configureCell{
