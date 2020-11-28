@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BD058D30C2EB436C5D7D3F46 /* Pods_Projector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */; };
+		CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF02D7AE256D9606001B522F /* StepNumbersCV.swift */; };
 		CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0C17E4242F9790000FB582 /* ProgressModel.swift */; };
 		CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */; };
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
@@ -57,6 +58,7 @@
 		020AF287354E46ED7A1A1D79 /* Pods-Projector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.debug.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.debug.xcconfig"; sourceTree = "<group>"; };
 		04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D7CF4AF407F88049378636 /* Pods-Projector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.release.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.release.xcconfig"; sourceTree = "<group>"; };
+		CF02D7AE256D9606001B522F /* StepNumbersCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepNumbersCV.swift; sourceTree = "<group>"; };
 		CF0C17E4242F9790000FB582 /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
 		CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStepCell.swift; sourceTree = "<group>"; };
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
 				CFEADA9B24ADF2ED00432C50 /* EditProjectVC.swift */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
+				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
 				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
@@ -190,7 +193,10 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
+				CF279E352464115B00B79978 /* StepAddItemCell.swift */,
 				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
+				CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */,
 				CFB5E204244883F400E304EC /* DetailProjectData.swift */,
 				CFA5878A242883A6006367AE /* CategoryCell.swift */,
 				CF0C17E4242F9790000FB582 /* ProgressModel.swift */,
@@ -211,10 +217,7 @@
 			children = (
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
 				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
-				CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
-				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
-				CF279E352464115B00B79978 /* StepAddItemCell.swift */,
 				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
@@ -376,6 +379,7 @@
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
+				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
 				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,

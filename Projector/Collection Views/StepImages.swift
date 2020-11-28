@@ -74,6 +74,10 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
         
+        //hide scrollbar
+        imageCollectionView.showsVerticalScrollIndicator = false
+        imageCollectionView.showsHorizontalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         

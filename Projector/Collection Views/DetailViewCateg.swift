@@ -152,6 +152,9 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
         stepCategoryCollectionView.dataSource = self
         stepCategoryCollectionView.delegate = self
         
+        stepCategoryCollectionView.showsHorizontalScrollIndicator = false
+        stepCategoryCollectionView.showsVerticalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         stepCategoryCollectionView.register(StepsCategoriesCell.self, forCellWithReuseIdentifier: cellIdentificator)
         
@@ -170,7 +173,6 @@ class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UIC
         //some sizes tweaks :)
         itemSize.height = 30
         itemSize.width = itemSize.width + 10
-        
         return itemSize
         
     }

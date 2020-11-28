@@ -45,25 +45,28 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    //Cancel button
-    let cancelButton: UIButton = {
+    
+    let dismissButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: "backArrow")
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(backAction(button:)), for: .touchDown)
-        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("", for: .normal)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.adjustsImageWhenHighlighted = false
+        button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
+        
         return button
     }()
-    //Date Label
-    let titleLabel: UILabel = {
+    
+    let viewControllerTitle: UILabel = {
         let label = UILabel()
-        label.text = "Add New Step"
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor.darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "New Step"
+        label.textColor = UIColor.init(white: 0.7, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textAlignment = .center
         return label
     }()
+    
     //Titles
     let nameTitle: UILabel = {
         let label = UILabel()
@@ -159,10 +162,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     override func viewDidLoad() {
         super.viewDidLoad()
         //add all subviews
-        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
+        [stepNameTextField, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
             view.addSubview($0)
         }
-        print(uniqueID as Any, "is id from NewStepViewController")
+        
         //constraints configuration
         setupLayout()
         
@@ -190,6 +193,19 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         view.backgroundColor = .white
         newStepImages.translatesAutoresizingMaskIntoConstraints = false
         newStepCategory.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        viewControllerTitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
+        dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        viewControllerTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        viewControllerTitle.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
+        viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        
         
         stepDistanceValueLabel.centerYAnchor.constraint(equalTo: stepDistanceSlider.centerYAnchor).isActive = true
         stepDistanceValueLabel.leftAnchor.constraint(equalTo: stepDistanceSlider.rightAnchor, constant:  28).isActive = true
@@ -241,7 +257,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         newStepCategory.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         newStepCategory.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
-        nameTitle.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant:  40).isActive = true
+        nameTitle.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant:  40).isActive = true
         nameTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  16).isActive = true
         nameTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         nameTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -251,26 +267,17 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         stepNameTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         stepNameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
-        cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant:  26).isActive = true
-        cancelButton.widthAnchor.constraint(equalToConstant: 8).isActive = true
-        cancelButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        
         stepSaveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
         stepSaveButton.leftAnchor.constraint(equalTo: view.rightAnchor, constant:  -58).isActive = true
         stepSaveButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         stepSaveButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
         
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
     }
     
     // MARK: - Navigation
     
-    //Dismiss View Controller
-    @objc func backAction( button: UIButton){
+    //back to previous view
+    @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     

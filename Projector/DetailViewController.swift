@@ -156,6 +156,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //specify delegate & datasourse for generating our individual horizontal cells
         stepsCollectionView.dataSource = self
         stepsCollectionView.delegate = self
+        
+        stepsCollectionView.showsHorizontalScrollIndicator = false
+        stepsCollectionView.showsVerticalScrollIndicator = false
     
         //Class is need to be registered in order of using inside
         stepsCollectionView.register(StepsCell.self, forCellWithReuseIdentifier: cellId)
@@ -367,6 +370,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //segue to step details
         //performSegue(withIdentifier: "ShowStepViewController", sender: nil)
         
+        showStepDetails(index: indexPath.item)
+        
     }
     //makes cells deselectable
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
@@ -457,7 +462,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     }
     
     //NEW STEP UPDATES
-    @IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
+    /*@IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
         //update array, to have a data for new cell
         updateMyArray()
         //update views 
@@ -467,7 +472,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //add new item
         let newIndexPath = IndexPath(row: localStepsArray.count - 1, section: 0)
         stepsCollectionView.insertItems(at: [newIndexPath])
-    }
+    }*/
     
     //UPDATES AFTER CHANGINGS
     func reloadViews(){
@@ -515,7 +520,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     
     //passing tapped cell identifier to NewStepVC
-    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+   /* override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // becouse prepare can be only 1, switch is needed
         switch segue.identifier{
         case "AddStep":
@@ -538,6 +543,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         default: break
         }
     }*/
+    
+    func showStepDetails(index: Int){
+        let selectedStepId = localStepsArray[index].id
+        
+        let stepDetailVC = StepViewController()
+        stepDetailVC.stepID = selectedStepId
+//        stepDetailVC.delegate = self
+        navigationController?.pushViewController(stepDetailVC, animated: true)
+    }
     
 }
 // Pinterest Layout Configurations

@@ -108,7 +108,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     configureAddItemAction(newObjectVC: newProjectViewController)
                 default:
                     
-                    print(lastVCClass, "is last view controller class")
+                    break
             }
             
             return false

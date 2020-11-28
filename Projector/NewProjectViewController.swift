@@ -42,6 +42,15 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return button
     }()
     
+    let viewControllerTitle: UILabel = {
+        let label = UILabel()
+        label.text = "New Project"
+        label.textColor = UIColor.init(white: 0.7, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textAlignment = .center
+        return label
+    }()
+    
     //MARK: Properties
     let saveButton: UIButton = {
         let button = UIButton()
@@ -157,6 +166,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         view.backgroundColor = .white
         
         view.addSubview(dismissButton)
+        view.addSubview(viewControllerTitle)
         view.addSubview(saveButton)
         view.addSubview(projectNameTitle)
         
@@ -337,6 +347,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     private func setupLayout(){
         
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        viewControllerTitle.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         projectNameTitle.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -357,6 +368,11 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        viewControllerTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        viewControllerTitle.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
+        viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true

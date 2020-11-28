@@ -66,6 +66,9 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
         categoryCollectionView.dataSource = self
         categoryCollectionView.delegate = self
         
+        categoryCollectionView.showsHorizontalScrollIndicator = false
+        categoryCollectionView.showsVerticalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         categoryCollectionView.register(CategoriesCell.self, forCellWithReuseIdentifier: cellID)
         

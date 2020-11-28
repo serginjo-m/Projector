@@ -62,6 +62,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         projectsCollectionView.dataSource = self
         projectsCollectionView.delegate = self
         
+        projectsCollectionView.showsHorizontalScrollIndicator = false
+        projectsCollectionView.showsVerticalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         projectsCollectionView.register(ProjectCell.self, forCellWithReuseIdentifier: cellID)
         

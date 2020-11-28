@@ -127,6 +127,9 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
         projectNumbersCollectionView.dataSource = self
         projectNumbersCollectionView.delegate = self
         
+        projectNumbersCollectionView.showsHorizontalScrollIndicator = false
+        projectNumbersCollectionView.showsVerticalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         projectNumbersCollectionView.register(ProjectNumbersCell.self, forCellWithReuseIdentifier: cellID)
         

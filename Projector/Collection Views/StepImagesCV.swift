@@ -58,6 +58,10 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
         stepImagesCollectionView.dataSource = self
         stepImagesCollectionView.delegate = self
         
+        //hide scrollbar
+        stepImagesCollectionView.showsVerticalScrollIndicator = false
+        stepImagesCollectionView.showsHorizontalScrollIndicator = false
+        
         //Class is need to be registered in order of using inside
         stepImagesCollectionView.register(StepImageCell.self, forCellWithReuseIdentifier: cellIdent)
         
@@ -70,7 +74,7 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
     //size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //here we don't need to use view.frame.height becouse our CategoryCell have it
-        return CGSize(width: 134, height: frame.height)
+        return CGSize(width: 144, height: frame.height)
     }
     
     //number of cells
@@ -107,7 +111,7 @@ class StepImageCell: UICollectionViewCell{
     //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.cornerRadius = 6
+        layer.cornerRadius = 8
         layer.masksToBounds = true
         setupViews()
     }
