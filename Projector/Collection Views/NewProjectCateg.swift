@@ -133,7 +133,7 @@ class CategoriesCell: UICollectionViewCell {
     //change color for cell selected state
     override var isSelected: Bool{
         didSet{
-//            self.backgroundColor = UIColor.purple
+            self.backgroundColor = UIColor.lightGray
         }
     }
     

@@ -87,12 +87,16 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             switch lastVCClass {
                 case "DetailViewController":
                     
+                    guard let detailVC = currentViewController as? DetailViewController else {return false}
+                    
                     //becouse case: DetailViewController, I can access it property for adding or modification
-                    let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
+                    //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
                     
                     let controller = NewStepViewController()
-                    controller.uniqueID = currentViewControllerId
-                    
+                    controller.uniqueID = detailVC.projectListIdentifier
+                    controller.stepsCV = detailVC.stepsCollectionView
+                    //----------------------------------------------------------------------------------------------
+                    controller.delegate = detailVC
                     configureAddItemAction(newObjectVC: controller)
             
                 case "ProjectViewController":

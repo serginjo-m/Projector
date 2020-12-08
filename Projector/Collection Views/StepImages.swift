@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import RealmSwift
 
-
+//Connection btwn ....
 protocol NewStepImagesDelegate: class{
     //delete image url from parent array that will be used for saving object
     func deleteUrl(int: Int)

@@ -54,7 +54,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         button.setTitleColor(UIColor.darkGray, for: .normal)
         button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
         
@@ -134,9 +133,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     private func performPageConfigurations(){
-        
-        
-        
         //by default - black
         view.backgroundColor = .white
         
@@ -247,12 +243,13 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //configure stepTableView
         configureStepTableView()
         parentVC?.stepsCollectionView.reloadData()
+        //call DetailVC delegate function of main VC that perform reloads (a bit odd)?!
         parentVC?.delegate?.reloadTableView()
     }
     
-    //REMOVE
+    //REMOVE ITEM
     @objc func removeItem(button: UIButton){
-        print("item removed")
+        print("remove item function")
 //        if let myStep = projectStep {
 //            ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
 //            stepTableView.reloadData()

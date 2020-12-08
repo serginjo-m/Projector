@@ -298,9 +298,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         let selectedProject = proJects[indexPath.row]
         projectDetailViewController.projectListIdentifier = selectedProject.id
         projectDetailViewController.delegate = self
-        
-        
-        //BUG - need to reset navigation stack everytime navigation controller is changed.
         navigationController?.pushViewController(projectDetailViewController, animated: true)
     }
     

@@ -46,7 +46,6 @@ class StepsCell: UICollectionViewCell{
     
     let imageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "interior")
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         return image
@@ -61,24 +60,52 @@ class StepsCell: UICollectionViewCell{
         gradient.locations = [0.55, 0.75, 1.0]
         return gradient
     }()
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        //calculation is so slow, not very happy with that
+        //NEED TO IMPROVE IT!!!!!
+        gradient.frame = self.bounds
+    }
+    
     func setupViews(){
         
         //insert gradient
         layer.masksToBounds = true
-        
+        backgroundColor = .brown
 
         addSubview(imageView)
         addSubview(deleteButton)
         addSubview(doneButton)
         addSubview(stepNameLabel)
-        
-        deleteButton.frame = CGRect(x:frame.width - 25, y: 9, width:16, height: 16)
-        stepNameLabel.frame = CGRect(x: 9, y: frame.height - 48, width: 149, height: 48)
-        doneButton.frame = CGRect(x:10, y: 10, width: 20, height: 20)
-        imageView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        //gradient
         imageView.layer.insertSublayer(gradient, at: 0)
-        gradient.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        stepNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        imageView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        
+        stepNameLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        stepNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 9).isActive = true
+        stepNameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
+        stepNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        deleteButton.topAnchor.constraint(equalTo: topAnchor, constant: 9).isActive = true
+        deleteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
+        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
+        doneButton.topAnchor.constraint(equalTo: topAnchor, constant: 9).isActive = true
+        doneButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 9).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        doneButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
 }
 

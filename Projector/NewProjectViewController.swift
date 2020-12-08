@@ -13,6 +13,12 @@ import Photos
 
 class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
+    //unique project id for updating
+    var projectId: String?
+    //becouse project template needs to contain all steps
+    var projectSteps: List<ProjectStep>?
+    //most for reload data
+    weak var delegate: EditViewControllerDelegate?
     // need for indicating a selected image inside PHAsset array
     var selectedImageURLString: String?
     //category collection view
@@ -73,6 +79,8 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     let nameTextField: UITextField = {
         let textField = UITextField()
+        textField.keyboardType = .default
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.placeholder = "Write Your Project Name Here"
         textField.font = UIFont.boldSystemFont(ofSize: 15)
         return textField
@@ -218,27 +226,41 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         dismiss(animated: true) {
-            
-            let name = self.nameTextField.text ?? ""
-            let category = self.newProjectCategories.categoryName
-            let imageUrl = self.selectedImageURLString
-            let budget = Int(round(self.budgetSlider.value))
-            let distance = Int(round(self.distanceSlider.value))
-            let date = self.createdDate
-            
-            //create template of project
-            let projectTemplate = ProjectList()
-
-            projectTemplate.distance = distance
-            projectTemplate.totalCost = budget
-            projectTemplate.name = name
-            projectTemplate.category = category
-            projectTemplate.selectedImagePathUrl = imageUrl
-            projectTemplate.date = date
-
-            ProjectListRepository.instance.createProjectList(list: projectTemplate)
-            self.projectCV?.reloadData()
+            let project: ProjectList = self.defineProjectTemplate()
+            if self.projectId == nil{
+                //creates new project instance
+                ProjectListRepository.instance.createProjectList(list: project)
+                self.projectCV?.reloadData()
+            }else{
+                //becouse project with that id exist it perform update
+                ProjectListRepository.instance.updateProjectList(list: project)
+                //configure detail VC
+                self.delegate?.performAllConfigurations()
+                //reload parents views
+                self.delegate?.reloadViews()
+            }
         }
+    }
+    
+    //creates project instance from values :)))))))))
+    func defineProjectTemplate() -> ProjectList{
+        let projectTemplate = ProjectList()
+        if let id = projectId {
+            projectTemplate.id = id
+        }
+        projectTemplate.date = createdDate
+        projectTemplate.name = nameTextField.text ?? ""
+        projectTemplate.category = newProjectCategories.categoryName
+        projectTemplate.selectedImagePathUrl = selectedImageURLString
+        projectTemplate.totalCost = Int(round(budgetSlider.value))
+        projectTemplate.distance = Int(round(distanceSlider.value))
+        //adds steps to template
+        if let stepsArray = projectSteps{
+            for step in stepsArray{
+                projectTemplate.projectStep.append(step)
+            }
+        }
+        return projectTemplate
     }
     
     //MARK: UITextFieldDelegate

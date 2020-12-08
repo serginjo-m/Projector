@@ -42,8 +42,9 @@ class PinterestLayout: UICollectionViewLayout {
         return CGSize(width: contentWidth, height: contentHeight)
     }
     //Whenever a layout operation is about to take place, UIKit calls this method. It’s opportunity to prepare and perform any calculations required to determine the collection view’s size and the positions of the items.
+    
+    
     override func prepare() {
-        
         
         
         //Maybe I should find more elegant solution
