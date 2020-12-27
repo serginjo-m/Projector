@@ -29,6 +29,7 @@
 		CF321C15245D43D2005CC10E /* StepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* StepImages.swift */; };
 		CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712CD23740BAE00B2D593 /* Main.storyboard */; };
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
+		CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF535DD02587DEF600F15DCB /* MonthMetadata.swift */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
 		CF594365253215670036641B /* StatisticsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594364253215670036641B /* StatisticsStackView.swift */; };
@@ -48,9 +49,14 @@
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
 		CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB7C0E24574F4D00B14349 /* StepCategory.swift */; };
+		CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */; };
+		CFBC3A42258152CF00EEF13D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A41258152CF00EEF13D /* Day.swift */; };
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
+		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
+		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
+		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +86,7 @@
 		CF3712CE23740BAE00B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF3712D323740BB200B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF3712D523740BB200B2D593 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF535DD02587DEF600F15DCB /* MonthMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetadata.swift; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
 		CF594364253215670036641B /* StatisticsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsStackView.swift; sourceTree = "<group>"; };
@@ -99,9 +106,14 @@
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
 		CFBB7C0E24574F4D00B14349 /* StepCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCategory.swift; sourceTree = "<group>"; };
+		CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
+		CFBC3A41258152CF00EEF13D /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
+		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
+		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
+		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +182,7 @@
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
+				CFD88DF52595EBAE00B726FF /* Calendar */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
@@ -230,6 +243,8 @@
 			children = (
 				CFB3B29823741214002E2F9B /* ProjectList.swift */,
 				CFB3B29A2374177E002E2F9B /* ProjectStep.swift */,
+				CFBC3A41258152CF00EEF13D /* Day.swift */,
+				CF535DD02587DEF600F15DCB /* MonthMetadata.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -240,6 +255,17 @@
 				CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		CFD88DF52595EBAE00B726FF /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
+				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
+				CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */,
+				CFD88DFA25961B0600B726FF /* CalendarCell.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,18 +384,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
+				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
+				CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */,
+				CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */,
+				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
 				CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */,
 				CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */,
+				CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */,
 				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
+				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
 				CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */,
 				CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */,

@@ -214,6 +214,9 @@ class EditStepViewController: UIViewController, UITextFieldDelegate, UITextViewD
                 stepCategory.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
              }
         }
+        
+        
+        
         stepImages.photoArray = stepViewSetting.photoArr
         selectedPhotoURLStringArray = stepViewSetting.urlArr
         stepItems = stepViewSetting.items

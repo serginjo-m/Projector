@@ -16,9 +16,6 @@ protocol StepViewControllerDelegate: class {
 
 class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, StepViewControllerDelegate {
     
-    //EDIT VC
-    let editStepViewController = EditStepViewController()
-    
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "stepTableViewCell"
     
@@ -69,14 +66,15 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     
     let circleImage: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "redCircle")
+        let image = UIImageView(image: #imageLiteral(resourceName: "redCircle"))
+//        image.image = UIImage(named: "redCircle")
         return image
     }()
     
     var stepNameTitle: UILabel = {
         let label = UILabel()
         label.text = "Your Step Name"
+        label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -93,7 +91,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let editStepButton: UIButton = {
         let button = UIButton()
-//        button.addTarget(self, action: #selector(changeSelectedValue(button:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
         button.setTitle("Edit", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.setTitleColor(UIColor.init(red: 104/255, green: 104/255, blue: 104/255, alpha: 1), for: .normal)
@@ -127,12 +125,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //perform all configuration separated by categories
-        performPageConfigurations()
-    }
-    
-    
-    private func performPageConfigurations(){
+        
         //by default - black
         view.backgroundColor = .white
         
@@ -144,6 +137,13 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, completeStepButton,editStepButton, removeStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
             contentUIView.addSubview($0)
         }
+        
+        //perform all configuration separated by categories
+        performPageConfigurations()
+    }
+    
+    
+    private func performPageConfigurations(){
         
         //------------------------ temporary solution -----------------------------
         guard let step = projectStep else {return}
@@ -157,7 +157,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         //CONSTRAINTS
+        //----------------------------------------------------------------------------------------------------
+        //it is not very efficient to configure ALL constraints after editing step
         setupLayout(titleRectHeight: rect.height)
+        
         
         //IMAGES CV CONFIGURATION
         configureImageCV()
@@ -166,9 +169,16 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         configureStepTableView()
     }
     
-    //back to previous view
-    @objc func backAction(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+    //RELOAD ALL VIEWS
+    func someKindOfFunctionThatPerformRelaod(){
+        
+        performPageConfigurations()
+        myStepImagesCV.stepImagesCollectionView.reloadData()
+        
+        //--------------------------- whole VC need to be reduced! ---------------------------------------
+        parentVC?.stepsCollectionView.reloadData()
+        //call DetailVC delegate function of main VC that perform reloads (a bit odd)?!
+        parentVC?.delegate?.reloadTableView()
     }
     
     //TABLE VIEW CONFIGURATION
@@ -207,6 +217,87 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return stepImage
     }
 
+    //back to previous view
+    @objc func backAction(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    //REMOVE ITEM
+    @objc func removeItem(button: UIButton){
+        if let myStep = projectStep {
+            ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
+            stepTableView.reloadData()
+        }
+    }
+    
+    //COMPLETE
+    @objc func changeSelectedValue(button: UIButton) {
+        //assign an opposite value to button.isSeleceted
+        button.isSelected = !button.isSelected
+        ProjectListRepository.instance.updateStepCompletionStatus(step: projectStep!, isComplete: button.isSelected)
+        parentVC?.stepsCollectionView.reloadData()
+        parentVC?.delegate?.reloadTableView()
+    }
+    
+    //EDIT ACTION
+    @objc func editButtonAction(_ sender: Any){
+        guard let step = projectStep else {return}
+        
+        let editStepViewController = NewStepViewController()
+        editStepViewController.modalTransitionStyle = .coverVertical
+        editStepViewController.modalPresentationStyle = .fullScreen
+        editStepViewController.stepID = stepID
+        editStepViewController.viewControllerTitle.text = "Edit Step"
+        editStepViewController.stepNameTextField.text = step.name
+        //categories
+        editStepViewController.newStepCategory.selectedCategory = step.category
+        //select step category in collecion view
+        for (index, item) in editStepViewController.newStepCategory.sortedCategories.enumerated() {
+            if step.category == item {
+                editStepViewController.newStepCategory.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+            }
+        }
+        editStepViewController.newStepImages.photoArray = {
+            var arrPhoto = [UIImage]()
+            //plus image
+            let defaultImage = UIImage(named: "plusIconV2")
+            //unwrap optional
+            if let photo = defaultImage{
+                arrPhoto.append(photo)
+            }
+            //append images
+            if myStepImagesCV.photosArray.count > 0{
+                for image in myStepImagesCV.photosArray{
+                    arrPhoto.append(image)
+                }
+            }
+            return arrPhoto
+        }()
+        //becouse [String] != List<String>
+        editStepViewController.selectedPhotoURLStringArray = {
+            var array = [String]()
+            
+            for url in step.selectedPhotosArray{
+                array.append(url)
+            }
+            
+            return array
+        }()
+        //becouse [String] != List<String>
+        editStepViewController.stepItems = {
+            var stepItems = [String]()
+            for item in step.itemsArray{
+                stepItems.append(item)
+            }
+            return stepItems
+        }()
+        editStepViewController.stepPriceSlider.value = Float(step.cost)
+        editStepViewController.stepDistanceSlider.value = Float(step.distance)
+        editStepViewController.stepComplete = step.complete
+        editStepViewController.editDelegate = self
+
+        self.present(editStepViewController, animated: true, completion: nil)
+    }
     
     //table view section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -231,101 +322,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.removeButton.tag = indexPath.row
         cell.removeButton.addTarget(self, action: #selector(removeItem(button:)), for: .touchUpInside)
         return cell
-    }
-    
-    //RELOAD ALL VIEWS
-    func someKindOfFunctionThatPerformRelaod(){
-        
-        //configure image collection view
-        configureImageCV()
-        myStepImagesCV.stepImagesCollectionView.reloadData()
-        
-        //configure stepTableView
-        configureStepTableView()
-        parentVC?.stepsCollectionView.reloadData()
-        //call DetailVC delegate function of main VC that perform reloads (a bit odd)?!
-        parentVC?.delegate?.reloadTableView()
-    }
-    
-    //REMOVE ITEM
-    @objc func removeItem(button: UIButton){
-        print("remove item function")
-//        if let myStep = projectStep {
-//            ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
-//            stepTableView.reloadData()
-//        }
-    }
-    
-    //COMPLETE
-    @objc func changeSelectedValue(button: UIButton) {
-        //assign an opposite value to button.isSeleceted
-        button.isSelected = !button.isSelected
-        ProjectListRepository.instance.updateStepCompletionStatus(step: projectStep!, isComplete: button.isSelected)
-        parentVC?.stepsCollectionView.reloadData()
-        parentVC?.delegate?.reloadTableView()
-    }
-    
-    //EDIT ACTION
-    @objc func editButtonAction(_ sender: Any){
-        
-        editStepViewController.stepViewSetting.id = stepID ?? ""
-        editStepViewController.stepViewSetting.name = projectStep?.name ?? ""
-        editStepViewController.stepViewSetting.category = projectStep?.category ?? "Other"
-        editStepViewController.stepViewSetting.index = {
-            var int = 0
-            for (num, item) in editStepViewController.stepCategory.sortedCategories.enumerated() {
-                if projectStep?.category == item {
-                    int = num
-                }
-            }
-            return int
-        }()
-        
-        editStepViewController.stepViewSetting.photoArr = {
-            var arrPhoto = [UIImage]()
-            //plus image
-            let defaultImage = UIImage(named: "plusIconV2")
-            //unwrap optional
-            if let photo = defaultImage{
-                arrPhoto.append(photo)
-            }
-            //append images
-            if myStepImagesCV.photosArray.count > 0{
-                for image in myStepImagesCV.photosArray{
-                    arrPhoto.append(image)
-                }
-            }
-            return arrPhoto
-        }()
-        
-        editStepViewController.stepViewSetting.urlArr = {
-            var array = [String]()
-            if let arr = projectStep?.selectedPhotosArray{
-                for url in arr{
-                    array.append(url)
-                }
-            }
-            return array
-        }()
-        
-        editStepViewController.stepViewSetting.items = {
-            var stepItems = [String]()
-            if let itemsArray = projectStep?.itemsArray{
-                for item in itemsArray{
-                    stepItems.append(item)
-                }
-            }
-            return stepItems
-        }()
-        editStepViewController.stepViewSetting.price = projectStep?.cost ?? 0
-        editStepViewController.stepViewSetting.distance = projectStep?.distance ?? 0
-        editStepViewController.stepViewSetting.complete = projectStep?.complete ?? false
-        
-        //------------- I don't realy like this approach, becouse it seems like a routine cycle
-        editStepViewController.delegate = self
-        
-        //present edit VC
-        self.show(editStepViewController, sender: sender)
     }
     
     //perforn all positioning configurations
@@ -367,6 +363,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let categoryLabelString = categoryLabel.text else {return}
         let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
         
+        //not sure is that's better solution, but it works after each reload
+        categoryLabel.removeConstraints(categoryLabel.constraints)
         categoryLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
         categoryLabel.centerXAnchor.constraint(equalTo: contentUIView.centerXAnchor, constant: 0).isActive = true
         categoryLabel.widthAnchor.constraint(equalToConstant: categoryLabelSize).isActive = true

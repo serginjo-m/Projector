@@ -10,17 +10,32 @@ import UIKit
 //Bottom Navigation
 class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     
+    //------------------------under construction var -----------------------
+    //date as a start point for calendar
+    let date = Date()
+    
     override func viewDidLoad() {
         
         self.delegate = self
         
         viewControllers = [
             createNavControllerWithTitle(viewController: ProjectViewController(), title: "Home", imageName: "home"),
-            createNavControllerWithTitle(viewController: UIViewController(), title: "Calendar", imageName: "calendarIcon"),
+            createCalendarViewController(),
             createNavControllerWithTitle(viewController: NewProjectViewController(), title: "Add", imageName: "addButton"),
             createNavControllerWithTitle(viewController: UIViewController(), title: "Spendings", imageName: "money"),
             createNavControllerWithTitle(viewController: UIViewController(), title: "Notifications", imageName: "bell")
         ]
+    }
+    
+    //Build Calendar and then calls create nav controller
+    private func createCalendarViewController() -> UINavigationController {
+        let calendarViewController = CalendarViewController(baseDate: date) { (date) in
+            
+            //Do Nothing here !!
+            //So maybe modify logic ?
+            
+        }
+        return createNavControllerWithTitle(viewController: calendarViewController, title: "Calendar", imageName: "calendarIcon")
     }
     
     //Template for navigation items
@@ -110,6 +125,15 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                      //want to transfer some data
                     newProjectViewController.projectCV = projectVC.projectsCollectionView
                     configureAddItemAction(newObjectVC: newProjectViewController)
+                
+                case "StepViewController":
+                
+                    guard let stepVC = currentViewController as? StepViewController else {return false}
+                
+                    let newStepItemViewController = StepItemViewController()
+                    newStepItemViewController.stepID = stepVC.stepID
+                    newStepItemViewController.stepItemsTableView = stepVC.stepTableView
+                    configureAddItemAction(newObjectVC: newStepItemViewController)
                 default:
                     
                     break

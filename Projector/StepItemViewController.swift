@@ -13,9 +13,17 @@ class StepItemViewController: UIViewController {
     
     var realm: Realm!//create a var
     
-    var step: ProjectStep?
+    var stepID: String?
+    //Instance of Project Selected by User
+    var projectStep: ProjectStep? {
+        get{
+            //Retrieve a single object with unique identifier (stepID)
+            return ProjectListRepository.instance.getProjectStep(id: stepID!)
+        }
+    }
+   
     
-    var stepVC: StepViewController?
+    var stepItemsTableView: UITableView?
     
     //cancel button
     let closeButton: UIButton = {
@@ -114,11 +122,13 @@ class StepItemViewController: UIViewController {
         dismiss(animated: true) {
             
             try! self.realm!.write ({//here we actualy add a new object called projectList
-                self.step?.itemsArray.append(self.noteTextView.text)
+                self.projectStep?.itemsArray.append(self.noteTextView.text)
             })
             //clear before dismiss
-            self.noteTextView.text = ""
-            self.stepVC?.stepTableView.reloadData()
+            //self.noteTextView.text = ""
+            if let tableView = self.stepItemsTableView {
+                tableView.reloadData()
+            }
         }
         
     }

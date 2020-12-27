@@ -16,7 +16,14 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     //most for reload data------------------------------------------------------------------------------------------
     weak var delegate: EditViewControllerDelegate?
+    weak var editDelegate: StepViewControllerDelegate?
     
+    //step id passed by detail VC
+    var stepID: String?
+    //step completion status
+    var stepComplete: Bool?
+    // list of items in step
+    var stepItems = [String]()
     
     //MARK: Properties
     var realm: Realm!//create a var
@@ -203,6 +210,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         //here I pre configure my labels to refer an actual value of slider when it appears
         stepPriceValueLabel.text = "\(Int(round(stepPriceSlider.value)))$"
         stepDistanceValueLabel.text = "\(Int(round(stepDistanceSlider.value)))km"
+        
     }
     //Price
     @objc func priceSliderValueChanged(_ sender: UISlider) {
@@ -225,34 +233,64 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     @objc func saveButtonAction(_ sender: Any){
 
         dismiss(animated: true) {
-            let stepName = self.stepNameTextField.text ?? ""
-            let stepCategory = self.newStepCategory.selectedCategory
+            //use func for creating object
+            let stepTemplate: ProjectStep = self.defineStepTemplate()
             
-            //Set the projectList to be passed to ProjectViewController after the unwind segue.
-            //an issue is that it creates an individual item in realm
-            let newStep = ProjectStep()
-            newStep.name = stepName
-            newStep.category = stepCategory
-            newStep.cost = Int(round(self.stepPriceSlider.value))
-            newStep.distance = Int(round(self.stepDistanceSlider.value))
-            newStep.date = self.createdDate
-            
-            //add selected images url to step model
-            for item in self.selectedPhotoURLStringArray{
-                newStep.selectedPhotosArray.append(item)
+            if self.stepID != nil{
+                
+                ProjectListRepository.instance.editStep(step: stepTemplate)
+                
+                //delegate for reload
+                self.editDelegate?.someKindOfFunctionThatPerformRelaod()
+                
+            }else{
+                
+                try! self.realm!.write ({//here we actualy add a new object called projectList
+                    self.detailList?.projectStep.append(stepTemplate)
+                })
+                
+                //reload
+                self.delegate?.performAllConfigurations()
+                self.delegate?.reloadViews()
+                
             }
             
-            try! self.realm!.write ({//here we actualy add a new object called projectList
-                self.detailList?.projectStep.append(newStep)
-            })
             
-
-            //-----------------------reload won't work properly ------------need to explore-----------------
-//            self.stepsCV?.reloadData()
-            self.delegate?.performAllConfigurations()
-            self.delegate?.reloadViews()
         }
     }
+    
+    //creates step instance from values :)))))))))
+    func defineStepTemplate() -> ProjectStep{
+        let stepTemplate = ProjectStep()
+        //id
+        if let id = stepID {
+            stepTemplate.id = id
+        }
+        //date
+        stepTemplate.date = createdDate
+        //name
+        stepTemplate.name = stepNameTextField.text ?? ""
+        //category
+        stepTemplate.category = self.newStepCategory.selectedCategory
+        //photos
+        for item in selectedPhotoURLStringArray {
+            stepTemplate.selectedPhotosArray.append(item)
+        }
+        //items
+        for item in stepItems{
+            stepTemplate.itemsArray.append(item)
+        }
+        //price
+        stepTemplate.cost = Int(round(self.stepPriceSlider.value))
+        //distance
+        stepTemplate.distance = Int(round(self.stepDistanceSlider.value))
+        //complete
+        if let complete = stepComplete{
+            stepTemplate.complete = complete
+        }
+        return stepTemplate
+    }
+    
     
     //NAME TEXT FIELD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -277,6 +315,38 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         //Disable the Save button when text field is empty.
         let text = stepNameTextField.text ?? ""
         stepSaveButton.isEnabled = !text.isEmpty
+    }
+    
+    
+    
+    //IMAGES
+    //------------------------ not realy sure ---------------------- for what?
+    func deleteUrl(int: Int){
+        selectedPhotoURLStringArray.remove(at: int)
+    }
+    
+    func showImagePicker() {
+        // Hide the keyboard.
+        stepNameTextField.resignFirstResponder()
+        //check for libraty authorization, that allows PHAsset option using in picker
+        // & it is important, becouse all mechanism is based on PHAsset image address
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .notDetermined  {
+            PHPhotoLibrary.requestAuthorization({status in
+                
+            })
+        }
+        // UIImagePickerController is a view controller that lets a user pick media from their photo library.
+        let imagePickerController = UIImagePickerController()
+        
+        // Only allow photos to be picked, not taken.
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.allowsEditing = true
+        
+        // Make sure ViewController is notified when the user picks an image.
+        imagePickerController.delegate = self
+        
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     private func setupLayout(){
@@ -395,37 +465,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         stepSaveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         stepSaveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
     }
-    
-    //IMAGES
-    //------------------------ not realy sure ---------------------- for what?
-    func deleteUrl(int: Int){
-        selectedPhotoURLStringArray.remove(at: int)
-    }
-    
-    func showImagePicker() {
-        // Hide the keyboard.
-        stepNameTextField.resignFirstResponder()
-        //check for libraty authorization, that allows PHAsset option using in picker
-        // & it is important, becouse all mechanism is based on PHAsset image address
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status == .notDetermined  {
-            PHPhotoLibrary.requestAuthorization({status in
-                
-            })
-        }
-        // UIImagePickerController is a view controller that lets a user pick media from their photo library.
-        let imagePickerController = UIImagePickerController()
-        
-        // Only allow photos to be picked, not taken.
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.allowsEditing = true
-        
-        // Make sure ViewController is notified when the user picks an image.
-        imagePickerController.delegate = self
-        
-        present(imagePickerController, animated: true, completion: nil)
-    }
-    
     
     //?? Am I Need It?
     //MARK: UIImagePickerControllerDelegate

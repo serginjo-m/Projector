@@ -65,6 +65,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         projectsCollectionView.showsHorizontalScrollIndicator = false
         projectsCollectionView.showsVerticalScrollIndicator = false
         
+        
         //Class is need to be registered in order of using inside
         projectsCollectionView.register(ProjectCell.self, forCellWithReuseIdentifier: cellID)
         
@@ -182,87 +183,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         show(NewProjectViewController(), sender: sender)
     }
     
-    //perforn all positioning configurations
-    private func setupLayout(){
-        
-        //becouse by default it is black
-        view.backgroundColor = .white
-        
-        mainTitle.translatesAutoresizingMaskIntoConstraints = false
-        projectsTitle.translatesAutoresizingMaskIntoConstraints = false
-        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentUIView.translatesAutoresizingMaskIntoConstraints = false
-        recentProjectsStackView.translatesAutoresizingMaskIntoConstraints = false
-        userProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        recentActivitiesTitle.translatesAutoresizingMaskIntoConstraints = false
-        recentActivitiesCV.translatesAutoresizingMaskIntoConstraints = false
-        viewByCategoryTitle.translatesAutoresizingMaskIntoConstraints = false
-        viewByCategoryCV.translatesAutoresizingMaskIntoConstraints = false
-        statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
-        statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
-                
-        statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 0).isActive = true
-        statisticsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        statisticsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        statisticsStackView.heightAnchor.constraint(equalToConstant: 192).isActive = true
-        
-        statisticsTitle.topAnchor.constraint(equalTo: viewByCategoryCV.bottomAnchor, constant: 0).isActive = true
-        statisticsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        statisticsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        statisticsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        viewByCategoryCV.topAnchor.constraint(equalTo: viewByCategoryTitle.bottomAnchor, constant: 0).isActive = true
-        viewByCategoryCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        viewByCategoryCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
-        viewByCategoryCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
-        viewByCategoryTitle.topAnchor.constraint(equalTo: recentActivitiesCV.bottomAnchor, constant: 0).isActive = true
-        viewByCategoryTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        recentActivitiesCV.topAnchor.constraint(equalTo: recentActivitiesTitle.bottomAnchor, constant: 0).isActive = true
-        recentActivitiesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        recentActivitiesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109).isActive = true
-        
-        recentActivitiesTitle.topAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor, constant: 0).isActive = true
-        recentActivitiesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        recentActivitiesTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        recentActivitiesTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        userProfileButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 10).isActive = true
-        userProfileButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        userProfileButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        userProfileButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
-        
-        mainTitle.centerYAnchor.constraint(equalTo: userProfileButton.centerYAnchor, constant: 0).isActive = true
-        mainTitle.leftAnchor.constraint(equalTo: userProfileButton.rightAnchor, constant: 15).isActive = true
-        mainTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        mainTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
-        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
-        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
-        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
-        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
-        
-        projectsTitle.topAnchor.constraint(equalTo: userProfileButton.bottomAnchor, constant: 20).isActive = true//constant: 20
-        projectsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        projectsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        projectsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        recentProjectsStackView.topAnchor.constraint(equalTo: projectsTitle.bottomAnchor, constant: 0).isActive = true
-        recentProjectsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
-        recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
-    }
+    
     
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -342,28 +263,87 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return projectImage
     }
     
-    
-    // MARK: Segues
-    /*@IBAction func unwindToProjectList(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
-        //here perform some actions...
-        reloadTableView()
+    //perforn all positioning configurations
+    private func setupLayout(){
+        
+        //becouse by default it is black
+        view.backgroundColor = .white
+        
+        mainTitle.translatesAutoresizingMaskIntoConstraints = false
+        projectsTitle.translatesAutoresizingMaskIntoConstraints = false
+        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        contentUIView.translatesAutoresizingMaskIntoConstraints = false
+        recentProjectsStackView.translatesAutoresizingMaskIntoConstraints = false
+        userProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        recentActivitiesTitle.translatesAutoresizingMaskIntoConstraints = false
+        recentActivitiesCV.translatesAutoresizingMaskIntoConstraints = false
+        viewByCategoryTitle.translatesAutoresizingMaskIntoConstraints = false
+        viewByCategoryCV.translatesAutoresizingMaskIntoConstraints = false
+        statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
+        statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 0).isActive = true
+        statisticsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        statisticsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        statisticsStackView.heightAnchor.constraint(equalToConstant: 192).isActive = true
+        
+        statisticsTitle.topAnchor.constraint(equalTo: viewByCategoryCV.bottomAnchor, constant: 0).isActive = true
+        statisticsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        statisticsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        statisticsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        viewByCategoryCV.topAnchor.constraint(equalTo: viewByCategoryTitle.bottomAnchor, constant: 0).isActive = true
+        viewByCategoryCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        viewByCategoryCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        viewByCategoryCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        viewByCategoryTitle.topAnchor.constraint(equalTo: recentActivitiesCV.bottomAnchor, constant: 0).isActive = true
+        viewByCategoryTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        recentActivitiesCV.topAnchor.constraint(equalTo: recentActivitiesTitle.bottomAnchor, constant: 0).isActive = true
+        recentActivitiesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        recentActivitiesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109).isActive = true
+        
+        recentActivitiesTitle.topAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor, constant: 0).isActive = true
+        recentActivitiesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        recentActivitiesTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        recentActivitiesTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        userProfileButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 10).isActive = true
+        userProfileButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        userProfileButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        userProfileButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        
+        mainTitle.centerYAnchor.constraint(equalTo: userProfileButton.centerYAnchor, constant: 0).isActive = true
+        mainTitle.leftAnchor.constraint(equalTo: userProfileButton.rightAnchor, constant: 15).isActive = true
+        mainTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        mainTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
+        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
+        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
+        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
+        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        
+        projectsTitle.topAnchor.constraint(equalTo: userProfileButton.bottomAnchor, constant: 20).isActive = true//constant: 20
+        projectsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        projectsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        projectsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        recentProjectsStackView.topAnchor.constraint(equalTo: projectsTitle.bottomAnchor, constant: 0).isActive = true
+        recentProjectsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
+        recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowDetail"{
-            //identify index of selected step
-            if let indexPath = projectsCollectionView.indexPathsForSelectedItems?[0]{
-                //search step by sected item index
-                let selectedProject = proJects[indexPath.row]
-                //define what segue destination is
-                let controller = segue.destination as! DetailViewController
-                //controller.delegate = self// am I need this? // the answer is YES!! Becouse it is a part of a delegate mechanism
-                controller.projectListIdentifier = selectedProject.id
-                //set delegate
-                controller.delegate = self
-            }
-        }
-    }*/
 }
 
 class ProjectCell: UICollectionViewCell{
