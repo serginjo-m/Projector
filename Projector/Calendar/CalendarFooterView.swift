@@ -2,12 +2,6 @@
 import UIKit
 
 class CalendarFooterView: UIView {
-    lazy var separatorView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.init(white: 0.75, alpha: 1)
-        return view
-    }()
     
     lazy var previousMonthButton: UIButton = {
         let button = UIButton()
@@ -73,7 +67,6 @@ class CalendarFooterView: UIView {
         
         translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(separatorView)
         addSubview(previousMonthButton)
         addSubview(nextMonthButton)
     }
@@ -95,10 +88,6 @@ class CalendarFooterView: UIView {
         nextMonthButton.titleLabel?.font = .systemFont(ofSize: fontPointSize, weight: .medium)
         
         NSLayoutConstraint.activate([
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separatorView.topAnchor.constraint(equalTo: topAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 1),
             
             previousMonthButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             previousMonthButton.centerYAnchor.constraint(equalTo: centerYAnchor),

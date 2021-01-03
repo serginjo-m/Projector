@@ -87,4 +87,22 @@ class ProjectListRepository {
         })
     }
     
+    //create an event object
+    func createEvent(event: Event){
+        try! realm.write ({
+            realm.add(event)
+        })
+    }
+    
+    //update - project
+    func updateEvent(event: Event){
+        try! realm.write ({
+            realm.add(event, update: true)
+        })
+    }
+    
+    func getEvents() -> Results<Event> {
+        return realm.objects(Event.self)
+    }
+    
 }

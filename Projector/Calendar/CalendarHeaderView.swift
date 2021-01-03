@@ -19,13 +19,6 @@ class CalendarHeaderView: UIView {
         return stackView
     }()
     
-    lazy var separatorView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.init(white: 0.75, alpha: 1)
-        return view
-    }()
-    
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
@@ -49,12 +42,12 @@ class CalendarHeaderView: UIView {
         
         addSubview(monthLabel)
         addSubview(dayOfWeekStackView)
-        addSubview(separatorView)
+
         
         for dayNumber in 1...7 {
             let dayLabel = UILabel()
             dayLabel.font = .systemFont(ofSize: 12, weight: .bold)
-            dayLabel.textColor = .black
+            dayLabel.textColor = UIColor.init(displayP3Red: 164/255, green: 180/255, blue: 202/255, alpha: 1)
             dayLabel.textAlignment = .center
             dayLabel.text = dayOfWeekLetter(for: dayNumber)
             
@@ -75,19 +68,19 @@ class CalendarHeaderView: UIView {
     private func dayOfWeekLetter(for dayNumber: Int) -> String {
         switch dayNumber {
         case 1:
-            return "S"
+            return "SUN"
         case 2:
-            return "M"
+            return "MON"
         case 3:
-            return "T"
+            return "TUE"
         case 4:
-            return "W"
+            return "WED"
         case 5:
-            return "T"
+            return "THU"
         case 6:
-            return "F"
+            return "FRI"
         case 7:
-            return "S"
+            return "SAT"
         default:
             return ""
         }
@@ -104,12 +97,8 @@ class CalendarHeaderView: UIView {
             
             dayOfWeekStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dayOfWeekStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dayOfWeekStackView.bottomAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: -5),
+            dayOfWeekStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             
-            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separatorView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 1)
             ])
     }
 }

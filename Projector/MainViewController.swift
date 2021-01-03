@@ -172,6 +172,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         //setup recent projects collection view
         setupProjectCollectionView()
+        
+//        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

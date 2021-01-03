@@ -13,7 +13,13 @@ import Photos
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
-    
+    //events list
+    var events: Results<Event> {
+        get {
+            return ProjectListRepository.instance.getEvents()
+        }
+    }
+
     //MARK: Properties
     let cellID = "cellId"
     //Creates new calendar
@@ -107,10 +113,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         //Class is need to be registered in order of using inside
         calendarCollectionView.register(CalendarCell.self, forCellWithReuseIdentifier: cellID)
         
-        //CollectionView constraints
-        //NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": calendarCollectionView]))
-        
-        //NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|-85-[v0]-180-|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": calendarCollectionView]))
     }
     
     // MARK: Initializers
@@ -135,6 +137,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     // MARK: View Lifecycle
     
     override func viewDidLoad() {
+        
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE, MMMM d")
@@ -144,7 +147,29 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         headerView.baseDate = baseDate
         setupConstraints()
         
+        
+        //-----------------------------------------------------------------------------------------
+        let onlyDateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.timeStyle = .none
+            formatter.dateStyle = .full
+            formatter.timeZone = TimeZone.current
+            return formatter
+        }()
+        
+        
+        //----------------------------------------------------------------------------------------
+        let groupedDictionary = Dictionary(grouping: events) { (event) -> String in
+            
+            return onlyDateFormatter.string(from: event.date!)
+        }
+        print(groupedDictionary)
     }
+    
+    
+    
+    
+    
     
     func setupConstraints(){
         headerView.translatesAutoresizingMaskIntoConstraints = false

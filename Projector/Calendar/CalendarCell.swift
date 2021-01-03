@@ -78,6 +78,7 @@ class CalendarCell: UICollectionViewCell{
         isAccessibilityElement = true
         accessibilityTraits = .button
         
+        
         contentView.addSubview(selectionBackgroundView)
         
         contentView.addSubview(numberLabel)
@@ -166,7 +167,7 @@ private extension CalendarCell {
         accessibilityTraits.remove(.selected)
         accessibilityHint = "Tap to select"
         
-        numberLabel.textColor = isWithinDisplayedMonth ? .black : .darkGray
+        numberLabel.textColor = isWithinDisplayedMonth ? .black : UIColor.init(displayP3Red: 164/255, green: 180/255, blue: 202/255, alpha: 1)
         selectionBackgroundView.isHidden = true
     }
 }

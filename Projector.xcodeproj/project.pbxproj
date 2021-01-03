@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		BD058D30C2EB436C5D7D3F46 /* Pods_Projector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */; };
 		CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF02D7AE256D9606001B522F /* StepNumbersCV.swift */; };
+		CF059F452598A9D900729A74 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F442598A9D900729A74 /* Event.swift */; };
+		CF059F472598B47600729A74 /* NewEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F462598B47500729A74 /* NewEventVC.swift */; };
 		CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0C17E4242F9790000FB582 /* ProgressModel.swift */; };
 		CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */; };
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
@@ -64,6 +66,8 @@
 		04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D7CF4AF407F88049378636 /* Pods-Projector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.release.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.release.xcconfig"; sourceTree = "<group>"; };
 		CF02D7AE256D9606001B522F /* StepNumbersCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepNumbersCV.swift; sourceTree = "<group>"; };
+		CF059F442598A9D900729A74 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		CF059F462598B47500729A74 /* NewEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventVC.swift; sourceTree = "<group>"; };
 		CF0C17E4242F9790000FB582 /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
 		CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStepCell.swift; sourceTree = "<group>"; };
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
@@ -245,6 +249,7 @@
 				CFB3B29A2374177E002E2F9B /* ProjectStep.swift */,
 				CFBC3A41258152CF00EEF13D /* Day.swift */,
 				CF535DD02587DEF600F15DCB /* MonthMetadata.swift */,
+				CF059F442598A9D900729A74 /* Event.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 		CFD88DF52595EBAE00B726FF /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				CF059F462598B47500729A74 /* NewEventVC.swift */,
 				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
 				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
 				CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */,
@@ -409,6 +415,7 @@
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
 				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
+				CF059F452598A9D900729A74 /* Event.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
 				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
@@ -416,6 +423,7 @@
 				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
+				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,

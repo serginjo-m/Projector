@@ -134,6 +134,14 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     newStepItemViewController.stepID = stepVC.stepID
                     newStepItemViewController.stepItemsTableView = stepVC.stepTableView
                     configureAddItemAction(newObjectVC: newStepItemViewController)
+                
+                case "CalendarViewController":
+                
+                    let newEventItemViewController = NewEventViewController()
+                    newEventItemViewController.modalPresentationStyle = .overCurrentContext
+                    
+                    configureAddItemAction(newObjectVC: newEventItemViewController)
+                
                 default:
                     
                     break
