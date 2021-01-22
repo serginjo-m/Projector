@@ -94,10 +94,16 @@ class ProjectListRepository {
         })
     }
     
-    //update - project
+    //update an event object
     func updateEvent(event: Event){
         try! realm.write ({
             realm.add(event, update: true)
+        })
+    }
+    
+    func deleteEvent(event: Event){
+        try! realm.write ({
+            realm.delete(event)
         })
     }
     

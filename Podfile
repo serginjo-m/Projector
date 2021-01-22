@@ -1,10 +1,10 @@
-# Uncomment the next line to define a global platform for your project 
+# Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
 
 target 'Projector' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
+# Comment the next line if you don't want to use dynamic frameworks
+use_frameworks!
 
-  # Pods for Projector
-  pod "RealmSwift", "3.14.1"
+# Pods for Projector
+pod "RealmSwift", "3.14.1"
 end

@@ -16,4 +16,6 @@ struct Day {
     let isSelected: Bool
     //Tracks if this date is within the currently-viewed month
     let isWithinDisplayedMonth: Bool
+    //Keeps track of whether this date has an event
+    let containEvent: Bool
 }

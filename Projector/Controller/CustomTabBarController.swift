@@ -138,7 +138,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 case "CalendarViewController":
                 
                     let newEventItemViewController = NewEventViewController()
-                    newEventItemViewController.modalPresentationStyle = .overCurrentContext
+//                    newEventItemViewController.modalPresentationStyle = .overCurrentContext
                     
                     configureAddItemAction(newObjectVC: newEventItemViewController)
                 

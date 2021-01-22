@@ -16,10 +16,36 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //events list
     var events: Results<Event> {
         get {
+
             return ProjectListRepository.instance.getEvents()
         }
     }
+    
+    //grouped events by date
+    var groupedEventsByDate = [[Event]]()
+    
+    var groupedDictionary = [ Date : [Event]]()
+    
+    //transparent black view that covers all content
+    //IMPORTANT:
+    //here I can add gesture recognizer becouse lazy var
+    lazy var blackView: UIView = {
+        let view = UIView()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        view.backgroundColor = UIColor.init(white: 0, alpha: 0.25)
+        view.alpha = 0
+        return view
+    }()
+    
+    
+    
 
+    //------------------------- a bit trick becouse of constraint error ---------------------------
+    //need to give a valid frame to event elements when initialize it
+    //so error "Unable to simultaneously satisfy constraints" is gone
+    let eventElements = EventElementsViewController(frame: CGRect(x: -400, y: 0, width: 400, height: 300))
+    
+    
     //MARK: Properties
     let cellID = "cellId"
     //Creates new calendar
@@ -27,20 +53,22 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //date selected by user
     private var selectedDate: Date
     //current date
-    private var baseDate: Date {
+    
+    var baseDate: Date {
         didSet {
-            days = generateDaysInMonth(for: baseDate)
-            calendarCollectionView.reloadData()
-            headerView.baseDate = baseDate
+            //update page elements
+            updateAllPageElements()
+            
         }
     }
-    
+    //an array of days
     private lazy var days = generateDaysInMonth(for: baseDate)
     
+    //represents the number of weeks in the currently-displayed month
     private var numberOfWeeksInBaseDate: Int {
         return calendar.range(of: .weekOfMonth, in: .month, for: baseDate)?.count ?? 0
     }
-    
+    //once selected date changed need to pass closure
     private let selectedDateChanged: ((Date) -> Void)
     
     private lazy var dateFormatter: DateFormatter = {
@@ -103,6 +131,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         view.addSubview(headerView)
         view.addSubview(footerView)
         
+        view.addSubview(blackView)
+        view.addSubview(eventElements)
+        
         // ?? here we specify delegate & datasourse for generating our individual horizontal cells
         calendarCollectionView.dataSource = self
         calendarCollectionView.delegate = self
@@ -141,61 +172,79 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE, MMMM d")
+        
         view.backgroundColor = .white
+        
         setupCalendarCollectionView()
         
         headerView.baseDate = baseDate
         setupConstraints()
-        
-        
-        //-----------------------------------------------------------------------------------------
-        let onlyDateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.timeStyle = .none
-            formatter.dateStyle = .full
-            formatter.timeZone = TimeZone.current
-            return formatter
-        }()
-        
-        
-        //----------------------------------------------------------------------------------------
-        let groupedDictionary = Dictionary(grouping: events) { (event) -> String in
-            
-            return onlyDateFormatter.string(from: event.date!)
-        }
-        print(groupedDictionary)
-    }
-    
-    
-    
-    
-    
-    
-    func setupConstraints(){
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        calendarCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        footerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        headerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        headerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        headerView.heightAnchor.constraint(equalToConstant: 85).isActive = true
-        
-        calendarCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        calendarCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        calendarCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 0).isActive = true
-        calendarCollectionView.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: 0).isActive = true
-        
-        footerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        footerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        footerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        footerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
+
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         calendarCollectionView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        //Events data base for calendar
+        assembleGroupedEvents()
+        //day is need to be current everytime calendar appears &
+        //as date is set, all updateAllPageElements calls
+        baseDate = Date()
+    }
+    
+    private func updateAllPageElements(){
+        //return an array of days
+        days = generateDaysInMonth(for: baseDate)
+        //reload everytime
+        calendarCollectionView.reloadData()
+        //set header base date
+        headerView.baseDate = baseDate
+    }
+    //creates Dictionary and ....
+    func assembleGroupedEvents(){
+        //[ Date : [Event]]
+        groupedDictionary = Dictionary(grouping: events) { (event) -> Date in
+            // roll back to start of day so time no metter
+            return calendar.startOfDay(for: event.date!)
+        }
+        //[[Event]]
+        groupedDictionary.keys.forEach {(key) in
+//            print(key)
+            let values = groupedDictionary[key]
+//            print(values ?? "")
+            //an array of events for every key or empty arr
+            groupedEventsByDate.append(values ?? [])
+        }
+        
+//        print(groupedEventsByDate)
+    }
+    
+    
+        func setupConstraints(){
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        calendarCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        footerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        headerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        headerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 78).isActive = true
+        
+        calendarCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        calendarCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        calendarCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10).isActive = true
+        calendarCollectionView.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: 0).isActive = true
+        
+        footerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        footerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        footerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        footerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
     }
 }
 
@@ -219,12 +268,17 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let day = days[indexPath.row]
         selectedDateChanged(day.date)
+        
+        //define day events data base
+        eventsArrayFromDateKey(date: day.date)
     }
+    
     //calculate size of EACH cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let width = Int(collectionView.frame.width / 7)
-        let height = Int(collectionView.frame.height) / numberOfWeeksInBaseDate
-        return CGSize(width: width, height: height)
+        
+        return CGSize(width: width, height: 70)
     }
 }
 
@@ -287,7 +341,11 @@ extension CalendarViewController {
         
         let date = calendar.date( byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
         
-        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: calendar.isDate(date, inSameDayAs: selectedDate), isWithinDisplayedMonth: isWithinDisplayedMonth)
+        //test date like a Dictionary[key] in groupedDictionary to find out is there an event
+        let dateWithEvent = (groupedDictionary[date] != nil) ? true : false
+        
+        
+        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: calendar.isDate(date, inSameDayAs: selectedDate), isWithinDisplayedMonth: isWithinDisplayedMonth,  containEvent: dateWithEvent)
     }
     
     // add extra bit to the end of the month, if needed

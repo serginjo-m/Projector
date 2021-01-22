@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BD058D30C2EB436C5D7D3F46 /* Pods_Projector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */; };
+		2528C037002617B26AC128D5 /* Pods_Projector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */; };
 		CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF02D7AE256D9606001B522F /* StepNumbersCV.swift */; };
 		CF059F452598A9D900729A74 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F442598A9D900729A74 /* Event.swift */; };
 		CF059F472598B47600729A74 /* NewEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F462598B47500729A74 /* NewEventVC.swift */; };
@@ -16,6 +16,7 @@
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
 		CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */; };
 		CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */; };
+		CF1416D125B8B145001AC541 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = CF1416D025B8B145001AC541 /* Podfile */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
@@ -47,6 +48,8 @@
 		CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */; };
 		CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */; };
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
+		CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */; };
+		CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
@@ -63,7 +66,6 @@
 
 /* Begin PBXFileReference section */
 		020AF287354E46ED7A1A1D79 /* Pods-Projector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.debug.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.debug.xcconfig"; sourceTree = "<group>"; };
-		04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D7CF4AF407F88049378636 /* Pods-Projector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.release.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.release.xcconfig"; sourceTree = "<group>"; };
 		CF02D7AE256D9606001B522F /* StepNumbersCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepNumbersCV.swift; sourceTree = "<group>"; };
 		CF059F442598A9D900729A74 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
 		CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepStackView.swift; sourceTree = "<group>"; };
 		CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStepVC.swift; sourceTree = "<group>"; };
+		CF1416D025B8B145001AC541 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
@@ -106,6 +109,8 @@
 		CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewSteps.swift; sourceTree = "<group>"; };
 		CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = workVersionDetailVC.swift; sourceTree = "<group>"; };
 		CFA5878A242883A6006367AE /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLouncher.swift; sourceTree = "<group>"; };
+		CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventElementsVC.swift; sourceTree = "<group>"; };
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
@@ -118,6 +123,7 @@
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD058D30C2EB436C5D7D3F46 /* Pods_Projector.framework in Frameworks */,
+				2528C037002617B26AC128D5 /* Pods_Projector.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,9 +150,16 @@
 		570330C3CAEF4F54E1878C17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				04B28B8FF43C6234BB7EFB79 /* Pods_Projector.framework */,
+				E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF1416CD25B8AB42001AC541 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Maps;
 			sourceTree = "<group>";
 		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
@@ -162,6 +175,7 @@
 		CF3712BD23740BAE00B2D593 = {
 			isa = PBXGroup;
 			children = (
+				CF1416D025B8B145001AC541 /* Podfile */,
 				CF3712C823740BAE00B2D593 /* Projector */,
 				CF3712C723740BAE00B2D593 /* Products */,
 				CF9DA834244C479F00DFAEEF /* Sample Files  */,
@@ -181,6 +195,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF1416CD25B8AB42001AC541 /* Maps */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
 				CF9DA835244C499E00DFAEEF /* Collection Views */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
@@ -266,6 +281,8 @@
 			isa = PBXGroup;
 			children = (
 				CF059F462598B47500729A74 /* NewEventVC.swift */,
+				CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */,
+				CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */,
 				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
 				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
 				CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */,
@@ -285,7 +302,7 @@
 				CF3712C223740BAE00B2D593 /* Sources */,
 				CF3712C323740BAE00B2D593 /* Frameworks */,
 				CF3712C423740BAE00B2D593 /* Resources */,
-				61E45275114475C296D6FA1C /* [CP] Embed Pods Frameworks */,
+				AF764318393168AC267A7144 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,6 +325,23 @@
 				TargetAttributes = {
 					CF3712C523740BAE00B2D593 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.HealthKit = {
+								enabled = 0;
+							};
+							com.apple.HomeKit = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -336,6 +370,7 @@
 			files = (
 				CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */,
 				CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */,
+				CF1416D125B8B145001AC541 /* Podfile in Resources */,
 				CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,7 +378,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		61E45275114475C296D6FA1C /* [CP] Embed Pods Frameworks */ = {
+		AF764318393168AC267A7144 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -391,6 +426,7 @@
 			files = (
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
+				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
@@ -406,6 +442,7 @@
 				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
+				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
@@ -520,6 +557,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_REFLECTION_METADATA_LEVEL = all;
 			};
 			name = Debug;
 		};
@@ -574,6 +612,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_REFLECTION_METADATA_LEVEL = all;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

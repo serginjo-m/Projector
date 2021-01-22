@@ -52,7 +52,7 @@ class CalendarCell: UICollectionViewCell{
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
-        view.backgroundColor = .red
+        view.backgroundColor = UIColor.init(displayP3Red: 243/255, green: 103/255, blue: 115/255, alpha: 1)
         return view
     }()
     
@@ -63,6 +63,14 @@ class CalendarCell: UICollectionViewCell{
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.textColor = .black
         return label
+    }()
+    
+    private lazy var circleImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "redCircle")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.isHidden = true
+        return image
     }()
     
     private lazy var accessibilityDateFormatter: DateFormatter = {
@@ -82,6 +90,7 @@ class CalendarCell: UICollectionViewCell{
         contentView.addSubview(selectionBackgroundView)
         
         contentView.addSubview(numberLabel)
+        contentView.addSubview(circleImage)
     }
     
     required init?(coder: NSCoder) {
@@ -113,6 +122,10 @@ class CalendarCell: UICollectionViewCell{
             selectionBackgroundView.widthAnchor.constraint(equalToConstant: size),
             selectionBackgroundView.heightAnchor.constraint(equalTo: selectionBackgroundView.widthAnchor),
             
+            circleImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+            circleImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
+            circleImage.widthAnchor.constraint(equalToConstant: 8),
+            circleImage.heightAnchor.constraint(equalToConstant: 8)
             
             ])
         
@@ -137,6 +150,12 @@ private extension CalendarCell {
         } else {
             applyDefaultStyle(isWithinDisplayedMonth: day.isWithinDisplayedMonth)
         }
+        
+        if day.containEvent {
+            circleImage.isHidden = false
+        }else{
+            circleImage.isHidden = true
+        }
     }
     
     // small display size computed property
@@ -159,7 +178,7 @@ private extension CalendarCell {
         
         numberLabel.textColor = isSmallScreenSize ? .red : .white
         selectionBackgroundView.isHidden = isSmallScreenSize
-        selectionBackgroundView.backgroundColor = isCurrentDate ? .red : .black
+        selectionBackgroundView.backgroundColor = isCurrentDate ? UIColor.init(displayP3Red: 243/255, green: 103/255, blue: 115/255, alpha: 1) : .black
     }
     
     // Default style

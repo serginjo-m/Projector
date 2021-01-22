@@ -2,6 +2,7 @@
 import UIKit
 
 class CalendarHeaderView: UIView {
+    
     lazy var monthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,6 +51,8 @@ class CalendarHeaderView: UIView {
             dayLabel.textColor = UIColor.init(displayP3Red: 164/255, green: 180/255, blue: 202/255, alpha: 1)
             dayLabel.textAlignment = .center
             dayLabel.text = dayOfWeekLetter(for: dayNumber)
+
+            
             
             // VoiceOver users don't need to hear these days of the week read to them, nor do SwitchControl or Voice Control users need to select them
             // If fact, they get in the way!
@@ -74,7 +77,7 @@ class CalendarHeaderView: UIView {
         case 3:
             return "TUE"
         case 4:
-            return "WED"
+            return "WEW"
         case 5:
             return "THU"
         case 6:
@@ -89,15 +92,23 @@ class CalendarHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        //half length of string
+        let dayLabelHalfWidth = ceil("SAT".size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 12)]).width)/2
+        //half length of calendar cell
+        let calendarCellHalfWidth = round((self.frame.width / 7)/2)
+        //day label spacing :>)
+        let properMonthLabelPadding = calendarCellHalfWidth - dayLabelHalfWidth
+        
+        
         NSLayoutConstraint.activate([
             
-            monthLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
-            monthLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            monthLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 5),
+            monthLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            monthLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: properMonthLabelPadding),
+            monthLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             
             dayOfWeekStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dayOfWeekStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dayOfWeekStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            dayOfWeekStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             
             ])
     }

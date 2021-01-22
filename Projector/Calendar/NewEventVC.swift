@@ -222,22 +222,22 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         
-        dismiss(animated: true) {
-            let event: Event = self.defineEventTemplate()
-            //create or update logic (becouse if id exist and defined it will update object)
-            if self.eventId == nil{
-                //creates new project instance
-                ProjectListRepository.instance.createEvent(event: event)
-
-            }else{
-                //becouse event with that id exist it perform update
-                ProjectListRepository.instance.updateEvent(event: event)
-                //configure detail VC
-               // self.delegate?.performAllConfigurations()
-                //reload parents views
-               // self.delegate?.reloadViews()
-            }
+        let event: Event = self.defineEventTemplate()
+        //create or update logic (becouse if id exist and defined it will update object)
+        if self.eventId == nil{
+            //creates new project instance
+            ProjectListRepository.instance.createEvent(event: event)
+        }else{
+            //becouse event with that id exist it perform update
+            ProjectListRepository.instance.updateEvent(event: event)
+            //configure detail VC
+            // self.delegate?.performAllConfigurations()
+            //reload parents views
+            // self.delegate?.reloadViews()
+            
         }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     //creates event instance
@@ -248,6 +248,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         }
         if let date = self.eventDate{
             eventTemplate.date = date
+        }else{
+            eventTemplate.date = Date()
+        }
+        if let description = descriptionTextView.text{
+            eventTemplate.descr = description
         }
         return eventTemplate
     }
@@ -293,7 +298,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         case _ where textField == endTimeTextField:
             endTimePicker.isHidden = !endTimePicker.isHidden
         default:
-            print("Other text field")
+            break
         }
     }
     
@@ -344,13 +349,14 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     private func updateSaveButtonState(){
         //Disable the Save button when text field is empty.
         let text = nameTextField.text ?? ""
-        saveButton.isEnabled = !text.isEmpty
+        let date = dateTextField.text ?? ""
+        saveButton.isEnabled = !text.isEmpty && !date.isEmpty
     }
     
     
     
     private func setupLayout(){
-    
+        
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
         viewControllerTitle.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
@@ -466,7 +472,7 @@ extension NewEventViewController{
         case 1:
             return "Jan"
         case 2:
-            return "Fab"
+            return "Feb"
         case 3:
             return "Mar"
         case 4:
