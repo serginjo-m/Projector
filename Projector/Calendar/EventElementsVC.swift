@@ -8,8 +8,26 @@
 
 import UIKit
 import RealmSwift
+//because I need to reuse it in DetailViewController
+class ElementsViewController: UIView {
+    
+    //MARK: Initialization
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setupTableView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupTableView(){
+        
+    }
+}
 
-class EventElementsViewController: UIView, UITableViewDelegate, UITableViewDataSource{
+class EventElementsViewController: ElementsViewController, UITableViewDelegate, UITableViewDataSource{
     
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
@@ -29,22 +47,8 @@ class EventElementsViewController: UIView, UITableViewDelegate, UITableViewDataS
     //data for collection view
     var events: [Event] = []
     
-    
-    
-    
-    //MARK: Initialization
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupTableView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    
-    func setupTableView(){
+    //parent already has this function and call to it, so only thing I need is to override it!
+    override func setupTableView(){
         
         backgroundColor = .white
         

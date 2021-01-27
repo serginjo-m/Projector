@@ -27,7 +27,6 @@ protocol EditViewControllerDelegate: class{
     func reloadViews()
 }
 
-
 class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditViewControllerDelegate{
     
     //most for reload data

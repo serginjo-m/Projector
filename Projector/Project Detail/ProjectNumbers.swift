@@ -121,6 +121,7 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
     func setupView(){
         
         // Add a collectionView to the stackView
+        
         addArrangedSubview(projectNumbersCollectionView)
         
         // ?? here we specify delegate & datasourse for generating our individual horizontal cells
@@ -195,6 +196,10 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
     }
     
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
     
     //adding values to a project
     private func defineProjectsValues(){

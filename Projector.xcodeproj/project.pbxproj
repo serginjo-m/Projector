@@ -155,6 +155,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CF0BCA2325BB457F00A5C172 /* Project Detail */ = {
+			isa = PBXGroup;
+			children = (
+				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
+				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
+				CF2C1292237766A700F3132A /* DetailViewController.swift */,
+				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
+			);
+			path = "Project Detail";
+			sourceTree = "<group>";
+		};
 		CF1416CD25B8AB42001AC541 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -204,8 +215,7 @@
 				CFD88DF52595EBAE00B726FF /* Calendar */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
-				CF2C1292237766A700F3132A /* DetailViewController.swift */,
-				CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */,
+				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
@@ -245,14 +255,12 @@
 			isa = PBXGroup;
 			children = (
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
-				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594364253215670036641B /* StatisticsStackView.swift */,
-				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
 			);
 			path = "Collection Views";
 			sourceTree = "<group>";
