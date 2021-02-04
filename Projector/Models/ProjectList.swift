@@ -70,6 +70,7 @@ class ProjectList: Object {
     @objc dynamic var spending = 1
 
     let projectStep = List<ProjectStep>() //[ProjectStep]() - obj
+    let projectStatistics = List<StatisticData>()
     
     //MARK: Methods
     override static func primaryKey() -> String {

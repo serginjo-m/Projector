@@ -13,6 +13,7 @@ import Foundation
 import os
 import Photos
 
+
 class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //---------------------------- temporary solution --------------------------------------

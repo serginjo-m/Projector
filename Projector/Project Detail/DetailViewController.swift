@@ -36,9 +36,41 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     var scrollViewContainer = UIScrollView()
     var contentUIView = UIView()
     
+    let sideView = SidePanelView()
+                                                            
     //project statistics (money, distance..)
-    let projectNumbersCV = ProjectNumbersCollectionView()
+    // 'lazy' give access to self & set controller once
+    lazy var projectNumbersCV = ProjectNumbersCollectionView(
+        didTapBudgetCompletionHandler: { [weak self] in
+            guard let self = self else {return}
+            self.sideView.categoryKey = "budget"
+            self.sideView.selectedStatisticsLabel.text = "Project Budget"
+            self.showStatisticsDetail()
+    },
+        didTapTotalCostCompletionHandler: { [weak self] in
+            guard let self = self else {return}
+            self.sideView.categoryKey = "totalCost"
+            self.sideView.selectedStatisticsLabel.text = "Total Cost"
+            self.showStatisticsDetail()
+    },
+        didTapDistanceCompletionHandler: { [weak self] in
+            guard let self = self else {return}
+            self.sideView.categoryKey = "distance"
+            self.sideView.selectedStatisticsLabel.text = "Distance To Go!"
+            self.showStatisticsDetail()
+    })
     
+    //transparent black view that covers all content
+    //IMPORTANT:
+    //here I can add gesture recognizer becouse lazy var
+    lazy var blackView: UIView = {
+        let view = UIView()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        view.backgroundColor = UIColor.init(white: 0, alpha: 0.25)
+        view.alpha = 0
+        return view
+    }()
+
     //Project Steps Filter by Categories
     var stepCategoriesFilter = StepCategoriesCollectionView()
     //find steps array position in data base by id for filter
@@ -50,12 +82,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     var projectInstance: ProjectList? {
         get{
             //Retrieve a single object with unique identifier (projectListIdentifier)
-            return ProjectListRepository.instance.getProjectList(id: projectListIdentifier!)
+            return ProjectListRepository.instance.getProjectList(id: projectListIdentifier)
         }
     }
     
     //Identifier of selected project
-    var projectListIdentifier: String?
+    var projectListIdentifier = String() {
+        didSet{
+            self.sideView.projectId = self.projectListIdentifier
+        }
+    }
 
    //Project Image created programatically
     let projectImageView: UIImageView = {
@@ -168,9 +204,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         view.backgroundColor = .white
-        
+        view.addSubview(blackView)
+        view.addSubview(sideView)
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(projectImageView)
@@ -183,6 +220,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         contentUIView.addSubview(stepCategoriesFilter)
         contentUIView.addSubview(collectionStackView)
         
+        
+        
         //adds gradient to image view
         projectImageView.layer.insertSublayer(gradient, at: 0)
         
@@ -193,6 +232,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         //setup constraints
         setupLayout()
         
+        self.hideKeyboardWhenTappedAround()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -229,7 +269,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         }
         
         //as project ID defined filter start to run
-        stepCategoriesFilter.projectId = projectListIdentifier!
+        stepCategoriesFilter.projectId = projectListIdentifier
         
         // define parents collection view for reload
         stepCategoriesFilter.detailViewController = self
@@ -455,12 +495,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         projectNumbersTitle.translatesAutoresizingMaskIntoConstraints = false//
         projectNumbersCV.translatesAutoresizingMaskIntoConstraints = false//
         stepsTitle.translatesAutoresizingMaskIntoConstraints = false//
+        blackView.translatesAutoresizingMaskIntoConstraints = false
+
+        blackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        blackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        blackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        blackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         
+        //70% of width
+        let width = 70 * self.view.frame.width / 100
+        self.sideView.frame = CGRect(x: -self.view.frame.width, y: 0, width: width, height: self.view.frame.height)
         
-        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollViewContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        scrollViewContainer.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        scrollViewContainer.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         
         contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
         contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true

@@ -31,7 +31,8 @@ class NumberCellSetting: NSObject{
     }
 }
 
-class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    
     
     //this property need for cells
     private let cellID = "cellId"
@@ -79,15 +80,27 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
         ]
     }()
     
+    let didTapBudgetCompletionHandler: (() -> Void)
+    let didTapTotalCostCompletionHandler: (() -> Void)
+    let didTapDistanceCompletionHandler: (() -> Void)
     //MARK: Initialization
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    init(
+        didTapBudgetCompletionHandler: @escaping (() -> Void),
+        didTapTotalCostCompletionHandler: @escaping (() -> Void),
+        didTapDistanceCompletionHandler: @escaping (() -> Void)) {
+        
+        self.didTapBudgetCompletionHandler = didTapBudgetCompletionHandler
+        self.didTapTotalCostCompletionHandler = didTapTotalCostCompletionHandler
+        self.didTapDistanceCompletionHandler = didTapDistanceCompletionHandler
+        
+        super.init(frame: CGRect.zero)
         setupView()
     }
     
     required init(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
+        fatalError("init(coder:) has not been implemented")
+        
     }
     
     //here creates a horizontal collectionView inside stackView
@@ -122,7 +135,7 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
         
         // Add a collectionView to the stackView
         
-        addArrangedSubview(projectNumbersCollectionView)
+        addSubview(projectNumbersCollectionView)
         
         // ?? here we specify delegate & datasourse for generating our individual horizontal cells
         projectNumbersCollectionView.dataSource = self
@@ -171,7 +184,6 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ProjectNumbersCell
         
-       
         //here is IMPORTANT part, when I pass settings for every cell
         cell.configureCell = cellSettingsArray[indexPath.row]
         
@@ -198,8 +210,23 @@ class ProjectNumbersCollectionView: UIStackView,UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
+        switch indexPath.row{
+        case 0:
+            //total cost
+            didTapTotalCostCompletionHandler()
+        case 1:
+            //budget
+            didTapBudgetCompletionHandler()
+        case 2:
+            //distance
+            didTapDistanceCompletionHandler()
+        default:
+            break
+            
+        }
     }
+    
+    
     
     //adding values to a project
     private func defineProjectsValues(){

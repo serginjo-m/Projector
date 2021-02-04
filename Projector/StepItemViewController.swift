@@ -121,7 +121,7 @@ class StepItemViewController: UIViewController {
     @objc func saveAction(button: UIButton){
         dismiss(animated: true) {
             
-            try! self.realm!.write ({//here we actualy add a new object called projectList
+            try! self.realm!.write ({
                 self.projectStep?.itemsArray.append(self.noteTextView.text)
             })
             //clear before dismiss
