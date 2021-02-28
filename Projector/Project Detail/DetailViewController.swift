@@ -44,19 +44,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         didTapBudgetCompletionHandler: { [weak self] in
             guard let self = self else {return}
             self.sideView.categoryKey = "budget"
-            self.sideView.selectedStatisticsLabel.text = "Project Budget"
             self.showStatisticsDetail()
     },
         didTapTotalCostCompletionHandler: { [weak self] in
             guard let self = self else {return}
             self.sideView.categoryKey = "totalCost"
-            self.sideView.selectedStatisticsLabel.text = "Total Cost"
             self.showStatisticsDetail()
     },
         didTapDistanceCompletionHandler: { [weak self] in
             guard let self = self else {return}
             self.sideView.categoryKey = "distance"
-            self.sideView.selectedStatisticsLabel.text = "Distance To Go!"
             self.showStatisticsDetail()
     })
     
@@ -206,8 +203,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         super.viewDidLoad()
     
         view.backgroundColor = .white
-        view.addSubview(blackView)
-        view.addSubview(sideView)
+        //apply becouse side panel visible during animation btwn view controllers
+        view.layer.masksToBounds = true
+        
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(projectImageView)
@@ -220,7 +218,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         contentUIView.addSubview(stepCategoriesFilter)
         contentUIView.addSubview(collectionStackView)
         
-        
+        view.addSubview(blackView)
+        view.addSubview(sideView)
         
         //adds gradient to image view
         projectImageView.layer.insertSublayer(gradient, at: 0)
