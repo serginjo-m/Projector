@@ -17,7 +17,43 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //an instance of project detail vc
     let projectDetailViewController = DetailViewController()
     
-    var recentActivitiesCV = RecentActivitiesCollectionView()
+    lazy var recentActivitiesCV: RecentActivitiesCollectionView = {
+        let collectionView = RecentActivitiesCollectionView()
+        collectionView.isUserInteractionEnabled = true
+        collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapMe(_:))))
+        return collectionView
+    }()
+    //constraints animation approach
+    var maxTopAnchor: NSLayoutConstraint?
+    var minTopAnchor: NSLayoutConstraint?
+    var maxHeightAnchor: NSLayoutConstraint?
+    var minHeightAnchor: NSLayoutConstraint?
+    
+    @objc func tapMe(_ sender: UITapGestureRecognizer){
+        
+        guard let minHeight = minHeightAnchor else {return}
+        if minHeight.isActive == true{
+            //ORDER REQUIRED, else constraints error
+            minTopAnchor?.isActive = false
+            minHeightAnchor?.isActive = false
+            maxHeightAnchor?.isActive = true
+            maxTopAnchor?.isActive = true
+        }else{
+            //ORDER REQUIRED, else constraints error
+            maxHeightAnchor?.isActive = false
+            maxTopAnchor?.isActive = false
+            minTopAnchor?.isActive = true
+            minHeightAnchor?.isActive = true
+        }
+        
+        UIView.animate(withDuration: 3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            //------------------------ Cell Animation is not very clear --------------------------------------------
+            self.recentActivitiesCV.recentActivitiesCollectionView.reloadData()
+            self.view.layoutIfNeeded()
+            
+        }, completion: nil)
+    }
+    
     var viewByCategoryCV = ViewByCategoryCollectionView()
     var statisticsStackView = StatisticsStackView()
     
@@ -304,11 +340,20 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
         viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        recentActivitiesCV.topAnchor.constraint(equalTo: recentActivitiesTitle.bottomAnchor, constant: 0).isActive = true
+        
+        //animation approach
+        minTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: recentActivitiesTitle.bottomAnchor, constant: 0)
+        minHeightAnchor = recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109)
+        
+        maxTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
+        maxHeightAnchor = recentActivitiesCV.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -100)
+            
         recentActivitiesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         recentActivitiesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109).isActive = true
         
+        minTopAnchor?.isActive = true
+        minHeightAnchor?.isActive = true
+       
         recentActivitiesTitle.topAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor, constant: 0).isActive = true
         recentActivitiesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         recentActivitiesTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true

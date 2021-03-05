@@ -426,14 +426,14 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         statisticImage.topAnchor.constraint(equalTo: selectedStatisticsLabel.topAnchor, constant: 0).isActive = true
         statisticImage.widthAnchor.constraint(equalToConstant: 69).isActive = true
         statisticImage.heightAnchor.constraint(equalToConstant: 73).isActive = true
+        
+        containerView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        containerView.topAnchor.constraint(equalTo: statisticImage.bottomAnchor, constant: 0).isActive = true
+        containerView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         //height constraints animation
         minHeightAnchor = containerView.heightAnchor.constraint(equalToConstant: 2)
         maxHeightAnchor = containerView.heightAnchor.constraint(equalToConstant: 310)
         minHeightAnchor?.isActive = true
-
-        containerView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        containerView.topAnchor.constraint(equalTo: statisticImage.bottomAnchor, constant: 0).isActive = true
-        containerView.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         
         openViewButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 26).isActive = true
         openViewButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: -18).isActive = true

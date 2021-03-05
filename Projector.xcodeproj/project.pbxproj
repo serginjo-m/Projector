@@ -215,6 +215,7 @@
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CFD88DF52595EBAE00B726FF /* Calendar */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
+				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
@@ -266,7 +267,6 @@
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
-				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594364253215670036641B /* StatisticsStackView.swift */,
 			);
