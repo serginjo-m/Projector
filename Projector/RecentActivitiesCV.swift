@@ -14,10 +14,9 @@ import RealmSwift
 struct UltravisualLayoutConstants {
     struct Cell {
         // The width of the non-featured cell
-        static let standardWidth: CGFloat = 100
+        static let standardWidth: CGFloat = 54
         // The width of the first visible cell
         static let featuredWidth: CGFloat = 280
-        
     }
 }
 
@@ -62,6 +61,7 @@ class UltravisualLayout: UICollectionViewLayout {
 extension UltravisualLayout {
     // Return the size of all the content in the collection view
     override var collectionViewContentSize : CGSize {
+        
         //all content width
         let contentWidth = (CGFloat(numberOfItems) * dragOffset) + (width - dragOffset)
         return CGSize(width: contentWidth, height: height)
@@ -70,7 +70,6 @@ extension UltravisualLayout {
     
     override func prepare() {
         cache.removeAll(keepingCapacity: false)
-        
         
         let standardWidth = UltravisualLayoutConstants.Cell.standardWidth
         let featuredWidth = UltravisualLayoutConstants.Cell.featuredWidth
@@ -94,6 +93,7 @@ extension UltravisualLayout {
                 //calculate the xOffset and use that to derive the new x value for the cell.
                 //After that, you set the cell's width to be the featured width
                 let xOffset = standardWidth * nextItemPercentageOffset
+                
                 x = collectionView!.contentOffset.x - xOffset
                 width = featuredWidth
             } else if indexPath.item == (featuredItemIndex + 1)
@@ -250,28 +250,7 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         return cell
     }
     
-    // Need to perform action when user select cell
-    
-    /*turn cells to be selectable
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
     }
-    //action when user selects the cell
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        //that is how I can call a selected cell !!!
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.red
-    }
-    //makes cells deselectable
-    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    //define color of deselected cell
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
-    }*/
-    
-}
 
 class RecentActivitiesCell: UICollectionViewCell {
     

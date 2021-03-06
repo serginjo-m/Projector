@@ -23,37 +23,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapMe(_:))))
         return collectionView
     }()
+    
     //constraints animation approach
     var maxTopAnchor: NSLayoutConstraint?
     var minTopAnchor: NSLayoutConstraint?
     var maxHeightAnchor: NSLayoutConstraint?
     var minHeightAnchor: NSLayoutConstraint?
     
-    @objc func tapMe(_ sender: UITapGestureRecognizer){
-        
-        guard let minHeight = minHeightAnchor else {return}
-        if minHeight.isActive == true{
-            //ORDER REQUIRED, else constraints error
-            minTopAnchor?.isActive = false
-            minHeightAnchor?.isActive = false
-            maxHeightAnchor?.isActive = true
-            maxTopAnchor?.isActive = true
-        }else{
-            //ORDER REQUIRED, else constraints error
-            maxHeightAnchor?.isActive = false
-            maxTopAnchor?.isActive = false
-            minTopAnchor?.isActive = true
-            minHeightAnchor?.isActive = true
-        }
-        
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            //------------------------ Cell Animation is not very clear --------------------------------------------
-            self.recentActivitiesCV.recentActivitiesCollectionView.reloadData()
-            self.view.layoutIfNeeded()
-            
-        }, completion: nil)
-    }
-    
+   
     var viewByCategoryCV = ViewByCategoryCollectionView()
     var statisticsStackView = StatisticsStackView()
     
@@ -66,51 +43,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     //MARK: Properties
     let cellID = "cellId"
-    
-    //here creates a horizontal collectionView inside stackView
-    let projectsCollectionView: UICollectionView = {
-        
-        //instance for UICollectionView purposes
-        let layout = UICollectionViewFlowLayout()
-        
-        //changing default direction of scrolling
-        layout.scrollDirection = .horizontal
-        
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
-        // & also we need to specify how "big" it needs to be
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
-        
-        collectionView.backgroundColor = UIColor.clear
-        //deactivate default constraints
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return collectionView
-    }()
-    
-    //MARK: Methods
-    func setupProjectCollectionView(){
-        
-        // Add a collectionView to the stackView
-        recentProjectsStackView.addSubview(projectsCollectionView)
-        
-        // ?? here we specify delegate & datasourse for generating our individual horizontal cells
-        projectsCollectionView.dataSource = self
-        projectsCollectionView.delegate = self
-        
-        projectsCollectionView.showsHorizontalScrollIndicator = false
-        projectsCollectionView.showsVerticalScrollIndicator = false
-        
-        
-        //Class is need to be registered in order of using inside
-        projectsCollectionView.register(ProjectCell.self, forCellWithReuseIdentifier: cellID)
-        
-        //CollectionView constraints
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": projectsCollectionView]))
-        
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": projectsCollectionView]))
-        
-    }
     
     //container for all items on the page
     var scrollViewContainer = UIScrollView()
@@ -168,7 +100,26 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return label
     }()
     
-    
+    //here creates a horizontal collectionView inside stackView
+    let projectsCollectionView: UICollectionView = {
+        
+        //instance for UICollectionView purposes
+        let layout = UICollectionViewFlowLayout()
+        
+        //changing default direction of scrolling
+        layout.scrollDirection = .horizontal
+        
+        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        // & also we need to specify how "big" it needs to be
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        
+        collectionView.backgroundColor = UIColor.clear
+        //deactivate default constraints
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return collectionView
+    }()
     
     //I realy don't know how it works, but maybe that is solution
     //to my issue with camera roll access
@@ -193,9 +144,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
+        contentUIView.addSubview(recentProjectsStackView)
         contentUIView.addSubview(mainTitle)
         contentUIView.addSubview(projectsTitle)
-        contentUIView.addSubview(recentProjectsStackView)
         contentUIView.addSubview(userProfileButton)
         contentUIView.addSubview(recentActivitiesTitle)
         contentUIView.addSubview(recentActivitiesCV)
@@ -214,6 +165,55 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     override func viewDidAppear(_ animated: Bool) {
         statisticsStackView.progressAnimation()
+    }
+    
+    //MARK: Methods
+    func setupProjectCollectionView(){
+        
+        // Add a collectionView to the stackView
+        recentProjectsStackView.addSubview(projectsCollectionView)
+        
+        // ?? here we specify delegate & datasourse for generating our individual horizontal cells
+        projectsCollectionView.dataSource = self
+        projectsCollectionView.delegate = self
+        
+        projectsCollectionView.showsHorizontalScrollIndicator = false
+        projectsCollectionView.showsVerticalScrollIndicator = false
+        
+        
+        //Class is need to be registered in order of using inside
+        projectsCollectionView.register(ProjectCell.self, forCellWithReuseIdentifier: cellID)
+        
+        //CollectionView constraints
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": projectsCollectionView]))
+        
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": projectsCollectionView]))
+        
+    }
+    
+    //recent activity tap animation
+    @objc func tapMe(_ sender: UITapGestureRecognizer){
+        
+        guard let minHeight = minHeightAnchor else {return}
+        if minHeight.isActive == true{
+            //ORDER REQUIRED, else constraints error
+            minTopAnchor?.isActive = false
+            minHeightAnchor?.isActive = false
+            maxHeightAnchor?.isActive = true
+            maxTopAnchor?.isActive = true
+        }else{
+            //ORDER REQUIRED, else constraints error
+            maxHeightAnchor?.isActive = false
+            maxTopAnchor?.isActive = false
+            minTopAnchor?.isActive = true
+            minHeightAnchor?.isActive = true
+        }
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            self.view.layoutIfNeeded()
+            
+        }, completion: nil)
     }
     
     //open new step VC
@@ -320,6 +320,26 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
         statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        //animation approach
+        minTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 433)
+        minHeightAnchor = recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109)
+        
+        maxTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
+        maxHeightAnchor = recentActivitiesCV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+        
+        recentActivitiesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        recentActivitiesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        
+        minTopAnchor?.isActive = true
+        minHeightAnchor?.isActive = true
+        
+        recentActivitiesTitle.bottomAnchor.constraint(equalTo: recentActivitiesCV.topAnchor, constant: -11).isActive = true
+        recentActivitiesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        recentActivitiesTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        recentActivitiesTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        
+        
         statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 0).isActive = true
         statisticsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         statisticsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
@@ -330,40 +350,21 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         statisticsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
         statisticsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        viewByCategoryCV.topAnchor.constraint(equalTo: viewByCategoryTitle.bottomAnchor, constant: 0).isActive = true
+        viewByCategoryCV.topAnchor.constraint(equalTo: viewByCategoryTitle.bottomAnchor, constant: 11).isActive = true
         viewByCategoryCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         viewByCategoryCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         viewByCategoryCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-        viewByCategoryTitle.topAnchor.constraint(equalTo: recentActivitiesCV.bottomAnchor, constant: 0).isActive = true
+        viewByCategoryTitle.topAnchor.constraint(equalTo: recentActivitiesCV.bottomAnchor, constant: 11).isActive = true
         viewByCategoryTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        
-        //animation approach
-        minTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: recentActivitiesTitle.bottomAnchor, constant: 0)
-        minHeightAnchor = recentActivitiesCV.heightAnchor.constraint(equalToConstant: 109)
-        
-        maxTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
-        maxHeightAnchor = recentActivitiesCV.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -100)
-            
-        recentActivitiesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        recentActivitiesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        
-        minTopAnchor?.isActive = true
-        minHeightAnchor?.isActive = true
-       
-        recentActivitiesTitle.topAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor, constant: 0).isActive = true
-        recentActivitiesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        recentActivitiesTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        recentActivitiesTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        userProfileButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 10).isActive = true
+        viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
+    
+        userProfileButton.bottomAnchor.constraint(equalTo: projectsTitle.topAnchor, constant: -29).isActive = true
         userProfileButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         userProfileButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
         userProfileButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
-        
+                
         mainTitle.centerYAnchor.constraint(equalTo: userProfileButton.centerYAnchor, constant: 0).isActive = true
         mainTitle.leftAnchor.constraint(equalTo: userProfileButton.rightAnchor, constant: 15).isActive = true
         mainTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
@@ -372,7 +373,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
         contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
@@ -381,12 +382,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
         contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
         
-        projectsTitle.topAnchor.constraint(equalTo: userProfileButton.bottomAnchor, constant: 20).isActive = true//constant: 20
+        projectsTitle.bottomAnchor.constraint(equalTo: recentProjectsStackView.topAnchor, constant: -11).isActive = true//constant: 20
         projectsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         projectsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        projectsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        projectsTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        recentProjectsStackView.topAnchor.constraint(equalTo: projectsTitle.bottomAnchor, constant: 0).isActive = true
+        recentProjectsStackView.bottomAnchor.constraint(equalTo: recentActivitiesTitle.topAnchor, constant: -11).isActive = true
         recentProjectsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
         recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
