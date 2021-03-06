@@ -46,7 +46,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             minHeightAnchor?.isActive = true
         }
         
-        UIView.animate(withDuration: 3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             //------------------------ Cell Animation is not very clear --------------------------------------------
             self.recentActivitiesCV.recentActivitiesCollectionView.reloadData()
             self.view.layoutIfNeeded()

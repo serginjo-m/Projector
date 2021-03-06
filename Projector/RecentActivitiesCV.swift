@@ -13,10 +13,11 @@ import RealmSwift
 // The heights are declared as constants outside of the class so they can be easily referenced elsewhere
 struct UltravisualLayoutConstants {
     struct Cell {
-        // The height of the non-featured cell
-        static let standardHeight: CGFloat = 100
-        // The height of the first visible cell
-        static let featuredHeight: CGFloat = 280
+        // The width of the non-featured cell
+        static let standardWidth: CGFloat = 100
+        // The width of the first visible cell
+        static let featuredWidth: CGFloat = 280
+        
     }
 }
 
@@ -32,12 +33,12 @@ class UltravisualLayout: UICollectionViewLayout {
     // Returns the item index of the currently featured cell
     var featuredItemIndex: Int {
         // Use max to make sure the featureItemIndex is never < 0
-        return max(0, Int(collectionView!.contentOffset.y / dragOffset))
+        return max(0, Int(collectionView!.contentOffset.x / dragOffset))
     }
     
     // Returns a value between 0 and 1 that represents how close the next cell is to becoming the featured cell
     var nextItemPercentageOffset: CGFloat {
-        return (collectionView!.contentOffset.y / dragOffset) - CGFloat(featuredItemIndex)
+        return (collectionView!.contentOffset.x / dragOffset) - CGFloat(featuredItemIndex)
     }
     
     // Returns the width of the collection view
@@ -50,7 +51,7 @@ class UltravisualLayout: UICollectionViewLayout {
         return collectionView!.bounds.height
     }
     
-    // Returns the number of items in the collection view
+    // Returns the number of items in the collection view (defined in collectionView)
     var numberOfItems: Int {
         return collectionView!.numberOfItems(inSection: 0)
     }
@@ -61,57 +62,68 @@ class UltravisualLayout: UICollectionViewLayout {
 extension UltravisualLayout {
     // Return the size of all the content in the collection view
     override var collectionViewContentSize : CGSize {
-        let contentHeight = (CGFloat(numberOfItems) * dragOffset) + (height - dragOffset)
-        return CGSize(width: width, height: contentHeight)
+        //all content width
+        let contentWidth = (CGFloat(numberOfItems) * dragOffset) + (width - dragOffset)
+        return CGSize(width: contentWidth, height: height)
     }
+    
     
     override func prepare() {
         cache.removeAll(keepingCapacity: false)
         
-        let standardHeight = UltravisualLayoutConstants.Cell.standardHeight
-        let featuredHeight = UltravisualLayoutConstants.Cell.featuredHeight
+        
+        let standardWidth = UltravisualLayoutConstants.Cell.standardWidth
+        let featuredWidth = UltravisualLayoutConstants.Cell.featuredWidth
         
         var frame = CGRect.zero
-        var y: CGFloat = 0
+        var x: CGFloat = 0
         
         for item in 0..<numberOfItems {
-            // 1
+            // Create an index path to the current cell, then create default attributes for it.
             let indexPath = IndexPath(item: item, section: 0)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
-            // 2
+            // Prepare the cell to move left or right. Since the majority of cells will not be featured — there are many more standard cells than the single featured cells — it defaults to the standardWidth
             attributes.zIndex = item
-            var height = standardHeight
+            var width = standardWidth
             
-            // 3
+            // Determine the current cell's status — featured, next or standard.
+            //In the case of the latter, you do nothing
             if indexPath.item == featuredItemIndex {
-                // 4
-                let yOffset = standardHeight * nextItemPercentageOffset
-                y = collectionView!.contentOffset.y - yOffset
-                height = featuredHeight
+                // If the cell is currently in the featured-cell position,
+                //calculate the xOffset and use that to derive the new x value for the cell.
+                //After that, you set the cell's width to be the featured width
+                let xOffset = standardWidth * nextItemPercentageOffset
+                x = collectionView!.contentOffset.x - xOffset
+                width = featuredWidth
             } else if indexPath.item == (featuredItemIndex + 1)
                 && indexPath.item != numberOfItems {
-                // 5
-                let maxY = y + standardHeight
-                height = standardHeight + max(
-                    (featuredHeight - standardHeight) * nextItemPercentageOffset, 0
+                // If the cell is next in line, you start by calculating the largest y could be
+                //(in this case, larger than the featured cell) and combine that with a calculated width
+                //to end up with the correct value of x, which is 280.0 — the width of the featured cell.
+                let maxX = x + standardWidth
+                width = standardWidth + max(
+                    (featuredWidth - standardWidth) * nextItemPercentageOffset, 0
                 )
-                y = maxY - height
+                x = maxX - width
             }
             
-            // 6
-            frame = CGRect(x: 0, y: y, width: width, height: height)
+            // Lastly, set some common elements for each cell, including creating the frame, setting the calculated attributes, and updating the cache values. The very last step is to update x so that it's at the bottom of the last calculated cell so that you can move down the list of cells efficiently
+            frame = CGRect(x: x, y: 0, width: width, height: height)
             attributes.frame = frame
             cache.append(attributes)
-            y = frame.maxY
+            x = frame.maxX
         }
 
     }
     
     // Return all attributes in the cache whose frame intersects with the rect passed to the method
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        
         var layoutAttributes: [UICollectionViewLayoutAttributes] = []
+       
         for attributes in cache {
+            
             if attributes.frame.intersects(rect) {
                 layoutAttributes.append(attributes)
             }
