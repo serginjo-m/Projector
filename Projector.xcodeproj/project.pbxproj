@@ -65,6 +65,7 @@
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
 		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
 		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
+		CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF34C3025FA97B3009F8452 /* UltraLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +130,7 @@
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		CFF34C3025FA97B3009F8452 /* UltraLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraLayout.swift; sourceTree = "<group>"; };
 		E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -216,6 +218,7 @@
 				CFD88DF52595EBAE00B726FF /* Calendar */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
+				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
@@ -483,6 +486,7 @@
 				CF1218C425C6DED900530E54 /* StatisticData.swift in Sources */,
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
+				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,

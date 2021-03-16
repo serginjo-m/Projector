@@ -18,6 +18,7 @@ class ProjectListRepository {
 
     static let instance = ProjectListRepository()//initializer
     
+    
     func getProjectLists() -> Results<ProjectList> {
         return realm.objects(ProjectList.self)
     }
@@ -37,7 +38,7 @@ class ProjectListRepository {
             realm.add(list)
         })
     }
-    
+
     //update - project
     func updateProjectList(list: ProjectList){
         try! realm.write ({
@@ -110,5 +111,4 @@ class ProjectListRepository {
     func getEvents() -> Results<Event> {
         return realm.objects(Event.self)
     }
-    
 }

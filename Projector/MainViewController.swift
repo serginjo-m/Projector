@@ -201,19 +201,24 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             minHeightAnchor?.isActive = false
             maxHeightAnchor?.isActive = true
             maxTopAnchor?.isActive = true
+            //open state width
+            self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 280
         }else{
             //ORDER REQUIRED, else constraints error
             maxHeightAnchor?.isActive = false
             maxTopAnchor?.isActive = false
             minTopAnchor?.isActive = true
             minHeightAnchor?.isActive = true
+            //close state width
+            self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 54
         }
         
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
-            
-        }, completion: nil)
+        }, completion: { (true) in
+//            self.recentActivitiesCV.visualLayoutConstraints.viewIsOpen = !self.recentActivitiesCV.visualLayoutConstraints.viewIsOpen
+        })
+        
     }
     
     //open new step VC
