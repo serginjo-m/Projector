@@ -209,6 +209,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF3F0FC6260269B500CAC008 /* Main VC */,
 				CF5483B925EC398D00D6A05B /* Step */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
 				CF9DA835244C499E00DFAEEF /* Collection Views */,
@@ -216,10 +217,6 @@
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CFD88DF52595EBAE00B726FF /* Calendar */,
-				CF2C1293237766A700F3132A /* MainViewController.swift */,
-				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
-				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
-				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
 				CF27A06E254DA091007D06D3 /* Assets.xcassets */,
@@ -227,6 +224,17 @@
 				CF3712D523740BB200B2D593 /* Info.plist */,
 			);
 			path = Projector;
+			sourceTree = "<group>";
+		};
+		CF3F0FC6260269B500CAC008 /* Main VC */ = {
+			isa = PBXGroup;
+			children = (
+				CF2C1293237766A700F3132A /* MainViewController.swift */,
+				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
+				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
+				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
+			);
+			path = "Main VC";
 			sourceTree = "<group>";
 		};
 		CF5483B925EC398D00D6A05B /* Step */ = {
