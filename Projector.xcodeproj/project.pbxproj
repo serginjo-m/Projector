@@ -33,6 +33,8 @@
 		CF321C15245D43D2005CC10E /* StepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* StepImages.swift */; };
 		CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712CD23740BAE00B2D593 /* Main.storyboard */; };
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
+		CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3F0FC72602746A00CAC008 /* UserActivity.swift */; };
+		CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3F0FCB2602888D00CAC008 /* DayActivity.swift */; };
 		CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF535DD02587DEF600F15DCB /* MonthMetadata.swift */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
@@ -98,6 +100,8 @@
 		CF3712CE23740BAE00B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF3712D323740BB200B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF3712D523740BB200B2D593 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF3F0FC72602746A00CAC008 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
+		CF3F0FCB2602888D00CAC008 /* DayActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayActivity.swift; sourceTree = "<group>"; };
 		CF535DD02587DEF600F15DCB /* MonthMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetadata.swift; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
@@ -293,6 +297,8 @@
 				CFBC3A41258152CF00EEF13D /* Day.swift */,
 				CF535DD02587DEF600F15DCB /* MonthMetadata.swift */,
 				CF059F442598A9D900729A74 /* Event.swift */,
+				CF3F0FC72602746A00CAC008 /* UserActivity.swift */,
+				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -491,6 +497,7 @@
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
+				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,
 				CF1218C425C6DED900530E54 /* StatisticData.swift in Sources */,
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
@@ -501,6 +508,7 @@
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
+				CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,
 				CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */,
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,

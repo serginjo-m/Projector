@@ -111,4 +111,21 @@ class ProjectListRepository {
     func getEvents() -> Results<Event> {
         return realm.objects(Event.self)
     }
+    
+    //create an event object
+    func createDayActivity(dayActivity: DayActivity){
+        try! realm.write ({
+            realm.add(dayActivity)
+        })
+    }
+    
+    func getDayActivities() -> Results<DayActivity> {
+        return realm.objects(DayActivity.self)
+    }
+    
+    func appendNewItemToDayActivity(dayActivity: DayActivity, userActivity: UserActivity) {
+        try! self.realm!.write ({//here we actualy add a new object called userActivity
+            dayActivity.userActivities.append(userActivity)
+        })
+    }
 }

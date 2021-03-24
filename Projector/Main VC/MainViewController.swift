@@ -12,6 +12,12 @@ import Foundation
 import os
 import Photos
 
+//this class should contain user activity object accessable to all view controllers and classes
+class UserActivitySingleton {
+    static let shared = UserActivitySingleton()
+    var currentDayActivity = DayActivity()
+}
+
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
     
     //an instance of project detail vc
@@ -40,6 +46,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             return ProjectListRepository.instance.getProjectLists()
         }
     }
+    
+    //Widget data source & to find out: is object already exist of need to create new one
+    var dayActivities: Results<DayActivity> {
+        get {
+            return ProjectListRepository.instance.getDayActivities()
+        }
+    }
+
     
     //MARK: Properties
     let cellID = "cellId"
@@ -164,10 +178,41 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         statisticsStackView.progressAnimation()
+        
+        //dayActivity object for today
+        createDayActivity()
     }
     
     //MARK: Methods
+    //user activity object for today
+    func createDayActivity (){
+        //keep recent activities CV always updated
+        recentActivitiesCV.collectionViewDataSource = self.dayActivities
+        recentActivitiesCV.recentActivitiesCollectionView.reloadData()
+        
+        //create day string == to object day string
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        let dayString = formatter.string(from: Date())
+        //check if there is already object with current date
+        for day in dayActivities{
+            if day.date == dayString{
+                //if object was created today, set shared class to it
+                UserActivitySingleton.shared.currentDayActivity = day
+                return
+            }
+        }
+        //create new DayActivity instance
+        UserActivitySingleton.shared.currentDayActivity = DayActivity()
+        //set date to current date
+        UserActivitySingleton.shared.currentDayActivity.date = dayString
+        //save it to data base
+        ProjectListRepository.instance.createDayActivity(dayActivity: UserActivitySingleton.shared.currentDayActivity)
+        
+    }
+    
     func setupProjectCollectionView(){
         
         // Add a collectionView to the stackView
@@ -201,22 +246,28 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             minHeightAnchor?.isActive = false
             maxHeightAnchor?.isActive = true
             maxTopAnchor?.isActive = true
+            
             //open state width
             self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 280
+            //it's like a triger to animation
+            self.recentActivitiesCV.visualLayoutConstraints.isClicked = true
         }else{
             //ORDER REQUIRED, else constraints error
             maxHeightAnchor?.isActive = false
             maxTopAnchor?.isActive = false
             minTopAnchor?.isActive = true
             minHeightAnchor?.isActive = true
+            
             //close state width
             self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 54
+            //it's like a trigger for animation
+            self.recentActivitiesCV.visualLayoutConstraints.isClicked = false
         }
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: { (true) in
-//            self.recentActivitiesCV.visualLayoutConstraints.viewIsOpen = !self.recentActivitiesCV.visualLayoutConstraints.viewIsOpen
+            
         })
         
     }

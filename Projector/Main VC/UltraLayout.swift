@@ -10,12 +10,17 @@ import UIKit
 
 // The heights are declared as constants outside of the class so they can be easily referenced elsewhere
 class UltravisualLayoutConstants {
-    
-        // The width of the non-featured cell
-        var standardWidth: CGFloat = 54
-        // The width of the first visible cell
-        var featuredWidth: CGFloat = 54
-    
+    // The width of the non-featured cell
+    var standardWidth: CGFloat = 54
+    // The width of the first visible cell
+    var featuredWidth: CGFloat = 54
+
+    //like an observer of click action
+    var isClicked = false {
+        didSet{
+            print("user clicks widget")
+        }
+    }
 }
 
 // MARK: Properties and Variables
@@ -65,7 +70,6 @@ class UltravisualLayout: UICollectionViewLayout {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: UICollectionViewLayout
@@ -82,6 +86,8 @@ extension UltravisualLayout {
     
     
     override func prepare() {
+        guard let cv = collectionView else {return}
+        
         cache.removeAll(keepingCapacity: false)
         
         let standardWidth = layoutConstraints.standardWidth

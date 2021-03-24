@@ -227,10 +227,15 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     @objc func saveAction(_ sender: Any) {
         dismiss(animated: true) {
             let project: ProjectList = self.defineProjectTemplate()
+            
+            let activity = UserActivity()
+            activity.date = Date()
+            
             if self.projectId == nil{
                 //creates new project instance
                 ProjectListRepository.instance.createProjectList(list: project)
                 self.projectCV?.reloadData()
+                activity.descr = "Created new \(project.name) project"
             }else{
                 //becouse project with that id exist it perform update
                 ProjectListRepository.instance.updateProjectList(list: project)
@@ -238,7 +243,11 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
                 self.delegate?.performAllConfigurations()
                 //reload parents views
                 self.delegate?.reloadViews()
+                activity.descr = "Updated \(project.name) project"
             }
+            
+            ProjectListRepository.instance.appendNewItemToDayActivity(dayActivity: UserActivitySingleton.shared.currentDayActivity, userActivity: activity)
+            
         }
     }
     

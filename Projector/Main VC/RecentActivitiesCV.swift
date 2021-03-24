@@ -12,6 +12,10 @@ import RealmSwift
 
 class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     
+    
+    //data source
+    var collectionViewDataSource: Results<DayActivity>?
+    
     //this property need for cells
     private let cellID = "cellId"
     // colors for 7 days
@@ -110,7 +114,6 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
     
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //here I need num based on ...
         return 7
     }
     //define the cell
@@ -122,9 +125,17 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         cell.dayOfWeekLabel.text = daysOfWeek[indexPath.row]
         //day number
         cell.dayNumberLabel.text = String(dayNumbers[indexPath.row])
+        
+        //becouse not all cells initially contains data
+        if let dataSource = collectionViewDataSource{
+            if dataSource.count - 1 >= indexPath.row{
+                cell.cellTemplate = dataSource[0]
+            }else{
+                cell.listLabel.text = "Nothing to write"
+            }
+        }
         return cell
     }
-    
 }
 
 class RecentActivitiesCell: UICollectionViewCell {
@@ -138,6 +149,21 @@ class RecentActivitiesCell: UICollectionViewCell {
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //template
+    var cellTemplate: DayActivity? {
+        didSet{
+            if let setting = cellTemplate{
+                
+                var str = ""
+                for item in setting.userActivities{
+                str += "\(item.descr)\n\n"
+                }
+                
+                listLabel.text = str
+            }
+        }
     }
     
     let dayOfWeekLabel: UILabel = {
