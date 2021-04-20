@@ -243,6 +243,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
                 //delegate for reload
                 self.editDelegate?.someKindOfFunctionThatPerformRelaod()
                 
+                UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
             }else{
                 
                 try! self.realm!.write ({//here we actualy add a new object called projectList
@@ -253,6 +254,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
                 self.delegate?.performAllConfigurations()
                 self.delegate?.reloadViews()
                 
+                UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
             }
             
             

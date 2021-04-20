@@ -120,9 +120,14 @@ class StepItemViewController: UIViewController {
     }
     @objc func saveAction(button: UIButton){
         dismiss(animated: true) {
+            guard let step = self.projectStep else {return}
+            if let text = self.noteTextView.text {
+                UserActivitySingleton.shared.createUserActivity(description: "New Item: \(text) was added to \(step.name) step")
+            }
             
             try! self.realm!.write ({
-                self.projectStep?.itemsArray.append(self.noteTextView.text)
+                step.itemsArray.append(self.noteTextView.text)
+                
             })
             //clear before dismiss
             //self.noteTextView.text = ""

@@ -213,14 +213,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         }
         //[[Event]]
         groupedDictionary.keys.forEach {(key) in
-//            print(key)
+
             let values = groupedDictionary[key]
-//            print(values ?? "")
+
             //an array of events for every key or empty arr
             groupedEventsByDate.append(values ?? [])
         }
-        
-//        print(groupedEventsByDate)
+
     }
     
     

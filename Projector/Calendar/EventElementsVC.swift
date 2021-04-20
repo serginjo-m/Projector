@@ -107,13 +107,14 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
     }
     //REMOVE ITEM
     @objc func removeItem(button: UIButton){
+        UserActivitySingleton.shared.createUserActivity(description: "\(self.events[button.tag].title) event was removed")
+
         //remove event from database
         ProjectListRepository.instance.deleteEvent(event: self.events[button.tag])
         //remove from table view datasource
         events.remove(at: button.tag)
         //reload tableView
         self.eventsTableView.reloadData()
-//        print("this is event \(self.events[button.tag])")
     }
     
     

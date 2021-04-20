@@ -230,7 +230,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
 
         //setup constraints
         setupLayout()
-        
+        //includes keyboard dismiss func from extension
         self.hideKeyboardWhenTappedAround()
     }
     
@@ -352,6 +352,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         //delete button
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            UserActivitySingleton.shared.createUserActivity(description: "Deleted \(self.localStepsArray[button.tag].name)")
+            
             //delete step in data base
             ProjectListRepository.instance.deleteProjectStep(list: self.projectInstance!, stepAtIndex: button.tag)
             //update array for collection veiw
@@ -368,28 +371,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         present(alertVC, animated: true, completion: nil)
     }
     
-    //NEW STEP UPDATES
-    /*@IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
-         //update array, to have a data for new cell
-         updateMyArray()
-         //update views
-         self.delegate?.reloadTableView()
-         //perform all operations step by step with categories CV
-         stepCategoriesFilter.updateCategoriesCV()
-         //add new item
-         let newIndexPath = IndexPath(row: localStepsArray.count - 1, section: 0)
-         stepsCollectionView.insertItems(at: [newIndexPath])
-     }*/
-
     //COMPLETED ACTION
     @objc func itemCompleted(button: UIButton){
+        guard let step = projectInstance?.projectStep[button.tag] else {return}
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected
-        //here save .tag of selected switch = selected cell
-        let updatedStep = projectInstance?.projectStep[button.tag]
-        //func that change complete bool of the step
-        ProjectListRepository.instance.updateStepCompletionStatus(step: updatedStep!, isComplete: button.isSelected)
         
+        //func that change complete bool of the step
+        ProjectListRepository.instance.updateStepCompletionStatus(step: step, isComplete: button.isSelected)
+        
+        let completedString = button.isSelected == true ? "completed" : "not completed"
+        UserActivitySingleton.shared.createUserActivity(description: "\(step.name) is \(completedString)")
         //update views after data source has been changed
         reloadViews()
     }
@@ -471,12 +463,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         }
     }
     
+    //perform segue to step detail view controller
     func showStepDetails(index: Int){
         
         let selectedStepId = localStepsArray[index].id
-        
+        //------------------------------------- not happy, because object is huge! -----------------------------
         let stepDetailVC = StepViewController()
+        
+        stepDetailVC.stepIndex = index
         stepDetailVC.stepID = selectedStepId
+        stepDetailVC.projectId = self.projectListIdentifier
         navigationController?.pushViewController(stepDetailVC, animated: true)
     }
     

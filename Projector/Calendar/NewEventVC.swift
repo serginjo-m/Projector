@@ -22,6 +22,12 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     var eventStart: Date?
     var eventEnd: Date?
     
+    private lazy var dateFormatterFullDate: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        return dateFormatter
+    }()
+    
     //unique project id for updating
     var eventId: String?
     
@@ -224,10 +230,15 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @objc func saveAction(_ sender: Any) {
         
         let event: Event = self.defineEventTemplate()
-        //create or update logic (becouse if id exist and defined it will update object)
+        
+        //unwrap optional date for activity object
+        guard let eventDate = event.date else {return}
+        
         if self.eventId == nil{
             //creates new project instance
             ProjectListRepository.instance.createEvent(event: event)
+            
+            UserActivitySingleton.shared.createUserActivity(description: "New Event on \(self.dateFormatterFullDate.string(from: eventDate)): \(event.title)")
         }else{
             //becouse event with that id exist it perform update
             ProjectListRepository.instance.updateEvent(event: event)
@@ -235,7 +246,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             // self.delegate?.performAllConfigurations()
             //reload parents views
             // self.delegate?.reloadViews()
-            
+            UserActivitySingleton.shared.createUserActivity(description: "\(event.title) on \(self.dateFormatterFullDate.string(from: eventDate)) was updated")
         }
         
         dismiss(animated: true, completion: nil)

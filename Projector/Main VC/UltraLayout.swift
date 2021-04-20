@@ -14,13 +14,8 @@ class UltravisualLayoutConstants {
     var standardWidth: CGFloat = 54
     // The width of the first visible cell
     var featuredWidth: CGFloat = 54
-
-    //like an observer of click action
-    var isClicked = false {
-        didSet{
-            print("user clicks widget")
-        }
-    }
+    //actual state of cv
+    var isSelected = true
 }
 
 // MARK: Properties and Variables
@@ -70,6 +65,7 @@ class UltravisualLayout: UICollectionViewLayout {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
 
 // MARK: UICollectionViewLayout
@@ -78,19 +74,18 @@ extension UltravisualLayout {
     
     // Return the size of all the content in the collection view
     override var collectionViewContentSize : CGSize {
-        
         //all content width
         let contentWidth = (CGFloat(numberOfItems) * dragOffset) + (width - dragOffset)
         return CGSize(width: contentWidth, height: height)
     }
     
-    
+
+   
     override func prepare() {
-        guard let cv = collectionView else {return}
         
         cache.removeAll(keepingCapacity: false)
         
-        let standardWidth = layoutConstraints.standardWidth
+        let standardWidth = (self.width - layoutConstraints.featuredWidth) / 6
         let featuredWidth = layoutConstraints.featuredWidth
         
         var frame = CGRect.zero
@@ -139,15 +134,14 @@ extension UltravisualLayout {
     
     // Return all attributes in the cache whose frame intersects with the rect passed to the method
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        
         var layoutAttributes: [UICollectionViewLayoutAttributes] = []
-        
         for attributes in cache {
-            
+
             if attributes.frame.intersects(rect) {
                 layoutAttributes.append(attributes)
             }
         }
+        
         return layoutAttributes
     }
     
@@ -155,4 +149,18 @@ extension UltravisualLayout {
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
+    
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attrs = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+        attrs?.alpha = 1.0
+        return attrs
+    }
+    
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attrs = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        attrs?.alpha = 1.0
+        return attrs
+    }
+        
 }
+

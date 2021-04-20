@@ -9,19 +9,6 @@
 import UIKit
 import RealmSwift
 
-// this extension hide keyboard when user
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-}
-
 class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate  {
     
     var realm: Realm!//create a var
@@ -283,14 +270,20 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
+        guard let proj = project else {return}
         //template
         let statisticData: StatisticData = self.defineStatisticDataTemplate()
         //save to database
         try! self.realm!.write ({
-            guard let proj = project else {return}
+
             proj.projectStatistics.append(statisticData)
+            
         })
         
+        let addSubtract = statisticData.positiveNegative == 0 ? "-" : "+"
+        UserActivitySingleton.shared.createUserActivity(description: "\(proj.name):\n \(addSubtract)\(statisticData.number)  to \(statisticData.category)")
+        
+
         //---------------------- It definitely need some improvement -------------------------------------------
         //assign the same values lead to reload of data and view
         let id = projectId
@@ -330,6 +323,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
             statisticData.comment = text
         }
         statisticData.category = categoryKey
+        
         return statisticData
     }
     

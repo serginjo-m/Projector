@@ -12,10 +12,17 @@ import Foundation
 import os
 import Photos
 
-//this class should contain user activity object accessable to all view controllers and classes
-class UserActivitySingleton {
-    static let shared = UserActivitySingleton()
-    var currentDayActivity = DayActivity()
+// this extension hide keyboard when user
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
@@ -66,7 +73,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     var recentProjectsStackView = UIStackView()
     
     //Profile Button
-    var userProfileButton: UIButton = {
+    lazy var userProfileButton: UIButton = {
         let button = UIButton()
         button.layer.backgroundColor = UIColor.yellow.cgColor
         button.layer.cornerRadius = 18
@@ -76,7 +83,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         button.clipsToBounds = true
         return button
     }()
-    
+   
     //Titles
     var mainTitle: UILabel = {
         let label = UILabel()
@@ -95,7 +102,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     var recentActivitiesTitle: UILabel = {
         let label = UILabel()
-        label.text = "Recent Activities"
+        label.text = "Last Days Activity"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -144,6 +151,15 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Camera
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
+            if response {
+                //access granted
+            } else {
+                
+            }
+        }
+        
         //don't know if it helps with camera roll access for app
         if status == .notDetermined  {
             PHPhotoLibrary.requestAuthorization({status in})
@@ -168,12 +184,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         contentUIView.addSubview(viewByCategoryCV)
         contentUIView.addSubview(statisticsTitle)
         contentUIView.addSubview(statisticsStackView)
+        
         //setup constraints
         setupLayout()
-        
         //setup recent projects collection view
         setupProjectCollectionView()
-        
 //        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
@@ -186,8 +201,17 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //MARK: Methods
+    
+    
     //user activity object for today
     func createDayActivity (){
+        
+        //------------------------------------------------------------------------------------------------------------
+        
+        //Here I want to have a logic that keep my database up to 30 items
+        
+        //------------------------------------------------------------------------------------------------------------
+        
         //keep recent activities CV always updated
         recentActivitiesCV.collectionViewDataSource = self.dayActivities
         recentActivitiesCV.recentActivitiesCollectionView.reloadData()
@@ -204,6 +228,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
                 return
             }
         }
+        
         //create new DayActivity instance
         UserActivitySingleton.shared.currentDayActivity = DayActivity()
         //set date to current date
@@ -248,9 +273,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             maxTopAnchor?.isActive = true
             
             //open state width
-            self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 280
-            //it's like a triger to animation
-            self.recentActivitiesCV.visualLayoutConstraints.isClicked = true
+            self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 250
+            self.recentActivitiesCV.visualLayoutConstraints.standardWidth = 20
+            
         }else{
             //ORDER REQUIRED, else constraints error
             maxHeightAnchor?.isActive = false
@@ -260,16 +285,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             
             //close state width
             self.recentActivitiesCV.visualLayoutConstraints.featuredWidth = 54
-            //it's like a trigger for animation
-            self.recentActivitiesCV.visualLayoutConstraints.isClicked = false
+            self.recentActivitiesCV.visualLayoutConstraints.standardWidth = 54
         }
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
-        }, completion: { (true) in
-            
         })
-        
     }
     
     //open new step VC
@@ -325,6 +346,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         //delete button
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            UserActivitySingleton.shared.createUserActivity(description: "\(self.proJects[button.tag].name) was removed")
             //remove project from database
             ProjectListRepository.instance.deleteProjectList(list: self.proJects[button.tag])
             //reload view

@@ -10,8 +10,97 @@ import UIKit
 import Foundation
 import RealmSwift
 
-class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+struct RecentDay {
+    // Date represents a given day in a month.
+    let date: Date
+    //The number to display on the collection view cell.
+    let number: String
+    //Date string that will be used for comparison
+    let dateString: String
+}
+
+//this class should contain user activity object accessable to all view controllers and classes
+class UserActivitySingleton {
     
+    static let shared = UserActivitySingleton()
+    
+    //a bit trick here
+    //because I don't want to deal with optionals everywhere I need to add new item
+    //first create an empty object, and then it will be rewritten immediately
+    var currentDayActivity = DayActivity()
+    
+    let calendar = Calendar(identifier: .gregorian)
+    
+    let selectedDate = Date()
+    
+    //create user activity object with date
+    func createUserActivity(description: String){
+        let userActivity = UserActivity()
+        userActivity.date = Date()
+        userActivity.descr = description
+        ProjectListRepository.instance.appendNewItemToDayActivity(dayActivity: currentDayActivity, userActivity: userActivity)
+    }
+    
+    private lazy var dateFormatterNumber: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d"
+        return dateFormatter
+    }()
+    
+    private lazy var dateFormatterFullDate: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        return dateFormatter
+    }()
+    
+    //takes day and return an array of days
+    func generateDaysInMonth (for baseDate: Date) -> [RecentDay] {
+        
+        //last 29 days
+        let offsetInInitialRow = 29
+        // "first day of month" is today
+        let firstDayOfMonth = Date()
+        
+        
+        
+        //calculate last 30 days from today
+        let days: [RecentDay] = (0...29)
+            .map { day in
+                
+                // check day for current or previous month
+                let isWithinDisplayedMonth = day >= offsetInInitialRow
+                
+                // calculate the offset
+                let dayOffset = isWithinDisplayedMonth ? day - offsetInInitialRow : -(offsetInInitialRow - day)
+                
+                // adds of substructs an offset from Date for new day
+                return generateDay(offsetBy: dayOffset, for: firstDayOfMonth)
+        }
+        
+        return days
+    }
+    
+    //Generate Days For Calendar
+    func generateDay( offsetBy dayOffset: Int, for baseDate: Date) -> RecentDay {
+        
+        let date = calendar.date( byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
+        
+        return RecentDay(
+            date: date,
+            number: self.dateFormatterNumber.string(from: date),
+            dateString: self.dateFormatterFullDate.string(from: date)
+        )
+    }
+}
+
+
+
+class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+   
+    
+    let baseDate = Date()
+    //an array of days
+    lazy var days = UserActivitySingleton.shared.generateDaysInMonth(for: baseDate)
     
     //data source
     var collectionViewDataSource: Results<DayActivity>?
@@ -20,18 +109,22 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
     private let cellID = "cellId"
     // colors for 7 days
     var cellColors = [
-        UIColor.init(red: 95/255, green: 74/255, blue: 99/255, alpha: 1),
-        UIColor.init(red: 191/255, green: 105/255, blue: 128/255, alpha: 1),
-        UIColor.init(red: 47/255, green: 119/255, blue: 191/255, alpha: 1),
-        UIColor.init(red: 38/255, green: 166/255, blue: 153/255, alpha: 1),
-        UIColor.init(red: 255/255, green: 213/255, blue: 87/255, alpha: 1),
-        UIColor.init(red: 253/255, green: 169/255, blue: 65/255, alpha: 1),
-        UIColor.init(red: 242/255, green: 98/255, blue: 98/255, alpha: 1)
+        UIColor.init(red: 242/255, green: 98/255, blue: 98/255, alpha: 1),//7
+        UIColor.init(red: 95/255, green: 74/255, blue: 99/255, alpha: 1),//1
+        UIColor.init(red: 191/255, green: 105/255, blue: 128/255, alpha: 1),//2
+        UIColor.init(red: 47/255, green: 119/255, blue: 191/255, alpha: 1),//3
+        UIColor.init(red: 38/255, green: 166/255, blue: 153/255, alpha: 1),//4
+        UIColor.init(red: 255/255, green: 213/255, blue: 87/255, alpha: 1),//5
+        UIColor.init(red: 253/255, green: 169/255, blue: 65/255, alpha: 1)//6
     ]
     
-    var daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"]
-    // dummy date, need improvements
-    var dayNumbers = [24, 25, 26, 27, 28, 29, 30]
+    //reversed days of week
+
+    var daysOfWeek = ["Sa", "Fr", "Th", "We", "Tu", "Mo", "Su"]
+    
+    
+    //last item weekday
+    lazy var reversedWeekday = 7 - (Calendar.current.component(.weekday, from: days.last!.date))
     
     //MARK: Initialization
     override init(frame: CGRect) {
@@ -46,27 +139,20 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
     
     var visualLayoutConstraints = UltravisualLayoutConstants()
     
+    lazy var layout: UltravisualLayout = {
+        let layout = UltravisualLayout(layoutConstraints: self.visualLayoutConstraints)
+        return layout
+    }()
+    
     //here creates a horizontal collectionView inside stackView
     lazy var recentActivitiesCollectionView: UICollectionView = {
-        
-        //instance for UICollectionView purposes
-        let layout = UltravisualLayout(layoutConstraints: visualLayoutConstraints)
-        
-        //changing default direction of scrolling
-//        layout.scrollDirection = .horizontal
-//
-//        //spacing...
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        //layout.itemSize = CGSize(width: 120, height: 45)
-//        layout.minimumInteritemSpacing = 0
-//        layout.minimumLineSpacing = 0
-//
-        
-        
+
+       
         //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+     
         collectionView.backgroundColor = UIColor.clear
         
         //deactivate default constraints
@@ -104,34 +190,41 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": recentActivitiesCollectionView]))
         
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": recentActivitiesCollectionView]))
+        
     }
     
-    //size
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //here we don't need to use view.frame.height becouse our CategoryCell have it
-        return CGSize(width: frame.height/2, height: frame.height )
-    }
+    
     
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        return days.count
     }
+  
     //define the cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! RecentActivitiesCell
-        //define day color
-        cell.backgroundColor = cellColors[indexPath.row]
-        //day of week
-        cell.dayOfWeekLabel.text = daysOfWeek[indexPath.row]
-        //day number
-        cell.dayNumberLabel.text = String(dayNumbers[indexPath.row])
         
-        //becouse not all cells initially contains data
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! RecentActivitiesCell
+        
+        //loop through array of 7 colors & 7 weekdays multiple times
+        let int = (reversedWeekday + indexPath.row) % 7
+        
+        cell.backgroundColor = cellColors[int]
+        //day of week
+        cell.dayOfWeekLabel.text = daysOfWeek[int]
+        //day number
+        
+        let reverseIterNumber = (days.count - indexPath.row) - 1
+    
+        cell.dayNumberLabel.text = "\(days[reverseIterNumber].number)"
+        //take action list clear before doing iterations
+        cell.listLabel.text = ""
+        //at first run data source is empty
         if let dataSource = collectionViewDataSource{
-            if dataSource.count - 1 >= indexPath.row{
-                cell.cellTemplate = dataSource[0]
-            }else{
-                cell.listLabel.text = "Nothing to write"
+            //not so efficient but...., for small amount of items
+            for item in dataSource{
+                if item.date == days[reverseIterNumber].dateString{
+                    cell.cellTemplate = item
+                }
             }
         }
         return cell
@@ -139,7 +232,9 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
 }
 
 class RecentActivitiesCell: UICollectionViewCell {
+   
     
+   
     //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -156,7 +251,9 @@ class RecentActivitiesCell: UICollectionViewCell {
         didSet{
             if let setting = cellTemplate{
                 
-                var str = ""
+                //if object exist, meens app was opened that day
+                var str = "Looking!\n\n"
+                
                 for item in setting.userActivities{
                 str += "\(item.descr)\n\n"
                 }
@@ -170,6 +267,7 @@ class RecentActivitiesCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = UIColor.init(white: 1, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.textAlignment = .center
         return label
     }()
     
@@ -178,6 +276,7 @@ class RecentActivitiesCell: UICollectionViewCell {
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.text = "This is Dummy text, that \n will be used for developing."
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
@@ -191,6 +290,7 @@ class RecentActivitiesCell: UICollectionViewCell {
     }()
     
     func setupViews(){
+        
         //mask content outside cell
         layer.masksToBounds = true
         
@@ -202,14 +302,14 @@ class RecentActivitiesCell: UICollectionViewCell {
         dayNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         listLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 20).isActive = true
+        listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
         listLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
-        listLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -15).isActive = true
+        listLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         listLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
         
         dayOfWeekLabel.topAnchor.constraint(equalTo: topAnchor, constant: 13).isActive = true
-        dayOfWeekLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        dayOfWeekLabel.widthAnchor.constraint(equalToConstant: 13).isActive = true
+        dayOfWeekLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        dayOfWeekLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         dayOfWeekLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
         
         dayNumberLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true

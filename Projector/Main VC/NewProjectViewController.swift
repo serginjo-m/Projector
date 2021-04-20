@@ -92,12 +92,14 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return view
     }()
     
-    let imagePickerButton: UIView = {
+    lazy var imagePickerButton: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(displayP3Red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
         view.isUserInteractionEnabled = true
         view.layer.cornerRadius = 11
         view.clipsToBounds = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -196,8 +198,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         //constraints
         setupLayout()
-        //add tap gesture to imagePickerButton
-        imageViewConfiguration()
         
         //set delegate to name text field
         nameTextField.delegate = self
@@ -228,14 +228,12 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         dismiss(animated: true) {
             let project: ProjectList = self.defineProjectTemplate()
             
-            let activity = UserActivity()
-            activity.date = Date()
-            
             if self.projectId == nil{
                 //creates new project instance
                 ProjectListRepository.instance.createProjectList(list: project)
                 self.projectCV?.reloadData()
-                activity.descr = "Created new \(project.name) project"
+                
+                UserActivitySingleton.shared.createUserActivity(description: "Created new \(project.name) project")
             }else{
                 //becouse project with that id exist it perform update
                 ProjectListRepository.instance.updateProjectList(list: project)
@@ -243,10 +241,9 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
                 self.delegate?.performAllConfigurations()
                 //reload parents views
                 self.delegate?.reloadViews()
-                activity.descr = "Updated \(project.name) project"
+                
+                UserActivitySingleton.shared.createUserActivity(description: "Updated \(project.name) project")
             }
-            
-            ProjectListRepository.instance.appendNewItemToDayActivity(dayActivity: UserActivitySingleton.shared.currentDayActivity, userActivity: activity)
             
         }
     }
@@ -299,12 +296,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         // Dismiss the picker if the user canceled.
         dismiss(animated: true, completion: nil)
-    }
-    
-    //becouse tap gesture won't work inside constant configurator need to create separate function
-    private func imageViewConfiguration(){
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        imagePickerButton.addGestureRecognizer(tap)
     }
     
     //add image mechanism

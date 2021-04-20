@@ -11,6 +11,7 @@
 		CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF02D7AE256D9606001B522F /* StepNumbersCV.swift */; };
 		CF059F452598A9D900729A74 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F442598A9D900729A74 /* Event.swift */; };
 		CF059F472598B47600729A74 /* NewEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F462598B47500729A74 /* NewEventVC.swift */; };
+		CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0B7E41262608DE008AC084 /* CameraShot.swift */; };
 		CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0C17E4242F9790000FB582 /* ProgressModel.swift */; };
 		CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */; };
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
@@ -45,6 +46,7 @@
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72D38F2467E86F007FA034 /* StepItemViewController.swift */; };
+		CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7A57F6262C38D7004EAF01 /* CameraNote.swift */; };
 		CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7ECB7524634B47006CC7FF /* StepAddItem.swift */; };
 		CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8792B9247A869C007EBD30 /* ClosureExample.swift */; };
 		CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF888DA32427D01A00312407 /* FeaturedAppsController.swift */; };
@@ -76,6 +78,7 @@
 		CF02D7AE256D9606001B522F /* StepNumbersCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepNumbersCV.swift; sourceTree = "<group>"; };
 		CF059F442598A9D900729A74 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		CF059F462598B47500729A74 /* NewEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventVC.swift; sourceTree = "<group>"; };
+		CF0B7E41262608DE008AC084 /* CameraShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraShot.swift; sourceTree = "<group>"; };
 		CF0C17E4242F9790000FB582 /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
 		CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStepCell.swift; sourceTree = "<group>"; };
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF72D38F2467E86F007FA034 /* StepItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemViewController.swift; sourceTree = "<group>"; };
+		CF7A57F6262C38D7004EAF01 /* CameraNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraNote.swift; sourceTree = "<group>"; };
 		CF7ECB7524634B47006CC7FF /* StepAddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItem.swift; sourceTree = "<group>"; };
 		CF8792B9247A869C007EBD30 /* ClosureExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureExample.swift; sourceTree = "<group>"; };
 		CF888DA32427D01A00312407 /* FeaturedAppsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedAppsController.swift; sourceTree = "<group>"; };
@@ -213,6 +217,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
 				CF3F0FC6260269B500CAC008 /* Main VC */,
 				CF5483B925EC398D00D6A05B /* Step */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
@@ -299,6 +304,7 @@
 				CF059F442598A9D900729A74 /* Event.swift */,
 				CF3F0FC72602746A00CAC008 /* UserActivity.swift */,
 				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
+				CF7A57F6262C38D7004EAF01 /* CameraNote.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -496,6 +502,7 @@
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
+				CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,
 				CF1218C425C6DED900530E54 /* StatisticData.swift in Sources */,
@@ -504,6 +511,7 @@
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
+				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,

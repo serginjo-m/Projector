@@ -128,4 +128,11 @@ class ProjectListRepository {
             dayActivity.userActivities.append(userActivity)
         })
     }
+    
+    //create camera note
+    func createCameraNote(cameraNote: CameraNote){
+        try! realm.write ({
+            realm.add(cameraNote)
+        })
+    }
 }

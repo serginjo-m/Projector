@@ -37,6 +37,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    //delete action need index & project id of item in project step array for removing
+    var stepIndex: Int?
+    var projectId: String?
+    
     //step id passed by detail VC
     var stepID: String?
     
@@ -101,7 +105,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let removeStepButton: UIButton = {
         let button = UIButton()
-//        button.addTarget(self, action: #selector(changeSelectedValue(button:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(deleteStep(button:)), for: .touchUpInside)
         button.setTitle("Remove", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.setTitleColor(UIColor.init(red: 104/255, green: 104/255, blue: 104/255, alpha: 1), for: .normal)
@@ -224,19 +228,61 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //REMOVE ITEM
     @objc func removeItem(button: UIButton){
-        if let myStep = projectStep {
-            ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
-            stepTableView.reloadData()
-        }
+        guard let myStep = projectStep else {return}
+        
+        UserActivitySingleton.shared.createUserActivity(description: "\(myStep.itemsArray[button.tag]) removed from \(myStep.name)")
+        
+        ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
+        stepTableView.reloadData()
+        
     }
     
     //COMPLETE
     @objc func changeSelectedValue(button: UIButton) {
+        guard let step = projectStep else {return}
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected
-        ProjectListRepository.instance.updateStepCompletionStatus(step: projectStep!, isComplete: button.isSelected)
+        ProjectListRepository.instance.updateStepCompletionStatus(step: step, isComplete: button.isSelected)
         parentVC?.stepsCollectionView.reloadData()
         parentVC?.delegate?.reloadTableView()
+        
+        let completedString = button.isSelected == true ? "completed" : "not completed"
+        UserActivitySingleton.shared.createUserActivity(description: "\(step.name) is \(completedString)")
+    }
+    
+    //DELETE STEP
+    @objc func deleteStep( button: UIButton){
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Step?", message: "Are You sure want delete this step?", preferredStyle: .alert)
+        //cancel button
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        //delete button
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            guard let step = self.projectStep,
+                let projectId = self.projectId,
+                let stepIndex = self.stepIndex
+            else {return}
+            
+            UserActivitySingleton.shared.createUserActivity(description: "Deleted \(step.name)")
+            
+            var project: ProjectList? {
+                get{
+                    return ProjectListRepository.instance.getProjectList(id: projectId)
+                }
+            }
+            
+            if let proj = project {
+                //delete step in data base
+                ProjectListRepository.instance.deleteProjectStep(list: proj, stepAtIndex: stepIndex)
+            }
+            
+            self.navigationController?.popViewController(animated: true)
+        })
+        
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(deleteAction)
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
     }
     
     //EDIT ACTION

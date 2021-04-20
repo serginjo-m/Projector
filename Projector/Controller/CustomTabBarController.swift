@@ -13,6 +13,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     //------------------------under construction var -----------------------
     //date as a start point for calendar
     let date = Date()
+
     
     override func viewDidLoad() {
         
@@ -22,7 +23,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             createNavControllerWithTitle(viewController: ProjectViewController(), title: "Home", imageName: "home"),
             createCalendarViewController(),
             createNavControllerWithTitle(viewController: NewProjectViewController(), title: "Add", imageName: "addButton"),
-            createNavControllerWithTitle(viewController: UIViewController(), title: "Spendings", imageName: "money"),
+            createNavControllerWithTitle(viewController: CameraShot(), title: "Spendings", imageName: "money"),
             createNavControllerWithTitle(viewController: UIViewController(), title: "Notifications", imageName: "bell")
         ]
     }
@@ -33,7 +34,6 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
             //Do Nothing here !!
             //So maybe modify logic ?
-            
         }
         return createNavControllerWithTitle(viewController: calendarViewController, title: "Calendar", imageName: "calendarIcon")
     }
@@ -66,7 +66,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             //base for switch cases logic
             lastVCClass = "\(currentViewController.classForCoder)"
         
-            func configureAddItemAction(newObjectVC: UIViewController){
+            func configureAddItemAction(newObjectVC: [UIViewController]){
                 
                 
                 //get my add items nav view controller for setting its stack view controllers in func
@@ -75,24 +75,21 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 //ALERT MENU
                 let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
                 
-                let action1 = UIAlertAction(title: "Quick Create", style: .default) { (action:UIAlertAction) in
-                    self.present(newObjectVC, animated: true, completion: nil)
-                    //targetNavController.setViewControllers([newObjectVC], animated: false)
-                    //tabBarController.selectedIndex = 2
-                }
                 
-                let action2 = UIAlertAction(title: "Full Create", style: .default) { (action:UIAlertAction) in
-                    self.present(newObjectVC, animated: true, completion: nil)
-                    //targetNavController.setViewControllers([newObjectVC], animated: false)
-                    //tabBarController.selectedIndex = 2
+                
+                for controller in newObjectVC {
+                    let action = UIAlertAction(title: "Action", style: .default) { (action: UIAlertAction) in
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                    
+                    alert.addAction(action)
                 }
                 
                 let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
                     // Do nothing
                 }
                 
-                alert.addAction(action1)
-                alert.addAction(action2)
+                
                 alert.addAction(action3)
                 
                 present(alert, animated: true, completion: nil)
@@ -104,27 +101,31 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     
                     guard let detailVC = currentViewController as? DetailViewController else {return false}
                     
-                    //becouse case: DetailViewController, I can access it property for adding or modification
+                    //because case: DetailViewController, I can access it property for adding or modification
                     //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
                     
-                    let controller = NewStepViewController()
-                    controller.uniqueID = detailVC.projectListIdentifier
-                    controller.stepsCV = detailVC.stepsCollectionView
-                    //----------------------------------------------------------------------------------------------
-                    controller.delegate = detailVC
-                    configureAddItemAction(newObjectVC: controller)
+                    let newStep = NewStepViewController()
+                    newStep.uniqueID = detailVC.projectListIdentifier
+                    newStep.stepsCV = detailVC.stepsCollectionView
+                    
+                    newStep.delegate = detailVC
+                    
+                    configureAddItemAction(newObjectVC: [newStep])
             
                 case "ProjectViewController":
                     
                     guard let  projectVC = currentViewController as? ProjectViewController else {return false}
                     
                     let newProjectViewController = NewProjectViewController()
+                    let cameraShot = CameraShot()
                     
                     newProjectViewController.modalTransitionStyle = .coverVertical
                     newProjectViewController.modalPresentationStyle = .overCurrentContext
                      //want to transfer some data
                     newProjectViewController.projectCV = projectVC.projectsCollectionView
-                    configureAddItemAction(newObjectVC: newProjectViewController)
+                    
+                
+                    configureAddItemAction(newObjectVC: [newProjectViewController, cameraShot])
                 
                 case "StepViewController":
                 
@@ -133,14 +134,14 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     let newStepItemViewController = StepItemViewController()
                     newStepItemViewController.stepID = stepVC.stepID
                     newStepItemViewController.stepItemsTableView = stepVC.stepTableView
-                    configureAddItemAction(newObjectVC: newStepItemViewController)
+                    
+                    configureAddItemAction(newObjectVC: [newStepItemViewController])
                 
                 case "CalendarViewController":
                 
                     let newEventItemViewController = NewEventViewController()
-//                    newEventItemViewController.modalPresentationStyle = .overCurrentContext
                     
-                    configureAddItemAction(newObjectVC: newEventItemViewController)
+                    configureAddItemAction(newObjectVC: [newEventItemViewController])
                 
                 default:
                     
