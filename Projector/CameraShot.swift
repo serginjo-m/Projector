@@ -109,6 +109,8 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     
     //.camera or .photoLibrary image source
     var imagePicker: UIImagePickerController!
+    //reference to image in photo library
+    var selectedImageURL: String?
     
     // ImageSource.camera || ImageSource.photoLibrary
     enum ImageSource {
@@ -185,11 +187,13 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
         
         //SAVE TO QUICK NOTES
         let action1 = UIAlertAction(title: "Save To Quick Notes", style: .default) { (action: UIAlertAction) in
+        
+            guard let imageString = self.selectedImageURL else {return}
             
-            let cameraNote = self.createCameraNote(image: "String")
+            let cameraNote = self.createCameraNote(image: imageString)
             
             ProjectListRepository.instance.createCameraNote(cameraNote: cameraNote)
-            
+            UserActivitySingleton.shared.createUserActivity(description: "Photo Note was Created")
             self.dismiss(animated: true, completion: {
                
             })
@@ -208,6 +212,9 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     //create note from camera shot
     func createCameraNote(image: String) -> CameraNote{
         let note = CameraNote()
+        if self.titleTextField.text != nil {
+            note.title = self.titleTextField.text
+        }
         note.picture = image
         return note
     }
@@ -243,9 +250,41 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
             // we got back an error!
             showAlertWith(title: "Save error", message: error.localizedDescription)
         } else {
+            fetchLastImage(completion: selectedImageURL)
 //            showAlertWith(title: "Saved!", message: "Your image has been saved to your photos.")
         }
+        
+        
     }
+    
+    //find an address of the last image in photo library
+    func fetchLastImage(completion: String?){
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.fetchLimit = 1
+        
+        let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        
+        if (fetchResult.firstObject != nil){
+            let lastImageAsset: PHAsset = fetchResult.firstObject as! PHAsset
+            
+            //retreave image URL
+            lastImageAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
+                if lastImageAsset.mediaType == .image {
+                    if let strURL = contentEditingInput?.fullSizeImageURL?.description {
+                        //print("IMAGE URL: ", strURL)
+                        assignUrl(url: strURL)
+                    }
+                }
+            })
+            
+            func assignUrl(url: String){
+                selectedImageURL = url
+            }
+            
+        }
+    }
+    
     
     func showAlertWith(title: String, message: String){
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -308,7 +347,8 @@ extension CameraShot: UIImagePickerControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
         
-        imagePicker.dismiss(animated: true, completion: nil)
+        
+        
         guard let selectedImage = info[.originalImage] as? UIImage else {
             print("Image not found!")
             return
@@ -317,10 +357,13 @@ extension CameraShot: UIImagePickerControllerDelegate{
         //save action
         UIImageWriteToSavedPhotosAlbum(selectedImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
+        
         updateSaveButtonState()
         
         //assign image to imageView
         photoView.image = selectedImage
+        
+        imagePicker.dismiss(animated: true, completion: nil)
         
     }
     

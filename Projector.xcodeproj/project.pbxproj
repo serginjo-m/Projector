@@ -19,6 +19,7 @@
 		CF1218C425C6DED900530E54 /* StatisticData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1218C325C6DED900530E54 /* StatisticData.swift */; };
 		CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */; };
 		CF1416D125B8B145001AC541 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = CF1416D025B8B145001AC541 /* Podfile */; };
+		CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17A69126371DB9002337C0 /* CategoryItems.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
@@ -57,6 +58,7 @@
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
 		CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */; };
 		CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */; };
+		CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
@@ -86,6 +88,7 @@
 		CF1218C325C6DED900530E54 /* StatisticData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticData.swift; sourceTree = "<group>"; };
 		CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStepVC.swift; sourceTree = "<group>"; };
 		CF1416D025B8B145001AC541 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		CF17A69126371DB9002337C0 /* CategoryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItems.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
@@ -126,6 +129,7 @@
 		CFA5878A242883A6006367AE /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLouncher.swift; sourceTree = "<group>"; };
 		CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventElementsVC.swift; sourceTree = "<group>"; };
+		CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */,
 				2528C037002617B26AC128D5 /* Pods_Projector.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +171,7 @@
 		570330C3CAEF4F54E1878C17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */,
 				E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */,
 			);
 			name = Frameworks;
@@ -174,6 +180,7 @@
 		CF0BCA2325BB457F00A5C172 /* Project Detail */ = {
 			isa = PBXGroup;
 			children = (
+				CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */,
 				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
 				CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */,
 				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
@@ -189,7 +196,6 @@
 			children = (
 				CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */,
 				CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */,
-				CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -239,9 +245,11 @@
 			isa = PBXGroup;
 			children = (
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
+				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
+				CF17A69126371DB9002337C0 /* CategoryItems.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -287,7 +295,6 @@
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
-				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594364253215670036641B /* StatisticsStackView.swift */,
 			);
 			path = "Collection Views";
@@ -496,6 +503,7 @@
 				CF059F452598A9D900729A74 /* Event.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
 				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
+				CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
 				CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */,
 				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,

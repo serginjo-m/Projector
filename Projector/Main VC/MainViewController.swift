@@ -25,6 +25,8 @@ extension UIViewController {
     }
 }
 
+
+
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
     
     //an instance of project detail vc
@@ -44,7 +46,22 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     var minHeightAnchor: NSLayoutConstraint?
     
    
-    var viewByCategoryCV = ViewByCategoryCollectionView()
+    lazy var viewByCategoryCV: ViewByCategoryCollectionView = {
+        let category = ViewByCategoryCollectionView()
+        category.delegate = self
+        return category
+    }()
+    
+    //this func is for elements that have no access to navigation controller
+    func pushToViewController(){
+        
+        let viewController = CategoryItems()
+        
+        navigationController?.pushViewController(viewController, animated: true)
+        
+    }
+    
+    
     var statisticsStackView = StatisticsStackView()
     
     //MARK: Properties
@@ -160,14 +177,13 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             }
         }
         
-        //don't know if it helps with camera roll access for app
+        //helps with camera roll access for app
         if status == .notDetermined  {
             PHPhotoLibrary.requestAuthorization({status in})
         }
         
         //include number of projects to the title text
         projectsTitle.text = "Your Projects (\(proJects.count))"
-
         
         //temporary location
         //adjust scroll view
@@ -240,6 +256,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     func setupProjectCollectionView(){
         
+        
+        
         // Add a collectionView to the stackView
         recentProjectsStackView.addSubview(projectsCollectionView)
         
@@ -291,6 +309,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         })
+        
     }
     
     //open new step VC
@@ -362,6 +381,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     // it is a required part of delegate mechanism (Boss)
     func reloadTableView() {
+        print("table view reloaded!")
         //projects collection view reload data
         self.projectsCollectionView.reloadData()
 

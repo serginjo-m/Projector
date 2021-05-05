@@ -10,6 +10,7 @@ import UIKit
 
 protocol PinterestLayoutDelegate: AnyObject {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat
+    func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat
 }
 
 class PinterestLayout: UICollectionViewLayout {
@@ -35,6 +36,7 @@ class PinterestLayout: UICollectionViewLayout {
             return 0
         }
         let insets = collectionView.contentInset
+        
         return collectionView.bounds.width - (insets.left + insets.right)
     }
     //use both contentWidth and contentHeight from previous steps to calculate the size
@@ -47,17 +49,10 @@ class PinterestLayout: UICollectionViewLayout {
     override func prepare() {
         
         
-        //Maybe I should find more elegant solution
-        //becouse I have different projects that uses different steps array for CV
-        cache = []
-        
-        
-        
-        
-        //calculate the layout attributes if and the collection view exists
-        guard let collectionView = collectionView else {return}
+        //calculate the layout attributes if cache is empty and the collection view exists
+        guard cache.isEmpty, let collectionView = collectionView else {return}
         /*Declare and fill the xOffset array with the x-coordinate for every column based on the column widths. The yOffset array tracks the y-position for every column. You initialize each value in yOffset to 0, since this is the offset of the first item in each column.
-        */
+         */
         let columnWidth = contentWidth / CGFloat(numberOfColumns)
         var xOffset: [CGFloat] = []
         for column in 0..<numberOfColumns{
@@ -65,15 +60,28 @@ class PinterestLayout: UICollectionViewLayout {
         }
         var column = 0
         var yOffset: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+        
         //Loop through all the items in the first section since this particular layout has only one section.
         for item in 0..<collectionView.numberOfItems(inSection: 0){
             let indexPath = IndexPath(item: item, section: 0)
             /*Perform the frame calculation. width is the previously calculated cellWidth with the padding between cells removed. Ask the delegate for the height of the photo, then calculate the frame height based on this height and the predefined cellPadding for the top and bottom.If there is no delegate set, use default cell height. You then combine this with the x and y offsets of the current column to create insetFrame used by the attribute.*/
+            
             let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath) ?? 180
-            let height = cellPadding * 2 + photoHeight
+            let photoWidth = delegate?.collectionView(collectionView, widthForPhotoAtIndexPath: indexPath) ?? 50
+            //-----------------------------------------------------------------------------------------------------
+            
+            
+            
+             let actualHeight = round(photoHeight / photoWidth * columnWidth)
+            print(photoWidth, photoHeight, actualHeight)
+            
+            
+            //-----------------------------------------------------------------------------------------------------
+//            let height = cellPadding * 2 + actualHeight
+            let height = actualHeight
             let frame = CGRect(x: xOffset[column], y: yOffset[column], width: columnWidth, height: height)
             let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
-            
+            print(insetFrame, "inset")
             //Create an instance of UICollectionViewLayoutAttributes, set its frame using insetFrame and append the attributes to cache.
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = insetFrame

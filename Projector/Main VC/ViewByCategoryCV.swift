@@ -35,8 +35,12 @@ class CategoryButtonSetting: NSObject{
 
 class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     
+    
     //this property need for cells
     private let cellID = "cellId"
+    
+    //most for reload data
+    weak var delegate: DetailViewControllerDelegate?
     
     // cell settings
     let cellSettingsArray: [CategoryButtonSetting] = {
@@ -155,15 +159,18 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
         
     }
     
-    /*turn cells to be selectable
+    //turn cells to be selectable
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return true
     }
     //action when user selects the cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        //push to category items view controller
+        self.delegate?.pushToViewController()
+        
         //that is how I can call a selected cell !!!
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.red
+//        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.red
     }
     //makes cells deselectable
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
@@ -171,8 +178,8 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
     }
     //define color of deselected cell
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
-    }*/
+//        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
+    }
     
 }
 

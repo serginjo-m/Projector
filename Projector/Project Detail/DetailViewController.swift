@@ -16,6 +16,8 @@ protocol DetailViewControllerDelegate: class {
     func reloadTableView()
     //General func for retreaving image by URL (BECOUSE Realm can't save images)
     func retreaveImageForProject(myUrl: String) -> UIImage
+    //access nav controller for segue
+    func pushToViewController()
 }
 
 //Many protocols in app? is it good? ---------------------------------------
@@ -569,5 +571,9 @@ extension DetailViewController: PinterestLayoutDelegate {
         let sizesArray: [CGFloat] = [124, 97, 77, 105, 99, 120, 150]
     
         return sizesArray[indexPath.item]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
+        return 0
     }
 }

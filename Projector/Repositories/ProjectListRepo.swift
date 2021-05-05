@@ -135,4 +135,14 @@ class ProjectListRepository {
             realm.add(cameraNote)
         })
     }
+    
+    func getCameraNotes() -> Results<CameraNote> {
+        return realm.objects(CameraNote.self)
+    }
+    
+    func deleteCameraNote(note: CameraNote){
+        try! realm.write ({
+            realm.delete(note)
+        })
+    }
 }
