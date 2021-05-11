@@ -48,9 +48,9 @@ class PinterestLayout: UICollectionViewLayout {
     
     override func prepare() {
         
-        
+        cache = []
         //calculate the layout attributes if cache is empty and the collection view exists
-        guard cache.isEmpty, let collectionView = collectionView else {return}
+        guard let collectionView = collectionView else {return}
         /*Declare and fill the xOffset array with the x-coordinate for every column based on the column widths. The yOffset array tracks the y-position for every column. You initialize each value in yOffset to 0, since this is the offset of the first item in each column.
          */
         let columnWidth = contentWidth / CGFloat(numberOfColumns)
@@ -72,25 +72,28 @@ class PinterestLayout: UICollectionViewLayout {
             
             
             
-             let actualHeight = round(photoHeight / photoWidth * columnWidth)
-            print(photoWidth, photoHeight, actualHeight)
             
             
-            //-----------------------------------------------------------------------------------------------------
-//            let height = cellPadding * 2 + actualHeight
-            let height = actualHeight
+            let height = round(photoHeight / photoWidth * columnWidth)
             let frame = CGRect(x: xOffset[column], y: yOffset[column], width: columnWidth, height: height)
             let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
-            print(insetFrame, "inset")
+            
+            //------------------------- 2X calculation!!!!!!! ------------------------------------------------------
+            //--------------------------------- optimize calculation of height -------------------------------------
+            
+            
+            let newHeight = round(photoHeight / photoWidth * insetFrame.width)
+            let newFrame = CGRect(x: insetFrame.minX, y: insetFrame.minY, width: round(insetFrame.width), height: newHeight)
+            
+            
             //Create an instance of UICollectionViewLayoutAttributes, set its frame using insetFrame and append the attributes to cache.
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            attributes.frame = insetFrame
+            attributes.frame = newFrame
             cache.append(attributes)
             
             /*Expand contentHeight to account for the frame of the newly calculated item. Then, advance the yOffset for the current column based on the frame. Finally, advance the column so the next item will be placed in the next column.*/
             contentHeight = max(contentHeight, frame.maxY)
             yOffset[column] = yOffset[column] + height
-            
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
         

@@ -381,7 +381,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     // it is a required part of delegate mechanism (Boss)
     func reloadTableView() {
-        print("table view reloaded!")
         //projects collection view reload data
         self.projectsCollectionView.reloadData()
 

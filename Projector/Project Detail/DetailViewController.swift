@@ -567,13 +567,25 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
 extension DetailViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         
-        //return photos[indexPath.item].image.size.height
-        let sizesArray: [CGFloat] = [124, 97, 77, 105, 99, 120, 150]
-    
-        return sizesArray[indexPath.item]
+        let step = localStepsArray[indexPath.row]
+        if step.selectedPhotosArray.count > 0 {
+            guard let image = self.delegate?.retreaveImageForProject(myUrl: step.selectedPhotosArray[0]) else {return 60}
+            return image.size.height
+        }
+        
+        return 60
     }
     
     func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return 0
+        let step = localStepsArray[indexPath.row]
+        if step.selectedPhotosArray.count > 0 {
+            guard let image = self.delegate?.retreaveImageForProject(myUrl: step.selectedPhotosArray[0]) else {
+                return 100
+                
+            }
+            return image.size.width
+        }
+        
+        return 100
     }
 }

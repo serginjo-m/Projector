@@ -19,6 +19,9 @@ class CategoryItems: UIViewController, UICollectionViewDataSource, UICollectionV
         get{
             return ProjectListRepository.instance.getCameraNotes()
         }
+        set{
+            
+        }
     }
     
     //---------------------- realy don't want to have it separated! ------------------------
@@ -116,6 +119,9 @@ class CategoryItems: UIViewController, UICollectionViewDataSource, UICollectionV
  
     //from url arr to images arr
     func defineImages(){
+        //clear
+        imagesArray.removeAll()
+        
         if cameraNotes.count > 0 {
             for note in cameraNotes {
                 let image = retreaveImageForProject(myUrl: note.picture)
@@ -157,37 +163,79 @@ class CategoryItems: UIViewController, UICollectionViewDataSource, UICollectionV
     
     //remove item
     @objc func deleteAction (_ sender: UIButton){
+        //remove object
         ProjectListRepository.instance.deleteCameraNote(note: cameraNotes[sender.tag])
+        //update data base
+        cameraNotes = ProjectListRepository.instance.getCameraNotes()
+        //redefine images
+        defineImages()
+        //reload cv
         itemsCollectionView.reloadData()
     }
+    //animation start point
+    var startingFrame: CGRect?
+    //black bg
+    var blackBackgroundView: UIView?
+    //view to zoom in
+    var startingImageView: UIImageView?
     
     //custom zoom in logic
     func performZoomInForStartingImageView(startingImageView: UIImageView){
         
-        let startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
+        self.startingImageView = startingImageView
+        self.startingImageView?.isHidden = true
+        
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
         
         let zoomingImageView = UIImageView(frame: startingFrame!)
+        zoomingImageView.isUserInteractionEnabled = true
+        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         zoomingImageView.backgroundColor = .red
         zoomingImageView.image = startingImageView.image!
         
+        
         if let keyWindow = UIApplication.shared.keyWindow{
+            blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView?.alpha = 0
+            blackBackgroundView?.backgroundColor = .black
+            
+            keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            //math?
+            //math? of proportion with one side
             //h2 / w2 = h1 / w1
             //h2 = h1 / w1 * w2
             
-            
-            let height = startingFrame!.height / startingFrame!.width * keyWindow.frame.width
+            let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                
+                self.blackBackgroundView?.alpha = 1
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
                 zoomingImageView.center = keyWindow.center
                 
             }, completion: nil)
+        
+        }
+        
+    }
+    
+    @objc func handleZoomOut(tapGesture: UITapGestureRecognizer){
+        if let zoomOutImageView = tapGesture.view {
             
+            zoomOutImageView.layer.cornerRadius = 5
+            zoomOutImageView.clipsToBounds = true
             
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                
+                zoomOutImageView.frame = self.startingFrame!
+                self.blackBackgroundView?.alpha = 0
+                
+            }) { (completed: Bool) in
+                
+                //remove it completely
+                zoomOutImageView.removeFromSuperview()
+                self.startingImageView?.isHidden = false
+            }
         }
     }
     
@@ -280,7 +328,6 @@ class CategoryItemsCell: UICollectionViewCell {
         
         layer.masksToBounds = true
         layer.cornerRadius = 5
-        backgroundColor = .yellow
         
         addSubview(image)
         addSubview(titleLabel)

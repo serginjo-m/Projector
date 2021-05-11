@@ -46,7 +46,7 @@ class StepsCell: UICollectionViewCell{
     
     let imageView: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         return image
     }()
