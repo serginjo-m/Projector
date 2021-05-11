@@ -23,7 +23,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             createNavControllerWithTitle(viewController: ProjectViewController(), title: "Home", imageName: "home"),
             createCalendarViewController(),
             createNavControllerWithTitle(viewController: NewProjectViewController(), title: "Add", imageName: "addButton"),
-            createNavControllerWithTitle(viewController: CameraShot(), title: "Spendings", imageName: "money"),
+            createNavControllerWithTitle(viewController: CanvasViewController(), title: "Spendings", imageName: "money"),
             createNavControllerWithTitle(viewController: UIViewController(), title: "Notifications", imageName: "bell")
         ]
     }
