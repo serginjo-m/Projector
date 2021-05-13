@@ -199,6 +199,14 @@
 			path = "Project Detail";
 			sourceTree = "<group>";
 		};
+		CF17FDC7264D876A0092F5FA /* Canvas Note */ = {
+			isa = PBXGroup;
+			children = (
+				CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */,
+			);
+			path = "Canvas Note";
+			sourceTree = "<group>";
+		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,7 +239,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
-				CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */,
+				CF17FDC7264D876A0092F5FA /* Canvas Note */,
 				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
 				CF3F0FC6260269B500CAC008 /* Main VC */,
 				CF5483B925EC398D00D6A05B /* Step */,
