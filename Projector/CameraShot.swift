@@ -347,8 +347,6 @@ extension CameraShot: UIImagePickerControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
         
-        
-        
         guard let selectedImage = info[.originalImage] as? UIImage else {
             print("Image not found!")
             return
@@ -356,7 +354,6 @@ extension CameraShot: UIImagePickerControllerDelegate{
         
         //save action
         UIImageWriteToSavedPhotosAlbum(selectedImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-        
         
         updateSaveButtonState()
         

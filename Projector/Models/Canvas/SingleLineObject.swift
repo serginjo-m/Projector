@@ -1,5 +1,5 @@
 //
-//  LineCGPoints.swift
+//  SingleLineObject.swift
 //  Projector
 //
 //  Created by Serginjo Melnik on 11.05.2021.
@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 
-class LinePoints: Object {
-    var pointsArray = List<LineCGPoint>()
+class SingleLineObject: Object {
+    var singleLine = List<LineCGPoint>()
+    
 }

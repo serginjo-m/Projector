@@ -145,4 +145,10 @@ class ProjectListRepository {
             realm.delete(note)
         })
     }
+    
+    func createCanvasNote(canvasNote: CanvasNote){
+        try! realm.write ({
+            realm.add(canvasNote)
+        })
+    }
 }

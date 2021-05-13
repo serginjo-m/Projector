@@ -10,6 +10,6 @@ import UIKit
 import RealmSwift
 
 class LineCGPoint: Object {
-    var x = 0
-    var y = 0
+    var x: Float = 0
+    var y: Float = 0
 }

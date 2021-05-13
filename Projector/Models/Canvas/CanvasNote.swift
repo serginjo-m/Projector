@@ -13,8 +13,7 @@ class CanvasNote: Object {
     
     @objc dynamic var id = UUID().uuidString
     
-    let list = List<CanvasLinesArray>()
-    
+    var canvasLines = List<SingleLineObject>()
     //MARK: Methods
     override static func primaryKey() -> String {
         return "id"
