@@ -151,4 +151,8 @@ class ProjectListRepository {
             realm.add(canvasNote)
         })
     }
+    
+    func getCanvasNotes() -> Results<CanvasNote> {
+        return realm.objects(CanvasNote.self)
+    }
 }

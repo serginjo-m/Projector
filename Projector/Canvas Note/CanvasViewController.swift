@@ -9,65 +9,6 @@
 import UIKit
 import RealmSwift
 
-class CanvasView: UIView {
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        guard let context = UIGraphicsGetCurrentContext() else {return}
-        
-        context.setStrokeColor(UIColor.brown.cgColor)
-        context.setLineWidth(10)
-        context.setLineCap(.butt)
-     
-        canvasObject.canvasLines.forEach { (line) in
-
-            for (i, p) in line.singleLine.enumerated(){
-                //convert object to CGPoint
-                let point = CGPoint(x: CGFloat(p.x), y: CGFloat(p.y))
-                
-                //line first point
-                if i == 0{
-                    //starts
-                    context.move(to: point)
-                }else{
-                    //ends
-                    context.addLine(to: point)
-                }
-            }
-        }
-        
-        context.strokePath()
-    }
-    
-    //object that fits to realm
-    let canvasObject = CanvasNote()
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        canvasObject.canvasLines.append(SingleLineObject())
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        guard let point = touches.first?.location(in: nil) else {return}
-        
-        //write CGPoint to custom object
-        let linePoint = LineCGPoint()
-        linePoint.x = Float(point.x)
-        linePoint.y = Float(point.y)
-        
-        //capture line from array
-        //instead of getting copy of line
-        guard let lastLine = canvasObject.canvasLines.last else {return}
-        canvasObject.canvasLines.removeLast()
-        //add new point to line
-        lastLine.singleLine.append(linePoint)
-        //add it back into the lines array
-        canvasObject.canvasLines.append(lastLine)
-        //redraw canvas
-        setNeedsDisplay()
-    }
-}
-
 class CanvasViewController: UIViewController {
     
     let canvas = CanvasView()
@@ -106,12 +47,88 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
+    let undoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Undo", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(handleUndo), for: .touchUpInside)
+        return button
+    }()
+    
+    let clearButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Clear", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(handleClear), for: .touchUpInside)
+        return button
+    }()
+    
+    let yellowButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .yellow
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(handleColorChange), for: .touchUpInside)
+        return button
+    }()
+    
+    let redButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .red
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(handleColorChange), for: .touchUpInside)
+        return button
+    }()
+    
+    let  blueButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .blue
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(handleColorChange), for: .touchUpInside)
+        return button
+    }()
+    
+    let blackButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .black
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(handleColorChange), for: .touchUpInside)
+        return button
+    }()
+    
+    let slider: UISlider = {
+        let slider = UISlider()
+        slider.minimumValue = 1
+        slider.maximumValue = 10
+        slider.addTarget(self, action: #selector(handleSliderChange), for: .valueChanged)
+        return slider
+    }()
+    
+    let stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
     override func viewDidLoad() {
+        //colors container
+        let colorsStackView = UIStackView(arrangedSubviews: [yellowButton,redButton, blueButton, blackButton])
+        colorsStackView.distribution = .fillEqually
+        let actionButtonsStackView = UIStackView(arrangedSubviews: [clearButton, undoButton])
+        actionButtonsStackView.distribution = .fillEqually
+        
+        //elements container
+        [actionButtonsStackView, colorsStackView, slider].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.spacing = 12
         
         view.addSubview(canvas)
         view.addSubview(dismissButton)
         view.addSubview(viewControllerTitle)
         view.addSubview(saveButton)
+        view.addSubview(stackView)
+        
         
         canvas.backgroundColor = .white
         canvas.frame = view.frame
@@ -119,6 +136,23 @@ class CanvasViewController: UIViewController {
         setupConstraints()
     }
     
+    @objc func handleColorChange(button: UIButton) {
+        canvas.setStrokeColor(color: button.backgroundColor ?? .black)
+    }
+    
+    @objc func handleSliderChange() {
+        canvas.setStrokeWidth(width: slider.value)
+    }
+    
+    @objc func handleUndo (){
+        //remove last line
+        canvas.undo()
+    }
+    
+    @objc func handleClear() {
+        //remove all elements
+        canvas.clear()
+    }
     //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -165,6 +199,10 @@ class CanvasViewController: UIViewController {
     }
     
     func setupConstraints(){
+        
+        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         
         dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true

@@ -21,6 +21,9 @@
 		CF1416D125B8B145001AC541 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = CF1416D025B8B145001AC541 /* Podfile */; };
 		CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17A69126371DB9002337C0 /* CategoryItems.swift */; };
 		CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC4264B02870092F5FA /* SingleLineObject.swift */; };
+		CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC9264D87D20092F5FA /* Canvas View.swift */; };
+		CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904C2656E7DE00701943 /* BaseCVController.swift */; };
+		CF18904F265D724400701943 /* GenericsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904E265D724400701943 /* GenericsScheme.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
@@ -94,6 +97,9 @@
 		CF1416D025B8B145001AC541 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CF17A69126371DB9002337C0 /* CategoryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItems.swift; sourceTree = "<group>"; };
 		CF17FDC4264B02870092F5FA /* SingleLineObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineObject.swift; sourceTree = "<group>"; };
+		CF17FDC9264D87D20092F5FA /* Canvas View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
+		CF18904C2656E7DE00701943 /* BaseCVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCVController.swift; sourceTree = "<group>"; };
+		CF18904E265D724400701943 /* GenericsScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericsScheme.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
@@ -203,8 +209,17 @@
 			isa = PBXGroup;
 			children = (
 				CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */,
+				CF17FDC8264D87B90092F5FA /* Views */,
 			);
 			path = "Canvas Note";
+			sourceTree = "<group>";
+		};
+		CF17FDC8264D87B90092F5FA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CF17FDC9264D87D20092F5FA /* Canvas View.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
@@ -267,6 +282,7 @@
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF17A69126371DB9002337C0 /* CategoryItems.swift */,
+				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -296,6 +312,7 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CF18904E265D724400701943 /* GenericsScheme.swift */,
 				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
 				CF279E352464115B00B79978 /* StepAddItemCell.swift */,
 				CF2C1295237766A700F3132A /* NewProjectVC.swift */,
@@ -502,6 +519,7 @@
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
 				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
+				CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
@@ -509,6 +527,7 @@
 				CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */,
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
+				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
@@ -521,6 +540,7 @@
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
 				CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */,
+				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,

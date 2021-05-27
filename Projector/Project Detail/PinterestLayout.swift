@@ -66,7 +66,7 @@ class PinterestLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: item, section: 0)
             /*Perform the frame calculation. width is the previously calculated cellWidth with the padding between cells removed. Ask the delegate for the height of the photo, then calculate the frame height based on this height and the predefined cellPadding for the top and bottom.If there is no delegate set, use default cell height. You then combine this with the x and y offsets of the current column to create insetFrame used by the attribute.*/
             
-            let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath) ?? 180
+            let photoHeight = delegate?.collectionView(collectionView, heightForPhotoAtIndexPath: indexPath) ?? 100
             let photoWidth = delegate?.collectionView(collectionView, widthForPhotoAtIndexPath: indexPath) ?? 50
             //-----------------------------------------------------------------------------------------------------
             

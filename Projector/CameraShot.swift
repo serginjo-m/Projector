@@ -111,6 +111,8 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     var imagePicker: UIImagePickerController!
     //reference to image in photo library
     var selectedImageURL: String?
+    var selectedImageHeight: Int?
+    var selectedImageWidth: Int?
     
     // ImageSource.camera || ImageSource.photoLibrary
     enum ImageSource {
@@ -211,11 +213,14 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     }
     //create note from camera shot
     func createCameraNote(image: String) -> CameraNote{
+        guard let height = self.selectedImageHeight, let width = selectedImageWidth else {fatalError()}
         let note = CameraNote()
         if self.titleTextField.text != nil {
             note.title = self.titleTextField.text
         }
         note.picture = image
+        note.height = height
+        note.width = width
         return note
     }
     
@@ -250,6 +255,8 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
             // we got back an error!
             showAlertWith(title: "Save error", message: error.localizedDescription)
         } else {
+            self.selectedImageWidth = Int(image.size.width)
+            self.selectedImageHeight = Int(image.size.height)
             fetchLastImage(completion: selectedImageURL)
 //            showAlertWith(title: "Saved!", message: "Your image has been saved to your photos.")
         }

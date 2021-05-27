@@ -24,7 +24,8 @@ class CategoryItems: UIViewController, UICollectionViewDataSource, UICollectionV
         }
     }
     
-    //---------------------- realy don't want to have it separated! ------------------------
+   
+    //---------------------- really don't want to have it separated! ------------------------
     var imagesArray: [UIImage] = []
     
     let dismissButton: UIButton = {

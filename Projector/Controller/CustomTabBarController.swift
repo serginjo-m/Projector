@@ -23,7 +23,9 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             createNavControllerWithTitle(viewController: ProjectViewController(), title: "Home", imageName: "home"),
             createCalendarViewController(),
             createNavControllerWithTitle(viewController: NewProjectViewController(), title: "Add", imageName: "addButton"),
-            createNavControllerWithTitle(viewController: CanvasViewController(), title: "Spendings", imageName: "money"),
+            
+            //with this type of init I can pass different type of layout (Pinterest or default)
+            createNavControllerWithTitle(viewController: PhotoNotesCollectionViewController(collectionViewLayout: PinterestLayout()), title: "Spendings", imageName: "money"),
             createNavControllerWithTitle(viewController: UIViewController(), title: "Notifications", imageName: "bell")
         ]
     }
@@ -118,6 +120,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     
                     let newProjectViewController = NewProjectViewController()
                     let cameraShot = CameraShot()
+                    let canvasNote = CanvasViewController()
                     
                     newProjectViewController.modalTransitionStyle = .coverVertical
                     newProjectViewController.modalPresentationStyle = .overCurrentContext
@@ -125,7 +128,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     newProjectViewController.projectCV = projectVC.projectsCollectionView
                     
                 
-                    configureAddItemAction(newObjectVC: [newProjectViewController, cameraShot])
+                    configureAddItemAction(newObjectVC: [newProjectViewController, cameraShot, canvasNote])
                 
                 case "StepViewController":
                 
