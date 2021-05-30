@@ -9,8 +9,26 @@
 import UIKit
 import RealmSwift
 
+protocol BaseCollectionViewDelegate {
+    //update after delete
+    func updateDatabase()
+    // zooming in & zooming out
+    func performZoomInForStartingImageView(startingImageView: UIImageView)
+}
+
+
 //Base for collection View controller
-class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UICollectionViewController, UICollectionViewDelegateFlowLayout{
+class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, BaseCollectionViewDelegate{
+    
+    func performZoomInForStartingImageView(startingImageView: UIImageView) {
+        print("basic zoom in...")
+    }
+    
+    
+    // (override in child vc) handle update from cell
+    func updateDatabase() {
+        print("database was updated!")
+    }
     
     let cellId = "cellId"
     
@@ -39,12 +57,65 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UICollecti
         return label
     }()
     
+    //here creates a horizontal collectionView
+    let itemsCollectionView: UICollectionView = {
+        
+        //instance for UICollectionView purposes
+        let layout = PinterestLayout()
+        
+        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
+        // & also we need to specify how "big" it needs to be
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        collectionView.backgroundColor = UIColor.clear
+        
+        //deactivate default constraints
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return collectionView
+    }()
+    
+    lazy var collectionStackView: UIStackView = {
+        
+        let stack = UIStackView()
+        
+        stack.addSubview(itemsCollectionView)
+        
+        //specify delegate & datasourse for generating our individual horizontal cells
+        itemsCollectionView.dataSource = self
+        itemsCollectionView.delegate = self
+        
+        itemsCollectionView.showsHorizontalScrollIndicator = false
+        itemsCollectionView.showsVerticalScrollIndicator = false
+        
+        
+        //Class is need to be registered in order of using inside
+        itemsCollectionView.register(T.self, forCellWithReuseIdentifier: cellId)
+        
+        //CollectionView constraints
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": itemsCollectionView]))
+        
+        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": itemsCollectionView]))
+        
+        return stack
+    }()
+
     
     override func viewDidLoad() {
         super .viewDidLoad()
-        collectionView.backgroundColor = .white
-        //refer to cell, that is need to be passed when initialize class
-        collectionView.register(T.self, forCellWithReuseIdentifier: cellId)
+        
+        view.backgroundColor = .white
+        
+        view.addSubview(collectionStackView)
+        view.addSubview(dismissButton)
+        view.addSubview(viewControllerTitle)
+        
+         setupConstraints()
+        
+        //---------------------------- why here?? --------------------------------
+        if let layout = itemsCollectionView.collectionViewLayout as? PinterestLayout {
+            layout.delegate = self as? PinterestLayoutDelegate
+        }
     }
     
     //back to previous view
@@ -53,27 +124,52 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UICollecti
     }
     
     //Collection View 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BaseCollectionViewCell<U>
-        
+        cell.delegate = self
         cell.item = items[indexPath.row]
         
         return cell
+    }
+    
+    func setupConstraints(){
+        
+        [collectionStackView, dismissButton, viewControllerTitle].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
+        dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        viewControllerTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        viewControllerTitle.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
+        viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        
+        collectionStackView.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 20).isActive = true
+        collectionStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        collectionStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 7).isActive = true
+        collectionStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -7).isActive = true
+        
     }
 }
 
 class BaseCollectionViewCell<U>: UICollectionViewCell {
     
+    var delegate: BaseCollectionViewDelegate?
+    
     var item: U!
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundColor = .yellow
+        backgroundColor = .clear
     }
     
 }
@@ -84,19 +180,103 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         get{
            return ProjectListRepository.instance.getCameraNotes()
         }
+        set{
+            //need this option for updating after delete
+        }
+    }
+    
+    override func updateDatabase() {
+        //update data base
+        cameraNotes = ProjectListRepository.instance.getCameraNotes()
+        //from realm to array
+        setupDatabase()
+        //reload cv
+        itemsCollectionView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //define database from realm List<Result>
+        setupDatabase()
+    }
+    
+    //convert Realm Result<...> to an array of object.
+    func setupDatabase() {
         
-        //---------------------------- why here?? --------------------------------
-        if let layout = collectionViewLayout as? PinterestLayout {
-            layout.delegate = self
-        }
+        //clear old data from array
+        items.removeAll()
         
-        //--------------- not so efficient, but it works ----------------
+        //not so efficient, but it works
         for item in cameraNotes {
             items.append(item)
+        }
+        
+    }
+    
+    //animation start point
+    var startingFrame: CGRect?
+    //black bg
+    var blackBackgroundView: UIView?
+    //view to zoom in
+    var startingImageView: UIImageView?
+    
+    //custom zoom in logic
+    override func performZoomInForStartingImageView(startingImageView: UIImageView){
+        
+        self.startingImageView = startingImageView
+        self.startingImageView?.isHidden = true
+        
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
+        
+        let zoomingImageView = UIImageView(frame: startingFrame!)
+        zoomingImageView.isUserInteractionEnabled = true
+        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        zoomingImageView.backgroundColor = .red
+        zoomingImageView.image = startingImageView.image!
+        
+        
+        if let keyWindow = UIApplication.shared.keyWindow{
+            blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView?.alpha = 0
+            blackBackgroundView?.backgroundColor = .black
+            
+            keyWindow.addSubview(blackBackgroundView!)
+            keyWindow.addSubview(zoomingImageView)
+            
+            //math? of proportion with one side
+            //h2 / w2 = h1 / w1
+            //h2 = h1 / w1 * w2
+            
+            let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                self.blackBackgroundView?.alpha = 1
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                zoomingImageView.center = keyWindow.center
+                
+            }, completion: nil)
+            
+        }
+        
+    }
+    
+    @objc func handleZoomOut(tapGesture: UITapGestureRecognizer){
+        if let zoomOutImageView = tapGesture.view {
+            
+            zoomOutImageView.layer.cornerRadius = 5
+            zoomOutImageView.clipsToBounds = true
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                
+                zoomOutImageView.frame = self.startingFrame!
+                self.blackBackgroundView?.alpha = 0
+                
+            }) { (completed: Bool) in
+                
+                //remove it completely
+                zoomOutImageView.removeFromSuperview()
+                self.startingImageView?.isHidden = false
+            }
         }
     }
 }
@@ -114,8 +294,6 @@ extension PhotoNotesCollectionViewController: PinterestLayoutDelegate {
 
 //Photo note cell
 class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
-    
-    
     
     //It'll be like a template for our cell
     override var item: CameraNote! {
@@ -161,14 +339,25 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
     lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
+        button.addTarget(self, action: #selector(deleteAction(_:)), for: .touchUpInside)
         return button
     }()
     
+    //remove item
+    @objc func deleteAction (_ sender: UIButton){
+        guard let delegate = self.delegate else {return}
+        //remove object
+        ProjectListRepository.instance.deleteCameraNote(note: item)
+        //update cv
+        delegate.updateDatabase()
+    }
+    
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
+        guard let delegate = self.delegate else {return}
         if let imageView = sender.view as? UIImageView{
             //parent func that run all logic
-//            self.categoryItemsController?.performZoomInForStartingImageView(startingImageView: imageView)
+            delegate.performZoomInForStartingImageView(startingImageView: imageView)
         }
     }
     

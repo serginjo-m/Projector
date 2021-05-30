@@ -55,7 +55,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //this func is for elements that have no access to navigation controller
     func pushToViewController(){
         
-        let viewController = CategoryItems()
+        let viewController = PhotoNotesCollectionViewController()
         
         navigationController?.pushViewController(viewController, animated: true)
         

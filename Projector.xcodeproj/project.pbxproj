@@ -281,7 +281,6 @@
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
-				CF17A69126371DB9002337C0 /* CategoryItems.swift */,
 				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
 			);
 			path = "Main VC";
@@ -312,6 +311,7 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CF17A69126371DB9002337C0 /* CategoryItems.swift */,
 				CF18904E265D724400701943 /* GenericsScheme.swift */,
 				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
 				CF279E352464115B00B79978 /* StepAddItemCell.swift */,
