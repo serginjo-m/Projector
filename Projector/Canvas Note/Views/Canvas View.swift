@@ -41,37 +41,41 @@ class CanvasView: UIView {
     }
     
     //object that fits to realm
-    let canvasObject = CanvasNote()
+    var canvasObject = CanvasNote()
+
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {return}
+        guard let context = UIGraphicsGetCurrentContext() else {
+            print("context is not defined")
+            return
+        }
     
         canvasObject.canvasLines.forEach { (line) in
-            
             for (i, p) in line.singleLine.enumerated(){
                 let color = IntToStrokeColor(color: line.color)
-                
+
                 context.setStrokeColor(color.cgColor)
                 context.setLineWidth(CGFloat(line.strokeWidth))
                 context.setLineCap(.round)
                 
                 //convert object to CGPoint
                 let point = CGPoint(x: CGFloat(p.x), y: CGFloat(p.y))
-                
+
                 //line first point
                 if i == 0{
                     //starts
                     context.move(to: point)
+                    
                 }else{
                     //ends
                     context.addLine(to: point)
+                    
                 }
             }
-            
+
             context.strokePath()
-            
         }
     }
     
@@ -87,7 +91,11 @@ class CanvasView: UIView {
         let linePoint = LineCGPoint()
         linePoint.x = Float(point.x)
         linePoint.y = Float(point.y)
-
+        
+        //calculating max height of canvas
+        if Int(point.y) > canvasObject.canvasMaxHeight {
+            canvasObject.canvasMaxHeight = Int(point.y)
+        }
         
         //capture line from array
         //instead of getting copy of line

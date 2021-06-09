@@ -13,7 +13,9 @@ class CanvasNote: Object {
     
     @objc dynamic var id = UUID().uuidString
     
-    var canvasLines = List<SingleLineObject>()
+    @objc dynamic var canvasMaxHeight = 0
+    
+    let canvasLines = List<SingleLineObject>()
     //MARK: Methods
     override static func primaryKey() -> String {
         return "id"

@@ -122,6 +122,13 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     let cameraShot = CameraShot()
                     let canvasNote = CanvasViewController()
                     
+//                    //--------------------- little experiment ------------------------
+//                    let objects = ProjectListRepository.instance.getCanvasNotes()
+//                    
+//                    canvasNote.canvas.canvasObject = objects[0]
+                    
+                    
+                    
                     newProjectViewController.modalTransitionStyle = .coverVertical
                     newProjectViewController.modalPresentationStyle = .overCurrentContext
                      //want to transfer some data

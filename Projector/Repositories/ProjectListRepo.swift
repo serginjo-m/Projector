@@ -155,4 +155,10 @@ class ProjectListRepository {
     func getCanvasNotes() -> Results<CanvasNote> {
         return realm.objects(CanvasNote.self)
     }
+    
+    func deleteCanvasNote(note: CanvasNote){
+        try! realm.write ({
+            realm.delete(note)
+        })
+    }
 }

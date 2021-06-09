@@ -17,7 +17,7 @@ protocol DetailViewControllerDelegate: class {
     //General func for retreaving image by URL (BECOUSE Realm can't save images)
     func retreaveImageForProject(myUrl: String) -> UIImage
     //access nav controller for segue
-    func pushToViewController()
+    func pushToViewController(controllerType: Int)
 }
 
 //Many protocols in app? is it good? ---------------------------------------

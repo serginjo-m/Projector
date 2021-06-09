@@ -167,7 +167,7 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         //push to category items view controller
-        self.delegate?.pushToViewController()
+        self.delegate?.pushToViewController(controllerType: indexPath.row)
         
         //that is how I can call a selected cell !!!
 //        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.red

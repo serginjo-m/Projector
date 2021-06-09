@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class SingleLineObject: Object {
-    var color = 0
-    var strokeWidth: Float = 0
-    var singleLine = List<LineCGPoint>()
+    @objc dynamic var color = 0
+    @objc dynamic var strokeWidth: Float = 0
+    let singleLine = List<LineCGPoint>()
 }

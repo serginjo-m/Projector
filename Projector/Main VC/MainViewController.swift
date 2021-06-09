@@ -53,14 +53,24 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }()
     
     //this func is for elements that have no access to navigation controller
-    func pushToViewController(){
+    func pushToViewController(controllerType: Int){
         
-        let viewController = PhotoNotesCollectionViewController()
-        
+        let viewController = viewControllerType(for: controllerType)
         navigationController?.pushViewController(viewController, animated: true)
-        
     }
     
+    func viewControllerType(for contollerType: Int) -> UIViewController {
+        switch contollerType {
+        case 0:
+            return PhotoNotesCollectionViewController()
+        case 1:
+            return CanvasNotesCollectionViewController()
+        case 2:
+            return PhotoNotesCollectionViewController()
+        default:
+            return UIViewController()
+        }
+    }
     
     var statisticsStackView = StatisticsStackView()
     

@@ -20,6 +20,7 @@
 		CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */; };
 		CF1416D125B8B145001AC541 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = CF1416D025B8B145001AC541 /* Podfile */; };
 		CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17A69126371DB9002337C0 /* CategoryItems.swift */; };
+		CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */; };
 		CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC4264B02870092F5FA /* SingleLineObject.swift */; };
 		CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC9264D87D20092F5FA /* Canvas View.swift */; };
 		CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904C2656E7DE00701943 /* BaseCVController.swift */; };
@@ -96,6 +97,7 @@
 		CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStepVC.swift; sourceTree = "<group>"; };
 		CF1416D025B8B145001AC541 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CF17A69126371DB9002337C0 /* CategoryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItems.swift; sourceTree = "<group>"; };
+		CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawCanvasView.swift; sourceTree = "<group>"; };
 		CF17FDC4264B02870092F5FA /* SingleLineObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineObject.swift; sourceTree = "<group>"; };
 		CF17FDC9264D87D20092F5FA /* Canvas View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
 		CF18904C2656E7DE00701943 /* BaseCVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCVController.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
+				CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
+				CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */,
 				CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,
