@@ -79,6 +79,7 @@
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
 		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
 		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
+		CFDA030426711FC700772E32 /* CanvasNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDA030326711FC700772E32 /* CanvasNotesVC.swift */; };
 		CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF34C3025FA97B3009F8452 /* UltraLayout.swift */; };
 /* End PBXBuildFile section */
 
@@ -158,6 +159,7 @@
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		CFDA030326711FC700772E32 /* CanvasNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasNotesVC.swift; sourceTree = "<group>"; };
 		CFF34C3025FA97B3009F8452 /* UltraLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraLayout.swift; sourceTree = "<group>"; };
 		E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -278,13 +280,12 @@
 		CF3F0FC6260269B500CAC008 /* Main VC */ = {
 			isa = PBXGroup;
 			children = (
+				CFDA030226711F5B00772E32 /* QuickNotesCollViews */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
-				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
-				CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -384,6 +385,16 @@
 				CFD88DFA25961B0600B726FF /* CalendarCell.swift */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		CFDA030226711F5B00772E32 /* QuickNotesCollViews */ = {
+			isa = PBXGroup;
+			children = (
+				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
+				CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */,
+				CFDA030326711FC700772E32 /* CanvasNotesVC.swift */,
+			);
+			path = QuickNotesCollViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -562,6 +573,7 @@
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
 				CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */,
 				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,
+				CFDA030426711FC700772E32 /* CanvasNotesVC.swift in Sources */,
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
