@@ -9,10 +9,10 @@
 import UIKit
 import RealmSwift
 
-class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNoteCell, CanvasNote>{
-    var canvasNotes: Results<CanvasNote>{
+class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCell, TextNote>{
+    var textNotes: Results<TextNote>{
         get{
-            return ProjectListRepository.instance.getCanvasNotes()
+            return ProjectListRepository.instance.getTextNotes()
         }
         set{
             //need this option for updating after delete
@@ -21,7 +21,7 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
     //reload everything
     override func updateDatabase() {
         //update data base
-        canvasNotes = ProjectListRepository.instance.getCanvasNotes()
+        textNotes = ProjectListRepository.instance.getTextNotes()
         //from realm to array
         setupDatabase()
         //reload cv
@@ -32,9 +32,8 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         super.viewDidLoad()
         //define database from realm List<Result>
         setupDatabase()
-        viewControllerTitle.text = "Canvas Notes"
-        viewControllerTitle.textColor = UIColor.init(white: 0.1, alpha: 1)
-        view.backgroundColor = UIColor.init(white: 0.91, alpha: 1)
+        viewControllerTitle.text = "Text Notes"
+        view.backgroundColor = .white
     }
     
     //convert Realm Result<...> to an array of object.
@@ -44,7 +43,7 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         items.removeAll()
         
         //not so efficient, but it works
-        for item in canvasNotes {
+        for item in textNotes {
             items.append(item)
         }
         
@@ -52,17 +51,28 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
 }
 
 //Photo note cell
-class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
+class TextNoteCell: BaseCollectionViewCell<TextNote> {
     
     //It'll be like a template for our cell
-    override var item: CanvasNote! {
+    override var item: TextNote! {
         //didSet uses for logic purposes!
         didSet{
-            canvas.canvasObject = item
+            textLabel.text = item.text
         }
     }
     
-    let canvas = DrawCanvasView()
+    let textLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textColor = UIColor.black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     
     lazy var deleteButton: UIButton = {
         let button = UIButton()
@@ -75,7 +85,7 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
     @objc func deleteAction (_ sender: UIButton){
         guard let delegate = self.delegate else {return}
         //remove object
-        ProjectListRepository.instance.deleteCanvasNote(note: item)
+        ProjectListRepository.instance.deleteTextNote(textNote: item)
         //update cv
         delegate.updateDatabase()
     }
@@ -103,32 +113,27 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
         layer.masksToBounds = true
         layer.cornerRadius = 5
         
-        addSubview(canvas)
         addSubview(deleteButton)
+        addSubview(textLabel)
         
-        canvas.backgroundColor = .white
+        textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+        textLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+        textLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
+        textLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
         
-        
-        canvas.translatesAutoresizingMaskIntoConstraints = false
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        
         deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
         deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
         deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
         deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        
-        canvas.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-        canvas.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
-        canvas.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
-        canvas.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
     }
 }
 
 // Pinterest Layout Configurations
-extension CanvasNotesCollectionViewController: PinterestLayoutDelegate {
+extension TextNotesCollectionViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let imageHeight = Double(items[indexPath.item].canvasMaxHeight) / 3.5
-        return CGFloat(imageHeight)
+        let cellHeight = CGFloat(items[indexPath.row].height + 20)
+        return cellHeight
     }
     func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         

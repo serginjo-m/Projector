@@ -94,6 +94,7 @@ class PinterestLayout: UICollectionViewLayout {
             /*Expand contentHeight to account for the frame of the newly calculated item. Then, advance the yOffset for the current column based on the frame. Finally, advance the column so the next item will be placed in the next column.*/
             contentHeight = max(contentHeight, frame.maxY)
             yOffset[column] = yOffset[column] + height
+            
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
         
