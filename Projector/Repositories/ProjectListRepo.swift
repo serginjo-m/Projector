@@ -161,4 +161,21 @@ class ProjectListRepository {
             realm.delete(note)
         })
     }
+    
+    //create TextNote note
+    func createTextNote(textNote: TextNote){
+        try! realm.write ({
+            realm.add(textNote)
+        })
+    }
+    
+    func getTextNotes() -> Results<TextNote> {
+        return realm.objects(TextNote.self)
+    }
+    
+    func deleteTextNote(textNote: TextNote){
+        try! realm.write ({
+            realm.delete(textNote)
+        })
+    }
 }

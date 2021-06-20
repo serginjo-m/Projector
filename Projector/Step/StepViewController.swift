@@ -69,11 +69,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
-    let circleImage: UIImageView = {
-        let image = UIImageView(image: #imageLiteral(resourceName: "redCircle"))
-//        image.image = UIImage(named: "redCircle")
-        return image
-    }()
+    let circleImage = UIImageView(image: #imageLiteral(resourceName: "redCircle"))
     
     var stepNameTitle: UILabel = {
         let label = UILabel()

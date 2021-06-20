@@ -74,6 +74,10 @@
 		CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */; };
 		CFBC3A42258152CF00EEF13D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A41258152CF00EEF13D /* Day.swift */; };
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
+		CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7893267FCAC70066294A /* PhotoNoteCV.swift */; };
+		CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7895267FCB080066294A /* TextNoteCV.swift */; };
+		CFCD7898267FCB530066294A /* TextNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7897267FCB530066294A /* TextNote.swift */; };
+		CFCD789A267FCC2E0066294A /* NewTextNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
@@ -154,6 +158,10 @@
 		CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		CFBC3A41258152CF00EEF13D /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
+		CFCD7893267FCAC70066294A /* PhotoNoteCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoNoteCV.swift; sourceTree = "<group>"; };
+		CFCD7895267FCB080066294A /* TextNoteCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNoteCV.swift; sourceTree = "<group>"; };
+		CFCD7897267FCB530066294A /* TextNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNote.swift; sourceTree = "<group>"; };
+		CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTextNoteVC.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
@@ -260,6 +268,7 @@
 			children = (
 				CF17FDC7264D876A0092F5FA /* Canvas Note */,
 				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
+				CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */,
 				CF3F0FC6260269B500CAC008 /* Main VC */,
 				CF5483B925EC398D00D6A05B /* Step */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
@@ -361,6 +370,7 @@
 				CF3F0FC72602746A00CAC008 /* UserActivity.swift */,
 				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
 				CF7A57F6262C38D7004EAF01 /* CameraNote.swift */,
+				CFCD7897267FCB530066294A /* TextNote.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -393,6 +403,8 @@
 				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
 				CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */,
 				CFDA030326711FC700772E32 /* CanvasNotesVC.swift */,
+				CFCD7893267FCAC70066294A /* PhotoNoteCV.swift */,
+				CFCD7895267FCB080066294A /* TextNoteCV.swift */,
 			);
 			path = QuickNotesCollViews;
 			sourceTree = "<group>";
@@ -534,6 +546,7 @@
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
 				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
 				CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */,
+				CFCD789A267FCC2E0066294A /* NewTextNoteVC.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
@@ -542,6 +555,7 @@
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
+				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
@@ -552,10 +566,12 @@
 				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
+				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
 				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
 				CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */,
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
+				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
 				CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */,

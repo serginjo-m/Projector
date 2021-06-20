@@ -62,11 +62,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     func viewControllerType(for contollerType: Int) -> UIViewController {
         switch contollerType {
         case 0:
-            return PhotoNotesCollectionViewController()
+            return PhotoNotesCollectionViewController()//photo note
         case 1:
-            return CanvasNotesCollectionViewController()
+            return CanvasNotesCollectionViewController()//canvas note
         case 2:
-            return PhotoNotesCollectionViewController()
+            return TextNotesCollectionViewController()// text note
         default:
             return UIViewController()
         }
