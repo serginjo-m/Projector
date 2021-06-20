@@ -69,8 +69,12 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
-    let circleImage = UIImageView(image: #imageLiteral(resourceName: "redCircle"))
-
+    let circleImage: UIImageView = {
+        let image = UIImageView(image: #imageLiteral(resourceName: "redCircle"))
+//        image.image = UIImage(named: "redCircle")
+        return image
+    }()
+    
     var stepNameTitle: UILabel = {
         let label = UILabel()
         label.text = "Your Step Name"
@@ -401,7 +405,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
-        //size string need width calculation for constraints
+        //diff size string need width calculation for constraints
         guard let categoryLabelString = categoryLabel.text else {return}
         let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
         

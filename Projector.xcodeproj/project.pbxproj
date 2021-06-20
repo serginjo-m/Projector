@@ -49,7 +49,6 @@
 		CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */; };
 		CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */; };
 		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
-		CF6E8C4F26762D0300ACF029 /* TextNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6E8C4E26762D0300ACF029 /* TextNoteVC.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72D38F2467E86F007FA034 /* StepItemViewController.swift */; };
@@ -60,20 +59,10 @@
 		CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */; };
 		CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */; };
 		CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */; };
-		CF96E8E1267BD98F001C3BFF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF96E8DF267BD98F001C3BFF /* Interface.storyboard */; };
-		CF96E8E3267BD995001C3BFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF96E8E2267BD995001C3BFF /* Assets.xcassets */; };
-		CF96E8EA267BD995001C3BFF /* StatisticsManager Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CF96E8E9267BD995001C3BFF /* StatisticsManager Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		CF96E8EF267BD995001C3BFF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF96E8EE267BD995001C3BFF /* InterfaceController.swift */; };
-		CF96E8F1267BD995001C3BFF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF96E8F0267BD995001C3BFF /* ExtensionDelegate.swift */; };
-		CF96E8F3267BD995001C3BFF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF96E8F2267BD995001C3BFF /* NotificationController.swift */; };
-		CF96E8F5267BD996001C3BFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF96E8F4267BD996001C3BFF /* Assets.xcassets */; };
-		CF96E8FA267BD997001C3BFF /* StatisticsManager.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CF96E8DD267BD98F001C3BFF /* StatisticsManager.app */; };
 		CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */; };
 		CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */; };
 		CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */; };
 		CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */; };
-		CFA51E8A2672647B00DDE86F /* TextNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA51E892672647B00DDE86F /* TextNote.swift */; };
-		CFA51E8C2672677000DDE86F /* TextNoteCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA51E8B2672677000DDE86F /* TextNoteCV.swift */; };
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
 		CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */; };
 		CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */; };
@@ -91,51 +80,8 @@
 		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
 		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
 		CFDA030426711FC700772E32 /* CanvasNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDA030326711FC700772E32 /* CanvasNotesVC.swift */; };
-		CFDA0306267120A700772E32 /* PhotoNoteCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDA0305267120A700772E32 /* PhotoNoteCV.swift */; };
 		CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF34C3025FA97B3009F8452 /* UltraLayout.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		CF96E8EB267BD995001C3BFF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CF3712BE23740BAE00B2D593 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CF96E8E8267BD995001C3BFF;
-			remoteInfo = "StatisticsManager Extension";
-		};
-		CF96E8F8267BD997001C3BFF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CF3712BE23740BAE00B2D593 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CF96E8DC267BD98F001C3BFF;
-			remoteInfo = StatisticsManager;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		CF96E900267BD997001C3BFF /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				CF96E8EA267BD995001C3BFF /* StatisticsManager Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF96E902267BD997001C3BFF /* Embed Watch Content */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
-			dstSubfolderSpec = 16;
-			files = (
-				CF96E8FA267BD997001C3BFF /* StatisticsManager.app in Embed Watch Content */,
-			);
-			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		020AF287354E46ED7A1A1D79 /* Pods-Projector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.debug.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.debug.xcconfig"; sourceTree = "<group>"; };
@@ -183,7 +129,6 @@
 		CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectViewController.swift; sourceTree = "<group>"; };
 		CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
-		CF6E8C4E26762D0300ACF029 /* TextNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNoteVC.swift; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF72D38F2467E86F007FA034 /* StepItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemViewController.swift; sourceTree = "<group>"; };
@@ -194,23 +139,10 @@
 		CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewController.swift; sourceTree = "<group>"; };
 		CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasNote.swift; sourceTree = "<group>"; };
 		CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCGPoint.swift; sourceTree = "<group>"; };
-		CF96E8DD267BD98F001C3BFF /* StatisticsManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatisticsManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF96E8E0267BD98F001C3BFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		CF96E8E2267BD995001C3BFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CF96E8E4267BD995001C3BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CF96E8E9267BD995001C3BFF /* StatisticsManager Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "StatisticsManager Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF96E8EE267BD995001C3BFF /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
-		CF96E8F0267BD995001C3BFF /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		CF96E8F2267BD995001C3BFF /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		CF96E8F4267BD996001C3BFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CF96E8F6267BD996001C3BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CF96E8F7267BD996001C3BFF /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCateg.swift; sourceTree = "<group>"; };
 		CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewRestoreFile.swift; sourceTree = "<group>"; };
 		CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewSteps.swift; sourceTree = "<group>"; };
 		CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = workVersionDetailVC.swift; sourceTree = "<group>"; };
-		CFA51E892672647B00DDE86F /* TextNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNote.swift; sourceTree = "<group>"; };
-		CFA51E8B2672677000DDE86F /* TextNoteCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNoteCV.swift; sourceTree = "<group>"; };
 		CFA5878A242883A6006367AE /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLouncher.swift; sourceTree = "<group>"; };
 		CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventElementsVC.swift; sourceTree = "<group>"; };
@@ -228,7 +160,6 @@
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		CFDA030326711FC700772E32 /* CanvasNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasNotesVC.swift; sourceTree = "<group>"; };
-		CFDA0305267120A700772E32 /* PhotoNoteCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoNoteCV.swift; sourceTree = "<group>"; };
 		CFF34C3025FA97B3009F8452 /* UltraLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraLayout.swift; sourceTree = "<group>"; };
 		E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -240,13 +171,6 @@
 			files = (
 				CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */,
 				2528C037002617B26AC128D5 /* Pods_Projector.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF96E8E6267BD995001C3BFF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,8 +240,6 @@
 			children = (
 				CF1416D025B8B145001AC541 /* Podfile */,
 				CF3712C823740BAE00B2D593 /* Projector */,
-				CF96E8DE267BD98F001C3BFF /* StatisticsManager */,
-				CF96E8ED267BD995001C3BFF /* StatisticsManager Extension */,
 				CF3712C723740BAE00B2D593 /* Products */,
 				CF9DA834244C479F00DFAEEF /* Sample Files  */,
 				1CBB5DE09D890148DA389C83 /* Pods */,
@@ -329,8 +251,6 @@
 			isa = PBXGroup;
 			children = (
 				CF3712C623740BAE00B2D593 /* Projector.app */,
-				CF96E8DD267BD98F001C3BFF /* StatisticsManager.app */,
-				CF96E8E9267BD995001C3BFF /* StatisticsManager Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -338,7 +258,6 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
-				CF6E8C4E26762D0300ACF029 /* TextNoteVC.swift */,
 				CF17FDC7264D876A0092F5FA /* Canvas Note */,
 				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
 				CF3F0FC6260269B500CAC008 /* Main VC */,
@@ -393,29 +312,6 @@
 			path = Canvas;
 			sourceTree = "<group>";
 		};
-		CF96E8DE267BD98F001C3BFF /* StatisticsManager */ = {
-			isa = PBXGroup;
-			children = (
-				CF96E8DF267BD98F001C3BFF /* Interface.storyboard */,
-				CF96E8E2267BD995001C3BFF /* Assets.xcassets */,
-				CF96E8E4267BD995001C3BFF /* Info.plist */,
-			);
-			path = StatisticsManager;
-			sourceTree = "<group>";
-		};
-		CF96E8ED267BD995001C3BFF /* StatisticsManager Extension */ = {
-			isa = PBXGroup;
-			children = (
-				CF96E8EE267BD995001C3BFF /* InterfaceController.swift */,
-				CF96E8F0267BD995001C3BFF /* ExtensionDelegate.swift */,
-				CF96E8F2267BD995001C3BFF /* NotificationController.swift */,
-				CF96E8F4267BD996001C3BFF /* Assets.xcassets */,
-				CF96E8F6267BD996001C3BFF /* Info.plist */,
-				CF96E8F7267BD996001C3BFF /* PushNotificationPayload.apns */,
-			);
-			path = "StatisticsManager Extension";
-			sourceTree = "<group>";
-		};
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,7 +361,6 @@
 				CF3F0FC72602746A00CAC008 /* UserActivity.swift */,
 				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
 				CF7A57F6262C38D7004EAF01 /* CameraNote.swift */,
-				CFA51E892672647B00DDE86F /* TextNote.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -498,8 +393,6 @@
 				CF18904C2656E7DE00701943 /* BaseCVController.swift */,
 				CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */,
 				CFDA030326711FC700772E32 /* CanvasNotesVC.swift */,
-				CFDA0305267120A700772E32 /* PhotoNoteCV.swift */,
-				CFA51E8B2672677000DDE86F /* TextNoteCV.swift */,
 			);
 			path = QuickNotesCollViews;
 			sourceTree = "<group>";
@@ -516,51 +409,15 @@
 				CF3712C323740BAE00B2D593 /* Frameworks */,
 				CF3712C423740BAE00B2D593 /* Resources */,
 				AF764318393168AC267A7144 /* [CP] Embed Pods Frameworks */,
-				CF96E902267BD997001C3BFF /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CF96E8F9267BD997001C3BFF /* PBXTargetDependency */,
 			);
 			name = Projector;
 			productName = Projector;
 			productReference = CF3712C623740BAE00B2D593 /* Projector.app */;
 			productType = "com.apple.product-type.application";
-		};
-		CF96E8DC267BD98F001C3BFF /* StatisticsManager */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CF96E901267BD997001C3BFF /* Build configuration list for PBXNativeTarget "StatisticsManager" */;
-			buildPhases = (
-				CF96E8DB267BD98F001C3BFF /* Resources */,
-				CF96E900267BD997001C3BFF /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CF96E8EC267BD995001C3BFF /* PBXTargetDependency */,
-			);
-			name = StatisticsManager;
-			productName = StatisticsManager;
-			productReference = CF96E8DD267BD98F001C3BFF /* StatisticsManager.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		CF96E8E8267BD995001C3BFF /* StatisticsManager Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CF96E8FF267BD997001C3BFF /* Build configuration list for PBXNativeTarget "StatisticsManager Extension" */;
-			buildPhases = (
-				CF96E8E5267BD995001C3BFF /* Sources */,
-				CF96E8E6267BD995001C3BFF /* Frameworks */,
-				CF96E8E7267BD995001C3BFF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "StatisticsManager Extension";
-			productName = "StatisticsManager Extension";
-			productReference = CF96E8E9267BD995001C3BFF /* StatisticsManager Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -592,12 +449,6 @@
 							};
 						};
 					};
-					CF96E8DC267BD98F001C3BFF = {
-						CreatedOnToolsVersion = 10.1;
-					};
-					CF96E8E8267BD995001C3BFF = {
-						CreatedOnToolsVersion = 10.1;
-					};
 				};
 			};
 			buildConfigurationList = CF3712C123740BAE00B2D593 /* Build configuration list for PBXProject "Projector" */;
@@ -614,8 +465,6 @@
 			projectRoot = "";
 			targets = (
 				CF3712C523740BAE00B2D593 /* Projector */,
-				CF96E8DC267BD98F001C3BFF /* StatisticsManager */,
-				CF96E8E8267BD995001C3BFF /* StatisticsManager Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -629,23 +478,6 @@
 				CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */,
 				CF1416D125B8B145001AC541 /* Podfile in Resources */,
 				CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF96E8DB267BD98F001C3BFF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CF96E8E3267BD995001C3BFF /* Assets.xcassets in Resources */,
-				CF96E8E1267BD98F001C3BFF /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF96E8E7267BD995001C3BFF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CF96E8F5267BD996001C3BFF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,7 +537,6 @@
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
-				CFA51E8C2672677000DDE86F /* TextNoteCV.swift in Sources */,
 				CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */,
 				CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */,
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
@@ -734,7 +565,6 @@
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
-				CFDA0306267120A700772E32 /* PhotoNoteCV.swift in Sources */,
 				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
 				CF059F452598A9D900729A74 /* Event.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
@@ -755,7 +585,6 @@
 				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
-				CFA51E8A2672647B00DDE86F /* TextNote.swift in Sources */,
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
@@ -769,34 +598,10 @@
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,
 				CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */,
 				CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */,
-				CF6E8C4F26762D0300ACF029 /* TextNoteVC.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF96E8E5267BD995001C3BFF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CF96E8F3267BD995001C3BFF /* NotificationController.swift in Sources */,
-				CF96E8F1267BD995001C3BFF /* ExtensionDelegate.swift in Sources */,
-				CF96E8EF267BD995001C3BFF /* InterfaceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CF96E8EC267BD995001C3BFF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CF96E8E8267BD995001C3BFF /* StatisticsManager Extension */;
-			targetProxy = CF96E8EB267BD995001C3BFF /* PBXContainerItemProxy */;
-		};
-		CF96E8F9267BD997001C3BFF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CF96E8DC267BD98F001C3BFF /* StatisticsManager */;
-			targetProxy = CF96E8F8267BD997001C3BFF /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		CF3712CD23740BAE00B2D593 /* Main.storyboard */ = {
@@ -813,14 +618,6 @@
 				CF3712D323740BB200B2D593 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		CF96E8DF267BD98F001C3BFF /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CF96E8E0267BD98F001C3BFF /* Base */,
-			);
-			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -982,88 +779,6 @@
 			};
 			name = Release;
 		};
-		CF96E8FB267BD997001C3BFF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UF353UV4DH;
-				IBSC_MODULE = StatisticsManager_Extension;
-				INFOPLIST_FILE = StatisticsManager/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector.watchkitapp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.1;
-			};
-			name = Debug;
-		};
-		CF96E8FC267BD997001C3BFF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UF353UV4DH;
-				IBSC_MODULE = StatisticsManager_Extension;
-				INFOPLIST_FILE = StatisticsManager/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector.watchkitapp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.1;
-			};
-			name = Release;
-		};
-		CF96E8FD267BD997001C3BFF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UF353UV4DH;
-				INFOPLIST_FILE = "StatisticsManager Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector.watchkitapp.watchkitextension";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.1;
-			};
-			name = Debug;
-		};
-		CF96E8FE267BD997001C3BFF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UF353UV4DH;
-				INFOPLIST_FILE = "StatisticsManager Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "serginjo-m.Projector.watchkitapp.watchkitextension";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.1;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1081,24 +796,6 @@
 			buildConfigurations = (
 				CF3712D923740BB200B2D593 /* Debug */,
 				CF3712DA23740BB200B2D593 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CF96E8FF267BD997001C3BFF /* Build configuration list for PBXNativeTarget "StatisticsManager Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CF96E8FD267BD997001C3BFF /* Debug */,
-				CF96E8FE267BD997001C3BFF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CF96E901267BD997001C3BFF /* Build configuration list for PBXNativeTarget "StatisticsManager" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CF96E8FB267BD997001C3BFF /* Debug */,
-				CF96E8FC267BD997001C3BFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

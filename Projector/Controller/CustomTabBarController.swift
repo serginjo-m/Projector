@@ -68,7 +68,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             //base for switch cases logic
             lastVCClass = "\(currentViewController.classForCoder)"
         
-            func configureAddItemAction(newObjectVC: [String: UIViewController]){
+            func configureAddItemAction(newObjectVC: [UIViewController]){
                 
                 
                 //get my add items nav view controller for setting its stack view controllers in func
@@ -78,9 +78,10 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
                 
                 
-                for (key, value) in newObjectVC {
-                    let action = UIAlertAction(title: key, style: .default) { (action: UIAlertAction) in
-                        self.present(value, animated: true, completion: nil)
+                
+                for controller in newObjectVC {
+                    let action = UIAlertAction(title: "Action", style: .default) { (action: UIAlertAction) in
+                        self.present(controller, animated: true, completion: nil)
                     }
                     
                     alert.addAction(action)
@@ -111,37 +112,30 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     
                     newStep.delegate = detailVC
                     
-                    let viewControllers = [
-                        "Create New Step": newStep
-                    ]
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
+                    configureAddItemAction(newObjectVC: [newStep])
             
                 case "ProjectViewController":
                     
                     guard let  projectVC = currentViewController as? ProjectViewController else {return false}
                     
-                    //because new project view controller need preconfiguration
-                    //create it out of Dictionary
                     let newProjectViewController = NewProjectViewController()
+                    let cameraShot = CameraShot()
+                    let canvasNote = CanvasViewController()
+                    
+//                    //--------------------- little experiment ------------------------
+//                    let objects = ProjectListRepository.instance.getCanvasNotes()
+//                    
+//                    canvasNote.canvas.canvasObject = objects[0]
+                    
+                    
+                    
+                    newProjectViewController.modalTransitionStyle = .coverVertical
+                    newProjectViewController.modalPresentationStyle = .overCurrentContext
+                     //want to transfer some data
                     newProjectViewController.projectCV = projectVC.projectsCollectionView
                     
-                    //Dictionary ["view controller name" : viewController]
-                    let viewControllers = [
-                        "New Project": newProjectViewController,
-                        "Qiuck Camera Note": CameraShot(),
-                        "Qiuck Picture Note": CanvasViewController(),
-                        "Qiuck Text Note": TextNoteViewController()
-                    ]
-                    
-                    //configure appearance
-                    for (_, value) in viewControllers{
-                        value.modalTransitionStyle = .coverVertical
-                        value.modalPresentationStyle = .overCurrentContext
-                    }
-                    
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
+                
+                    configureAddItemAction(newObjectVC: [newProjectViewController, cameraShot, canvasNote])
                 
                 case "StepViewController":
                 
@@ -151,19 +145,13 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     newStepItemViewController.stepID = stepVC.stepID
                     newStepItemViewController.stepItemsTableView = stepVC.stepTableView
                     
-                    let viewControllers = [
-                        "Create Step Item" : newStepItemViewController
-                    ]
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
+                    configureAddItemAction(newObjectVC: [newStepItemViewController])
                 
                 case "CalendarViewController":
                 
-                    let viewControllers = [
-                        "Create New Event": NewEventViewController()
-                    ]
+                    let newEventItemViewController = NewEventViewController()
                     
-                    configureAddItemAction(newObjectVC: viewControllers)
+                    configureAddItemAction(newObjectVC: [newEventItemViewController])
                 
                 default:
                     
