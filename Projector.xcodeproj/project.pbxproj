@@ -78,6 +78,11 @@
 		CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7895267FCB080066294A /* TextNoteCV.swift */; };
 		CFCD7898267FCB530066294A /* TextNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7897267FCB530066294A /* TextNote.swift */; };
 		CFCD789A267FCC2E0066294A /* NewTextNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */; };
+		CFCD789D268237010066294A /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD789C268237010066294A /* UIViewExtension.swift */; };
+		CFCD78A126823F1E0066294A /* CountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A026823F1E0066294A /* CountingLabel.swift */; };
+		CFCD78A326823F540066294A /* ProgressShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A226823F540066294A /* ProgressShape.swift */; };
+		CFCD78A526823FAE0066294A /* AnimationDisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A426823FAE0066294A /* AnimationDisplayLink.swift */; };
+		CFCD78A7268240220066294A /* DataStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A6268240220066294A /* DataStackView.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
@@ -162,6 +167,11 @@
 		CFCD7895267FCB080066294A /* TextNoteCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNoteCV.swift; sourceTree = "<group>"; };
 		CFCD7897267FCB530066294A /* TextNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextNote.swift; sourceTree = "<group>"; };
 		CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTextNoteVC.swift; sourceTree = "<group>"; };
+		CFCD789C268237010066294A /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		CFCD78A026823F1E0066294A /* CountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingLabel.swift; sourceTree = "<group>"; };
+		CFCD78A226823F540066294A /* ProgressShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressShape.swift; sourceTree = "<group>"; };
+		CFCD78A426823FAE0066294A /* AnimationDisplayLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDisplayLink.swift; sourceTree = "<group>"; };
+		CFCD78A6268240220066294A /* DataStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStackView.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
@@ -266,6 +276,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CFCD789B268236DD0066294A /* Extensions */,
 				CF17FDC7264D876A0092F5FA /* Canvas Note */,
 				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
 				CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */,
@@ -289,6 +300,7 @@
 		CF3F0FC6260269B500CAC008 /* Main VC */ = {
 			isa = PBXGroup;
 			children = (
+				CFCD789E26823EC60066294A /* Statistics */,
 				CFDA030226711F5B00772E32 /* QuickNotesCollViews */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
@@ -352,7 +364,6 @@
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
-				CF594364253215670036641B /* StatisticsStackView.swift */,
 			);
 			path = "Collection Views";
 			sourceTree = "<group>";
@@ -381,6 +392,26 @@
 				CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		CFCD789B268236DD0066294A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CFCD789C268237010066294A /* UIViewExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CFCD789E26823EC60066294A /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				CF594364253215670036641B /* StatisticsStackView.swift */,
+				CFCD78A026823F1E0066294A /* CountingLabel.swift */,
+				CFCD78A226823F540066294A /* ProgressShape.swift */,
+				CFCD78A426823FAE0066294A /* AnimationDisplayLink.swift */,
+				CFCD78A6268240220066294A /* DataStackView.swift */,
+			);
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		CFD88DF52595EBAE00B726FF /* Calendar */ = {
@@ -542,6 +573,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFCD78A7268240220066294A /* DataStackView.swift in Sources */,
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
 				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
@@ -557,6 +589,7 @@
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,
+				CFCD78A326823F540066294A /* ProgressShape.swift in Sources */,
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
@@ -567,6 +600,7 @@
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
+				CFCD78A126823F1E0066294A /* CountingLabel.swift in Sources */,
 				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
 				CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */,
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
@@ -577,6 +611,7 @@
 				CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
 				CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */,
+				CFCD789D268237010066294A /* UIViewExtension.swift in Sources */,
 				CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */,
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
@@ -604,6 +639,7 @@
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
+				CFCD78A526823FAE0066294A /* AnimationDisplayLink.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,

@@ -135,7 +135,7 @@ class ProjectData: UIStackView, UICollectionViewDataSource, UICollectionViewDele
         //clear old data
         projectArray.removeAll()
         //append each item to array
-        ["\(project.totalCost)$", "\(project.budget)$", "\(project.distance)km", "\(project.spending)$"].forEach {
+        ["\(project.money)$", "\(project.time)hrs", "\(project.fuel)l"].forEach {
             projectArray.append($0)
         }
     }

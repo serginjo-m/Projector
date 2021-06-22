@@ -124,51 +124,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return label
     }()
     
-    var budgetTitle: UILabel = {
-        let label = UILabel()
-        label.text = "What is Your Budget?"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    var budgetSlider: UISlider = {
-        var slider = UISlider()
-        slider.maximumValue = 99000
-        slider.addTarget(self, action: #selector(budgetSliderValueChanged), for: UIControl.Event.valueChanged)
-        slider.value = 1
-        return slider
-    }()
-    
-    var budgetValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Nill"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
-        return label
-    }()
-    
-    var distanceTitle: UILabel = {
-        let label = UILabel()
-        label.text = "How Far Do You Go?"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    var distanceSlider: UISlider = {
-        var slider = UISlider()
-        slider.maximumValue = 99000
-        slider.addTarget(self, action: #selector(distanceSliderValueChanged), for: UIControl.Event.valueChanged)
-        slider.value = 1
-        return slider
-    }()
-    
-    var distanceValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Nill"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
-        return label
-    }()
     
     
     override func viewDidLoad() {
@@ -189,12 +144,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         view.addSubview(categoryTitle)
         view.addSubview(newProjectCategories)
-        view.addSubview(budgetTitle)
-        view.addSubview(budgetSlider)
-        view.addSubview(budgetValueLabel)
-        view.addSubview(distanceTitle)
-        view.addSubview(distanceSlider)
-        view.addSubview(distanceValueLabel)
+        
         
         //constraints
         setupLayout()
@@ -203,21 +153,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         nameTextField.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        //here I pre configure my labels to refer an actual value of slider when it appears
-        budgetValueLabel.text = "\(Int(round(budgetSlider.value)))$"
-        distanceValueLabel.text = "\(Int(round(distanceSlider.value)))km"
-    }
-    
-    //refer slider value to label
-    @objc func budgetSliderValueChanged(){
-        budgetValueLabel.text = "\(Int(round(budgetSlider.value)))$"
-    }
-    //refer slider value to label
-    @objc func distanceSliderValueChanged(){
-        distanceValueLabel.text = "\(Int(round(distanceSlider.value)))km"
-    }
-    
+   
     //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -258,8 +194,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         projectTemplate.name = nameTextField.text ?? ""
         projectTemplate.category = newProjectCategories.categoryName
         projectTemplate.selectedImagePathUrl = selectedImageURLString
-        projectTemplate.totalCost = Int(round(budgetSlider.value))
-        projectTemplate.distance = Int(round(distanceSlider.value))
         //adds steps to template
         if let stepsArray = projectSteps{
             for step in stepsArray{
@@ -379,12 +313,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         projectImage.translatesAutoresizingMaskIntoConstraints = false
         categoryTitle.translatesAutoresizingMaskIntoConstraints = false
         newProjectCategories.translatesAutoresizingMaskIntoConstraints = false
-        budgetTitle.translatesAutoresizingMaskIntoConstraints = false
-        budgetSlider.translatesAutoresizingMaskIntoConstraints = false
-        budgetValueLabel.translatesAutoresizingMaskIntoConstraints = false
-        distanceTitle.translatesAutoresizingMaskIntoConstraints = false
-        distanceSlider.translatesAutoresizingMaskIntoConstraints = false
-        distanceValueLabel.translatesAutoresizingMaskIntoConstraints = false
+       
         
         dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
@@ -440,36 +369,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         newProjectCategories.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         newProjectCategories.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         newProjectCategories.heightAnchor.constraint(equalToConstant: 122).isActive = true
-        
-        budgetTitle.topAnchor.constraint(equalTo: newProjectCategories.bottomAnchor, constant: 20).isActive = true
-        budgetTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        budgetTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        budgetTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        budgetSlider.topAnchor.constraint(equalTo: budgetTitle.bottomAnchor, constant: 0).isActive = true
-        budgetSlider.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        budgetSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -126).isActive = true
-        budgetSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        budgetValueLabel.centerYAnchor.constraint(equalTo: budgetSlider.centerYAnchor, constant: 0).isActive = true
-        budgetValueLabel.leftAnchor.constraint(equalTo: budgetSlider.rightAnchor, constant: 13).isActive = true
-        budgetValueLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        budgetValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        distanceTitle.topAnchor.constraint(equalTo: budgetSlider.bottomAnchor, constant: 8).isActive = true
-        distanceTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        distanceTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        distanceTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        distanceSlider.topAnchor.constraint(equalTo: distanceTitle.bottomAnchor, constant: 0).isActive = true
-        distanceSlider.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        distanceSlider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -126).isActive = true
-        distanceSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        distanceValueLabel.centerYAnchor.constraint(equalTo: distanceSlider.centerYAnchor, constant: 0).isActive = true
-        distanceValueLabel.leftAnchor.constraint(equalTo: distanceSlider.rightAnchor, constant: 13).isActive = true
-        distanceValueLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        distanceValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
 

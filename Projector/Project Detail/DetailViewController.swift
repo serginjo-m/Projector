@@ -409,10 +409,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
         }
         
         editProjectViewController.newProjectCategories.categoryName = project.category
-        //set project price value
-        editProjectViewController.budgetSlider.value = Float(project.totalCost)
-        //set project distance value
-        editProjectViewController.distanceSlider.value = Float(project.distance)
+        
         
         //information about project object need to be transfered
         editProjectViewController.selectedImageURLString = project.selectedImagePathUrl

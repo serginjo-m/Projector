@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Foundation
 import RealmSwift
 
 // template that holds configuration for every cell
@@ -234,7 +233,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         projectValues.removeAll()
         
         //fill up new data
-        ["\(project.totalCost)$", "\(project.budget)$", "\(project.distance)km"].forEach {
+        ["\(project.money)$", "\(project.time)hrs", "\(project.fuel)l"].forEach {
             projectValues.append($0)
         }
         //reload needed when browse btwn projects
