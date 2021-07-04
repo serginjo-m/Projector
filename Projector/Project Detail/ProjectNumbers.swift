@@ -52,7 +52,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
             NumberCellSetting(
                 imageName: "totalCost",
                 cellColor: UIColor.init(red: 95/255, green: 74/255, blue: 99/255, alpha: 1),
-                buttonTitle: "TOTAL COST",
+                buttonTitle: "MONEY SPENT",
                 imageWidth: 55,
                 imageHeight: 53,
                 imageTopAnchor: 17,
@@ -61,7 +61,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
             NumberCellSetting(
                 imageName: "budget",
                 cellColor:UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),
-                buttonTitle: "BUDGET",
+                buttonTitle: "TIME SPENT",
                 imageWidth: 68,
                 imageHeight: 81,
                 imageTopAnchor: 3,
@@ -70,7 +70,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
             NumberCellSetting(
                 imageName: "distance",
                 cellColor: UIColor.init(red: 132/255, green: 211/255, blue: 171/255, alpha: 1),
-                buttonTitle: "DISTANCE",
+                buttonTitle: "FUEL SPENT",
                 imageWidth: 76,
                 imageHeight: 82,
                 imageTopAnchor: 8,
@@ -79,19 +79,19 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         ]
     }()
     
-    let didTapBudgetCompletionHandler: (() -> Void)
-    let didTapTotalCostCompletionHandler: (() -> Void)
-    let didTapDistanceCompletionHandler: (() -> Void)
+    let didTapMoneyCompletionHandler: (() -> Void)
+    let didTapTimeCompletionHandler: (() -> Void)
+    let didTapFuelCompletionHandler: (() -> Void)
     //MARK: Initialization
     
     init(
-        didTapBudgetCompletionHandler: @escaping (() -> Void),
-        didTapTotalCostCompletionHandler: @escaping (() -> Void),
-        didTapDistanceCompletionHandler: @escaping (() -> Void)) {
+        didTapMoneyCompletionHandler: @escaping (() -> Void),
+        didTapTimeCompletionHandler: @escaping (() -> Void),
+        didTapFuelCompletionHandler: @escaping (() -> Void)) {
         
-        self.didTapBudgetCompletionHandler = didTapBudgetCompletionHandler
-        self.didTapTotalCostCompletionHandler = didTapTotalCostCompletionHandler
-        self.didTapDistanceCompletionHandler = didTapDistanceCompletionHandler
+        self.didTapMoneyCompletionHandler = didTapMoneyCompletionHandler
+        self.didTapTimeCompletionHandler = didTapTimeCompletionHandler
+        self.didTapFuelCompletionHandler = didTapFuelCompletionHandler
         
         super.init(frame: CGRect.zero)
         setupView()
@@ -211,14 +211,14 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         
         switch indexPath.row{
         case 0:
-            //total cost
-            didTapTotalCostCompletionHandler()
+            //money
+            didTapMoneyCompletionHandler()
         case 1:
-            //budget
-            didTapBudgetCompletionHandler()
+            //time
+            didTapTimeCompletionHandler()
         case 2:
-            //distance
-            didTapDistanceCompletionHandler()
+            //fuel
+            didTapFuelCompletionHandler()
         default:
             break
             
@@ -228,12 +228,18 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
     
     
     //adding values to a project
-    private func defineProjectsValues(){
+    func defineProjectsValues(){
+        
+        guard let money = project.money, let time = project.time, let fuel = project.fuel else {
+            print("project values error")
+            return
+        }
+        
         //clear old data
         projectValues.removeAll()
         
         //fill up new data
-        ["\(project.money)$", "\(project.time)hrs", "\(project.fuel)l"].forEach {
+        ["\(money)$", "\(time)h", "\(fuel)l"].forEach {
             projectValues.append($0)
         }
         //reload needed when browse btwn projects

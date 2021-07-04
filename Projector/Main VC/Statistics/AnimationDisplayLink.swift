@@ -24,12 +24,15 @@ class AnimationDisplayLink: NSObject{
     var actualValue: Double
     //animation duration
     let animationDuration: Double
+    //statistic value units
+    var units: String?
     
-    init(label: UILabel?, shape: CAShapeLayer?, startValue: Double, actualValue: Double, animationDuration: Double) {
+    init(label: UILabel?, shape: CAShapeLayer?, startValue: Double, actualValue: Double, animationDuration: Double, units: String?) {
         
         self.startValue = startValue
         self.actualValue = actualValue
         self.animationDuration = animationDuration
+        self.units = units
         
         self.label = label
         self.shape = shape
@@ -42,20 +45,20 @@ class AnimationDisplayLink: NSObject{
     }
     
     @objc func handleUpdate(){
-        
+        let unitsString = units ?? ""
         //every refresh it would be defined again
         let now = Date()
         //difference bwn start app time & every screen refresh
         let elapseTime = now.timeIntervalSince(animationStartDate)
         //when animation reaches end value
         if elapseTime > animationDuration {
-            label?.text = "\(Int(actualValue))%"
+            label?.text = "\(Int(actualValue))\(unitsString)"
             shape?.strokeEnd = CGFloat(actualValue / 100)
         }else{
             //percentage
             let percentageOfDuration = elapseTime / animationDuration
             let value = startValue + round(percentageOfDuration * (actualValue - startValue))
-            label?.text = "\(Int(value))%"
+            label?.text = "\(Int(value))\(unitsString)"
             shape?.strokeEnd = CGFloat(value / 100)
         }
     }

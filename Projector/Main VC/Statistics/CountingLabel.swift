@@ -14,14 +14,14 @@ class CountingLabel: UILabel {
     //animation logic
     var labelDisplayLink: AnimationDisplayLink?
     
-    init(startValue: Double, actualValue:Double, animationDuration: Double) {
+    init(startValue: Double, actualValue:Double, animationDuration: Double, units: String) {
         super.init(frame: .zero)
-        self.text = "\(Int(startValue))%"
+        self.text = "\(Int(startValue))\(units)"
         self.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
         self.font = UIFont.boldSystemFont(ofSize: 29)
         self.textAlignment = .center
         //passing all data required for animation
-        self.labelDisplayLink = AnimationDisplayLink(label: self, shape: nil, startValue: startValue, actualValue: actualValue, animationDuration: animationDuration)
+        self.labelDisplayLink = AnimationDisplayLink(label: self, shape: nil, startValue: startValue, actualValue: actualValue, animationDuration: animationDuration, units: units)
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

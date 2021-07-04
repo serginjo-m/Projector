@@ -43,19 +43,19 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     //project statistics (money, distance..)
     // 'lazy' give access to self & set controller once
     lazy var projectNumbersCV = ProjectNumbersCollectionView(
-        didTapBudgetCompletionHandler: { [weak self] in
+        didTapMoneyCompletionHandler: { [weak self] in
             guard let self = self else {return}
-            self.sideView.categoryKey = "budget"
+            self.sideView.categoryKey = "money"
             self.showStatisticsDetail()
     },
-        didTapTotalCostCompletionHandler: { [weak self] in
+        didTapTimeCompletionHandler: { [weak self] in
             guard let self = self else {return}
-            self.sideView.categoryKey = "totalCost"
+            self.sideView.categoryKey = "time"
             self.showStatisticsDetail()
     },
-        didTapDistanceCompletionHandler: { [weak self] in
+        didTapFuelCompletionHandler: { [weak self] in
             guard let self = self else {return}
-            self.sideView.categoryKey = "distance"
+            self.sideView.categoryKey = "fuel"
             self.showStatisticsDetail()
     })
     

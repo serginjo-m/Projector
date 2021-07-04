@@ -30,7 +30,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     var maxHeightAnchor: NSLayoutConstraint?
     var minHeightAnchor: NSLayoutConstraint?
     
-   
+    
     lazy var viewByCategoryCV: ViewByCategoryCollectionView = {
         let category = ViewByCategoryCollectionView()
         category.delegate = self

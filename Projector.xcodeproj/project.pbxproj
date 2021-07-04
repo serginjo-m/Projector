@@ -26,6 +26,7 @@
 		CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904C2656E7DE00701943 /* BaseCVController.swift */; };
 		CF18904F265D724400701943 /* GenericsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904E265D724400701943 /* GenericsScheme.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
+		CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
 		CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF279E352464115B00B79978 /* StepAddItemCell.swift */; };
@@ -113,6 +114,7 @@
 		CF18904C2656E7DE00701943 /* BaseCVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCVController.swift; sourceTree = "<group>"; };
 		CF18904E265D724400701943 /* GenericsScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericsScheme.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
+		CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectExtension.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
 		CF279E352464115B00B79978 /* StepAddItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItemCell.swift; sourceTree = "<group>"; };
@@ -244,6 +246,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		CF1D3E0D2683A1D200C10798 /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				CFB3B29823741214002E2F9B /* ProjectList.swift */,
+				CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */,
+			);
+			path = Project;
+			sourceTree = "<group>";
+		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,8 +382,8 @@
 		CFB3B297237411E5002E2F9B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CF1D3E0D2683A1D200C10798 /* Project */,
 				CF8DFB76264AE77200ACB4EB /* Canvas */,
-				CFB3B29823741214002E2F9B /* ProjectList.swift */,
 				CFB3B29A2374177E002E2F9B /* ProjectStep.swift */,
 				CF1218C325C6DED900530E54 /* StatisticData.swift */,
 				CFBC3A41258152CF00EEF13D /* Day.swift */,
@@ -644,6 +655,7 @@
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
+				CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */,
 				CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,
 				CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */,

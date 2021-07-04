@@ -27,7 +27,8 @@ class ProgressShapeLayer: CAShapeLayer {
         self.fillColor = UIColor.clear.cgColor
         self.strokeEnd = strokeEnd
         
-        self.shapeDisplayLink = AnimationDisplayLink(label: nil, shape: self, startValue: startValue, actualValue: actualValue, animationDuration: animationDuration)
+        self.shapeDisplayLink = AnimationDisplayLink(label: nil, shape: self, startValue: startValue, actualValue: actualValue, animationDuration: animationDuration, units: nil)
+       
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -11,6 +11,8 @@ import RealmSwift
 
 class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate  {
     
+    
+    //need to modify an array of existing project
     var realm: Realm!//create a var
     
     
@@ -22,8 +24,6 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         didSet{
             //as ID defined, retreave project from DB
             project = ProjectListRepository.instance.getProjectList(id: projectId)
-            //creates grouped data source for table view
-            assembleGroupedData()
         }
     }
     
@@ -40,13 +40,12 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
     var investedValue = 0
     var spendedValue = 0
     
-    //grouped statistic data by category
-    var groupedDataDictionary = [ String : [StatisticData]]()
     var tableViewDataSource = [StatisticData](){
         didSet{
             //reset every time array changed
             investedValue = 0
             spendedValue  = 0
+            
             //perform calculations
             for item in tableViewDataSource{
                 if item.positiveNegative == 1{
@@ -56,21 +55,28 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             
+            
             totalValueLabel.text = "\(investedValue)$ | \(spendedValue)$"
         }
     }
     
+    //once category defined, configure side panel elements and data source
     var categoryKey = ""{
         didSet{
+            
+            //visual configurations
             configurationByCategory(category: categoryKey)
+            
             //data source for table view
             createTableViewDataSource(key: categoryKey)
+            
             //reset all picker components
             valuePicker.selectRow(0, inComponent: 0, animated: false)
             valuePicker.selectRow(0, inComponent: 1, animated: false)
             valuePicker.selectRow(0, inComponent: 2, animated: false)
             commentTextField.text = ""
             saveButton.isEnabled = false
+            
         }
     }
     
@@ -219,31 +225,26 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
 
         setupConstraints()
     }
-    
-    //creates grouped dictionary by categories
-    func assembleGroupedData(){
-        guard let statistics = project?.projectStatistics else {return}
-        //[ String : [StatisticData]]
-        groupedDataDictionary = Dictionary(grouping: statistics) { (statistic) -> String in
-            return statistic.category
-        }
-    }
+
     //configure side panel by selected category
     func configurationByCategory(category: String){
         switch category {
-        case "totalCost" :
+        case "money" :
+            plusMinusSegmentedControl.isHidden = false
             statisticImage.image = UIImage(named: "totalCost")
             selectedStatisticsLabel.text = "Invested | Spended"
             backgroundColor = UIColor.init(displayP3Red: 95/255, green: 74/255, blue: 99/255, alpha: 1)
             containerView.backgroundColor = UIColor.init(displayP3Red: 65/255, green: 50/255, blue: 67/255, alpha: 1)
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 65/255, green: 50/255, blue: 67/255, alpha: 1)
-        case "budget":
+        case "time":
+            plusMinusSegmentedControl.isHidden = true
             statisticImage.image = UIImage(named: "budget")
             selectedStatisticsLabel.text = "Costs | Something"
             backgroundColor = UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1)
             containerView.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
-        case "distance":
+        case "fuel":
+            plusMinusSegmentedControl.isHidden = true
             statisticImage.image = UIImage(named: "distance")
             selectedStatisticsLabel.text = "Acheaved | ToGo"
             backgroundColor = UIColor.init(red: 116/255, green: 203/255, blue: 159/255, alpha: 1)
@@ -253,17 +254,23 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
             break
         }
     }
+    
     //this func creates datasource for my table view from groupedDataDictionary or clear data and then reaload
     func createTableViewDataSource(key: String){
+        guard let project = project else {return}
         //clear
         tableViewDataSource.removeAll()
-        //check if data exist (also avouid optionals)
-        guard let array = groupedDataDictionary[key] else {
-            panelTableView.reloadData()
-            return
+        
+        if let dictionary = project.groupedDictionary{
+            //check if data exist (also avoid optionals)
+            guard let array = dictionary[key] else {
+                panelTableView.reloadData()
+                return
+            }
+            
+            //assign data to array
+            tableViewDataSource = array
         }
-        //assign data to array
-        tableViewDataSource = array
         //reload
         panelTableView.reloadData()
     }
@@ -281,9 +288,9 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         })
         
         let addSubtract = statisticData.positiveNegative == 0 ? "-" : "+"
+        //add an action to activity list
         UserActivitySingleton.shared.createUserActivity(description: "\(proj.name):\n \(addSubtract)\(statisticData.number)  to \(statisticData.category)")
         
-
         //---------------------- It definitely need some improvement -------------------------------------------
         //assign the same values lead to reload of data and view
         let id = projectId

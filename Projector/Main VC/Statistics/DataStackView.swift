@@ -26,10 +26,10 @@ class DataStackView: UIStackView {
     var countingLabel: CountingLabel?
     
     //MARK: Initialization
-    init(frame: CGRect, dataCategory: String, startValue: Double, actualValue: Double, animationDuration: Double, imageName: String) {
+    init(frame: CGRect, dataCategory: String, startValue: Double, actualValue: Double, animationDuration: Double, imageName: String, units: String) {
         self.categoryLabel.text = dataCategory
         self.circleImage.image = UIImage(named: imageName)
-        self.countingLabel = CountingLabel(startValue: startValue, actualValue: actualValue, animationDuration: animationDuration)
+        self.countingLabel = CountingLabel(startValue: startValue, actualValue: actualValue, animationDuration: animationDuration, units: units)
         super.init(frame: frame)
         setupStackView()
     }

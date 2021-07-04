@@ -27,13 +27,16 @@ extension DetailViewController {
     
     //dismiss black view
     @objc func handleDismiss(){
+        //reload project details numbers cv
+        self.projectNumbersCV.defineProjectsValues()
+        self.projectNumbersCV.projectNumbersCollectionView.reloadData()
+        
         UIView.animate(withDuration: 0.5) {
             //70% of screen width
             let width = 70 * self.view.frame.width / 100
             
             self.blackView.alpha = 0
             self.sideView.frame = CGRect(x: -self.view.frame.width, y: 0, width: width, height: self.view.frame.height)
-            
         }
     }
 }

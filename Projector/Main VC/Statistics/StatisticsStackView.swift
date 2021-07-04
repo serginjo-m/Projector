@@ -11,7 +11,15 @@ import RealmSwift
 
 class StatisticsStackView: UIStackView {
     
-    var items: List<ProjectList>?
+    //projects, which is statistics database
+    var items: Results<ProjectList> {
+        get {
+            return ProjectListRepository.instance.getProjectLists()
+        }
+        set{
+            //updates?
+        }
+    }
     
     //MARK: Initialization
     override init(frame: CGRect) {
@@ -35,12 +43,12 @@ class StatisticsStackView: UIStackView {
     }()
     
     //data
-    let dataStackView1 = DataStackView(frame: .zero, dataCategory: "Distance", startValue: 0, actualValue: 75, animationDuration: 2, imageName: "greenCircle")
-    let dataStackView2 = DataStackView(frame: .zero, dataCategory: "Completed Steps", startValue: 0, actualValue: 50, animationDuration: 2, imageName: "redCircle")
-    let dataStackView3 = DataStackView(frame: .zero, dataCategory: "Investments", startValue: 0, actualValue: 35, animationDuration: 2, imageName: "blueCircle")
+    let moneyInvestment = DataStackView(frame: .zero, dataCategory: "Money Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "greenCircle", units: "$")
+    let timeSpent = DataStackView(frame: .zero, dataCategory: "Time Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "redCircle", units: "hrs")
+    let fuelConsumption = DataStackView(frame: .zero, dataCategory: "Fuel Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "blueCircle", units: "l")
     
     //percentage label inside track layer
-    let percentageLabel = CountingLabel(startValue: 0, actualValue: 76, animationDuration: 2)
+    let percentageLabel = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2, units: "%")
     
     //progress shapes
     let greenShapeLayer = ProgressShapeLayer(
@@ -91,7 +99,7 @@ class StatisticsStackView: UIStackView {
     
     func setupStackView(){
         //StackView configuration (it contains 3 others)
-        let stackView = UIStackView(arrangedSubviews: [dataStackView1, dataStackView2, dataStackView3])
+        let stackView = UIStackView(arrangedSubviews: [moneyInvestment, timeSpent, fuelConsumption])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
@@ -142,16 +150,51 @@ class StatisticsStackView: UIStackView {
         }
     }
     
+    
+    func categoryTotalValue(key: String) -> Double {
+        
+        var total: Double = 0
+        
+        for item in items {
+            
+            if let money = item.money {
+                total += Double(money)
+            }
+        }
+        
+        return total
+    }
+
+    
     //function calls by tap gesture & by viewDidLoad method in MainViewController
     @objc func progressAnimation(){
+        
+        
+        // Is my project object will be every time updated?----------------------------------------------
+        let totalMoneyNumber = categoryTotalValue(key: "money")
+        
+        
+        greenShapeLayer.shapeDisplayLink?.actualValue = 75
+        redShapeLayer.shapeDisplayLink?.actualValue = 40
+        blueShapeLayer.shapeDisplayLink?.actualValue = 30
+        percentageLabel.labelDisplayLink?.actualValue = 54
+        fuelConsumption.countingLabel?.labelDisplayLink?.actualValue = 47
+        timeSpent.countingLabel?.labelDisplayLink?.actualValue = 98
+        moneyInvestment.countingLabel?.labelDisplayLink?.actualValue = totalMoneyNumber
+        
+        //-------------------- order experiment --------------------------
+        greenShapeLayer.zPosition = 0
+        redShapeLayer.zPosition = 1
+        blueShapeLayer.zPosition = 2
+        
         //changing start point execute animation on object
         greenShapeLayer.shapeDisplayLink?.animationStartDate = Date()
         redShapeLayer.shapeDisplayLink?.animationStartDate = Date()
         blueShapeLayer.shapeDisplayLink?.animationStartDate = Date()
         percentageLabel.labelDisplayLink?.animationStartDate = Date()
-        dataStackView3.countingLabel?.labelDisplayLink?.animationStartDate = Date()
-        dataStackView2.countingLabel?.labelDisplayLink?.animationStartDate = Date()
-        dataStackView1.countingLabel?.labelDisplayLink?.animationStartDate = Date()
+        fuelConsumption.countingLabel?.labelDisplayLink?.animationStartDate = Date()
+        timeSpent.countingLabel?.labelDisplayLink?.animationStartDate = Date()
+        moneyInvestment.countingLabel?.labelDisplayLink?.animationStartDate = Date()
     }
     
 }

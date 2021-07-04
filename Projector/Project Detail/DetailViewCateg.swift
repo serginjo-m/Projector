@@ -11,8 +11,6 @@ import RealmSwift
 
 class StepCategoriesCollectionView: UIStackView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
 
-    //Properties
-    
     //Fetch Selected Project for Step CV modifications
     var project: ProjectList?
     
