@@ -43,6 +43,10 @@
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
 		CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3F0FC72602746A00CAC008 /* UserActivity.swift */; };
 		CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3F0FCB2602888D00CAC008 /* DayActivity.swift */; };
+		CF4197C22691E14000405EC5 /* StatisticsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C12691E14000405EC5 /* StatisticsVC.swift */; };
+		CF4197C42691E8E700405EC5 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C32691E8E700405EC5 /* BarChartView.swift */; };
+		CF4197C62691FBE300405EC5 /* GenericController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C52691FBE300405EC5 /* GenericController.swift */; };
+		CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C72691FC1000405EC5 /* GenericCell.swift */; };
 		CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF535DD02587DEF600F15DCB /* MonthMetadata.swift */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
@@ -86,6 +90,7 @@
 		CFCD78A7268240220066294A /* DataStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A6268240220066294A /* DataStackView.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
+		CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD5288326935B8400062DCF /* UIView+Stacking.swift */; };
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
 		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
 		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
@@ -133,6 +138,10 @@
 		CF3712D523740BB200B2D593 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF3F0FC72602746A00CAC008 /* UserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivity.swift; sourceTree = "<group>"; };
 		CF3F0FCB2602888D00CAC008 /* DayActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayActivity.swift; sourceTree = "<group>"; };
+		CF4197C12691E14000405EC5 /* StatisticsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsVC.swift; sourceTree = "<group>"; };
+		CF4197C32691E8E700405EC5 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
+		CF4197C52691FBE300405EC5 /* GenericController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericController.swift; sourceTree = "<group>"; };
+		CF4197C72691FC1000405EC5 /* GenericCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCell.swift; sourceTree = "<group>"; };
 		CF535DD02587DEF600F15DCB /* MonthMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetadata.swift; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
@@ -176,6 +185,7 @@
 		CFCD78A6268240220066294A /* DataStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStackView.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
+		CFD5288326935B8400062DCF /* UIView+Stacking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Stacking.swift"; sourceTree = "<group>"; };
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -287,6 +297,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF4197C02691E10600405EC5 /* Statistics Group */,
 				CFCD789B268236DD0066294A /* Extensions */,
 				CF17FDC7264D876A0092F5FA /* Canvas Note */,
 				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
@@ -320,6 +331,17 @@
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 			);
 			path = "Main VC";
+			sourceTree = "<group>";
+		};
+		CF4197C02691E10600405EC5 /* Statistics Group */ = {
+			isa = PBXGroup;
+			children = (
+				CF4197C12691E14000405EC5 /* StatisticsVC.swift */,
+				CF4197C32691E8E700405EC5 /* BarChartView.swift */,
+				CF4197C52691FBE300405EC5 /* GenericController.swift */,
+				CF4197C72691FC1000405EC5 /* GenericCell.swift */,
+			);
+			path = "Statistics Group";
 			sourceTree = "<group>";
 		};
 		CF5483B925EC398D00D6A05B /* Step */ = {
@@ -409,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				CFCD789C268237010066294A /* UIViewExtension.swift */,
+				CFD5288326935B8400062DCF /* UIView+Stacking.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -613,6 +636,7 @@
 				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
 				CFCD78A126823F1E0066294A /* CountingLabel.swift in Sources */,
 				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
+				CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */,
 				CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */,
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
@@ -627,10 +651,12 @@
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
+				CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */,
 				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
 				CF059F452598A9D900729A74 /* Event.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
 				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
+				CF4197C42691E8E700405EC5 /* BarChartView.swift in Sources */,
 				CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
 				CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */,
@@ -658,8 +684,10 @@
 				CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */,
 				CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,
+				CF4197C62691FBE300405EC5 /* GenericController.swift in Sources */,
 				CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */,
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,
+				CF4197C22691E14000405EC5 /* StatisticsVC.swift in Sources */,
 				CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */,
 				CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */,
 			);
