@@ -16,7 +16,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //events list
     var events: Results<Event> {
         get {
-
             return ProjectListRepository.instance.getEvents()
         }
     }
@@ -169,6 +168,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
     override func viewDidLoad() {
         
+        
+        
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE, MMMM d")
@@ -219,7 +220,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
             //an array of events for every key or empty arr
             groupedEventsByDate.append(values ?? [])
         }
-
     }
     
     

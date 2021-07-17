@@ -34,8 +34,12 @@ class GenericController<T: GenericCell<U>, U, H: UICollectionReusableView>: UICo
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! T
         cell.item = items[indexPath.row]
+    
         return cell
     }
     

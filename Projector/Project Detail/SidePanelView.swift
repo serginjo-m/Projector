@@ -71,6 +71,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
             createTableViewDataSource(key: categoryKey)
             
             //reset all picker components
+            plusMinusSegmentedControl.selectedSegmentIndex = 0
             valuePicker.selectRow(0, inComponent: 0, animated: false)
             valuePicker.selectRow(0, inComponent: 1, animated: false)
             valuePicker.selectRow(0, inComponent: 2, animated: false)

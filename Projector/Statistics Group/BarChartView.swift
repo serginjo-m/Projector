@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class BarChartView: UIView{
     
@@ -45,60 +46,15 @@ class BarChartView: UIView{
     }
 }
 
-//dataBase
-struct BarData {
-    let index: Int
-    let percentage: CGFloat
-    let color: UIColor
-}
 
 //custom cell based on GenericCell
 class BarChartCell: GenericCell<BarData>{
     
-    let indexLabel: UILabel = {
-        let label = UILabel()
-        label.text = "31"
-        label.font = UIFont.systemFont(ofSize: 10)
-        label.textColor = .lightGray
-        label.textAlignment = .center
-        return label
-    }()
-    
-    let barFillView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.layer.cornerRadius = 4
-        return view
-    }()
-    
-    let dotView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightGray
-        return view
-    }()
-    
-    lazy var barTrackView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.init(white: 0.95, alpha: 1)
-        view.layer.cornerRadius = 4
-        view.addSubview(barFillView)
-        
-        self.barFillView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        
-        self.barFillHeightConstraint = self.barFillView.heightAnchor.constraint(equalTo: view.heightAnchor)
-        self.barFillHeightConstraint.isActive = true
-        
-        return view
-    }()
-    
-    //color bar height constraint
-    var barFillHeightConstraint: NSLayoutConstraint!
-    
     override var item: BarData!{
         didSet{
-            
+
             //visible or hidden text
-            indexLabel.textColor = item.index % 6 == 0 ? .lightGray : .clear
+            indexLabel.textColor = item.index % 6 == 0 ? UIColor.init(white: 0.4, alpha: 1) : .clear
             
             //index == number string
             indexLabel.text = String(item.index + 1)
@@ -114,16 +70,104 @@ class BarChartCell: GenericCell<BarData>{
                 dotView.layer.cornerRadius = 2
             }
             
+            
+            //contain views ordered by value
+            let orderedViewsArray = orderViewsByValue()
+            
+            //add views regard its value & define anchors(with shortcut)
+            orderedViewsArray.forEach({
+                
+                barTrackView.addSubview($0)
+                
+                $0.anchor(top: nil, leading: barTrackView.leadingAnchor, bottom: barTrackView.bottomAnchor, trailing: barTrackView.trailingAnchor)
+                
+            })
+            
+            //some trick that fix an issue
+            self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
+            self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
+            self.fuelBarFillHeightConstraint = self.fuelBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
+
+            self.moneyBarFillHeightConstraint.isActive = true
+            self.timeBarFillHeightConstraint.isActive = true
+            self.fuelBarFillHeightConstraint.isActive = true
+
+
+
             //issue fix
             //diactivate old constraint & than set new & activate
-            barFillHeightConstraint.isActive = false
-            self.barFillHeightConstraint = self.barFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.percentage)
-            barFillHeightConstraint.isActive = true
+            moneyBarFillHeightConstraint.isActive = false
+            timeBarFillHeightConstraint.isActive = false
+            fuelBarFillHeightConstraint.isActive = false
             
-            //configure color
-            self.barFillView.backgroundColor = item.color
+            
+            //----------------------------------------------------------------------------------------------------
+            // 1.    So, if I give multipliers static value issue with reusing is disappeared
+            // 2.    Need something to do with 2+ maximums in the same day
+            //----------------------------------------------------------------------------------------------------
+            
+            
+        
+            self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.money)
+            self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.time)
+            self.fuelBarFillHeightConstraint = self.fuelBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.fuel)
+            
+            
+            moneyBarFillHeightConstraint.isActive = true
+            timeBarFillHeightConstraint.isActive = true
+            fuelBarFillHeightConstraint.isActive = true
+            
         }
     }
+    
+    let indexLabel: UILabel = {
+        let label = UILabel()
+        label.text = "31"
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textColor = .lightGray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    //green chart bar
+    let moneyBarFillView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(displayP3Red: 29/255, green: 212/255, blue: 122/255, alpha: 1)
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    //blue chart bar
+    let timeBarFillView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(displayP3Red: 68/255, green: 135/255, blue: 209/255, alpha: 1)
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    //red chart bar
+    let fuelBarFillView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(displayP3Red: 242/255, green: 98/255, blue: 98/255, alpha: 1)
+        view.layer.cornerRadius = 5
+        return view
+    }()
+    
+    let dotView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(white: 0.4, alpha: 1)
+        return view
+    }()
+
+    lazy var barTrackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(white: 0.95, alpha: 1)
+        view.layer.cornerRadius = 4
+        return view
+    }()
+    
+    //color bar height constraint
+    var moneyBarFillHeightConstraint: NSLayoutConstraint!
+    var timeBarFillHeightConstraint: NSLayoutConstraint!
+    var fuelBarFillHeightConstraint: NSLayoutConstraint!
     
     //contain dot indicator
     var dotViewContainer = UIView().withHeight(height: 24)
@@ -147,8 +191,6 @@ class BarChartCell: GenericCell<BarData>{
         
         dotViewContainer.addSubview(dotView)//adds indicator to container
         
-        
-        
         dotView.centerInSuperview()//center in container
         dotViewWidthConstraint = dotView.widthAnchor.constraint(equalToConstant: 6)
         dotViewHeightConstraint = dotView.heightAnchor.constraint(equalToConstant: 6)
@@ -160,80 +202,35 @@ class BarChartCell: GenericCell<BarData>{
     }
 }
 
+//dataBase
+struct BarData {
+    let index: Int
+    let categoryPercentage: CategoryValue
+}
 
-//---------------------------------------- must be for both calendar and statistics ------------------------------
-extension BarChartController {
-    //accept Date and return MonthMetadata object
-    func monthMetadata(for baseDate: Date) throws -> MonthMetadata{
-        //asks calendar for the number of days in basedate's month. return first day
-        guard
-            let numberOfDaysInMonth = calendar.range(
-                of: .day,
-                in: .month,
-                for: baseDate)?.count,
-            let firstDayOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: baseDate))
-            
-            else{
-                throw CalendarDataError.metadataGeneration
-        }
-        
-        //which day of the week first day of month falls on
-        let firstDayWeekday = calendar.component(.weekday, from: firstDayOfMonth)
-        
-        return MonthMetadata(
-            numberOfDays: numberOfDaysInMonth,
-            firstDay: firstDayOfMonth,
-            firstDayWeekday: firstDayWeekday)
-        
-    }
-    
-    //takes day and return an array of days
-    func generateDaysInMonth (for baseDate: Date) -> [Day] {
-        //calls metadata function for object
-        guard let metadata = try? monthMetadata(for: baseDate) else {
-            fatalError("An error occurred when generating the metadata for \(baseDate)")
-        }
-        //extract values from object
-        let numberOfDaysInMonth = metadata.numberOfDays//31
-        
-        
-        
-        let firstDayOfMonth = metadata.firstDay
-        
-        //adds extra bit to begining of month if needed
-        let days: [Day] = (1...numberOfDaysInMonth)
-            .map { day in
-                
-                // calculate the offset
-                let dayOffset = day - 1//day = 1....
-                
-                // adds of substructs an offset from Date for new day
-                return generateDay(offsetBy: dayOffset, for: firstDayOfMonth)
-        }
-        
-        return days
-    }
-    
-    // 7 : Generate Days For Calendar
-    func generateDay( offsetBy dayOffset: Int, for baseDate: Date) -> Day {
-        
-        let date = calendar.date( byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
-        
-        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: false, isWithinDisplayedMonth: true,  containEvent: false)
-    }
-    
-    
-    
-    enum CalendarDataError: Error {
-        case metadataGeneration
-    }
+struct CategoryValue{
+    let money: CGFloat
+    let time: CGFloat
+    let fuel: CGFloat
 }
 
 //VC contain collection view (chart)
 class BarChartController: GenericController<BarChartCell, BarData, UICollectionReusableView>, UICollectionViewDelegateFlowLayout{
     
+    var statistics: Results<StatisticData>{
+        get{
+            
+            return ProjectListRepository.instance.getStatisticNotes()
+        }
+        set{
+            //update
+        }
+    }
+    
+    var groupedDictionary = [ Date: [StatisticData]]()
     let calendar = Calendar(identifier: .gregorian)
-    private lazy var dateFormatter: DateFormatter = {
+    
+    lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d"
         return dateFormatter
@@ -242,26 +239,107 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     var baseDate = Date()
     lazy var days = generateDaysInMonth(for: self.baseDate)
     
+    //category month max value
+    var moneyMaximumValue: CGFloat = 0.0
+    var timeMaximumValue: CGFloat = 0.0
+    var fuelMaximumValue: CGFloat = 0.0
+    
+    
+    //all statistics, sorted by Date
+    func setStatisticsDictionary(){
+        groupedDictionary = Dictionary(grouping: statistics, by: { (statistic) -> Date in
+            let date = calendar.startOfDay(for: statistic.date)
+            return date
+        })
+    }
+    
+    //Maximum values need to be find before any pecentage calculations
+    func setCategoriesMaximumValue(){
+        
+        for (_, value) in days.enumerated(){
+            
+            //this is total day value by category
+            var moneyValue: CGFloat = 0.0
+            var timeValue: CGFloat = 0.0
+            var fuelValue: CGFloat = 0.0
+            
+            //iterate through dictionary(current month)
+            if let array = groupedDictionary[value.date]{
+                
+                for item in array{
+                    switch item.category{
+                    case "money":
+                        moneyValue += CGFloat(item.number)
+                    case "time":
+                        timeValue += CGFloat(item.number)
+                    case "fuel":
+                        fuelValue += CGFloat(item.number)
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            //check for max value in this month
+            if moneyValue > moneyMaximumValue {
+                moneyMaximumValue = moneyValue
+            }
+            if timeValue > timeMaximumValue{
+                timeMaximumValue = timeValue
+            }
+            if fuelValue > fuelMaximumValue{
+                fuelMaximumValue = fuelValue
+            }
+        }
+        
+    }
+    
+    func defineItemsArray(){
+        
+        for (index, value) in days.enumerated(){
+            
+            //this is total day value by category
+            var moneyValue: CGFloat = 0.0
+            var timeValue: CGFloat = 0.0
+            var fuelValue: CGFloat = 0.0
+            
+            //iterate through dictionary(current month)
+            if let array = groupedDictionary[value.date]{
+                
+                for item in array{
+                    switch item.category{
+                    case "money":
+                        moneyValue += CGFloat(item.number)
+                    case "time":
+                        timeValue += CGFloat(item.number)
+                    case "fuel":
+                        fuelValue += CGFloat(item.number)
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            let moneyPecentage = moneyValue / moneyMaximumValue
+            let timePercentage = timeValue / timeMaximumValue
+            let fuelPercentage = fuelValue / fuelMaximumValue
+            
+            //BarData struct is .init (because of declare GENERICS TYPE,
+            //where: GenericCell<U>, U == BarChartCell, BarData
+            items.append(.init(index: index, categoryPercentage: CategoryValue(money: moneyPecentage, time: timePercentage, fuel: fuelPercentage)))
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(days.count)
         
-        //set number of items color & pasing struct
-         for (index, value) in days.enumerated(){
-            let randomInt = Int.random(in: 0...2)
-            let color: UIColor
-            if randomInt == 0 {
-                color = .red
-            }else if randomInt == 1 {
-                color = .blue
-            }else{
-                color = .green
-            }
-            let random = Float.random(in: 0..<1)
-            
-        //BarData struct is .init ????????????????????????????????????????????????????????????????????????
-            items.append(.init(index: index, percentage: CGFloat(random), color: color))
-        }
+        //grouped Dictionary
+        setStatisticsDictionary()
+        //find categoies maximum values
+        setCategoriesMaximumValue()
+        //calculate percentage & define items array
+        defineItemsArray()
         
         collectionView.reloadData()
         collectionView.showsHorizontalScrollIndicator = false
@@ -270,10 +348,11 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: 14, height: view.frame.height)
+        return .init(width: 16, height: view.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 2
     }
 }
+

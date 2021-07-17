@@ -21,7 +21,7 @@ extension ProjectList {
         return dictionary
     }
     
-    //statistic variables
+    //total project spent by category
     var time: Int? {
         return categorySum(key: "time")
     }

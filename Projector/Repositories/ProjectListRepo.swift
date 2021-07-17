@@ -178,4 +178,8 @@ class ProjectListRepository {
             realm.delete(textNote)
         })
     }
+    
+    func getStatisticNotes() -> Results<StatisticData> {
+        return realm.objects(StatisticData.self)
+    }
 }

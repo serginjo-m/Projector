@@ -48,6 +48,7 @@
 		CF4197C62691FBE300405EC5 /* GenericController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C52691FBE300405EC5 /* GenericController.swift */; };
 		CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C72691FC1000405EC5 /* GenericCell.swift */; };
 		CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF535DD02587DEF600F15DCB /* MonthMetadata.swift */; };
+		CF55239C26A307AB0079EE12 /* OrderChartsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF55239B26A307AB0079EE12 /* OrderChartsExtension.swift */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
 		CF594365253215670036641B /* StatisticsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594364253215670036641B /* StatisticsStackView.swift */; };
@@ -91,6 +92,7 @@
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
 		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
 		CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD5288326935B8400062DCF /* UIView+Stacking.swift */; };
+		CFD528862696085700062DCF /* ChartCalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD528852696085700062DCF /* ChartCalendarExtension.swift */; };
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
 		CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */; };
 		CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DFA25961B0600B726FF /* CalendarCell.swift */; };
@@ -143,6 +145,7 @@
 		CF4197C52691FBE300405EC5 /* GenericController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericController.swift; sourceTree = "<group>"; };
 		CF4197C72691FC1000405EC5 /* GenericCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCell.swift; sourceTree = "<group>"; };
 		CF535DD02587DEF600F15DCB /* MonthMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetadata.swift; sourceTree = "<group>"; };
+		CF55239B26A307AB0079EE12 /* OrderChartsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderChartsExtension.swift; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
 		CF594364253215670036641B /* StatisticsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsStackView.swift; sourceTree = "<group>"; };
@@ -186,6 +189,7 @@
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
 		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
 		CFD5288326935B8400062DCF /* UIView+Stacking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Stacking.swift"; sourceTree = "<group>"; };
+		CFD528852696085700062DCF /* ChartCalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCalendarExtension.swift; sourceTree = "<group>"; };
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFooterView.swift; sourceTree = "<group>"; };
 		CFD88DFA25961B0600B726FF /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -338,8 +342,10 @@
 			children = (
 				CF4197C12691E14000405EC5 /* StatisticsVC.swift */,
 				CF4197C32691E8E700405EC5 /* BarChartView.swift */,
+				CF55239B26A307AB0079EE12 /* OrderChartsExtension.swift */,
 				CF4197C52691FBE300405EC5 /* GenericController.swift */,
 				CF4197C72691FC1000405EC5 /* GenericCell.swift */,
+				CFD528852696085700062DCF /* ChartCalendarExtension.swift */,
 			);
 			path = "Statistics Group";
 			sourceTree = "<group>";
@@ -650,6 +656,7 @@
 				CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */,
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
 				CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */,
+				CF55239C26A307AB0079EE12 /* OrderChartsExtension.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
 				CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */,
 				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
@@ -663,6 +670,7 @@
 				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,
 				CFDA030426711FC700772E32 /* CanvasNotesVC.swift in Sources */,
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,
+				CFD528862696085700062DCF /* ChartCalendarExtension.swift in Sources */,
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
 				CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */,
