@@ -43,9 +43,9 @@ class StatisticsStackView: UIStackView {
     }()
     
     //data
-    let moneyInvestment = DataStackView(frame: .zero, dataCategory: "Money Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "greenCircle", units: "$")
-    let timeSpent = DataStackView(frame: .zero, dataCategory: "Time Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "redCircle", units: "hrs")
-    let fuelConsumption = DataStackView(frame: .zero, dataCategory: "Fuel Spent", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "blueCircle", units: "l")
+    let moneyInvestment = DataStackView(frame: .zero, dataCategory: "Project 1", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "greenCircle", units: "$")
+    let timeSpent = DataStackView(frame: .zero, dataCategory: "Project 2", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "redCircle", units: "hrs")
+    let fuelConsumption = DataStackView(frame: .zero, dataCategory: "Project 3", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "blueCircle", units: "l")
     
     //percentage label inside track layer
     let percentageLabel = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2, units: "%")

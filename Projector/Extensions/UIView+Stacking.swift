@@ -80,10 +80,11 @@ extension UIView {
     }
     
     @discardableResult
-    func stack(_ axis: NSLayoutConstraint.Axis = .vertical, views: UIView..., spacing: CGFloat = 0) -> UIStackView {
+    func stack(_ axis: NSLayoutConstraint.Axis = .vertical, views: UIView..., spacing: CGFloat = 0, distribution: UIStackView.Distribution = .fill) -> UIStackView {
         let stackView = UIStackView(arrangedSubviews: views)
         stackView.axis = axis
         stackView.spacing = spacing
+        stackView.distribution = distribution
         addSubview(stackView)
         stackView.fillSuperview()
         return stackView

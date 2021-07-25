@@ -9,9 +9,11 @@
 import UIKit
 
 extension BarChartCell{
+    
     //--------------------------------------------------------------------------------------------------------------------
     //------------------------- calculations performs for days that are not visible. Is it an issue? ---------------------
     //--------------------------------------------------------------------------------------------------------------------
+    
     func orderViewsByValue() -> [UIView]{
         
         guard let item = item else {
@@ -79,13 +81,9 @@ extension BarChartCell{
                 print("Can't order Array")
             }
             
-            //---------------------------------------------------------------------------------------------------------
-            //            print(orderedViewsArray)
             return orderedViewsArray
         }
         
-        //-------------------------------------------------------------------------------------------------------------
-        //        print("nothing to order in day: \(item.index)")
         return [moneyBarFillView, timeBarFillView, fuelBarFillView]
     }
 }

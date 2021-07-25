@@ -128,7 +128,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     var statisticsTitle: UILabel = {
         let label = UILabel()
-        label.text = "Statistics"
+        label.text = "Steps Completed"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()

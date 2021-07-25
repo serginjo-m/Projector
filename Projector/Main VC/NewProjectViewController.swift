@@ -11,6 +11,11 @@ import Foundation
 import os
 import Photos
 
+//---------------------------------------------------------------------------------------------------------------------------
+//----------------------- all this view controller works realy strangely (begginer approach) --------------------------------
+//------------------------------------ should be recoded!!!! ----------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------
+
 class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //unique project id for updating
@@ -162,44 +167,82 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         dismiss(animated: true) {
-            let project: ProjectList = self.defineProjectTemplate()
             
-            if self.projectId == nil{
-                //creates new project instance
-                ProjectListRepository.instance.createProjectList(list: project)
-                self.projectCV?.reloadData()
+            //check if id/project exist
+            if let ID = self.projectId{
                 
-                UserActivitySingleton.shared.createUserActivity(description: "Created new \(project.name) project")
-            }else{
+                let project: ProjectList = self.defineProjectTemplate(id: ID)
+                
+                
                 //becouse project with that id exist it perform update
                 ProjectListRepository.instance.updateProjectList(list: project)
+                
+                //------------------------------------------------------------------------------------------------------
+                //------ screaming feature, because it seems like I need to perform updates from outside  --------------
+                //------ should be updated to viewWillTransiotion || viewWillAppear || or something else.........-------
+                //------------------------------------------------------------------------------------------------------
+                
                 //configure detail VC
                 self.delegate?.performAllConfigurations()
                 //reload parents views
                 self.delegate?.reloadViews()
                 
                 UserActivitySingleton.shared.createUserActivity(description: "Updated \(project.name) project")
+                
+            }else{// if it new copy
+                
+                let project: ProjectList = self.defineProjectTemplate(id: nil)
+                //creates new project instance
+                ProjectListRepository.instance.createProjectList(list: project)
+                
+                //------------------------------------------------------------------------------------------------------
+                //------ screaming feature, because it seems like I need to perform updates from outside  --------------
+                //------ should be updated to viewWillTransiotion || viewWillAppear || or something else.........-------
+                //------------------------------------------------------------------------------------------------------
+                self.projectCV?.reloadData()//!!!!!!!!!!!!!!
+                
+                UserActivitySingleton.shared.createUserActivity(description: "Created new \(project.name) project")
+                
             }
             
         }
     }
     
     //creates project instance from values :)))))))))
-    func defineProjectTemplate() -> ProjectList{
+    func defineProjectTemplate(id: String?) -> ProjectList{
+        
+        //empty object
         let projectTemplate = ProjectList()
-        if let id = projectId {
-            projectTemplate.id = id
-        }
-        projectTemplate.date = createdDate
+    
+        
+        //---------------- probably, without name shouldn't be active save button? --------------------
         projectTemplate.name = nameTextField.text ?? ""
+        //---------------------- takes category from collection view -------------------------------------
         projectTemplate.category = newProjectCategories.categoryName
+        //---------------------- image path ----------------------------------------------------------
         projectTemplate.selectedImagePathUrl = selectedImageURLString
-        //adds steps to template
-        if let stepsArray = projectSteps{
-            for step in stepsArray{
-                projectTemplate.projectStep.append(step)
+        
+        
+        if let ID = id {
+            if let project = ProjectListRepository.instance.getProjectList(id: ID){
+                //UPDATE EXISTING COPY TO WHAT USER WAS SPECIFIED
+                projectTemplate.id = ID
+                projectTemplate.date = project.date
+                projectTemplate.complete = project.complete
+                
+                for step in project.projectStep{
+                    projectTemplate.projectStep.append(step)
+                }
+                for statistic in project.projectStatistics{
+                    projectTemplate.projectStatistics.append(statistic)
+                }
             }
+        }else{//unique to new instance
+            //created date is just now!
+            projectTemplate.date = createdDate
+            
         }
+        
         return projectTemplate
     }
     

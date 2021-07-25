@@ -38,6 +38,7 @@ class GenericController<T: GenericCell<U>, U, H: UICollectionReusableView>: UICo
         
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! T
+        
         cell.item = items[indexPath.row]
     
         return cell

@@ -13,6 +13,7 @@
 		CF059F472598B47600729A74 /* NewEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F462598B47500729A74 /* NewEventVC.swift */; };
 		CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0B7E41262608DE008AC084 /* CameraShot.swift */; };
 		CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0C17E4242F9790000FB582 /* ProgressModel.swift */; };
+		CF0DBCC426A755030049E40E /* StatisticsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DBCC326A755030049E40E /* StatisticsContainer.swift */; };
 		CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */; };
 		CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */; };
 		CF0DD7E124520CCB0028ABB1 /* StepStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */; };
@@ -108,6 +109,7 @@
 		CF059F462598B47500729A74 /* NewEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventVC.swift; sourceTree = "<group>"; };
 		CF0B7E41262608DE008AC084 /* CameraShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraShot.swift; sourceTree = "<group>"; };
 		CF0C17E4242F9790000FB582 /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
+		CF0DBCC326A755030049E40E /* StatisticsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsContainer.swift; sourceTree = "<group>"; };
 		CF0DD7DA2450212A0028ABB1 /* DetailStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStepCell.swift; sourceTree = "<group>"; };
 		CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImagesCV.swift; sourceTree = "<group>"; };
 		CF0DD7E024520CCB0028ABB1 /* StepStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepStackView.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				CF4197C52691FBE300405EC5 /* GenericController.swift */,
 				CF4197C72691FC1000405EC5 /* GenericCell.swift */,
 				CFD528852696085700062DCF /* ChartCalendarExtension.swift */,
+				CF0DBCC326A755030049E40E /* StatisticsContainer.swift */,
 			);
 			path = "Statistics Group";
 			sourceTree = "<group>";
@@ -661,6 +664,7 @@
 				CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */,
 				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
 				CF059F452598A9D900729A74 /* Event.swift in Sources */,
+				CF0DBCC426A755030049E40E /* StatisticsContainer.swift in Sources */,
 				CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */,
 				CF27A0652548B5C4007D06D3 /* SketchShadowExtension.swift in Sources */,
 				CF4197C42691E8E700405EC5 /* BarChartView.swift in Sources */,

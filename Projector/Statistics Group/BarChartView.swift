@@ -102,12 +102,13 @@ class BarChartCell: GenericCell<BarData>{
             
             
             //----------------------------------------------------------------------------------------------------
-            // 1.    So, if I give multipliers static value issue with reusing is disappeared
+            // 1.    So, if I give multipliers static value, issue with reusing disappeares
             // 2.    Need something to do with 2+ maximums in the same day
+            // 3.    Calculations performs for days that are not visible. Is it an issue?
             //----------------------------------------------------------------------------------------------------
             
             
-        
+            
             self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.money)
             self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.time)
             self.fuelBarFillHeightConstraint = self.fuelBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.fuel)
@@ -320,13 +321,28 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
                 }
             }
             
-            let moneyPecentage = moneyValue / moneyMaximumValue
-            let timePercentage = timeValue / timeMaximumValue
-            let fuelPercentage = fuelValue / fuelMaximumValue
+            
+            var moneyPercentage: CGFloat = 0.0
+            var timePercentage: CGFloat = 0.0
+            var fuelPercentage: CGFloat = 0.0
+            
+            
+            //Need to avoid division by "0"
+            if moneyMaximumValue > 0 {
+                moneyPercentage = moneyValue / moneyMaximumValue
+            }
+            
+            if timeMaximumValue > 0 {
+                timePercentage = timeValue / timeMaximumValue
+            }
+            
+            if fuelMaximumValue > 0 {
+                fuelPercentage = fuelValue / fuelMaximumValue
+            }
             
             //BarData struct is .init (because of declare GENERICS TYPE,
             //where: GenericCell<U>, U == BarChartCell, BarData
-            items.append(.init(index: index, categoryPercentage: CategoryValue(money: moneyPecentage, time: timePercentage, fuel: fuelPercentage)))
+            items.append(.init(index: index, categoryPercentage: CategoryValue(money: moneyPercentage, time: timePercentage, fuel: fuelPercentage)))
         }
         
     }

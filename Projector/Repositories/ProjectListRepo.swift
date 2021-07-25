@@ -182,4 +182,10 @@ class ProjectListRepository {
     func getStatisticNotes() -> Results<StatisticData> {
         return realm.objects(StatisticData.self)
     }
+    
+    func deleteStatisticNote(note: StatisticData){
+        try! realm.write ({
+            realm.delete(note)
+        })
+    }
 }
