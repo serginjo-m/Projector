@@ -61,13 +61,13 @@ class BarChartCell: GenericCell<BarData>{
             
             //dot indicator configuration (small or bigger)
             if item.index % 6 == 0{
-                dotViewHeightConstraint.constant = 6
-                dotViewWidthConstraint.constant = 6
-                dotView.layer.cornerRadius = 4
-            }else{
                 dotViewHeightConstraint.constant = 4
                 dotViewWidthConstraint.constant = 4
                 dotView.layer.cornerRadius = 2
+            }else{
+                dotViewHeightConstraint.constant = 2
+                dotViewWidthConstraint.constant = 2
+                dotView.layer.cornerRadius = 1
             }
             
             
@@ -83,28 +83,11 @@ class BarChartCell: GenericCell<BarData>{
                 
             })
             
-            //some trick that fix an issue
-            self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
-            self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
-            self.fuelBarFillHeightConstraint = self.fuelBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor)
 
-            self.moneyBarFillHeightConstraint.isActive = true
-            self.timeBarFillHeightConstraint.isActive = true
-            self.fuelBarFillHeightConstraint.isActive = true
-
-
-
-            //issue fix
-            //diactivate old constraint & than set new & activate
-            moneyBarFillHeightConstraint.isActive = false
-            timeBarFillHeightConstraint.isActive = false
-            fuelBarFillHeightConstraint.isActive = false
-            
-            
             //----------------------------------------------------------------------------------------------------
-            // 1.    So, if I give multipliers static value, issue with reusing disappeares
+            //
             // 2.    Need something to do with 2+ maximums in the same day
-            // 3.    Calculations performs for days that are not visible. Is it an issue?
+            //
             //----------------------------------------------------------------------------------------------------
             
             
@@ -112,6 +95,34 @@ class BarChartCell: GenericCell<BarData>{
             self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.money)
             self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.time)
             self.fuelBarFillHeightConstraint = self.fuelBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.fuel)
+            
+            
+            // This Logic is for the cases when 2+ maximum values in the same day
+            
+            //first check if all 3 maximum today
+            if item.categoryPercentage.fuel == 1.0 && item.categoryPercentage.time == 1.0 && item.categoryPercentage.money == 1.0{
+                print("Let's devide by 3")
+            }else if item.categoryPercentage.money == 1.0 {
+                if item.categoryPercentage.money == item.categoryPercentage.time{
+                    
+                    print("money == time")
+                }else if item.categoryPercentage.money == item.categoryPercentage.fuel{
+                    print("money == fuel")
+                }
+            }else if item.categoryPercentage.time == 1.0{
+                if item.categoryPercentage.time == item.categoryPercentage.money {
+                    print("time == money")
+                }else if item.categoryPercentage.time == item.categoryPercentage.fuel{
+                    print("time == fuel")
+                }
+                
+            }else if item.categoryPercentage.fuel == 1.0{
+                if item.categoryPercentage.fuel == item.categoryPercentage.money{
+                    print("fuel == money")
+                }else if item.categoryPercentage.fuel == item.categoryPercentage.time{
+                    print("fuel == time")
+                }
+            }
             
             
             moneyBarFillHeightConstraint.isActive = true
@@ -124,7 +135,7 @@ class BarChartCell: GenericCell<BarData>{
     let indexLabel: UILabel = {
         let label = UILabel()
         label.text = "31"
-        label.font = UIFont.systemFont(ofSize: 10)
+        label.font = UIFont.systemFont(ofSize: 8)
         label.textColor = .lightGray
         label.textAlignment = .center
         return label
@@ -134,21 +145,21 @@ class BarChartCell: GenericCell<BarData>{
     let moneyBarFillView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(displayP3Red: 29/255, green: 212/255, blue: 122/255, alpha: 1)
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 4
         return view
     }()
     //blue chart bar
     let timeBarFillView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(displayP3Red: 68/255, green: 135/255, blue: 209/255, alpha: 1)
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 4
         return view
     }()
     //red chart bar
     let fuelBarFillView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(displayP3Red: 242/255, green: 98/255, blue: 98/255, alpha: 1)
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 4
         return view
     }()
     
@@ -184,9 +195,9 @@ class BarChartCell: GenericCell<BarData>{
         //Cell StackView custom configuration
         stack(views:
             stack(.horizontal, views:
-                UIView().withWidth(3),//blank view on the left side
+                UIView().withWidth(2),//blank view on the left side
                 barTrackView,//actual bar view
-                UIView().withWidth(3)),//blank view on the right side
+                UIView().withWidth(2)),//blank view on the right side
                 dotViewContainer,//container for dots indicator
             indexLabel, spacing: 0)//numbers indicator
         
@@ -197,7 +208,7 @@ class BarChartCell: GenericCell<BarData>{
         dotViewHeightConstraint = dotView.heightAnchor.constraint(equalToConstant: 6)
         dotViewWidthConstraint.isActive = true
         dotViewHeightConstraint.isActive = true
-        dotView.layer.cornerRadius = 5
+        dotView.layer.cornerRadius = 2
         //center to number
         dotView.centerXAnchor.constraint(equalTo: indexLabel.centerXAnchor).isActive = true
     }
@@ -364,11 +375,22 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: 16, height: view.frame.height)
+        
+        
+        //-------------------------------------------------------------------------------------------------------------
+        //-- 1. total width will be devided by number of days, but it will also live a small gap on the right of cv
+        //-------------------------------------------------------------------------------------------------------------
+        
+        
+        let width: CGFloat = CGFloat((Int(view.frame.width) / days.count))
+        
+        let cellSize = CGSize.init(width: width, height: view.frame.height)
+
+        return cellSize
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
+        return 0
     }
 }
 

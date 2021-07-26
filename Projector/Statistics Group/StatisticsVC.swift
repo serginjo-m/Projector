@@ -242,10 +242,10 @@ class StatisticCell: UITableViewCell {
                     moneyNumber.text = "\(money) $"
                 }
                 if let time = template.time {
-                    timeNumber.text = "\(time) minutes"
+                    timeNumber.text = "\(time) min."
                 }
                 if let fuel = template.fuel {
-                    fuelNumber.text = "\(fuel) liters"
+                    fuelNumber.text = "\(fuel) l."
                 }
             }
             
