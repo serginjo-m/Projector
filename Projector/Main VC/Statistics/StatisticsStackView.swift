@@ -42,11 +42,7 @@ class StatisticsStackView: UIStackView {
         return view
     }()
     
-    //data
-    let moneyInvestment = DataStackView(frame: .zero, dataCategory: "Project 1", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "greenCircle", units: "$")
-    let timeSpent = DataStackView(frame: .zero, dataCategory: "Project 2", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "redCircle", units: "hrs")
-    let fuelConsumption = DataStackView(frame: .zero, dataCategory: "Project 3", startValue: 0, actualValue: 0, animationDuration: 2, imageName: "blueCircle", units: "l")
-    
+
     //percentage label inside track layer
     let percentageLabel = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2, units: "%")
     
@@ -59,23 +55,7 @@ class StatisticsStackView: UIStackView {
         actualValue: 76,
         animationDuration: 2
     )
-    let redShapeLayer = ProgressShapeLayer(
-        strokeColor: UIColor.init(displayP3Red: 242/255, green: 98/255, blue: 98/255, alpha: 1).cgColor,
-        arcCenter: .zero,
-        strokeEnd: 0,
-        startValue: 0,
-        actualValue: 50,
-        animationDuration: 2
-    )
-    
-    let blueShapeLayer = ProgressShapeLayer(
-        strokeColor: UIColor.init(displayP3Red: 68/255, green: 135/255, blue: 209/255, alpha: 1).cgColor,
-        arcCenter: .zero,
-        strokeEnd: 0,
-        startValue: 0,
-        actualValue: 35,
-        animationDuration: 2
-    )
+
     
     //track for progress shapes
     let trackLayer: CAShapeLayer = {
@@ -96,37 +76,49 @@ class StatisticsStackView: UIStackView {
         return shape
     }()
     
+    let numbersComparisonLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 31)
+        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
+        return label
+    }()
+    
+    let lineSeparator: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.init(red: 215/255, green: 215/255, blue:215/255 , alpha: 1)
+        return view
+    }()
+    
+    let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.numberOfLines = 0
+        return label
+    }()
     
     func setupStackView(){
-        //StackView configuration (it contains 3 others)
-        let stackView = UIStackView(arrangedSubviews: [moneyInvestment, timeSpent, fuelConsumption])
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-        stackView.isLayoutMarginsRelativeArrangement = true
+ 
         
+        //gray background
         addSubview(backgroundUIView)
         
         layer.addSublayer(whiteCircle)
         layer.addSublayer(trackLayer)
         layer.addSublayer(greenShapeLayer)
-        layer.addSublayer(redShapeLayer)
-        layer.addSublayer(blueShapeLayer)
-        
+        //
         addSubview(percentageLabel)
-        addSubview(stackView)
+        addSubview(numbersComparisonLabel)
+        addSubview(lineSeparator)
+        addSubview(descriptionLabel)
         
         //tap animation feature
         backgroundUIView.translatesAutoresizingMaskIntoConstraints = false
         backgroundUIView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(progressAnimation)))
         percentageLabel.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-
-        stackView.topAnchor.constraint(equalTo: backgroundUIView.topAnchor, constant: 0).isActive = true
-        stackView.rightAnchor.constraint(equalTo: backgroundUIView.rightAnchor, constant: -20).isActive = true
-        stackView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: 120).isActive = true
 
         backgroundUIView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         backgroundUIView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
@@ -138,6 +130,21 @@ class StatisticsStackView: UIStackView {
         percentageLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         percentageLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
+        numbersComparisonLabel.topAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
+        numbersComparisonLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 200).isActive = true
+        numbersComparisonLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        numbersComparisonLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        lineSeparator.topAnchor.constraint(equalTo: numbersComparisonLabel.bottomAnchor, constant: 23).isActive = true
+        lineSeparator.leftAnchor.constraint(equalTo: numbersComparisonLabel.leftAnchor, constant: 0).isActive = true
+        lineSeparator.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        lineSeparator.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        
+        descriptionLabel.topAnchor.constraint(equalTo: lineSeparator.bottomAnchor, constant: 17).isActive = true
+        descriptionLabel.leftAnchor.constraint(equalTo: numbersComparisonLabel.leftAnchor, constant: 0).isActive = true
+        descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        
     }
     
     //this is very interesting approach for:
@@ -145,56 +152,75 @@ class StatisticsStackView: UIStackView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        [trackLayer, blueShapeLayer, greenShapeLayer, redShapeLayer, whiteCircle].forEach {
+        [trackLayer, greenShapeLayer, whiteCircle].forEach {//redShapeLayer, blueShapeLayer
             $0.position = CGPoint(x: 100, y: backgroundUIView.frame.height / 2)
         }
     }
     
     
-    func categoryTotalValue(key: String) -> Double {
-        
-        var total: Double = 0
-        
-        for item in items {
-            
-            if let money = item.money {
-                total += Double(money)
-            }
-        }
-        
-        return total
-    }
-
-    
     //function calls by tap gesture & by viewDidLoad method in MainViewController
     @objc func progressAnimation(){
         
+        //all steps in all projects
+        var totalSteps: Double = 0
+        //completed steps in all projects
+        var completedSteps: Double = 0
+        // steps completion percentage
+        var projectPercentage: Double = 0
         
-        // Is my project object will be every time updated?----------------------------------------------
-        let totalMoneyNumber = categoryTotalValue(key: "money")
+        //length of completed step number
+        var numberLength = 1
         
+        //iterate through all projects
+        for project in self.items {
+            //check if steps there's steps in the project
+            if project.projectStep.count > 0{
+                //iterate through steps
+                for step in project.projectStep {
+                    //count steps
+                    totalSteps += 1
+                    // complete or not
+                    if step.complete == true {
+                        //if complete - add
+                        completedSteps += 1
+                    }
+                }
+            }
+            //avoid division by 0
+            if totalSteps > 0 {
+                projectPercentage = (completedSteps / totalSteps) * 100
+            }
+        }
         
-        greenShapeLayer.shapeDisplayLink?.actualValue = 75
-        redShapeLayer.shapeDisplayLink?.actualValue = 40
-        blueShapeLayer.shapeDisplayLink?.actualValue = 30
-        percentageLabel.labelDisplayLink?.actualValue = 54
-        fuelConsumption.countingLabel?.labelDisplayLink?.actualValue = 47
-        timeSpent.countingLabel?.labelDisplayLink?.actualValue = 98
-        moneyInvestment.countingLabel?.labelDisplayLink?.actualValue = totalMoneyNumber
+        greenShapeLayer.shapeDisplayLink?.actualValue = projectPercentage
+        percentageLabel.labelDisplayLink?.actualValue = projectPercentage
         
-        //-------------------- order experiment --------------------------
-        greenShapeLayer.zPosition = 0
-        redShapeLayer.zPosition = 1
-        blueShapeLayer.zPosition = 2
+        //complete steps color configuration
+        if completedSteps >= 1000 {
+            numberLength = 4
+        }else if completedSteps >= 100{
+            numberLength = 3
+        }else if completedSteps >= 10{
+            numberLength = 2
+        }
+        
+        let greenColor: UIColor = UIColor.init(displayP3Red: 29/255, green: 212/255, blue: 122/255, alpha: 1)
+        let myString = "\(Int(completedSteps)) / \(Int(totalSteps))"
+        let mutableString = NSMutableAttributedString(string: myString, attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 31)])
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: greenColor, range: NSRange(location:0, length:numberLength))
+        //description
+        if items.count > 0{
+            descriptionLabel.text = "steps completed in \(items.count) projects"
+        }else{
+            descriptionLabel.text = "no steps - no progress"
+        }
+        
+        numbersComparisonLabel.attributedText = mutableString
         
         //changing start point execute animation on object
         greenShapeLayer.shapeDisplayLink?.animationStartDate = Date()
-        redShapeLayer.shapeDisplayLink?.animationStartDate = Date()
-        blueShapeLayer.shapeDisplayLink?.animationStartDate = Date()
         percentageLabel.labelDisplayLink?.animationStartDate = Date()
-        fuelConsumption.countingLabel?.labelDisplayLink?.animationStartDate = Date()
-        timeSpent.countingLabel?.labelDisplayLink?.animationStartDate = Date()
-        moneyInvestment.countingLabel?.labelDisplayLink?.animationStartDate = Date()
+
     }
     
 }
