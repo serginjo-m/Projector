@@ -35,7 +35,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     weak var delegate: DetailViewControllerDelegate?
     
     //scroll view container
-    var scrollViewContainer = UIScrollView()
+    //container for all items on the page
+    var scrollViewContainer: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
     var contentUIView = UIView()
     
     let sideView = SidePanelView()

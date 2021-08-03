@@ -46,34 +46,34 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
     let cellSettingsArray: [CategoryButtonSetting] = {
         return [
             CategoryButtonSetting(
-                imageName: "notes",
-                cellColor: UIColor.init(red: 132/255, green: 211/255, blue: 171/255, alpha: 1),
-                buttonTitle: "QUICK NOTES",
-                imageWidth: 49,
-                imageHeight: 74,
-                imageTopAnchor: 12,
-                imageLeftAnchor: -2,
-                titleLeftAnchor: 61
+                imageName: "camera",
+                cellColor: UIColor.init(red: 251/255, green: 137/255, blue: 181/255, alpha: 1),
+                buttonTitle: "PHOTO NOTES",
+                imageWidth: 76,
+                imageHeight: 58,
+                imageTopAnchor: 6,
+                imageLeftAnchor: -12,
+                titleLeftAnchor: 65
             ),
             CategoryButtonSetting(
-                imageName: "rocket",
-                cellColor:UIColor.init(red: 242/255, green: 98/255, blue: 98/255, alpha: 1),
-                buttonTitle: "PROJECTS",
-                imageWidth: 60,
-                imageHeight: 77,
-                imageTopAnchor: 0,
-                imageLeftAnchor: 0,
-                titleLeftAnchor: 43
+                imageName: "colorPalete",
+                cellColor:UIColor.init(red: 36/255, green: 140/255, blue: 232/255, alpha: 1),
+                buttonTitle: "PICTURE NOTES",
+                imageWidth: 113,
+                imageHeight: 85,
+                imageTopAnchor: 9,
+                imageLeftAnchor: -61,
+                titleLeftAnchor: 55
             ),
             CategoryButtonSetting(
-                imageName: "calendar",
-                cellColor: UIColor.init(red: 12/255, green: 154/255, blue: 242/255, alpha: 1),
-                buttonTitle: "EVENTS",
-                imageWidth: 32,
-                imageHeight: 60,
-                imageTopAnchor: 5,
-                imageLeftAnchor: 0,
-                titleLeftAnchor: 52
+                imageName: "letters",
+                cellColor: UIColor.init(red: 255/255, green: 213/255, blue: 87/255, alpha: 1),
+                buttonTitle: "TEXT NOTES",
+                imageWidth: 48,
+                imageHeight: 39,
+                imageTopAnchor: 15,
+                imageLeftAnchor: 8,
+                titleLeftAnchor: 65
             )
         ]
     }()
@@ -226,6 +226,7 @@ class ViewByCategoryCell: UICollectionViewCell {
     let buttonBackgroundImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "notes")
+        image.contentMode = .scaleAspectFit
         return image
     }()
     

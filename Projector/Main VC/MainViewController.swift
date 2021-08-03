@@ -78,7 +78,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     let cellID = "cellId"
     
     //container for all items on the page
-    var scrollViewContainer = UIScrollView()
+    var scrollViewContainer: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
     var contentUIView = UIView()
     
     //stack view for recent projects collection view
@@ -114,21 +119,21 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     var recentActivitiesTitle: UILabel = {
         let label = UILabel()
-        label.text = "Last Days Activity"
+        label.text = "Last 30 Days Activity"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
     
     var viewByCategoryTitle: UILabel = {
         let label = UILabel()
-        label.text = "View By Category"
+        label.text = "Quick Notes"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
     
     var statisticsTitle: UILabel = {
         let label = UILabel()
-        label.text = "Steps Completed"
+        label.text = "Achievements"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -473,7 +478,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        contentUIView.heightAnchor.constraint(equalToConstant: 920).isActive = true
         
         projectsTitle.bottomAnchor.constraint(equalTo: recentProjectsStackView.topAnchor, constant: -11).isActive = true//constant: 20
         projectsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true

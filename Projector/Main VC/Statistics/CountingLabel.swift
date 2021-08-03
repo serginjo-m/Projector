@@ -17,7 +17,7 @@ class CountingLabel: UILabel {
     init(startValue: Double, actualValue:Double, animationDuration: Double, units: String? = "") {
         super.init(frame: .zero)
         self.text = "\(Int(startValue))\(units ?? "")"
-        self.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
+        self.textColor = UIColor.init(red: 126/255, green: 86/255, blue: 177/255, alpha: 1)
         self.font = UIFont.boldSystemFont(ofSize: 29)
         self.textAlignment = .center
         //passing all data required for animation

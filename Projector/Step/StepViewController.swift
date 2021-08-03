@@ -25,8 +25,14 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //PARENT VC - WHOLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     weak var parentVC: DetailViewController?
     
-    //scroll view container
-    var scrollViewContainer = UIScrollView()
+    //scroll view container2
+    //container for all items on the page
+    var scrollViewContainer: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
     var contentUIView = UIView()
     
     //Instance of Project Selected by User

@@ -37,7 +37,8 @@ class StatisticsStackView: UIStackView {
     //Grey section background
     let backgroundUIView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.init(red: 242/255, green: 242/255, blue:242/255 , alpha: 1)
+        view.backgroundColor = UIColor.init(red: 165/255, green: 202/255, blue:215/255 , alpha: 1)
+        view.clipsToBounds = true
         view.layer.cornerRadius = 8
         return view
     }()
@@ -47,8 +48,8 @@ class StatisticsStackView: UIStackView {
     let percentageLabel = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2, units: "%")
     
     //progress shapes
-    let greenShapeLayer = ProgressShapeLayer(
-        strokeColor: UIColor.init(displayP3Red: 29/255, green: 212/255, blue: 122/255, alpha: 1).cgColor,
+    let progressShapeLayer = ProgressShapeLayer(
+        strokeColor: UIColor.init(red: 126/255, green: 86/255, blue: 177/255, alpha: 1).cgColor,
         arcCenter: .zero,
         strokeEnd: 0,
         startValue: 0,
@@ -62,13 +63,13 @@ class StatisticsStackView: UIStackView {
         let shape = CAShapeLayer()
         shape.path = UIBezierPath(arcCenter: .zero , radius: 60 , startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
         shape.fillColor = UIColor.clear.cgColor
-        shape.strokeColor = UIColor.init(red: 215/255, green: 215/255, blue:215/255 , alpha: 1).cgColor
+        shape.strokeColor = UIColor.init(red: 226/255, green: 236/255, blue:239/255 , alpha: 1).cgColor
         shape.lineWidth = 12
         shape.fillColor = UIColor.clear.cgColor
         return shape
     }()
     
-    //Progress shape white background
+    
     let whiteCircle: CAShapeLayer = {
         let shape = CAShapeLayer()
         shape.path = UIBezierPath(arcCenter: .zero , radius: 77 , startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
@@ -76,39 +77,57 @@ class StatisticsStackView: UIStackView {
         return shape
     }()
     
+    let darkCircle: CAShapeLayer = {
+        let shape = CAShapeLayer()
+        shape.path = UIBezierPath(arcCenter: .zero , radius: 114 , startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
+        shape.fillColor = UIColor.init(red: 154/255, green: 188/255, blue: 201/255, alpha: 1).cgColor
+        return shape
+    }()
+    
+    let brightCircle: CAShapeLayer = {
+        let shape = CAShapeLayer()
+        shape.path = UIBezierPath(arcCenter: .zero , radius: 178 , startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
+        shape.fillColor = UIColor.init(red: 159/255, green: 195/255, blue: 208/255, alpha: 1).cgColor
+        return shape
+    }()
+    
     let numbersComparisonLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 31)
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
+        label.textColor = UIColor.init(red: 126/255, green: 86/255, blue: 177/255, alpha: 1)
         return label
     }()
     
     let lineSeparator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.init(red: 215/255, green: 215/255, blue:215/255 , alpha: 1)
+        view.backgroundColor = UIColor.init(red: 154/255, green: 188/255, blue:201/255 , alpha: 1)
         return view
     }()
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.numberOfLines = 0
         return label
     }()
     
     func setupStackView(){
  
+    
         
         //gray background
         addSubview(backgroundUIView)
+        backgroundUIView.layer.addSublayer(brightCircle)
+        backgroundUIView.layer.addSublayer(darkCircle)
+        
         
         layer.addSublayer(whiteCircle)
         layer.addSublayer(trackLayer)
-        layer.addSublayer(greenShapeLayer)
+        layer.addSublayer(progressShapeLayer)
         //
         addSubview(percentageLabel)
         addSubview(numbersComparisonLabel)
@@ -130,10 +149,10 @@ class StatisticsStackView: UIStackView {
         percentageLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         percentageLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
-        numbersComparisonLabel.topAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
+        numbersComparisonLabel.topAnchor.constraint(equalTo: topAnchor, constant: 38).isActive = true
         numbersComparisonLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 200).isActive = true
         numbersComparisonLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        numbersComparisonLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        numbersComparisonLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
         lineSeparator.topAnchor.constraint(equalTo: numbersComparisonLabel.bottomAnchor, constant: 23).isActive = true
         lineSeparator.leftAnchor.constraint(equalTo: numbersComparisonLabel.leftAnchor, constant: 0).isActive = true
@@ -143,7 +162,7 @@ class StatisticsStackView: UIStackView {
         descriptionLabel.topAnchor.constraint(equalTo: lineSeparator.bottomAnchor, constant: 17).isActive = true
         descriptionLabel.leftAnchor.constraint(equalTo: numbersComparisonLabel.leftAnchor, constant: 0).isActive = true
         descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
-        descriptionLabel.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 76).isActive = true
         
     }
     
@@ -152,7 +171,7 @@ class StatisticsStackView: UIStackView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        [trackLayer, greenShapeLayer, whiteCircle].forEach {//redShapeLayer, blueShapeLayer
+        [trackLayer, progressShapeLayer, whiteCircle, darkCircle, brightCircle].forEach {
             $0.position = CGPoint(x: 100, y: backgroundUIView.frame.height / 2)
         }
     }
@@ -168,8 +187,7 @@ class StatisticsStackView: UIStackView {
         // steps completion percentage
         var projectPercentage: Double = 0
         
-        //length of completed step number
-        var numberLength = 1
+        
         
         //iterate through all projects
         for project in self.items {
@@ -192,35 +210,53 @@ class StatisticsStackView: UIStackView {
             }
         }
         
-        greenShapeLayer.shapeDisplayLink?.actualValue = projectPercentage
+        progressShapeLayer.shapeDisplayLink?.actualValue = projectPercentage
         percentageLabel.labelDisplayLink?.actualValue = projectPercentage
         
-        //complete steps color configuration
-        if completedSteps >= 1000 {
-            numberLength = 4
-        }else if completedSteps >= 100{
-            numberLength = 3
-        }else if completedSteps >= 10{
-            numberLength = 2
-        }
         
-        let greenColor: UIColor = UIColor.init(displayP3Red: 29/255, green: 212/255, blue: 122/255, alpha: 1)
-        let myString = "\(Int(completedSteps)) / \(Int(totalSteps))"
-        let mutableString = NSMutableAttributedString(string: myString, attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 31)])
-        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: greenColor, range: NSRange(location:0, length:numberLength))
         //description
         if items.count > 0{
-            descriptionLabel.text = "steps completed in \(items.count) projects"
+            descriptionLabel.attributedText = prepareMutableString(
+                string: "steps are completed in \(items.count) projects",
+                fontSize: 20,
+                color: UIColor.init(red: 126/255, green: 86/255, blue: 177/255, alpha: 1),
+                location: 23,
+                numberValue: Double(items.count))
         }else{
             descriptionLabel.text = "no steps - no progress"
         }
         
-        numbersComparisonLabel.attributedText = mutableString
+        numbersComparisonLabel.attributedText = prepareMutableString(
+            string: "\(Int(completedSteps)) / \(Int(totalSteps))",
+            fontSize: 31,
+            color: UIColor.white,
+            location: 0,
+            numberValue: totalSteps)
         
         //changing start point execute animation on object
-        greenShapeLayer.shapeDisplayLink?.animationStartDate = Date()
+        progressShapeLayer.shapeDisplayLink?.animationStartDate = Date()
         percentageLabel.labelDisplayLink?.animationStartDate = Date()
 
     }
     
+    fileprivate func prepareMutableString(string: String, fontSize: CGFloat, color: UIColor, location: Int, numberValue: Double) -> NSMutableAttributedString{
+        
+        let mutableString = NSMutableAttributedString(string: string, attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: fontSize)])
+        
+        //length of completed step number
+        var numberLength = 1
+        
+        //complete steps color configuration
+        if numberValue >= 1000 {
+            numberLength = 4
+        }else if numberValue >= 100{
+            numberLength = 3
+        }else if numberValue >= 10{
+            numberLength = 2
+        }
+        
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:location, length:numberLength))
+        
+        return mutableString
+    }
 }
