@@ -29,6 +29,9 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
         get{
             return ProjectListRepository.instance.getProjectLists()
         }
+        set{
+            //update...
+        }
     }
     
     //container for all items on the page
@@ -91,6 +94,10 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     //configure categories numbers
     fileprivate func setupCategories() {
         
+        categoriesStackView.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+        
         var totalMoney = 0
         var totalTime = 0
         var totalFuel = 0
@@ -134,9 +141,7 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupCategories()
-
+    
         
         view.backgroundColor = .white
         
@@ -150,6 +155,15 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        //update project database
+        projects = ProjectListRepository.instance.getProjectLists()
+        //configure categories numbers
+        setupCategories()
+        
+        //----------------table view update-------finished?---------------------
+        statisticTableView.reloadData()
+    }
     
 
     //MARK: Table View Section

@@ -175,7 +175,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         configureStepTableView()
     }
     
-    //RELOAD ALL VIEWS
+    //RELOAD ALL VIEWS :))
     func someKindOfFunctionThatPerformRelaod(){
         
         performPageConfigurations()

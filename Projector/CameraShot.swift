@@ -143,7 +143,7 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+      
     }
     
     //MARK: UITextFieldDelegate

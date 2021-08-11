@@ -28,6 +28,7 @@
 		CF18904F265D724400701943 /* GenericsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904E265D724400701943 /* GenericsScheme.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */; };
+		CF242F4D26BC5C2900F44A2F /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
 		CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF279E352464115B00B79978 /* StepAddItemCell.swift */; };
@@ -35,6 +36,7 @@
 		CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */; };
 		CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF27A06E254DA091007D06D3 /* Assets.xcassets */; };
 		CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A072254E0158007D06D3 /* ProjectNumbers.swift */; };
+		CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */; };
 		CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1292237766A700F3132A /* DetailViewController.swift */; };
 		CF2C1298237766A700F3132A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1293237766A700F3132A /* MainViewController.swift */; };
 		CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1294237766A700F3132A /* AppDelegate.swift */; };
@@ -124,6 +126,7 @@
 		CF18904E265D724400701943 /* GenericsScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericsScheme.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectExtension.swift; sourceTree = "<group>"; };
+		CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
 		CF279E352464115B00B79978 /* StepAddItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItemCell.swift; sourceTree = "<group>"; };
@@ -131,6 +134,7 @@
 		CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		CF27A06E254DA091007D06D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Projector/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		CF27A072254E0158007D06D3 /* ProjectNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectNumbers.swift; sourceTree = "<group>"; };
+		CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsHeaderImage.swift; sourceTree = "<group>"; };
 		CF2C1292237766A700F3132A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		CF2C1293237766A700F3132A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CF2C1294237766A700F3132A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -271,6 +275,15 @@
 			path = Project;
 			sourceTree = "<group>";
 		};
+		CF242F4B26BC5BEB00F44A2F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */,
+				CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,6 +316,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF242F4B26BC5BEB00F44A2F /* Notifications */,
 				CF4197C02691E10600405EC5 /* Statistics Group */,
 				CFCD789B268236DD0066294A /* Extensions */,
 				CF17FDC7264D876A0092F5FA /* Canvas Note */,
@@ -359,7 +373,6 @@
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
-				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
 			);
 			path = Step;
@@ -378,6 +391,7 @@
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
 			isa = PBXGroup;
 			children = (
+				CF13D0ED24C891A8002FCCE1 /* EditStepVC.swift */,
 				CF17A69126371DB9002337C0 /* CategoryItems.swift */,
 				CF18904E265D724400701943 /* GenericsScheme.swift */,
 				CF7ECB7524634B47006CC7FF /* StepAddItem.swift */,
@@ -655,6 +669,7 @@
 				CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
 				CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */,
+				CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */,
 				CFCD789D268237010066294A /* UIViewExtension.swift in Sources */,
 				CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */,
 				CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */,
@@ -671,6 +686,7 @@
 				CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */,
 				CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */,
 				CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */,
+				CF242F4D26BC5C2900F44A2F /* NotificationsVC.swift in Sources */,
 				CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */,
 				CFDA030426711FC700772E32 /* CanvasNotesVC.swift in Sources */,
 				CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */,

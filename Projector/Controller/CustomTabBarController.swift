@@ -26,7 +26,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
             //with this type of init I can pass different type of layout (Pinterest or default)
             createNavControllerWithTitle(viewController: StatisticsViewController(), title: "Spendings", imageName: "money"),
-            createNavControllerWithTitle(viewController: UIViewController(), title: "Notifications", imageName: "bell")
+            createNavControllerWithTitle(viewController: NotificationsViewController(), title: "Notifications", imageName: "bell")
         ]
     }
     
