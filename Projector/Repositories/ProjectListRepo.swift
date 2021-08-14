@@ -188,4 +188,21 @@ class ProjectListRepository {
             realm.delete(note)
         })
     }
+    
+    //create Notification
+    func createNotification(notification: Notification){
+        try! realm.write ({
+            realm.add(notification)
+        })
+    }
+    
+    func getNotificationNotes() -> Results<Notification> {
+        return realm.objects(Notification.self)
+    }
+    
+    func deleteNotificationNote(note: Notification){
+        try! realm.write ({
+            realm.delete(note)
+        })
+    }
 }

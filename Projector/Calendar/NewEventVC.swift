@@ -35,10 +35,9 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let dismissButton: UIButton = {
         let button = UIButton()
-        button.setTitle("", for: .normal)
-        button.setTitleColor(UIColor.darkGray, for: .normal)
+        
         button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+       
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
         return button
@@ -70,7 +69,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         let textField = UITextField()
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.placeholder = "Title"
+        textField.attributedPlaceholder = NSAttributedString(string: "Title",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
         textField.font = UIFont.boldSystemFont(ofSize: 22)
         
         return textField
@@ -85,7 +85,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     let dateTitle: UILabel = {
         let label = UILabel()
         label.text = "Date"
-        label.textColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1)
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
         return label
@@ -96,7 +96,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.placeholder = "    day / month / year"
+        textField.attributedPlaceholder = NSAttributedString(string: "    day / month / year",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
         
@@ -115,12 +116,22 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return picker
     }()
     
+    let timeTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Time*"
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textAlignment = .left
+        return label
+    }()
+    
     let startTimeTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.placeholder = "    start at: 00:00"
+        textField.attributedPlaceholder = NSAttributedString(string: "    start at: 00:00",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
         
@@ -144,7 +155,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.placeholder = "    end at: 00:00"
+        textField.attributedPlaceholder = NSAttributedString(string: "    end at: 00:00",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
         
@@ -165,8 +177,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let descriptionTitle: UILabel = {
         let label = UILabel()
-        label.text = "Description"
-        label.textColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1)
+        label.text = "Description*"
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
         return label
@@ -194,6 +206,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.addSubview(lineUIView)
         view.addSubview(dateTitle)
         view.addSubview(dateTextField)
+        view.addSubview(timeTitle)
         view.addSubview(startTimeTextField)
         view.addSubview(endTimeTextField)
         view.addSubview(descriptionTitle)
@@ -235,6 +248,22 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         guard let eventDate = event.date else {return}
         
         if self.eventId == nil{
+            
+            let notification = Notification()
+            notification.name = event.title
+            notification.category = "event"
+            if let date = event.date{
+                notification.eventDate = date
+            }
+            //creates new notification
+            ProjectListRepository.instance.createNotification(notification: notification)
+            
+            
+            
+            
+            
+            
+            
             //creates new project instance
             ProjectListRepository.instance.createEvent(event: event)
             
@@ -377,6 +406,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         dateTitle.translatesAutoresizingMaskIntoConstraints = false
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         dateTextField.translatesAutoresizingMaskIntoConstraints = false
+        timeTitle.translatesAutoresizingMaskIntoConstraints = false
         startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
         startTimePicker.translatesAutoresizingMaskIntoConstraints = false
         endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -424,7 +454,12 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         datePicker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         datePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        startTimeTextField.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 12).isActive = true
+        timeTitle.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 12).isActive = true
+        timeTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        timeTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        timeTitle.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        
+        startTimeTextField.topAnchor.constraint(equalTo: timeTitle.bottomAnchor, constant: 12).isActive = true
         startTimeTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         startTimeTextField.widthAnchor.constraint(equalToConstant: ((view.frame.size.width - 30) / 2) - 6).isActive = true
         startTimeTextField.heightAnchor.constraint(equalToConstant: 43).isActive = true
@@ -434,7 +469,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         startTimePicker.widthAnchor.constraint(equalTo: startTimeTextField.widthAnchor, multiplier: 1).isActive = true
         startTimePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        endTimeTextField.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 12).isActive = true
+        endTimeTextField.topAnchor.constraint(equalTo: timeTitle.bottomAnchor, constant: 12).isActive = true
         endTimeTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         endTimeTextField.widthAnchor.constraint(equalToConstant: ((view.frame.size.width - 30) / 2) - 6).isActive = true
         endTimeTextField.heightAnchor.constraint(equalToConstant: 43).isActive = true
@@ -444,7 +479,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         endTimePicker.widthAnchor.constraint(equalTo: endTimeTextField.widthAnchor, multiplier: 1).isActive = true
         endTimePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        descriptionTitle.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 30).isActive = true
+        descriptionTitle.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 12).isActive = true
         descriptionTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         descriptionTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         descriptionTitle.heightAnchor.constraint(equalToConstant: 17).isActive = true

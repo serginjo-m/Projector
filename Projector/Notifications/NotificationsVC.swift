@@ -12,11 +12,30 @@ import RealmSwift
 
 class NotificationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var notifications: Results<Notification> {
+        get{
+           return ProjectListRepository.instance.getNotificationNotes()
+        }
+        set{
+            //update....
+        }
+    }
+    
+    var items: [Notification] = []
     
     //cell identifier
     let cellIdentifier = "cellIdentifier"
     //TABLE VIEW
-    let notificationTableView = UITableView()
+    lazy var notificationTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
+        return tableView
+    }()
     
     //scroll view container
     //container for all items on the page
@@ -50,27 +69,32 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         contentUIView.addSubview(headerContainerView)
         contentUIView.addSubview(notificationTableView)
        
-        //TABLE VIEW CONFIGURATION
-        configureStepTableView()
-        
         setupConstraints()
     }
     
-    //TABLE VIEW CONFIGURATION
-    private func configureStepTableView(){
-        notificationTableView.delegate = self
-        notificationTableView.dataSource = self
-        notificationTableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        notificationTableView.separatorStyle = .none
-        notificationTableView.translatesAutoresizingMaskIntoConstraints = false
-        notificationTableView.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
+    //view controller update point :)
+    override func viewWillAppear(_ animated: Bool) {
+        
+        
+        notifications = ProjectListRepository.instance.getNotificationNotes()
+        //clear
+        items.removeAll()
+        
+        //filter results to ....
+        items = notifications.filter{$0.eventDate > Date()}
+        
+        notificationTableView.reloadData()
+        
     }
-    
+   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        if  items.count > 0{
+            return items.count
+        }
+        return 0
     }
     
-    let arr = ["Project title", "this should be very long string for test of flexibility of our cell based on"]
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // create a new cell if needed or reuse an old one
@@ -80,15 +104,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
        
         cell.selectionStyle = .none
         
-        
-//        var string = "Lorem Ipsum"
-//
-//
-//        if indexPath.row == 1 {
-//            string += "\n\n\n\n"
-//        }
-//
-//        cell.notificationTitle.text = string
+        cell.template = items[indexPath.row]
         
         return cell
     }
@@ -123,6 +139,119 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
 
 class NotificationTableViewCell: UITableViewCell {
     
+    
+    
+    var template: Notification? {
+        didSet{
+            if let object = template {
+                notificationTitle.text = object.name
+                
+                
+                    var string = "Happen: "
+                    string += self.dateFormatterFullDate.string(from: object.eventDate)
+                    createdNotificationDateLabel.text = string
+                
+                
+                categoryIcon.image = setImageToCategory(category: object.category)
+                
+                let percentageValue = CGFloat(abs(object.startDate.timeIntervalSinceNow) / abs(object.startDate.timeIntervalSince(object.eventDate)))
+                
+                
+                    let notificationCalendar = NSCalendar.current
+
+                    let competitionDifference = notificationCalendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date(), to: object.eventDate)
+                    
+                    timeRemainingLabel.text = convertComponentsToString(dateComponents: competitionDifference)
+                
+                
+                
+                
+                //-------------------------------------------------------------------------------------------------------
+                //--------------------- 1. table view must include only events that are not expired ---------------------
+                //--------------------- 2. different types shoud perform different calculations -------------------------
+                //--------------------- 3. icon size shoud be different for each category -------------------------------
+                //-------------------------------------------------------------------------------------------------------
+                
+                //constraints update approach
+                categoryIconWidthAnchor?.isActive = false
+                categoryIconHeightAnchor?.isActive = false
+                progressBarWidthAnchor?.isActive = false
+                
+                //icon size
+                categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 21)
+                categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 21)
+                //progress
+                progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: percentageValue)
+                
+                progressBarWidthAnchor?.isActive = true
+                categoryIconWidthAnchor?.isActive = true
+                categoryIconHeightAnchor?.isActive = true
+                
+               
+                
+            }
+        }
+    }
+    
+    
+    
+    var progressBarWidthAnchor: NSLayoutConstraint?
+    var categoryIconWidthAnchor: NSLayoutConstraint?
+    var categoryIconHeightAnchor: NSLayoutConstraint?
+    
+    //return image by category string
+    func setImageToCategory(category: String) -> UIImage {
+        
+        switch category {
+            case "event":
+                return UIImage(named: "calendarIcon")!
+            default:
+                return UIImage(named: "calendarIcon")!
+        }
+        
+    }
+    
+    //time to event string
+    func convertComponentsToString(dateComponents: DateComponents) -> String {
+        var string = ""
+        
+        if let years = dateComponents.year {
+            if years > 0 {
+                string += "\(years)y "
+            }
+        }
+        if let days = dateComponents.day{
+            if days > 0{
+                string += "\(days)d "
+            }
+        }
+        if let hours = dateComponents.hour{
+            if hours > 0 {
+                string += "\(hours)h "
+            }
+        }
+        if let minutes = dateComponents.minute{
+            if minutes > 0{
+                string += "\(minutes)min "
+            }
+        }
+        string += "left"
+        
+        
+        
+        return string
+    }
+    
+    fileprivate func countDown(timeInterval: Int){
+        
+    }
+    
+    private lazy var dateFormatterFullDate: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd / MMM / yyyy HH:mm"
+        return dateFormatter
+    }()
+    
     let categoryIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "projectIcon"))
         imageView.contentMode = .scaleAspectFit
@@ -153,7 +282,7 @@ class NotificationTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = UIColor.init(white: 168/255, alpha: 1)
+        label.textColor = UIColor.init(white: 120/255, alpha: 1)
         label.text = "08 / 08 / 2021 18:31"
         return label
     }()
@@ -177,9 +306,9 @@ class NotificationTableViewCell: UITableViewCell {
     let timeRemainingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 11)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.text = "1 day left"
-        label.textColor = UIColor.init(white: 168/255, alpha: 1)
+        label.textColor = UIColor.init(white: 120/255, alpha: 1)
         return label
     }()
     
@@ -209,8 +338,7 @@ class NotificationTableViewCell: UITableViewCell {
         
         categoryIcon.centerYAnchor.constraint(equalTo: backgroundBubble.centerYAnchor, constant: 0),
         categoryIcon.leftAnchor.constraint(equalTo: leftAnchor, constant: 0),
-        categoryIcon.widthAnchor.constraint(equalToConstant: 22),
-        categoryIcon.heightAnchor.constraint(equalToConstant: 32),
+        
         
         createdNotificationDateLabel.topAnchor.constraint(equalTo: notificationTitle.bottomAnchor, constant: 9),
         createdNotificationDateLabel.heightAnchor.constraint(equalToConstant: 17),
@@ -225,7 +353,7 @@ class NotificationTableViewCell: UITableViewCell {
         progressBar.topAnchor.constraint(equalTo: progressBarTrack.topAnchor, constant: 0),
         progressBar.leftAnchor.constraint(equalTo: progressBarTrack.leftAnchor, constant: 0),
         progressBar.heightAnchor.constraint(equalToConstant: 6),
-        progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: 0.65),
+    
             
         timeRemainingLabel.topAnchor.constraint(equalTo: progressBarTrack.bottomAnchor, constant: 14),
         timeRemainingLabel.leftAnchor.constraint(equalTo: notificationTitle.leftAnchor, constant: 0),
@@ -234,6 +362,14 @@ class NotificationTableViewCell: UITableViewCell {
         ]
         
         NSLayoutConstraint.activate(constraints)
+        
+        //update approach
+        categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 22)
+        categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 32)
+        progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: 0.65)
+        categoryIconWidthAnchor?.isActive = true
+        categoryIconHeightAnchor?.isActive = true
+        progressBarWidthAnchor?.isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

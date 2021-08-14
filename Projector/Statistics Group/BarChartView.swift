@@ -83,14 +83,23 @@ class BarChartCell: GenericCell<BarData>{
                 
             })
             
-
+        
             //----------------------------------------------------------------------------------------------------
             //
             // 2.    Need something to do with 2+ maximums in the same day
             //
             //----------------------------------------------------------------------------------------------------
+           
             
-            
+            //OHHHHHH SHi+!!! I've forgotten to deactivate constraints before update them --------------------
+           
+            if moneyBarFillHeightConstraint != nil || timeBarFillHeightConstraint != nil || fuelBarFillHeightConstraint != nil {
+                
+                moneyBarFillHeightConstraint.isActive = false
+                timeBarFillHeightConstraint.isActive = false
+                fuelBarFillHeightConstraint.isActive = false
+                
+            }
             
             self.moneyBarFillHeightConstraint = self.moneyBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.money)
             self.timeBarFillHeightConstraint = self.timeBarFillView.heightAnchor.constraint(equalTo: barTrackView.heightAnchor, multiplier: item.categoryPercentage.time)
@@ -307,6 +316,8 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     }
     
     func defineItemsArray(){
+        //clear every call
+        items.removeAll()
         
         for (index, value) in days.enumerated(){
             
@@ -351,9 +362,12 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
                 fuelPercentage = fuelValue / fuelMaximumValue
             }
             
+            
             //BarData struct is .init (because of declare GENERICS TYPE,
             //where: GenericCell<U>, U == BarChartCell, BarData
             items.append(.init(index: index, categoryPercentage: CategoryValue(money: moneyPercentage, time: timePercentage, fuel: fuelPercentage)))
+            
+            
         }
         
     }
@@ -361,14 +375,14 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //grouped Dictionary
-        setStatisticsDictionary()
-        //find categoies maximum values
-        setCategoriesMaximumValue()
-        //calculate percentage & define items array
-        defineItemsArray()
-        
-        collectionView.reloadData()
+//        //grouped Dictionary
+//        setStatisticsDictionary()
+//        //find categoies maximum values
+//        setCategoriesMaximumValue()
+//        //calculate percentage & define items array
+//        defineItemsArray()
+//        
+//        collectionView.reloadData()
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = .clear

@@ -37,6 +37,7 @@
 		CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF27A06E254DA091007D06D3 /* Assets.xcassets */; };
 		CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A072254E0158007D06D3 /* ProjectNumbers.swift */; };
 		CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */; };
+		CF29D9CB26C437DC00B3FEE2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9CA26C437DC00B3FEE2 /* Notification.swift */; };
 		CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1292237766A700F3132A /* DetailViewController.swift */; };
 		CF2C1298237766A700F3132A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1293237766A700F3132A /* MainViewController.swift */; };
 		CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1294237766A700F3132A /* AppDelegate.swift */; };
@@ -135,6 +136,7 @@
 		CF27A06E254DA091007D06D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Projector/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		CF27A072254E0158007D06D3 /* ProjectNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectNumbers.swift; sourceTree = "<group>"; };
 		CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsHeaderImage.swift; sourceTree = "<group>"; };
+		CF29D9CA26C437DC00B3FEE2 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		CF2C1292237766A700F3132A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		CF2C1293237766A700F3132A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CF2C1294237766A700F3132A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
 				CF7A57F6262C38D7004EAF01 /* CameraNote.swift */,
 				CFCD7897267FCB530066294A /* TextNote.swift */,
+				CF29D9CA26C437DC00B3FEE2 /* Notification.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF29D9CB26C437DC00B3FEE2 /* Notification.swift in Sources */,
 				CFCD78A7268240220066294A /* DataStackView.swift in Sources */,
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,

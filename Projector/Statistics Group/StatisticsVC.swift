@@ -156,10 +156,36 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        
         //update project database
         projects = ProjectListRepository.instance.getProjectLists()
         //configure categories numbers
         setupCategories()
+        
+        
+        //----------------------------------- chart update block -----------------------------------------------
+        
+        
+        barChartView.barChartController.setStatisticsDictionary()
+        barChartView.barChartController.setCategoriesMaximumValue()
+        barChartView.barChartController.defineItemsArray()
+        barChartView.barChartController.collectionView.reloadData()
+        
+//        print(barChartView.barChartController.moneyMaximumValue, barChartView.barChartController.timeMaximumValue, barChartView.barChartController.fuelMaximumValue)
+        
+        
+//        //grouped Dictionary
+//        setStatisticsDictionary()
+//        //find categoies maximum values
+//        setCategoriesMaximumValue()
+//        //calculate percentage & define items array
+//        defineItemsArray()
+//
+//        collectionView.reloadData()
+        //------------------------------------------------------------------------------------------------------
+        
+        
         
         //----------------table view update-------finished?---------------------
         statisticTableView.reloadData()
