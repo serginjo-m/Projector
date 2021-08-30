@@ -115,6 +115,17 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
     
+    let reminderStepButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(setReminder(button:)), for: .touchUpInside)
+        button.setTitle("Reminder", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.setTitleColor(UIColor.init(red: 104/255, green: 104/255, blue: 104/255, alpha: 1), for: .normal)
+        button.setTitleColor(UIColor.init(red: 245/255, green: 166/255, blue: 35/255, alpha: 1), for: .selected)
+        return button
+    }()
+    
     var stepValuesTitle: UILabel = {
         let label = UILabel()
         label.text = "Step Values"
@@ -140,7 +151,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.addSubview(contentUIView)
         
         //add items to a view
-        [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, completeStepButton,editStepButton, removeStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
+        [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, completeStepButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -155,6 +166,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let step = projectStep else {return}
         stepNameTitle.text = step.name
         completeStepButton.isSelected = step.complete
+        reminderStepButton.isSelected = step.reminder
         stepNumbersCV.step = step
         categoryLabel.text = step.category
         
@@ -287,6 +299,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         present(alertVC, animated: true, completion: nil)
     }
     
+    @objc func setReminder(button: UIButton){
+        print("try to set a reminder")
+    }
+    
     //EDIT ACTION
     @objc func editButtonAction(_ sender: Any){
         guard let step = projectStep else {return}
@@ -339,8 +355,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             return stepItems
         }()
-        editStepViewController.stepPriceSlider.value = Float(step.cost)
-        editStepViewController.stepDistanceSlider.value = Float(step.distance)
+        
         editStepViewController.stepComplete = step.complete
         editStepViewController.editDelegate = self
 
@@ -442,14 +457,19 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         completeStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         editStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
-        editStepButton.leftAnchor.constraint(equalTo: completeStepButton.rightAnchor, constant: 29).isActive = true
+        editStepButton.leftAnchor.constraint(equalTo: completeStepButton.rightAnchor, constant: 24).isActive = true
         editStepButton.widthAnchor.constraint(equalToConstant: 31).isActive = true
         editStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         removeStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
-        removeStepButton.leftAnchor.constraint(equalTo: editStepButton.rightAnchor, constant: 29).isActive = true
+        removeStepButton.leftAnchor.constraint(equalTo: editStepButton.rightAnchor, constant: 24).isActive = true
         removeStepButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         removeStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        
+        reminderStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
+        reminderStepButton.leftAnchor.constraint(equalTo: removeStepButton.rightAnchor, constant: 24).isActive = true
+        reminderStepButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        reminderStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         myStepImagesCV.topAnchor.constraint(equalTo: completeStepButton.bottomAnchor, constant:  30).isActive = true
         myStepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true

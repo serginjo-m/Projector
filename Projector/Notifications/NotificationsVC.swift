@@ -166,11 +166,10 @@ class NotificationTableViewCell: UITableViewCell {
                 
                 
                 
-                //-------------------------------------------------------------------------------------------------------
-                //--------------------- 1. table view must include only events that are not expired ---------------------
-                //--------------------- 2. different types shoud perform different calculations -------------------------
-                //--------------------- 3. icon size shoud be different for each category -------------------------------
-                //-------------------------------------------------------------------------------------------------------
+                //--------------------------------------------------------------------------------------------
+                //---------- 1. table view must include only events that are not expired ---------------------
+                //---------- 2. different types shoud perform different calculations -------------------------
+                //--------------------------------------------------------------------------------------------
                 
                 //constraints update approach
                 categoryIconWidthAnchor?.isActive = false
@@ -178,8 +177,18 @@ class NotificationTableViewCell: UITableViewCell {
                 progressBarWidthAnchor?.isActive = false
                 
                 //icon size
-                categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 21)
-                categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 21)
+                switch object.category{
+                    case "event":
+                        categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 21)
+                        categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 21)
+                    case "step":
+                        categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 22)
+                        categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 32)
+                    default:
+                        categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 21)
+                        categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 21)
+                }
+                
                 //progress
                 progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: percentageValue)
                 
@@ -205,6 +214,8 @@ class NotificationTableViewCell: UITableViewCell {
         switch category {
             case "event":
                 return UIImage(named: "calendarIcon")!
+            case "step":
+                return UIImage(named: "projectIcon")!
             default:
                 return UIImage(named: "calendarIcon")!
         }
@@ -218,6 +229,11 @@ class NotificationTableViewCell: UITableViewCell {
         if let years = dateComponents.year {
             if years > 0 {
                 string += "\(years)y "
+            }
+        }
+        if let months = dateComponents.month{
+            if months > 0{
+                string += "\(months)mth "
             }
         }
         if let days = dateComponents.day{
@@ -236,8 +252,6 @@ class NotificationTableViewCell: UITableViewCell {
             }
         }
         string += "left"
-        
-        
         
         return string
     }

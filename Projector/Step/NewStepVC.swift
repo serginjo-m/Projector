@@ -12,7 +12,7 @@ import os.log
 import Photos
 
 
-class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
+class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
     
     //most for reload data------------------------------------------------------------------------------------------
     weak var delegate: EditViewControllerDelegate?
@@ -109,52 +109,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
-    let priceTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Do You Need to Pay for It?"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    let stepPriceSlider: UISlider = {
-        let slider = UISlider()
-        slider.addTarget(self, action: #selector(priceSliderValueChanged(_:)), for: .valueChanged)
-        slider.maximumValue = 99000
-        slider.value = 1
-        return slider
-    }()
-
-    let stepPriceValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Nill"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
-        return label
-    }()
-    
-    let distanceTitle: UILabel = {
-        let label = UILabel()
-        label.text = "How Far Do You Go?"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
-    let stepDistanceSlider: UISlider = {
-        let slider = UISlider()
-        slider.addTarget(self, action: #selector(distanceSliderValueChanged(_:)), for: .valueChanged)
-        slider.maximumValue = 9000
-        slider.value = 1
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        return slider
-    }()
-    
-    let stepDistanceValueLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Nill"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.init(displayP3Red: 104/255, green: 104/255, blue: 104/255, alpha: 1)
-        return label
-    }()
-    
+   
     //define current date
     let createdDate: String = {
         let calendar = Calendar(identifier: .gregorian)
@@ -163,6 +118,35 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
         return myDate
     }()
+    
+    //Reminder view object
+    private lazy var expandingReminderView = ExpandingReminder(
+        //expand,close & remove button (3 in 1)
+        didTapExpandCompletionHandler: { [weak self] in
+            guard let self = self else {return}
+            
+            let applyButton = self.expandingReminderView.applyReminderButton
+            let expandButton = self.expandingReminderView.reminderExpandIcon
+            
+            //Check what kind of animation should run
+            if applyButton.isSelected == false {
+                self.handleAnimate(active: false)
+            }else{
+                
+                applyButton.isSelected = false
+            }
+            
+        },
+        //apply reminder button
+        didTapApplyCompletionHandler: { [weak self] in
+            guard let self = self else {return}
+            
+            self.handleAnimate(active: true)
+        })
+    
+    //constraints for animation approach
+    var maxHeightAnchor: NSLayoutConstraint?
+    var minHeightAnchor: NSLayoutConstraint?
     
     //define selected project for adding steps to it
     var detailList: ProjectList? {
@@ -182,7 +166,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
+        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, expandingReminderView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -205,24 +189,57 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         newStepCategory.backgroundColor = UIColor(white: 0.97, alpha: 1)
         
     }
-    //Update slider labels every time it appears
-    override func viewWillAppear(_ animated: Bool) {
-        //here I pre configure my labels to refer an actual value of slider when it appears
-        stepPriceValueLabel.text = "\(Int(round(stepPriceSlider.value)))$"
-        stepDistanceValueLabel.text = "\(Int(round(stepDistanceSlider.value)))km"
+    
+    //animate add item menu
+    fileprivate func handleAnimate(active: Bool){
+    
+        guard let minHeight = minHeightAnchor else {return}
+        
+        
+        if minHeight.isActive == true{
+            //hide title
+            self.expandingReminderView.reminderTitle.alpha = 0
+            
+            minHeightAnchor?.isActive = false
+            maxHeightAnchor?.isActive = true
+        }else{
+            maxHeightAnchor?.isActive = false
+            minHeightAnchor?.isActive = true
+        }
+        
+        //"active" can be true only when apply button is tapped
+        if active == false {
+            
+            //rotate icon 45 degrees
+            self.expandingReminderView.reminderExpandIcon.transform = self.expandingReminderView.reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
+        }
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            let grayColor = UIColor.init(white: 214/255, alpha: 1)
+            let greenColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
+            let blackColor = UIColor.init(white: 55/255, alpha: 1)
+            
+            //change color of close button
+            if let maxHeight = self.maxHeightAnchor {
+                self.expandingReminderView.reminderExpandIcon.tintColor = maxHeight.isActive ? blackColor : .white
+                self.expandingReminderView.reminderExpandButton.backgroundColor = maxHeight.isActive ? grayColor : greenColor
+            }
+            //if apply button is tapped, changes background color to green
+            if active == true {
+                self.expandingReminderView.backgroundColor = UIColor.init(red: 211/255, green: 250/255, blue: 227/255, alpha: 1)
+            }
+            //show reminder title 
+            if minHeight.isActive == true{
+                self.expandingReminderView.reminderTitle.alpha = 1
+            }
+            
+            self.view.layoutIfNeeded()
+            
+        }, completion: nil)
+        
         
     }
-    //Price
-    @objc func priceSliderValueChanged(_ sender: UISlider) {
-        // here I pass my priceSlider value to the text label
-        stepPriceValueLabel.text = "\(Int(round(sender.value)))$"
-    }
-    //Distance
-    @objc func distanceSliderValueChanged(_ sender: UISlider) {
-        // here I pass my priceSlider value to the text label
-        stepDistanceValueLabel.text = "\(Int(round(sender.value)))km"
-    }
-
     
     //back to previous view
     @objc func backAction(_ sender: Any) {
@@ -257,6 +274,13 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
                 UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
             }
             
+            //create step notification
+            if let notification = self.expandingReminderView.notification{
+                notification.name = stepTemplate.name
+                notification.category = "step"
+                notification.parentId = stepTemplate.id
+                ProjectListRepository.instance.createNotification(notification: notification)
+            }
             
         }
     }
@@ -282,10 +306,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         for item in stepItems{
             stepTemplate.itemsArray.append(item)
         }
-        //price
-        stepTemplate.cost = Int(round(self.stepPriceSlider.value))
-        //distance
-        stepTemplate.distance = Int(round(self.stepDistanceSlider.value))
+        if self.expandingReminderView.notification != nil{
+            stepTemplate.reminder = true//inform that reminder exist
+        }
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
@@ -304,7 +327,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateSaveButtonState()
         navigationItem.title = textField.text
-        //projectNameLabel.text = textField.text
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -321,8 +343,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     
     
     
-    //IMAGES
+    //-------------------------------------------------------------------------------------------------
     //------------------------ not realy sure ---------------------- for what?
+    //------------------------ 1. Images removement won't work properly -------------------------------
+    //-------------------------------------------------------------------------------------------------
+    
+    
     func deleteUrl(int: Int){
         selectedPhotoURLStringArray.remove(at: int)
     }
@@ -362,16 +388,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         nameTitle.translatesAutoresizingMaskIntoConstraints = false
         categoryTitle.translatesAutoresizingMaskIntoConstraints = false
         photoTitle.translatesAutoresizingMaskIntoConstraints = false
-        priceTitle.translatesAutoresizingMaskIntoConstraints = false
-        distanceTitle.translatesAutoresizingMaskIntoConstraints = false
+       
         stepNameTextField.translatesAutoresizingMaskIntoConstraints = false
         lineUIView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
-        stepPriceSlider.translatesAutoresizingMaskIntoConstraints = false
-        stepPriceValueLabel.translatesAutoresizingMaskIntoConstraints = false
-        stepDistanceValueLabel.translatesAutoresizingMaskIntoConstraints = false
-        stepDistanceSlider.translatesAutoresizingMaskIntoConstraints = false
+   
         
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -397,36 +419,15 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
         viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        stepDistanceValueLabel.centerYAnchor.constraint(equalTo: stepDistanceSlider.centerYAnchor).isActive = true
-        stepDistanceValueLabel.leftAnchor.constraint(equalTo: stepDistanceSlider.rightAnchor, constant:  13).isActive = true
-        stepDistanceValueLabel.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        stepDistanceValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        stepDistanceSlider.topAnchor.constraint(equalTo: distanceTitle.bottomAnchor, constant:  13).isActive = true
-        stepDistanceSlider.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
-        stepDistanceSlider.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -120).isActive = true
-        stepDistanceSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        distanceTitle.topAnchor.constraint(equalTo: stepPriceSlider.bottomAnchor, constant:  21).isActive = true
-        distanceTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
-        distanceTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        distanceTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
-        stepPriceValueLabel.centerYAnchor.constraint(equalTo: stepPriceSlider.centerYAnchor).isActive = true
-        stepPriceValueLabel.leftAnchor.constraint(equalTo: stepPriceSlider.rightAnchor, constant:  13).isActive = true
-        stepPriceValueLabel.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        stepPriceValueLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        stepPriceSlider.topAnchor.constraint(equalTo: priceTitle.bottomAnchor, constant:  13).isActive = true
-        stepPriceSlider.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
-        stepPriceSlider.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -120).isActive = true
-        stepPriceSlider.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        priceTitle.topAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant:  30).isActive = true
-        priceTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
-        priceTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        priceTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
+        expandingReminderView.bottomAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant: 88).isActive = true
+        expandingReminderView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
+        expandingReminderView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        //height constraints animation
+        minHeightAnchor = expandingReminderView.heightAnchor.constraint(equalToConstant: 46)
+        maxHeightAnchor = expandingReminderView.heightAnchor.constraint(equalToConstant: 432)
+        minHeightAnchor?.isActive = true
+
         newStepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  20).isActive = true
         newStepImages.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         newStepImages.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true

@@ -59,6 +59,7 @@
 		CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */; };
 		CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */; };
 		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
+		CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72D38F2467E86F007FA034 /* StepItemViewController.swift */; };
@@ -160,6 +161,7 @@
 		CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectViewController.swift; sourceTree = "<group>"; };
 		CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
+		CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingReminder.swift; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF72D38F2467E86F007FA034 /* StepItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemViewController.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
+				CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */,
 			);
 			path = Step;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */,
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
+				CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */,
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,

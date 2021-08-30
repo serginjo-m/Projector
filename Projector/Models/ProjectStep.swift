@@ -27,7 +27,7 @@ class ProjectStep: Object {
     override static func primaryKey() -> String {
         return "id"
     }
-    
+    @objc dynamic var reminder = false//step has a reminder
     @objc dynamic var complete = false
     override var description: String{
         return "\(name)"

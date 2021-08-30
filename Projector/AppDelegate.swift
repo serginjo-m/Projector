@@ -21,9 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 12,
+            schemaVersion: 15,
             migrationBlock: { migration , oldSchemaVersion in
-                if oldSchemaVersion < 12 {
+                if oldSchemaVersion < 15 {
                     
                 }
             }

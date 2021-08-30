@@ -11,7 +11,6 @@ import RealmSwift
 
 class Notification: Object {
     
-    //MARK: Properties
     
     //notification title
     @objc dynamic var name = ""
@@ -21,12 +20,12 @@ class Notification: Object {
     @objc dynamic var complete = false
     // competition date
     @objc dynamic var eventDate: Date = Date()
+    //is time included
+    @objc dynamic var eventTime = false
     //date start point
     @objc dynamic var startDate = Date()
-    
-    
-    
-    
+    //link to parent object
+    @objc dynamic var parentId = ""
     
     //id
     @objc dynamic var id = UUID().uuidString

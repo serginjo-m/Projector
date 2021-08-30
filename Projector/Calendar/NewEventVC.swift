@@ -223,15 +223,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         tapGestureReconizer.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGestureReconizer)
 
-        //set delegate to name text field
+        //set delegate to  text field
         nameTextField.delegate = self
         dateTextField.delegate = self
         startTimeTextField.delegate = self
         endTimeTextField.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-       
     }
     
     //back to previous view
@@ -257,12 +253,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             }
             //creates new notification
             ProjectListRepository.instance.createNotification(notification: notification)
-            
-            
-            
-            
-            
-            
             
             //creates new project instance
             ProjectListRepository.instance.createEvent(event: event)
