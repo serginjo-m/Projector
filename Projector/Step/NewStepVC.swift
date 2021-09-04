@@ -120,7 +120,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }()
     
     //Reminder view object
-    private lazy var expandingReminderView = ExpandingReminder(
+    lazy var expandingReminderView = ExpandingReminder(
         //expand,close & remove button (3 in 1)
         didTapExpandCompletionHandler: { [weak self] in
             guard let self = self else {return}
@@ -160,7 +160,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         //add scroll containers
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
@@ -229,7 +229,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             if active == true {
                 self.expandingReminderView.backgroundColor = UIColor.init(red: 211/255, green: 250/255, blue: 227/255, alpha: 1)
             }
-            //show reminder title 
+            //show reminder title
             if minHeight.isActive == true{
                 self.expandingReminderView.reminderTitle.alpha = 1
             }
@@ -273,22 +273,14 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 
                 UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
             }
-            
-            //create step notification
-            if let notification = self.expandingReminderView.notification{
-                notification.name = stepTemplate.name
-                notification.category = "step"
-                notification.parentId = stepTemplate.id
-                ProjectListRepository.instance.createNotification(notification: notification)
-            }
-            
+
         }
     }
     
     //creates step instance from values :)))))))))
     func defineStepTemplate() -> ProjectStep{
         let stepTemplate = ProjectStep()
-        //id
+        //if id exist(edit mode), replace it
         if let id = stepID {
             stepTemplate.id = id
         }
@@ -306,9 +298,24 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         for item in stepItems{
             stepTemplate.itemsArray.append(item)
         }
-        if self.expandingReminderView.notification != nil{
-            stepTemplate.reminder = true//inform that reminder exist
+        
+        if let existingNotification = self.expandingReminderView.notification{
+            
+            //because I won't modify existing in data base notification,
+            //create new one based on existing and assign it to step
+            let notification = Notification()
+            notification.eventDate = existingNotification.eventDate
+            notification.eventTime = existingNotification.eventTime
+            notification.startDate = existingNotification.startDate
+            
+            //take some data from step object
+            notification.name = stepTemplate.name
+            notification.category = "step"
+            notification.parentId = stepTemplate.id
+            //finaly assign reminder to step
+            stepTemplate.reminder = notification
         }
+        
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete

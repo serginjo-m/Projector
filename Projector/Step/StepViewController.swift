@@ -166,7 +166,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let step = projectStep else {return}
         stepNameTitle.text = step.name
         completeStepButton.isSelected = step.complete
-        reminderStepButton.isSelected = step.reminder
+        reminderStepButton.isSelected = step.reminder != nil ? true : false//convert to bool value
         stepNumbersCV.step = step
         categoryLabel.text = step.category
         
@@ -300,7 +300,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func setReminder(button: UIButton){
-        print("try to set a reminder")
+        print("button try to set a reminder")
     }
     
     //EDIT ACTION
@@ -358,7 +358,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         editStepViewController.stepComplete = step.complete
         editStepViewController.editDelegate = self
-
+        //unwrap an optional value
+        if let reminder = step.reminder{
+            editStepViewController.expandingReminderView.notification = reminder
+        }
+        
         self.present(editStepViewController, animated: true, completion: nil)
     }
     

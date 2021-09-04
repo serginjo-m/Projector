@@ -205,4 +205,8 @@ class ProjectListRepository {
             realm.delete(note)
         })
     }
+    
+    func getNotification(id: String) -> Notification? {
+        return realm.object(ofType: Notification.self, forPrimaryKey: id)
+    }
 }

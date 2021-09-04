@@ -11,7 +11,22 @@ import UIKit
 class ExpandingReminder: UIView {
     
     //notification model
-    var notification: Notification?
+    var notification: Notification? {
+        didSet{//can be set from database during page init or from reminder
+            //convert reminder to active state
+            setReminderToActiveState()
+            //unwrap optional value
+            if let notification = self.notification {
+                //because name can only be defined by previously saved in database reminder
+                if notification.name.isEmpty == false{
+                    //hold inside var, because I know that object saved to database & should be removed if user
+                    self.notificationId = notification.id
+                }
+            }
+        }
+    }
+    //saved to realm Notification object id, so it can be removed when user do so
+    var notificationId: String?
     
     let reminderTitle: UILabel = {
         let label = UILabel()
@@ -137,45 +152,49 @@ class ExpandingReminder: UIView {
         didTapExpandCompletionHandler()
     }
     
-    @objc func didTapApplyButton(button: UIButton) {
-        
-        //if apply create an instance of Notification object
-        self.notification = Notification()
-        //hide or reveal all reminder form
-        hideRevealContent(active: applyReminderButton.isSelected)
-        
-        //IMPORTANT: indicates that user confirmed reminder !!!!
-        applyReminderButton.isSelected = true
-        
-        //unwrap optionals
-        if let dateString = dateLabel.text, let timeString = timeLabel.text, let notification = self.notification {
-            
-            //define string for reminderTitle label
-            var string = ""
+    //reminder final string
+    fileprivate func setReminderString() {
+    
+        if let notification = self.notification, let timeString = timeLabel.text, let dateString = dateLabel.text{
+            //-------------------------------------------------------------------------------------------------
+            //----------------- not the best solution, but let's move on --------------------------------------
+            //-------------------------------------------------------------------------------------------------
             //because when time is set it changes string to shorter than 12 characters :) (a bit ....)
-            if timeString.count < 12 {
-                //set date & time to label
-                string = "Reminder: \(dateString) \(timeString)"
-                
+            let timeIsSet: Bool = timeString.count < 12 ? true : false
+            let dateIsSet: Bool = dateString.count > 12 ? true : false
+            
+            //set Notification event date
+            //if user specified reminder time
+            if timeIsSet{
                 //nofify that time is applied
                 notification.eventTime = true
                 //take date from date picker
                 let date = datePicker.date
-                
                 //time
                 let components = Calendar.current.dateComponents([.hour, .minute], from: timePicker.date)
                 if let hour = components.hour, let minute = components.minute{
                     //final event date notification formated from date picker(date) & time picker (time only)
                     notification.eventDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: date)!
                 }
-            }else{
-                //only date applied
-                string = "Reminder: \(dateString)"
+            }else if dateIsSet{//if date without time point
                 notification.eventDate = datePicker.date
             }
             
-            //title contain two colors
+            //final reminder string
+            var string = "Reminder: "
+            //if time applied to reminder
+            if notification.eventTime{
+                //set date & time to label
+                string += dateToString(date: notification.eventDate, timeString: true, dateString: true)
+            }else{
+                //only date applied
+                string += dateToString(date: notification.eventDate, timeString: false, dateString: true)
+                
+            }
+            
+            //first title color
             reminderTitle.textColor = UIColor.init(red: 95/255, green: 178/255, blue: 130/255, alpha: 1)
+            //second part with diff color
             reminderTitle.attributedText = prepareMutableString(
                 string: string,
                 fontSize: 15,
@@ -183,20 +202,62 @@ class ExpandingReminder: UIView {
                 location: 10,
                 numberValue: string.count - 10)
         }
+
+    }
+    //apply button function
+    @objc func didTapApplyButton(button: UIButton) {
+        
+        
+        //hide or reveal all reminder form
+        hideRevealContent(active: applyReminderButton.isSelected)
+        
+        //if apply create an instance of Notification object
+        self.notification = Notification()
         
         //call parent func
         didTapApplyCompletionHandler()
+    }
+    
+    //convert reminder to active state
+    func setReminderToActiveState(){
+        
+        //IMPORTANT: indicates that user confirmed reminder !!!!
+        applyReminderButton.isSelected = true
+        //unwrap optional value
+        if let notification = self.notification {
+            //green color
+            backgroundColor = UIColor.init(red: 211/255, green: 250/255, blue: 227/255, alpha: 1)
+            //convert Notification event date to reminder title string
+            setReminderString()
+            
+            //edit mode requires plus icon transformation when view controller is init
+            if notification.parentId.isEmpty == false{
+                reminderExpandIcon.transform = reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
+            }
+        }
     }
     
     
     //hide or reveal content
     fileprivate func hideRevealContent(active: Bool){
         
-        //else block runs when reminder applied & user try to remove it
+        //else block execute when reminder applied & user try to remove it
         guard  active == false else {
             
+            //remove previously created notification object,
+            self.notification = nil
+            
+            //remove notification object from data base, if it exist
+            if let id = self.notificationId{
+                //get object by id
+                if let reminderObject = ProjectListRepository.instance.getNotification(id: id) {
+                    //remove object
+                    ProjectListRepository.instance.deleteNotificationNote(note: reminderObject)
+                }
+            }
+            
             //expect call here only from expand button & while apply == true
-            //so before unblock set all to default value
+            //so before unblock set all views to default value
             applyReminderButton.isEnabled = false
             self.reminderTitle.text = "Set a Reminder?"
             self.reminderTitle.textColor = UIColor.init(white: 42/255, alpha: 1)
@@ -204,17 +265,13 @@ class ExpandingReminder: UIView {
             self.timeLabel.text = "This is time"
             self.datePicker.date = Date()
             self.timePicker.date = Date()
+            //reminder background to gray color
             backgroundColor = UIColor.init(white: 239/255, alpha: 1)
-            
-            //remove previously created notification object
-            self.notification = nil
-    
             
             //rotate icon 45 degrees
             reminderExpandIcon.transform = reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
             
             return
-            
         }
         
         //hide views for compact view mode & reveal for full mode
@@ -310,30 +367,39 @@ class ExpandingReminder: UIView {
     
     //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
-
-        //date
-        let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: sender.date)
-        //configure date label from date components
-        if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday {
-            let weekDayString = dayOfWeekLetter(for: weekday)
-            let monthStr = monthString(for: month)
-            dateLabel.text = ("\(weekDayString), \(day) \(monthStr) \(year)")
-        }
+        //date label text from date picker Date
+        dateLabel.text = dateToString(date: sender.date, timeString: false, dateString: true)
         //unblock apply button
         applyReminderButton.isEnabled = true
     }
     
     //start time picker action
     @objc func timeChanged(_ sender: UIDatePicker) {
-        //time
-        let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: sender.date)
-        //configure time label from date components
-        if let hour = components.hour, let minute = components.minute{
-            timeLabel.text = "at \(hour):\(minute)"
-        }
+        //time label text from time picker Date
+        timeLabel.text = dateToString(date: sender.date, timeString: true, dateString: false)
     }
     
-   
+    //creates string from Date
+    func dateToString(date: Date, timeString: Bool, dateString: Bool) -> String{
+        
+        //final string
+        var string = ""
+        
+        let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: date)
+        if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday, let hour = components.hour, let minute = components.minute {
+            //string must contain date
+            if dateString == true{
+                let weekDayString = dayOfWeekLetter(for: weekday)
+                let monthStr = monthString(for: month)
+                string += ("\(weekDayString), \(day) \(monthStr) \(year) ")
+            }
+            //string must contain time
+            if timeString == true{
+                string += "at \(hour):\(minute)"
+            }
+        }
+        return string
+    }
     
     private func dayOfWeekLetter(for dayNumber: Int) -> String {
         switch dayNumber {
