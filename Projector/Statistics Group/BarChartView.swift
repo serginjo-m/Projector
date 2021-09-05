@@ -52,9 +52,8 @@ class BarChartCell: GenericCell<BarData>{
     
     override var item: BarData!{
         didSet{
-
             //visible or hidden text
-            indexLabel.textColor = item.index % 6 == 0 ? UIColor.init(white: 0.4, alpha: 1) : .clear
+            indexLabel.textColor = item.index % 6 == 0 || item.isLastOne ? UIColor.init(white: 0.4, alpha: 1) : .clear
             
             //index == number string
             indexLabel.text = String(item.index + 1)
@@ -86,7 +85,7 @@ class BarChartCell: GenericCell<BarData>{
         
             //----------------------------------------------------------------------------------------------------
             //
-            // 2.    Need something to do with 2+ maximums in the same day
+            // 2.    Need something to do with 2+ maximums on the same day
             //
             //----------------------------------------------------------------------------------------------------
            
@@ -226,6 +225,7 @@ class BarChartCell: GenericCell<BarData>{
 //dataBase
 struct BarData {
     let index: Int
+    let isLastOne: Bool//reveal last day number
     let categoryPercentage: CategoryValue
 }
 
@@ -363,9 +363,12 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
             }
             
             
+            //reveal last day number
+            let lastItem = days.count == index + 1 ? true : false
+            
             //BarData struct is .init (because of declare GENERICS TYPE,
             //where: GenericCell<U>, U == BarChartCell, BarData
-            items.append(.init(index: index, categoryPercentage: CategoryValue(money: moneyPercentage, time: timePercentage, fuel: fuelPercentage)))
+            items.append(.init(index: index, isLastOne: lastItem, categoryPercentage: CategoryValue(money: moneyPercentage, time: timePercentage, fuel: fuelPercentage)))
             
             
         }
@@ -391,9 +394,10 @@ class BarChartController: GenericController<BarChartCell, BarData, UICollectionR
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         
-        //-------------------------------------------------------------------------------------------------------------
-        //-- 1. total width will be devided by number of days, but it will also live a small gap on the right of cv
-        //-------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------
+        //------------------- 1. total width will be devided by number of days, ---------------------------
+        //------------------  but it will also live a small gap on the right of cv ------------------------
+        //-------------------------------------------------------------------------------------------------
         
         
         let width: CGFloat = CGFloat((Int(view.frame.width) / days.count))
