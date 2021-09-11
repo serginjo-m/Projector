@@ -20,10 +20,23 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         }
     }
     
-    //grouped events by date
-    var groupedEventsByDate = [[Event]]()
+    // list of holidays
+    var listOfHolidays = [HolidayDetail](){
+        didSet{
+            
+            //Dispatch, so it works indipendently and not slow down all app
+            DispatchQueue.main.async {
+                //creates grouped holidays dictionary
+                self.assembleGroupedHolidaysByMonth()
+            }
+        }
+    }
     
-    var groupedDictionary = [ Date : [Event]]()
+    //holidays dictionary key == date
+    var groupedHolidayDictionary = [Date: [HolidayDetail]]()
+    //events dictionary grouped by date
+    var groupedEventDictionary = [ Date : [Event]]()
+    
     
     //transparent black view that covers all content
     //IMPORTANT:
@@ -36,9 +49,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         return view
     }()
     
-    
-    
-
     //------------------------- a bit trick becouse of constraint error ---------------------------
     //need to give a valid frame to event elements when initialize it
     //so error "Unable to simultaneously satisfy constraints" is gone
@@ -147,6 +157,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
     // MARK: Initializers
     init(baseDate: Date, selectedDateChanged: @escaping ((Date) -> Void) ) {
+        
         //what is the diff btwn selectedDate....
         self.selectedDate = baseDate
         //.... and baseDate
@@ -158,6 +169,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         modalPresentationStyle = .overCurrentContext
         modalTransitionStyle = .crossDissolve
         definesPresentationContext = true
+        //IMPORTANT!!!
+        //because it starts to fetch information before view displays
+        //so when it appears all information is ready
+        getHolidayResults()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -208,22 +223,27 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //creates Dictionary and ....
     func assembleGroupedEvents(){
         //[ Date : [Event]]
-        groupedDictionary = Dictionary(grouping: events) { (event) -> Date in
+        groupedEventDictionary = Dictionary(grouping: events) { (event) -> Date in
             // roll back to start of day so time no metter
             return calendar.startOfDay(for: event.date!)
         }
-        //[[Event]]
-        groupedDictionary.keys.forEach {(key) in
-
-            let values = groupedDictionary[key]
-
-            //an array of events for every key or empty arr
-            groupedEventsByDate.append(values ?? [])
-        }
     }
     
+    //creates holiday Dictionary key == date
+    func assembleGroupedHolidaysByMonth(){
+        
+        //[ Date : [Event]]
+        groupedHolidayDictionary = Dictionary(grouping: listOfHolidays) { (holiday) -> Date in
+            
+            if let date = holiday.date.datetime.dateObject {
+                return date
+            }
+            return Date()
+        }
+        
+    }
     
-        func setupConstraints(){
+    func setupConstraints(){
         headerView.translatesAutoresizingMaskIntoConstraints = false
         calendarCollectionView.translatesAutoresizingMaskIntoConstraints = false
         footerView.translatesAutoresizingMaskIntoConstraints = false
@@ -339,12 +359,11 @@ extension CalendarViewController {
     func generateDay( offsetBy dayOffset: Int, for baseDate: Date, isWithinDisplayedMonth: Bool) -> Day {
         
         let date = calendar.date( byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
-        
         //test date like a Dictionary[key] in groupedDictionary to find out is there an event
-        let dateWithEvent = (groupedDictionary[date] != nil) ? true : false
+        let dateWithEvent = (groupedEventDictionary[date] != nil) ? true : false
+        let dateWithHoliday = (groupedHolidayDictionary[date] != nil) ? true : false
         
-        
-        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: calendar.isDate(date, inSameDayAs: selectedDate), isWithinDisplayedMonth: isWithinDisplayedMonth,  containEvent: dateWithEvent)
+        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: calendar.isDate(date, inSameDayAs: selectedDate), isWithinDisplayedMonth: isWithinDisplayedMonth,  containEvent: dateWithEvent, containHoliday: dateWithHoliday)
     }
     
     // add extra bit to the end of the month, if needed
@@ -374,6 +393,13 @@ extension CalendarViewController {
         case metadataGeneration
     }
 }
-
-
+// holiday information API request
+extension CalendarViewController {
+    func getHolidayResults() {
+        let holidayRequest = HolidayRequest(countryCode: "IT")//Italian Holidays
+        holidayRequest.getHolidays {[weak self] result in//weak self prevent any retain cycles
+            self?.listOfHolidays = result
+        }
+    }
+}
 

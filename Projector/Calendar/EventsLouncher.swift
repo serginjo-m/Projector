@@ -62,7 +62,7 @@ extension CalendarViewController {
         
 //        eventElements.selectedDateLabel.text = date.description(with: .current)
         
-        if let events = groupedDictionary[date] {
+        if let events = groupedEventDictionary[date] {
             //clear before
             eventElements.events.removeAll()
             //fill new data

@@ -65,11 +65,21 @@ class CalendarCell: UICollectionViewCell{
         return label
     }()
     
-    private lazy var circleImage: UIImageView = {
+    private lazy var topCircleImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "redCircle")
+        image.image = image.image?.withRenderingMode(.alwaysTemplate)
+        image.tintColor = .clear
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.isHidden = true
+        return image
+    }()
+    
+    private lazy var bottomCircleImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "blueCircle")
+        image.image = image.image?.withRenderingMode(.alwaysTemplate)
+        image.tintColor = .clear
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
@@ -83,14 +93,15 @@ class CalendarCell: UICollectionViewCell{
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        
         isAccessibilityElement = true
         accessibilityTraits = .button
-        
         
         contentView.addSubview(selectionBackgroundView)
         
         contentView.addSubview(numberLabel)
-        contentView.addSubview(circleImage)
+        contentView.addSubview(topCircleImage)
+        contentView.addSubview(bottomCircleImage)
     }
     
     required init?(coder: NSCoder) {
@@ -111,23 +122,26 @@ class CalendarCell: UICollectionViewCell{
         let size = traitCollection.horizontalSizeClass == .compact ?
             min(min(frame.width, frame.height) - 10, 60) : 45
         
-        // 2
         NSLayoutConstraint.activate([
-            
-            numberLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             numberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            numberLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             
             selectionBackgroundView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor),
             selectionBackgroundView.centerXAnchor.constraint(equalTo: numberLabel.centerXAnchor),
             selectionBackgroundView.widthAnchor.constraint(equalToConstant: size),
             selectionBackgroundView.heightAnchor.constraint(equalTo: selectionBackgroundView.widthAnchor),
             
-            circleImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            circleImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
-            circleImage.widthAnchor.constraint(equalToConstant: 8),
-            circleImage.heightAnchor.constraint(equalToConstant: 8)
-            
-            ])
+            topCircleImage.topAnchor.constraint(equalTo: selectionBackgroundView.bottomAnchor, constant: 4),
+            topCircleImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
+            topCircleImage.widthAnchor.constraint(equalToConstant: 8),
+            topCircleImage.heightAnchor.constraint(equalToConstant: 8),
+        
+            bottomCircleImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
+            bottomCircleImage.widthAnchor.constraint(equalToConstant: 8),
+            bottomCircleImage.heightAnchor.constraint(equalToConstant: 8),
+            bottomCircleImage.topAnchor.constraint(equalTo: topCircleImage.bottomAnchor, constant: 4)
+        ])
+        
         
         selectionBackgroundView.layer.cornerRadius = size / 2
         
@@ -141,6 +155,7 @@ class CalendarCell: UICollectionViewCell{
 }
 
 private extension CalendarCell {
+    
     //apply different styles based on the selection status
     func updateSelectionStatus() {
         guard let day = day else { return }
@@ -151,11 +166,25 @@ private extension CalendarCell {
             applyDefaultStyle(isWithinDisplayedMonth: day.isWithinDisplayedMonth)
         }
         
-        if day.containEvent {
-            circleImage.isHidden = false
-        }else{
-            circleImage.isHidden = true
+        let redColor = UIColor.init(red: 243/255, green: 103/255, blue: 115/255, alpha: 1)
+        let greenColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
+        
+        //reset tint color
+        topCircleImage.tintColor = .clear
+        bottomCircleImage.tintColor = .clear
+        //check for both, so need to use 2 circles
+        let containEventHoliday = day.containEvent && day.containHoliday ? true : false
+        
+        //if both
+        if containEventHoliday{
+            topCircleImage.tintColor = redColor
+            bottomCircleImage.tintColor = greenColor
+        }else if day.containEvent{//if event
+            topCircleImage.tintColor = redColor
+        }else if day.containHoliday{//if holiday
+            topCircleImage.tintColor = greenColor
         }
+        
     }
     
     // small display size computed property

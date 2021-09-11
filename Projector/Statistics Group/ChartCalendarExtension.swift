@@ -61,12 +61,12 @@ extension BarChartController {
         return days
     }
     
-    // 7 : Generate Days For Calendar
+    // 7 : Generate Days For Bar Chart
     func generateDay( offsetBy dayOffset: Int, for baseDate: Date) -> Day {
         
         let date = calendar.date( byAdding: .day, value: dayOffset, to: baseDate) ?? baseDate
         
-        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: false, isWithinDisplayedMonth: true,  containEvent: false)
+        return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: false, isWithinDisplayedMonth: true,  containEvent: false, containHoliday: false)
     }
     
     

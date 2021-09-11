@@ -77,7 +77,7 @@ class CalendarHeaderView: UIView {
         case 3:
             return "TUE"
         case 4:
-            return "WEW"
+            return "WED"
         case 5:
             return "THU"
         case 6:

@@ -18,4 +18,6 @@ struct Day {
     let isWithinDisplayedMonth: Bool
     //Keeps track of whether this date has an event
     let containEvent: Bool
+    //Keeps track of whether this date has a holiday
+    let containHoliday: Bool
 }

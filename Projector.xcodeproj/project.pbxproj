@@ -26,6 +26,8 @@
 		CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC9264D87D20092F5FA /* Canvas View.swift */; };
 		CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904C2656E7DE00701943 /* BaseCVController.swift */; };
 		CF18904F265D724400701943 /* GenericsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904E265D724400701943 /* GenericsScheme.swift */; };
+		CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A411D26E4C13B009EB276 /* Holiday.swift */; };
+		CF1A412026E4C366009EB276 /* HolidayRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A411F26E4C366009EB276 /* HolidayRequest.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
 		CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */; };
 		CF242F4D26BC5C2900F44A2F /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */; };
@@ -126,6 +128,8 @@
 		CF17FDC9264D87D20092F5FA /* Canvas View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
 		CF18904C2656E7DE00701943 /* BaseCVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCVController.swift; sourceTree = "<group>"; };
 		CF18904E265D724400701943 /* GenericsScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericsScheme.swift; sourceTree = "<group>"; };
+		CF1A411D26E4C13B009EB276 /* Holiday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Holiday.swift; sourceTree = "<group>"; };
+		CF1A411F26E4C366009EB276 /* HolidayRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayRequest.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectExtension.swift; sourceTree = "<group>"; };
 		CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
@@ -268,6 +272,15 @@
 				CF17FDC9264D87D20092F5FA /* Canvas View.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		CF1A411C26E4BDC1009EB276 /* Holidays API */ = {
+			isa = PBXGroup;
+			children = (
+				CF1A411D26E4C13B009EB276 /* Holiday.swift */,
+				CF1A411F26E4C366009EB276 /* HolidayRequest.swift */,
+			);
+			path = "Holidays API";
 			sourceTree = "<group>";
 		};
 		CF1D3E0D2683A1D200C10798 /* Project */ = {
@@ -480,6 +493,7 @@
 		CFD88DF52595EBAE00B726FF /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				CF1A411C26E4BDC1009EB276 /* Holidays API */,
 				CF059F462598B47500729A74 /* NewEventVC.swift */,
 				CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */,
 				CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */,
@@ -662,6 +676,7 @@
 				CF0DD7DB2450212A0028ABB1 /* DetailStepCell.swift in Sources */,
 				CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */,
 				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,
+				CF1A412026E4C366009EB276 /* HolidayRequest.swift in Sources */,
 				CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */,
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
@@ -673,6 +688,7 @@
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
 				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
+				CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
 				CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
