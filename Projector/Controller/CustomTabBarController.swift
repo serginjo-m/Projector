@@ -7,15 +7,41 @@
 //
 
 import UIKit
+import RealmSwift
 //Bottom Navigation
 class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //------------------------under construction var -----------------------
     //date as a start point for calendar
     let date = Date()
-
+    
+    //list of holidays received from server
+    var listOfHolidays = [HolidayDetail](){
+        didSet{
+            //Dispatch, so it works indipendently and not slow down all app
+            DispatchQueue.main.async {
+                //creates grouped holidays dictionary
+                self.convertHolidaysToEvents()
+            }
+        }
+    }
+    
+    //---------------------------------------------------------------------------------------------
+    //get ALL events, for checking, is data base contain previously downloaded holidays from server
+    var events: Results<Event>{
+        get{
+            return ProjectListRepository.instance.getEvents()
+        }
+        set{
+            //update?
+        }
+    }
     
     override func viewDidLoad() {
+        
+        //------------------------- optimization needed -------------------------------------------
+        //check if holiday data was downloaded
+        downloadHolidayEvents()
         
         self.delegate = self
         
@@ -175,4 +201,46 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         return true
     }
     
+}
+
+extension CustomTabBarController {
+    
+    //-------------------------- need to find a better way to do this check --------------------------------
+    //check if holiday objects was downloaded
+    func downloadHolidayEvents() {
+        var holidayArr = [Event]()
+        
+        events.forEach{
+            if let category = $0.category{
+                if category == "holiday"{
+                    holidayArr.append($0)
+                }
+            }
+        }
+        //if no holiday events was founded, send a request to server
+        if holidayArr.count == 0{
+            getHolidayResults()
+        }
+    }
+    
+        
+    func getHolidayResults() {
+    
+        let holidayRequest = HolidayRequest(countryCode: "IT")//Italian Holidays
+        holidayRequest.getHolidays {[weak self] result in//weak self prevent any retain cycles
+            self?.listOfHolidays = result
+        }
+    }
+    
+    //convert Holiday obj to Event obj
+    func convertHolidaysToEvents(){
+        self.listOfHolidays.forEach{
+            let holidayEvent = Event()
+            holidayEvent.category = "holiday"
+            holidayEvent.title = $0.name
+            holidayEvent.date = $0.date.datetime.dateObject
+            holidayEvent.descr = $0.description
+            ProjectListRepository.instance.createEvent(event: holidayEvent)
+        }
+    }
 }
