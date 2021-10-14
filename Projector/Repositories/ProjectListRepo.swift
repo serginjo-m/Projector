@@ -209,4 +209,21 @@ class ProjectListRepository {
     func getNotification(id: String) -> Notification? {
         return realm.object(ofType: Notification.self, forPrimaryKey: id)
     }
+    
+    //create user
+    func createUser(user: User){
+        try! realm.write ({
+            realm.add(user)
+        })
+    }
+    
+    func getAllUsers() -> Results<User> {
+        return realm.objects(User.self)
+    }
+    
+    func updateUserStatus(isLogined: Bool, user: User){
+        try! realm.write {
+            user.isLogined = isLogined
+        }
+    }
 }

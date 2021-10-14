@@ -167,7 +167,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //Camera
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
             if response {
@@ -214,6 +213,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         //dayActivity object for today
         createDayActivity()
+        //check if app is lounch for the first time, so intro view controller shows
+        isAppAlreadyLaunchedOnce()
     }
     
     //MARK: Methods
@@ -588,5 +589,35 @@ class ProjectCell: UICollectionViewCell{
         projectImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         projectImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
         
+    }
+}
+
+extension ProjectViewController {
+    
+    func isAppAlreadyLaunchedOnce(){
+        
+        let defaults = UserDefaults.standard
+        
+        if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
+            
+           
+//            let layout = UICollectionViewFlowLayout()
+//            layout.scrollDirection = .horizontal
+//
+//            navigationController?.present(SwipingController(collectionViewLayout: layout), animated: true, completion: nil)
+            
+            
+        } else {
+            
+            //App launched first time
+            defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+            
+            //app is already launched once!
+            
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            
+            navigationController?.present(SwipingController(collectionViewLayout: layout), animated: true, completion: nil)
+        }
     }
 }
