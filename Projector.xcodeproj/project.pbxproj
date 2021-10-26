@@ -32,6 +32,8 @@
 		CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */; };
 		CF242F4D26BC5C2900F44A2F /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */; };
 		CF2472F72713606E002D6DCA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2472F62713606E002D6DCA /* User.swift */; };
+		CF2472FA2718B49C002D6DCA /* DetailViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2472F92718B49C002D6DCA /* DetailViewControllerDelegate.swift */; };
+		CF2472FC2718B4FE002D6DCA /* EditViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2472FB2718B4FE002D6DCA /* EditViewControllerDelegate.swift */; };
 		CF24E681242D1BAD00EEA027 /* Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24E680242D1BAD00EEA027 /* Restore.swift */; };
 		CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */; };
 		CF279E362464115B00B79978 /* StepAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF279E352464115B00B79978 /* StepAddItemCell.swift */; };
@@ -141,6 +143,8 @@
 		CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectExtension.swift; sourceTree = "<group>"; };
 		CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		CF2472F62713606E002D6DCA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CF2472F92718B49C002D6DCA /* DetailViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewControllerDelegate.swift; sourceTree = "<group>"; };
+		CF2472FB2718B4FE002D6DCA /* EditViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewControllerDelegate.swift; sourceTree = "<group>"; };
 		CF24E680242D1BAD00EEA027 /* Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restore.swift; sourceTree = "<group>"; };
 		CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProjectCateg.swift; sourceTree = "<group>"; };
 		CF279E352464115B00B79978 /* StepAddItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItemCell.swift; sourceTree = "<group>"; };
@@ -262,6 +266,7 @@
 		CF0BCA2325BB457F00A5C172 /* Project Detail */ = {
 			isa = PBXGroup;
 			children = (
+				CF2472F82718B3EA002D6DCA /* Protocols */,
 				CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */,
 				CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */,
 				CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */,
@@ -326,6 +331,15 @@
 				CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		CF2472F82718B3EA002D6DCA /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				CF2472F92718B49C002D6DCA /* DetailViewControllerDelegate.swift */,
+				CF2472FB2718B4FE002D6DCA /* EditViewControllerDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
@@ -719,6 +733,7 @@
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
 				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
+				CF2472FA2718B49C002D6DCA /* DetailViewControllerDelegate.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
@@ -769,6 +784,7 @@
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
 				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
+				CF2472FC2718B4FE002D6DCA /* EditViewControllerDelegate.swift in Sources */,
 				CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */,
 				CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */,
 				CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */,

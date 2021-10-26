@@ -600,7 +600,7 @@ extension ProjectViewController {
         
         if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
             
-           
+//                       app is already launched once!
 //            let layout = UICollectionViewFlowLayout()
 //            layout.scrollDirection = .horizontal
 //
@@ -612,11 +612,11 @@ extension ProjectViewController {
             //App launched first time
             defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
             
-            //app is already launched once!
+
             
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
-            
+
             navigationController?.present(SwipingController(collectionViewLayout: layout), animated: true, completion: nil)
         }
     }

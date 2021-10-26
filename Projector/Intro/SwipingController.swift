@@ -18,37 +18,33 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
             headerString: "Easy steps to organize your project",
             bodyText: "Dive into your project very easily. Achieve your goals and be happy.",
             imageConstraints:
-            SwipingImageConstraints(imageWidth: 288,
-                                    imageHeight: 312,
-                                    imageTopAnchor: 25,
-                                    imageLeadingAnchor: 57)),
+            SwipingImageConstraints(imageHeight: 0.9873,//311,//1,0833333
+                                    imageCenterYAnchor: -121,
+                                    imageCenterXAnchor: 0)),
         SwipingPage(
             imageName: "statistics_p2",
             headerString: "Create your project management tool",
             bodyText: "By using Projector, the project you are working on can be managed easily.",
             imageConstraints:
-            SwipingImageConstraints(imageWidth: 302,
-                                    imageHeight: 276,
-                                    imageTopAnchor: 58,
-                                    imageLeadingAnchor: 32)),
+            SwipingImageConstraints(imageHeight: 0.91390,//276,//0,91390
+                                    imageCenterYAnchor: -103,
+                                    imageCenterXAnchor: 0)),
         SwipingPage(
             imageName: "calendar_p3",
             headerString: "Project Management\nMade Simple.",
             bodyText: "Organize your daily project easily and manage your time well and neatly",
             imageConstraints:
-            SwipingImageConstraints(imageWidth: 294,
-                                    imageHeight: 269,
-                                    imageTopAnchor: 68,
-                                    imageLeadingAnchor: 50)),
+            SwipingImageConstraints(imageHeight:0.91496, //269,//0,91496
+                                    imageCenterYAnchor: -100,
+                                    imageCenterXAnchor: 0)),
         SwipingPage(
             imageName: "space_p4",
             headerString: "",
             bodyText: "",
             imageConstraints:
-            SwipingImageConstraints(imageWidth: 304,
-                                    imageHeight: 139,
-                                    imageTopAnchor: 58,
-                                    imageLeadingAnchor: 27))
+            SwipingImageConstraints(imageHeight: 0.4572, //139,//0,4572
+                                    imageCenterYAnchor: -175,
+                                    imageCenterXAnchor: 0))
     ]
     
     let cellId = "cellId"
@@ -178,7 +174,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         //skip button
         view.addSubview(skipButton)
         skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
-        skipButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 35).isActive = true
+        skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         skipButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 19).isActive = true
     }

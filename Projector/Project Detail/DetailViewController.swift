@@ -10,25 +10,6 @@ import UIKit
 import RealmSwift
 import Photos
 
-//calls functions from MainViewController
-protocol DetailViewControllerDelegate: class {
-    //this function is reload mainVC project data
-    func reloadTableView()
-    //General func for retreaving image by URL (BECOUSE Realm can't save images)
-    func retreaveImageForProject(myUrl: String) -> UIImage
-    //access nav controller for segue
-    func pushToViewController(controllerType: Int)
-}
-
-//Many protocols in app? is it good? ---------------------------------------
-//reload views after changings(add or edit object)
-protocol EditViewControllerDelegate: class{
-    // assign all necessary data to objects  in detailVC
-    func performAllConfigurations()
-    //reload mainVC TV & detailVC CV after make changes to stepsCV
-    func reloadViews()
-}
-
 class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditViewControllerDelegate{
     
     //most for reload data
@@ -66,8 +47,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
     })
     
     //transparent black view that covers all content
-    //IMPORTANT:
-    //here I can add gesture recognizer becouse lazy var
     lazy var blackView: UIView = {
         let view = UIView()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
@@ -275,6 +254,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UICollectionV
             stepsTitle.text = "Steps To Do (\(project.projectStep.count))"
         }
         
+        
+        
+        
+        
+        
+        //-------------------------------------------------------------------------------------------------------
         //as project ID defined filter start to run
         stepCategoriesFilter.projectId = projectListIdentifier
         

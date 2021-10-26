@@ -32,22 +32,27 @@ class SwipingCell: UICollectionViewCell{
             descriptionTextView.attributedText = attributedText
             descriptionTextView.textAlignment = .center
             
-            [imageWidthConstraint, imageHeightConstraint, imageTopAnchorConstraint, imageLeadingAnchorConstraint].forEach{
+            [imageHeightConstraint, imageCenterYAnchorConstraint, imageCenterXAnchorConstraint].forEach{
                 guard let constraint = $0 else {return}
                 constraint.isActive = false
             }
             
-            let width = unwrappedPage.imageConstraints.imageWidth
+            
             let height = unwrappedPage.imageConstraints.imageHeight
-            let leading = unwrappedPage.imageConstraints.imageLeadingAnchor
-            let top = unwrappedPage.imageConstraints.imageTopAnchor
+            let centerX = unwrappedPage.imageConstraints.imageCenterXAnchor
+            let centerY = unwrappedPage.imageConstraints.imageCenterYAnchor
+            let heightConstraint = Double(frame.width - 60) * height
             
-            imageWidthConstraint = image.widthAnchor.constraint(equalToConstant: width)
-            imageHeightConstraint = image.heightAnchor.constraint(equalToConstant: height)
-            imageLeadingAnchorConstraint = image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leading)
-            imageTopAnchorConstraint = image.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: top)
             
-            [imageWidthConstraint, imageHeightConstraint, imageTopAnchorConstraint, imageLeadingAnchorConstraint].forEach{
+            imageHeightConstraint = image.heightAnchor.constraint(equalToConstant: CGFloat(heightConstraint))
+            imageCenterXAnchorConstraint = image.centerXAnchor.constraint(equalTo: centerXAnchor, constant: centerX)
+            imageCenterYAnchorConstraint = image.centerYAnchor.constraint(equalTo: centerYAnchor, constant: centerY)
+            
+            
+            
+            
+            
+            [imageHeightConstraint, imageCenterYAnchorConstraint, imageCenterXAnchorConstraint].forEach{
                 guard let constraint = $0 else {return}
                 constraint.isActive = true
             }
@@ -172,10 +177,10 @@ class SwipingCell: UICollectionViewCell{
     }()
     
     //constraints for animation
-    var imageWidthConstraint: NSLayoutConstraint!
+    
     var imageHeightConstraint: NSLayoutConstraint!
-    var imageTopAnchorConstraint: NSLayoutConstraint!
-    var imageLeadingAnchorConstraint: NSLayoutConstraint!
+    var imageCenterYAnchorConstraint: NSLayoutConstraint!
+    var imageCenterXAnchorConstraint: NSLayoutConstraint!
     //inputs animation approach
     var userInputStackLeftConstraint: NSLayoutConstraint!
     var userInputStackRightConstraint: NSLayoutConstraint!
@@ -242,45 +247,48 @@ class SwipingCell: UICollectionViewCell{
     func setupLayout(){
         
         hideKeyboardWhenTappedAround()
-        
+      
         addSubview(image)
         addSubview(descriptionTextView)
         addSubview(registerLoginNavStack)
         addSubview(userInputStack)
         
-        userInputStack.topAnchor.constraint(equalTo: registerLoginNavStack.bottomAnchor, constant: 15).isActive = true
+        
+       
+        
+        userInputStack.heightAnchor.constraint(equalToConstant: 243).isActive = true
         userInputStackLeftConstraint = userInputStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
         //...but this is not active now
         userInputStackRightConstraint = userInputStack.rightAnchor.constraint(equalTo: rightAnchor, constant: 0)
         
         userInputStack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
         
-        userInputStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -70).isActive = true
+        userInputStack.topAnchor.constraint(equalTo: registerLoginNavStack.bottomAnchor, constant: 20).isActive = true
         
         userInputStackLeftConstraint.isActive = true
         
-        
         NSLayoutConstraint.activate([
-            registerLoginNavStack.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 268),
+            registerLoginNavStack.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 30),
             registerLoginNavStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 31),
             registerLoginNavStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -31),
             registerLoginNavStack.heightAnchor.constraint(equalToConstant: 50),
         ])
         
-        imageWidthConstraint = image.widthAnchor.constraint(equalToConstant: 200)
+        image.widthAnchor.constraint(equalTo: widthAnchor, constant: -60)
         imageHeightConstraint = image.heightAnchor.constraint(equalToConstant: 150)
-        imageTopAnchorConstraint = image.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 80)
-        imageLeadingAnchorConstraint = image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
+        imageCenterYAnchorConstraint = image.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100)
+        imageCenterXAnchorConstraint = image.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 30)
         
-        [imageWidthConstraint, imageHeightConstraint, imageTopAnchorConstraint, imageLeadingAnchorConstraint].forEach{
+        [imageHeightConstraint, imageCenterYAnchorConstraint, imageCenterXAnchorConstraint].forEach{
             guard let constraint = $0 else {return}
             constraint.isActive = true
         }
         
+        let imagePadding = CGFloat(frame.height * 0.04)
         
         descriptionTextView.leftAnchor.constraint(equalTo: leftAnchor, constant: 25).isActive = true
         descriptionTextView.rightAnchor.constraint(equalTo: rightAnchor, constant: -25).isActive = true
-        descriptionTextView.topAnchor.constraint(equalTo: centerYAnchor, constant: 80).isActive = true
+        descriptionTextView.topAnchor.constraint(equalTo: image.bottomAnchor, constant: imagePadding).isActive = true
         descriptionTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
     }
     

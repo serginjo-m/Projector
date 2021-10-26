@@ -15,8 +15,7 @@ struct SwipingPage {
 }
 
 struct SwipingImageConstraints {
-    let imageWidth: CGFloat
-    let imageHeight: CGFloat
-    let imageTopAnchor: CGFloat
-    let imageLeadingAnchor: CGFloat
+    let imageHeight: Double
+    let imageCenterYAnchor: CGFloat
+    let imageCenterXAnchor: CGFloat
 }
