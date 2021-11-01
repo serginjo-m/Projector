@@ -13,7 +13,7 @@ import UIKit
 protocol DetailViewControllerDelegate: class {
     //this function is reload mainVC project data
     func reloadTableView()
-    //General func for retreaving image by URL (BECOUSE Realm can't save images)
+    //General func for retreaving image by URL (BECAUSE Realm can't save images)
     func retreaveImageForProject(myUrl: String) -> UIImage
     //access nav controller for segue
     func pushToViewController(controllerType: Int)

@@ -133,7 +133,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     
                     let newStep = NewStepViewController()
                     newStep.uniqueID = detailVC.projectListIdentifier
-                    newStep.stepsCV = detailVC.stepsCollectionView
+//                    newStep.stepsCV = detailVC.stepsCollectionView
                     
                     newStep.delegate = detailVC
                     

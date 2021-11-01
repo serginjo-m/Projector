@@ -194,7 +194,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         myStepImagesCV.stepImagesCollectionView.reloadData()
         
         //--------------------------- whole VC need to be reduced! ---------------------------------------
-        parentVC?.stepsCollectionView.reloadData()
+//        parentVC?.stepsCollectionView.reloadData()
         //call DetailVC delegate function of main VC that perform reloads (a bit odd)?!
         parentVC?.delegate?.reloadTableView()
     }
@@ -257,7 +257,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //assign an opposite value to button.isSeleceted
         button.isSelected = !button.isSelected
         ProjectListRepository.instance.updateStepCompletionStatus(step: step, isComplete: button.isSelected)
-        parentVC?.stepsCollectionView.reloadData()
+//        parentVC?.stepsCollectionView.reloadData()
         parentVC?.delegate?.reloadTableView()
         
         let completedString = button.isSelected == true ? "completed" : "not completed"
