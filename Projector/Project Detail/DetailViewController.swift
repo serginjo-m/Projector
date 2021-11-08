@@ -63,12 +63,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         }
     }
     //Identifier of selected project
-    var projectListIdentifier = String() {
-        didSet{
-            self.sideView.projectId = self.projectListIdentifier
+    var projectListIdentifier = String()
+    lazy var stepsCollections: Steps = {
+        //it is optional, so I need to set something to view
+        guard let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier) else {
+            return Steps(project: ProjectList())//empty instace
         }
-    }
-    
+        let steps = Steps(project: project)
+        return steps
+    }()
     
    //Project Image created programatically
     let projectImageView: UIImageView = {
@@ -123,10 +126,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
-    
-    
-    let stepsCollections = Steps()
-    
     
     let editButton: UIButton = {
         let button = UIButton()
@@ -201,12 +200,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         //SET PROJECT DATA TO OBJECTS
         if let project = projectInstance{
             projectNumbersCV.project = project
+            stepsCollections.project = project
             projectName.text = project.name
             stepsTitle.text = "Steps To Do (\(project.projectStep.count))"
+            
         }
     }
-    
-   
     
     //EDIT BUTTON ACTION
     @objc func editButtonAction(_ sender: Any){
@@ -250,6 +249,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         projectNumbersCV.projectNumbersCollectionView.reloadData()
     }
     
+    func pushToViewController(stepId: String) {
+        
+        //--------------------------- not happy, because object is huge! -----------------------------
+        let stepViewController = StepViewController()
+        
+        //        stepDetailVC.stepIndex = index
+        stepViewController.stepID = stepId
+        //        stepDetailVC.projectId = self.projectListIdentifier
+        
+        navigationController?.pushViewController(stepViewController, animated: true)
+    }
     
     
     
@@ -268,12 +278,18 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //perforn all positioning configurations
     private func setupLayout(){
-      
-
+        
+        //----------------------------------- is it better solution? ----------------------------------------
+        //set delegate to collection view after cast
+        [stepsCollections.todoList, stepsCollections.inProgressList, stepsCollections.doneList, stepsCollections.blockedList].forEach { (list) in
+            if let castList = list as? StepsCategoryCollectionView {
+                castList.customDelegate = self
+            }
+        }
+        
         [editButton, scrollViewContainer, contentUIView, projectName, projectImageView, dismissButton, projectNumbersTitle, projectNumbersCV, stepsTitle, blackView, stepsCollections].forEach { (view) in
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         
         
 

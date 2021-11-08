@@ -14,8 +14,7 @@ import Photos
 
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
     
-    //an instance of project detail vc
-    let projectDetailViewController = DetailViewController()
+    
     
     lazy var recentActivitiesCV: RecentActivitiesCollectionView = {
         let collectionView = RecentActivitiesCollectionView()
@@ -348,8 +347,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 188, height: recentProjectsStackView.frame.height)
     }
+    
     //action when user selects the cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        //an instance of project detail vc
+        let projectDetailViewController = DetailViewController()
         //search step by sected item index
         let selectedProject = proJects[indexPath.row]
         projectDetailViewController.projectListIdentifier = selectedProject.id

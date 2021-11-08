@@ -9,13 +9,27 @@
 import UIKit
 import RealmSwift
 
-class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+
+class Steps: UIView{
     
-    let blueColor = UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1)
-    let orangeColor = UIColor.init(red: 248/255, green: 182/255, blue: 24/255, alpha: 1)
-    let greenColor = UIColor.init(red: 17/255, green: 201/255, blue: 109/255, alpha: 1)
-    let redColor = UIColor.init(red: 236/255, green: 65/255, blue: 91/255, alpha: 1)
+    //MARK: database
     
+    var project: ProjectList 
+    
+    var projectSteps: List<ProjectStep>{
+        get{
+            return project.projectStep
+        }
+        set{
+            //update?
+        }
+    }
+    //[String : [ProjectStep]]
+    lazy var groupedStepsByCategory = Dictionary(grouping: projectSteps) { (step) -> String in
+        return step.category
+    }
+    
+
     let colorArr = [
         UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),//blue color
         UIColor.init(red: 248/255, green: 182/255, blue: 24/255, alpha: 1),//orange color
@@ -23,6 +37,7 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
         UIColor.init(red: 236/255, green: 65/255, blue: 91/255, alpha: 1)//red color
     ]
     
+    //MARK: steps navigation
     lazy var stepsNavigationStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [todoButton, inProgressButton, doneButton, blockedButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +46,6 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
     }()
     lazy var todoButton: UIButton = {
         let button = UIButton()
-//        button.layer.backgroundColor = UIColor.green.cgColor
         button.setTitle("To-do", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[0], for: .selected)
@@ -44,7 +58,6 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
     }()
     lazy var inProgressButton: UIButton = {
         let button = UIButton()
-//        button.layer.backgroundColor = UIColor.red.cgColor
         button.setTitle("In Progress", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[1], for: .selected)
@@ -56,7 +69,6 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
     }()
     lazy var doneButton: UIButton = {
         let button = UIButton()
-//        button.layer.backgroundColor = UIColor.yellow.cgColor
         button.setTitle("Done", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[2], for: .selected)
@@ -68,7 +80,6 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
     }()
     lazy var blockedButton: UIButton = {
         let button = UIButton()
-//        button.layer.backgroundColor = UIColor.blue.cgColor
         button.setTitle("Blocked", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[3], for: .selected)
@@ -87,121 +98,111 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
         return view
     }()
     
-    var pointerViewLeftConstraint: NSLayoutConstraint?
+    //MARK: Steps Collection Views
     
+    let cellId = "cellId"
+    
+    lazy var todoList: UICollectionView = {
+        let layout = PinterestLayout()
+        let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        guard let projectSteps = groupedStepsByCategory["todo"] else {return collectionView}
+        collectionView.projectSteps = projectSteps
+        return collectionView
+    }()
+    
+    lazy var inProgressList: UICollectionView = {
+        let layout = PinterestLayout()
+        let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        guard let projectSteps = groupedStepsByCategory["inProgress"] else {return collectionView}
+        collectionView.projectSteps = projectSteps
+        return collectionView
+    }()
+    
+    lazy var doneList: UICollectionView = {
+        let layout = PinterestLayout()
+        let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        guard let projectSteps = groupedStepsByCategory["done"] else {return collectionView}
+        collectionView.projectSteps = projectSteps
+        return collectionView
+    }()
+    
+    lazy var blockedList: UICollectionView = {
+        let layout = PinterestLayout()
+        let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        guard let projectSteps = groupedStepsByCategory["blocked"] else {return collectionView}
+        collectionView.projectSteps = projectSteps
+        return collectionView
+    }()
+    
+    lazy var stepsCategoryCollectionViewStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [todoList, inProgressList, doneList, blockedList])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.accessibilityScroll(UIAccessibilityScrollDirection.right)
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    //variable constraints for animation
+    var pointerViewLeftConstraint: NSLayoutConstraint?
+    var stackLeadingAnchorConstraint: NSLayoutConstraint?
+    
+    
+    //same func but dif button.tag, that helps define what button is tupped
     @objc func handleTodo(_ sender: UIButton){
-        handlePointerAnimation(sender: sender)
+        handleStepBlockAnimation(sender: sender)
     }
     @objc func handleInProgress(_ sender: UIButton){
-        handlePointerAnimation(sender: sender)
+        handleStepBlockAnimation(sender: sender)
     }
     @objc func handleDone(_ sender: UIButton){
-        handlePointerAnimation(sender: sender)
+        handleStepBlockAnimation(sender: sender)
     }
     @objc func handleBlocked(_ sender: UIButton){
-        handlePointerAnimation(sender: sender)
+        handleStepBlockAnimation(sender: sender)
     }
     
     
+    lazy var buttonsArr = [todoButton, inProgressButton, doneButton, blockedButton]
+    //holds current collection view & navigation position
     var currentPosition = 0 {
         didSet{
+            //pointer color
             pointerView.backgroundColor = colorArr[currentPosition]
+            //reset all buttons selected state to .normal
             buttonsArr.forEach{$0.isSelected = false}
+            //search step by sected item index
             buttonsArr[currentPosition].isSelected = true
         }
     }
     
-    lazy var buttonsArr = [todoButton, inProgressButton, doneButton, blockedButton]
     
-    fileprivate func handlePointerAnimation(sender: UIButton){
+    //
+    fileprivate func handleStepBlockAnimation(sender: UIButton){
         
-        let indexPath = IndexPath(item: sender.tag, section: 0)
-        stepsCollectionView.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
-
+        //define offset distance
+        let contentOffsetX = frame.width * CGFloat(sender.tag)
+        //change constraint offset distance
+        stackLeadingAnchorConstraint?.constant = -contentOffsetX
+        pointerViewLeftConstraint?.constant = contentOffsetX / 4
+        //animate changes
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+        
+        //update current position
         currentPosition = sender.tag
     }
     
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pointerViewLeftConstraint?.constant = scrollView.contentOffset.x / 4
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    init(project: ProjectList){
         
-        let x = targetContentOffset.pointee.x
-        let currentPageIndex = Int(x / frame.width)
+        self.project = project
         
-        currentPosition = currentPageIndex
-    }
-    
-    
-    
-//    MARK: Steps Collection View
-//    identifier for collection view
-    var cellId = "cellID"
-
-    //here creates a horizontal collectionView
-    let stepsCollectionView: UICollectionView = {
-
-        //instance for UICollectionView purposes
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
-        // & also we need to specify how "big" it needs to be
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
-        collectionView.backgroundColor = UIColor.clear
-
-        //deactivate default constraints
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-
-        return collectionView
-    }()
-
-    lazy var collectionStackView: UIStackView = {
-
-        let stack = UIStackView()
-
-        stack.addSubview(stepsCollectionView)
-
-        //specify delegate & datasourse for generating our individual horizontal cells
-        stepsCollectionView.dataSource = self
-        stepsCollectionView.delegate = self
-
-        stepsCollectionView.showsHorizontalScrollIndicator = false
-        stepsCollectionView.showsVerticalScrollIndicator = false
-
-        stepsCollectionView.isPagingEnabled = true
-
-        //Class is need to be registered in order of using inside
-        stepsCollectionView.register(StepsPageCell.self, forCellWithReuseIdentifier: cellId)
-
-        //CollectionView constraints
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": stepsCollectionView]))
-
-        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": stepsCollectionView]))
-        return stack
-    }()
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! StepsPageCell
-        
-
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: frame.width, height: frame.height - 48)
-    }
-    
-    
-
-    init(){
         super.init(frame: .zero)
+        
         setupLayout()
     }
 
@@ -209,11 +210,14 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     fileprivate func setupLayout(){
+        
+        clipsToBounds = true
         
         addSubview(pointerView)
         addSubview(stepsNavigationStackView)
-        addSubview(collectionStackView)
+        addSubview(stepsCategoryCollectionViewStack)
         
         NSLayoutConstraint.activate([
             stepsNavigationStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
@@ -222,18 +226,20 @@ class Steps: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICol
             stepsNavigationStackView.heightAnchor.constraint(equalToConstant: 18)
         ])
         
-        pointerViewLeftConstraint = pointerView.leftAnchor.constraint(equalTo: stepsCollectionView.leftAnchor, constant: 0)
+        pointerViewLeftConstraint = pointerView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
         pointerView.topAnchor.constraint(equalTo: stepsNavigationStackView.bottomAnchor, constant: 7).isActive = true
         pointerView.heightAnchor.constraint(equalToConstant: 8).isActive = true
         pointerView.widthAnchor.constraint(equalTo: stepsNavigationStackView.widthAnchor, multiplier: 1/4).isActive = true
         
         pointerViewLeftConstraint?.isActive = true
         
-        collectionStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionStackView.topAnchor.constraint(equalTo: stepsNavigationStackView.bottomAnchor, constant: 30).isActive = true
-        collectionStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        collectionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-        collectionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+
+        stepsCategoryCollectionViewStack.topAnchor.constraint(equalTo: stepsNavigationStackView.bottomAnchor, constant: 30).isActive = true
+        stackLeadingAnchorConstraint = stepsCategoryCollectionViewStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0)
+        stepsCategoryCollectionViewStack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 4).isActive = true
+        stepsCategoryCollectionViewStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        
+        stackLeadingAnchorConstraint?.isActive = true
     }
 }

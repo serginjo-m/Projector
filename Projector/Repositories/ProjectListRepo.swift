@@ -27,8 +27,18 @@ class ProjectListRepository {
         return realm.object(ofType: ProjectList.self, forPrimaryKey: id)
     }
     
+    func getProjectSteps() -> Results<ProjectStep> {
+        return realm.objects(ProjectStep.self)
+    }
+    
     func getProjectStep(id: String) -> ProjectStep? {
         return realm.object(ofType: ProjectStep.self, forPrimaryKey: id)
+    }
+    
+    func updateStepCategory(category: String, step: ProjectStep){
+        try! realm.write {
+            step.category = category
+        }
     }
     
     //here we actualy add a new object

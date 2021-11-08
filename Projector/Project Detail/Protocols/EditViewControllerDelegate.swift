@@ -16,5 +16,7 @@ protocol EditViewControllerDelegate: class{
     func performAllConfigurations()
     //reload mainVC TV & detailVC CV after make changes to stepsCV
     func reloadViews()
+    //access nav controller for segue
+    func pushToViewController(stepId: String)
 }
 

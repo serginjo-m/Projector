@@ -118,7 +118,8 @@
 		CFFA4EC6272B1C6100071F01 /* Steps.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4EC5272B1C6100071F01 /* Steps.swift */; };
 		CFFA4EC9272B243500071F01 /* StepViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4EC8272B243500071F01 /* StepViewControllerDelegate.swift */; };
 		CFFA4ECB272F00AA00071F01 /* StepCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4ECA272F00AA00071F01 /* StepCollectionView.swift */; };
-		CFFA4ECD273007C000071F01 /* StepsPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4ECC273007C000071F01 /* StepsPageCell.swift */; };
+		CFFA4ED52737D17400071F01 /* StepsCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4ED42737D17400071F01 /* StepsCategoryCollectionView.swift */; };
+		CFFA4ED82739998800071F01 /* StringToImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA4ED72739998800071F01 /* StringToImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -236,7 +237,8 @@
 		CFFA4EC5272B1C6100071F01 /* Steps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Steps.swift; sourceTree = "<group>"; };
 		CFFA4EC8272B243500071F01 /* StepViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewControllerDelegate.swift; sourceTree = "<group>"; };
 		CFFA4ECA272F00AA00071F01 /* StepCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCollectionView.swift; sourceTree = "<group>"; };
-		CFFA4ECC273007C000071F01 /* StepsPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsPageCell.swift; sourceTree = "<group>"; };
+		CFFA4ED42737D17400071F01 /* StepsCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsCategoryCollectionView.swift; sourceTree = "<group>"; };
+		CFFA4ED72739998800071F01 /* StringToImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringToImage.swift; sourceTree = "<group>"; };
 		E7BA9B5FFB97D482659B9390 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -383,6 +385,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CFFA4ED62739996900071F01 /* Singletons */,
 				CF1E854426F3AFCA001B0BB7 /* Intro */,
 				CF242F4B26BC5BEB00F44A2F /* Notifications */,
 				CF4197C02691E10600405EC5 /* Statistics Group */,
@@ -392,13 +395,13 @@
 				CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */,
 				CF3F0FC6260269B500CAC008 /* Main VC */,
 				CF5483B925EC398D00D6A05B /* Step */,
+				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
 				CF9DA835244C499E00DFAEEF /* Collection Views */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CFD88DF52595EBAE00B726FF /* Calendar */,
-				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
 				CF27A06E254DA091007D06D3 /* Assets.xcassets */,
 				CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */,
@@ -585,11 +588,19 @@
 			isa = PBXGroup;
 			children = (
 				CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */,
-				CF0DD7DA2450212A0028ABB1 /* StepCell.swift */,
 				CFFA4EC5272B1C6100071F01 /* Steps.swift */,
-				CFFA4ECC273007C000071F01 /* StepsPageCell.swift */,
+				CFFA4ED42737D17400071F01 /* StepsCategoryCollectionView.swift */,
+				CF0DD7DA2450212A0028ABB1 /* StepCell.swift */,
 			);
 			path = Steps;
+			sourceTree = "<group>";
+		};
+		CFFA4ED62739996900071F01 /* Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				CFFA4ED72739998800071F01 /* StringToImage.swift */,
+			);
+			path = Singletons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -729,10 +740,10 @@
 				CFCD78A7268240220066294A /* DataStackView.swift in Sources */,
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
-				CFFA4ECD273007C000071F01 /* StepsPageCell.swift in Sources */,
 				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
 				CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */,
 				CFCD789A267FCC2E0066294A /* NewTextNoteVC.swift in Sources */,
+				CFFA4ED52737D17400071F01 /* StepsCategoryCollectionView.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CFFA4EC6272B1C6100071F01 /* Steps.swift in Sources */,
@@ -748,6 +759,7 @@
 				CFFA4EC9272B243500071F01 /* StepViewControllerDelegate.swift in Sources */,
 				CF43240A272B177600421226 /* PinterestDelegate.swift in Sources */,
 				CFCD78A326823F540066294A /* ProgressShape.swift in Sources */,
+				CFFA4ED82739998800071F01 /* StringToImage.swift in Sources */,
 				CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */,
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
