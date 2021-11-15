@@ -67,6 +67,13 @@ class ProjectListRepository {
             step.complete = isComplete
         })
     }
+    
+    func updateStepProgressStatus(step: ProjectStep, status: String) {
+        try! self.realm.write({
+            step.category = status
+        })
+    }
+    
     //edit step function
     func editStep(step: ProjectStep){
         try! self.realm.write({

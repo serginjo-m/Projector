@@ -8,8 +8,9 @@
 
 import UIKit
 
-
 class StepCell: UICollectionViewCell{
+    //position options menu next to the selected cell button
+    weak var delegate: StepsCollectionViewDelegate?
     
     var template: ProjectStep? {
         didSet{
@@ -44,46 +45,41 @@ class StepCell: UICollectionViewCell{
         return label
     }()
     
-    lazy var statusButton: UIButton = {
+    lazy var optionsButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Status", for: .normal)
-        button.setTitleColor(.brown, for: .normal)
-        button.contentHorizontalAlignment = .right
-        button.adjustsImageWhenHighlighted = false
+        button.backgroundColor = UIColor.init(white: 1, alpha: 0.82)
+        button.layer.cornerRadius = 10
+        button.setImage(UIImage(named: "3dots"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        button.addTarget(self, action: #selector(handleStatus), for: .touchUpInside)
+        button.contentMode = .center
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(handleStatus(_:)), for: .touchUpInside)
         return button
     }()
-
-//    let deleteButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(UIImage(named:"removeStep"), for: .normal)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.isUserInteractionEnabled = true
-//        return button
-//    }()
-
+    
     let imageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
         image.clipsToBounds = true
         return image
     }()
-    //adds contrast to project title
-    let gradient: CAGradientLayer =  {
-        let gradient = CAGradientLayer()
-        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
-        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.21).cgColor//black 16% opacity
-        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.56).cgColor//black 56% opacity
-        gradient.colors = [topColor, middleColor, bottomColor]
-        gradient.locations = [0.55, 0.75, 1.0]
-        return gradient
-    }()
+//    //adds contrast to project title
+//    let gradient: CAGradientLayer =  {
+//        let gradient = CAGradientLayer()
+//        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
+//        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.21).cgColor//black 16% opacity
+//        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.56).cgColor//black 56% opacity
+//        gradient.colors = [topColor, middleColor, bottomColor]
+//        gradient.locations = [0.55, 0.75, 1.0]
+//        return gradient
+//    }()
 
     
-    @objc func handleStatus(){
-        print("status has changed")
+    @objc func handleStatus(_ sender: UIButton){
+        guard let delegate = self.delegate else {return}
+        let button = sender
+        delegate.showView(startingUIButton: button)
     }
     
     func setupViews(){
@@ -93,18 +89,14 @@ class StepCell: UICollectionViewCell{
         layer.cornerRadius = 5
         backgroundColor = UIColor.init(white: 0.90, alpha: 1)
         
-        gradient.frame = self.bounds
+//        gradient.frame = self.bounds
 
         addSubview(imageView)
-//        addSubview(deleteButton)
-        addSubview(statusButton)
+        addSubview(optionsButton)
         addSubview(stepNameLabel)
-        imageView.layer.insertSublayer(gradient, at: 0)
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.layer.insertSublayer(gradient, at: 0)
         
-        stepNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        statusButton.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
         imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
@@ -115,16 +107,11 @@ class StepCell: UICollectionViewCell{
         stepNameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 9).isActive = true
         stepNameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
         stepNameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-//        deleteButton.topAnchor.constraint(equalTo: topAnchor, constant: 9).isActive = true
-//        deleteButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
-//        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
-//        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        
-        statusButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
-        statusButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -19).isActive = true
-        statusButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        statusButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+    
+        optionsButton.topAnchor.constraint(equalTo: topAnchor, constant: 12).isActive = true
+        optionsButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
+        optionsButton.widthAnchor.constraint(equalToConstant: 22).isActive = true
+        optionsButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
     }
 }
 

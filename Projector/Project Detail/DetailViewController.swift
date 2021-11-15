@@ -67,9 +67,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     lazy var stepsCollections: Steps = {
         //it is optional, so I need to set something to view
         guard let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier) else {
-            return Steps(project: ProjectList())//empty instace
+            return Steps(project: ProjectList(), delegate: self)//empty instace
         }
-        let steps = Steps(project: project)
+        let steps = Steps(project: project, delegate: self)
         return steps
     }()
     
@@ -241,6 +241,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //UPDATES AFTER CHaNGINGS
     func reloadViews(){
+        print("parent reload views function called!")
         //here we call mainVC delegate function to reload its data
         self.delegate?.reloadTableView()
         // reload steps collection view
@@ -278,15 +279,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //perforn all positioning configurations
     private func setupLayout(){
-        
-        //----------------------------------- is it better solution? ----------------------------------------
-        //set delegate to collection view after cast
-        [stepsCollections.todoList, stepsCollections.inProgressList, stepsCollections.doneList, stepsCollections.blockedList].forEach { (list) in
-            if let castList = list as? StepsCategoryCollectionView {
-                castList.customDelegate = self
-            }
-        }
-        
+                
         [editButton, scrollViewContainer, contentUIView, projectName, projectImageView, dismissButton, projectNumbersTitle, projectNumbersCV, stepsTitle, blackView, stepsCollections].forEach { (view) in
             view.translatesAutoresizingMaskIntoConstraints = false
         }

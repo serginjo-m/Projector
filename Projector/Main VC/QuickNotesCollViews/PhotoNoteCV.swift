@@ -135,21 +135,12 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
         //didSet uses for logic purposes!
         didSet{
             titleLabel.text = item.title != "" ? item.title : ""
-            
-            image.image = retreaveImageForProject(myUrl: item.picture)
+            //shared func for all items that need to convert a url to an image
+            image.image = StringToImage.shared.retreaveImageForProject(myUrl: item.picture)
         }
     }
     
-    //return UIImage by URL
-    func retreaveImageForProject(myUrl: String) -> UIImage{
-        var projectImage: UIImage = UIImage(named: "defaultImage")!
-        let url = URL(string: myUrl)
-        let data = try? Data(contentsOf: url!)
-        if let imageData = data{
-            projectImage = UIImage(data: imageData)!
-        }
-        return projectImage
-    }
+    
     
     lazy var image: UIImageView = {
         let image = UIImageView()

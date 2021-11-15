@@ -14,6 +14,8 @@ class Steps: UIView{
     
     //MARK: database
     
+    weak var delegate: EditViewControllerDelegate?
+   
     var project: ProjectList 
     
     var projectSteps: List<ProjectStep>{
@@ -102,37 +104,41 @@ class Steps: UIView{
     
     let cellId = "cellId"
     
-    lazy var todoList: UICollectionView = {
+    lazy var todoList: StepsCategoryCollectionView = {
         let layout = PinterestLayout()
         let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.customDelegate = delegate
         guard let projectSteps = groupedStepsByCategory["todo"] else {return collectionView}
         collectionView.projectSteps = projectSteps
         return collectionView
     }()
     
-    lazy var inProgressList: UICollectionView = {
+    lazy var inProgressList: StepsCategoryCollectionView = {
         let layout = PinterestLayout()
         let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.customDelegate = delegate
         guard let projectSteps = groupedStepsByCategory["inProgress"] else {return collectionView}
         collectionView.projectSteps = projectSteps
         return collectionView
     }()
     
-    lazy var doneList: UICollectionView = {
+    lazy var doneList: StepsCategoryCollectionView = {
         let layout = PinterestLayout()
         let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.customDelegate = delegate
         guard let projectSteps = groupedStepsByCategory["done"] else {return collectionView}
         collectionView.projectSteps = projectSteps
         return collectionView
     }()
     
-    lazy var blockedList: UICollectionView = {
+    lazy var blockedList: StepsCategoryCollectionView = {
         let layout = PinterestLayout()
         let collectionView = StepsCategoryCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.customDelegate = delegate
         guard let projectSteps = groupedStepsByCategory["blocked"] else {return collectionView}
         collectionView.projectSteps = projectSteps
         return collectionView
@@ -197,9 +203,10 @@ class Steps: UIView{
         currentPosition = sender.tag
     }
     
-    init(project: ProjectList){
+    init(project: ProjectList, delegate: EditViewControllerDelegate){
         
         self.project = project
+        self.delegate = delegate
         
         super.init(frame: .zero)
         

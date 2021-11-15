@@ -29,6 +29,7 @@
 		CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A411D26E4C13B009EB276 /* Holiday.swift */; };
 		CF1A412026E4C366009EB276 /* HolidayRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A411F26E4C366009EB276 /* HolidayRequest.swift */; };
 		CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1C51E1244F682200FBD1CE /* StepViewController.swift */; };
+		CF1D24502741057B00341C26 /* StepProgressMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D244F2741057B00341C26 /* StepProgressMenu.swift */; };
 		CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */; };
 		CF242F4D26BC5C2900F44A2F /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */; };
 		CF2472F72713606E002D6DCA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2472F62713606E002D6DCA /* User.swift */; };
@@ -146,6 +147,7 @@
 		CF1A411D26E4C13B009EB276 /* Holiday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Holiday.swift; sourceTree = "<group>"; };
 		CF1A411F26E4C366009EB276 /* HolidayRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayRequest.swift; sourceTree = "<group>"; };
 		CF1C51E1244F682200FBD1CE /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
+		CF1D244F2741057B00341C26 /* StepProgressMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressMenu.swift; sourceTree = "<group>"; };
 		CF1D3E12268B6DA000C10798 /* ProjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectExtension.swift; sourceTree = "<group>"; };
 		CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		CF2472F62713606E002D6DCA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				CFFA4EC5272B1C6100071F01 /* Steps.swift */,
 				CFFA4ED42737D17400071F01 /* StepsCategoryCollectionView.swift */,
 				CF0DD7DA2450212A0028ABB1 /* StepCell.swift */,
+				CF1D244F2741057B00341C26 /* StepProgressMenu.swift */,
 			);
 			path = Steps;
 			sourceTree = "<group>";
@@ -825,6 +828,7 @@
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
 				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
+				CF1D24502741057B00341C26 /* StepProgressMenu.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
 				CFCD78A526823FAE0066294A /* AnimationDisplayLink.swift in Sources */,
