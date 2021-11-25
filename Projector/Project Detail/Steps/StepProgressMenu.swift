@@ -98,8 +98,12 @@ class StepProgressMenu: UIView {
             print("project step isn't defined!")
             return
         }
-        delegate.reloadViews()
+        
+       
+        //because changing has been made
         ProjectListRepository.instance.updateStepProgressStatus(step: step, status: status)
+        //call DetailViewController for update database and reload views
+        delegate.reloadViews()
     }
     
     func setupLayout(){

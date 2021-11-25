@@ -74,6 +74,7 @@
 		CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7ECB7524634B47006CC7FF /* StepAddItem.swift */; };
 		CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8792B9247A869C007EBD30 /* ClosureExample.swift */; };
 		CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF888DA32427D01A00312407 /* FeaturedAppsController.swift */; };
+		CF8D01062746DC9B009754D8 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8D01052746DC9B009754D8 /* UIImageView.swift */; };
 		CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */; };
 		CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */; };
 		CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */; };
@@ -194,6 +195,7 @@
 		CF7ECB7524634B47006CC7FF /* StepAddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItem.swift; sourceTree = "<group>"; };
 		CF8792B9247A869C007EBD30 /* ClosureExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureExample.swift; sourceTree = "<group>"; };
 		CF888DA32427D01A00312407 /* FeaturedAppsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedAppsController.swift; sourceTree = "<group>"; };
+		CF8D01052746DC9B009754D8 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		CF8DFB74264ADA5400ACB4EB /* CanvasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewController.swift; sourceTree = "<group>"; };
 		CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasNote.swift; sourceTree = "<group>"; };
 		CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCGPoint.swift; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 				CFCD789C268237010066294A /* UIViewExtension.swift */,
 				CFD5288326935B8400062DCF /* UIView+Stacking.swift */,
 				CFEDDC5226F7C900005E5652 /* UIColorExt.swift */,
+				CF8D01052746DC9B009754D8 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -767,6 +770,7 @@
 				CF2C1298237766A700F3132A /* MainViewController.swift in Sources */,
 				CF13D0EE24C891A8002FCCE1 /* EditStepVC.swift in Sources */,
 				CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */,
+				CF8D01062746DC9B009754D8 /* UIImageView.swift in Sources */,
 				CF0DD7DB2450212A0028ABB1 /* StepCell.swift in Sources */,
 				CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */,
 				CF5A91E7255DB6AB00FB605B /* NewProjectViewController.swift in Sources */,

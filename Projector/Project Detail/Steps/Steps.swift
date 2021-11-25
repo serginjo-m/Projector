@@ -12,11 +12,34 @@ import RealmSwift
 
 class Steps: UIView{
     
+    
     //MARK: database
     
     weak var delegate: EditViewControllerDelegate?
    
-    var project: ProjectList 
+    var project: ProjectList {
+        didSet{
+            updateAllStepCollectionViews()
+        }
+    }
+    
+    fileprivate func updateAllStepCollectionViews(){
+        
+        projectSteps = project.projectStep
+        groupedStepsByCategory = Dictionary(grouping: projectSteps) { (step) -> String in
+            return step.category
+        }
+        let lists = [todoList, inProgressList, doneList, blockedList]
+        let progressCategories = ["todo", "inProgress", "done", "blocked"]
+        for (index, list) in lists.enumerated(){
+            list.projectSteps.removeAll()
+            if let unwrappedList = groupedStepsByCategory[progressCategories[index]]{
+                list.projectSteps = unwrappedList
+            }else{
+                list.projectSteps = []
+            }
+        }
+    }
     
     var projectSteps: List<ProjectStep>{
         get{

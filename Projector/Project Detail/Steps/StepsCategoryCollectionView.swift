@@ -15,6 +15,7 @@ protocol StepsCollectionViewDelegate: AnyObject {
 
 
 class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StepsCollectionViewDelegate{
+    
     //menu that contains progress options
     lazy var progressMenu: StepProgressMenu = {
         let menu = StepProgressMenu()
@@ -24,9 +25,13 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
 
     let cellId = "cellId"
     
-    var projectSteps = [ProjectStep]()
-    //the only reason it here, it's because I need to have an access to navigationController.push...
+    var projectSteps = [ProjectStep]() {
+        didSet{
+            self.reloadData()
+        }
+    }
     
+    //the only reason it here, it's because I need to have an access to navigationController.push...
     //access DetailViewController (reload, push, setupViews)
     weak var customDelegate: EditViewControllerDelegate?{
         didSet{

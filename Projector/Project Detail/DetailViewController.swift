@@ -136,9 +136,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         return button
     }()
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -241,13 +238,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //UPDATES AFTER CHaNGINGS
     func reloadViews(){
-        print("parent reload views function called!")
+        
         //here we call mainVC delegate function to reload its data
         self.delegate?.reloadTableView()
         // reload steps collection view
-//        self.stepsCollectionView.reloadData()
+        if let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier){
+            //as project defined, didSet call update for collection views
+            stepsCollections.project = project
+        }
         //reload statistics collection view
         projectNumbersCV.projectNumbersCollectionView.reloadData()
+        
     }
     
     func pushToViewController(stepId: String) {

@@ -19,8 +19,10 @@ class StepCell: UICollectionViewCell{
             stepNameLabel.text = unwrappedTemplate.name
             
             if unwrappedTemplate.selectedPhotosArray.count > 0 {
-                //call Singelton
-                imageView.image = StringToImage.shared.retreaveImageForProject(myUrl: unwrappedTemplate.selectedPhotosArray[0])
+                //use UIImageView extension func that retreaves image by url
+                imageView.retreaveImageUsingURLString(myUrl: unwrappedTemplate.selectedPhotosArray[0])
+            }else{
+                imageView.image = nil
             }
             
         }
