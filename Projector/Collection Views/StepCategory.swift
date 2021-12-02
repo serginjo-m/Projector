@@ -17,13 +17,13 @@ class NewStepCategory:UIStackView, UICollectionViewDataSource, UICollectionViewD
     private let cellId = "cellId"
     
     //contains unsorted categories
-    var stepCategories = ["Buy", "Repair", "Inform", "Meet", "Call", "Organize", "Clear", "Pay", "Send", "Learn", "Health", "Documents", "Job", "Other"]
+    var stepCategories = ["todo", "inProgress", "done", "blocked"]
     //uses for sort categories by num of letters in word
     var counts = [String: Int]()
     //array for sorted strings
     var sortedCategories = [String]()
     //category selected by user
-    var selectedCategory = "Other"
+    var selectedCategory = "todo"
     
     //MARK: Initialization
     override init(frame: CGRect) {

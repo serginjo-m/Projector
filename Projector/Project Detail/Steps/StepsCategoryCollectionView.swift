@@ -52,6 +52,7 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     //variable constraints for animation
     var statusOptionsRightConstraint: NSLayoutConstraint?
     var statusOptionsTopConstraint: NSLayoutConstraint?
@@ -66,6 +67,7 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
         guard let topOffset = startingFrame?.origin.y, let rightOffset = startingFrame?.origin.x else {return}
         statusOptionsTopConstraint?.constant = topOffset - properCoordinates!.origin.y
         statusOptionsRightConstraint?.constant = rightOffset - 30
+        progressMenu.isHidden = !progressMenu.isHidden//hide or show progress menu
         self.layoutIfNeeded()
         //select step using buttons tag, that corresponds to the cell number
         progressMenu.projectStep = projectSteps[startingUIButton.tag]

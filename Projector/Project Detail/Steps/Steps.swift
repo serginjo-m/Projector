@@ -12,7 +12,6 @@ import RealmSwift
 
 class Steps: UIView{
     
-    
     //MARK: database
     
     weak var delegate: EditViewControllerDelegate?
@@ -183,17 +182,25 @@ class Steps: UIView{
     //same func but dif button.tag, that helps define what button is tupped
     @objc func handleTodo(_ sender: UIButton){
         handleStepBlockAnimation(sender: sender)
+        hideProgressMenu(progressMenu: todoList.progressMenu)
     }
     @objc func handleInProgress(_ sender: UIButton){
         handleStepBlockAnimation(sender: sender)
+        hideProgressMenu(progressMenu: inProgressList.progressMenu)
     }
     @objc func handleDone(_ sender: UIButton){
         handleStepBlockAnimation(sender: sender)
+        hideProgressMenu(progressMenu: doneList.progressMenu)
     }
     @objc func handleBlocked(_ sender: UIButton){
         handleStepBlockAnimation(sender: sender)
+        hideProgressMenu(progressMenu: blockedList.progressMenu)
     }
     
+    //hide step progress menu when user scroll to other collection view
+    fileprivate func hideProgressMenu(progressMenu: StepProgressMenu){
+        progressMenu.isHidden = true
+    }
     
     lazy var buttonsArr = [todoButton, inProgressButton, doneButton, blockedButton]
     //holds current collection view & navigation position

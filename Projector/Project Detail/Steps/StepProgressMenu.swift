@@ -99,7 +99,7 @@ class StepProgressMenu: UIView {
             return
         }
         
-       
+       self.isHidden = true
         //because changing has been made
         ProjectListRepository.instance.updateStepProgressStatus(step: step, status: status)
         //call DetailViewController for update database and reload views
@@ -107,10 +107,10 @@ class StepProgressMenu: UIView {
     }
     
     func setupLayout(){
+        isHidden = true
         backgroundColor = .white
         layer.cornerRadius = 10
-        clipsToBounds = true
-        
+        clipsToBounds = true        
         addSubview(optionButtonsStack)
         
         optionButtonsStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
