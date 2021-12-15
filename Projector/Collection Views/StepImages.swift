@@ -10,12 +10,14 @@ import UIKit
 import Foundation
 import RealmSwift
 
-//Connection btwn ....
 protocol NewStepImagesDelegate: class{
-    //delete image url from parent array that will be used for saving object
-    func deleteUrl(int: Int)
     //opens parent VC image picker
     func showImagePicker()
+}
+
+struct NewStepImageCellTemplate {
+    var imageURL: String?
+    var tag: Int
 }
 
 class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -25,7 +27,7 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
     //this property need for cells
     private let cellID = "cellId"
     //array contains default 'plus' image
-    var photoArray = [UIImage(named: "plusIconV2")]
+    var photoArray = List<String>()
     
     //MARK: Initialization
     override init(frame: CGRect) {
@@ -103,52 +105,61 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
         return numberOfCells
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.item == 0 {
+            //only view controller can present image picker
+            self.delegate?.showImagePicker()
+        }
+    }
+    
     //define the cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ImageCollectionViewCell
-        
-        //tap gesture recognizer for UIImageView
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         
         //delete image button configuration
         cell.deleteButton.addTarget(self, action: #selector(removeImage(button:)), for: .touchUpInside)
         cell.deleteButton.tag = indexPath.row
         
-        //append img to cell only if it exist
-        if indexPath.row < photoArray.count{
-            cell.deleteButton.isHidden = false
-            cell.photoView.image = photoArray[indexPath.row]
-        }else{
-            cell.deleteButton.isHidden = true
-            //default image
-            cell.photoView.image = UIImage(named: "border")
+        //struct
+        var template = NewStepImageCellTemplate(imageURL: nil , tag: indexPath.item)
+        
+        //not all 8 initial cells has an image
+        if photoArray.count >= indexPath.item && indexPath.item != 0{
+            template.imageURL = photoArray[indexPath.item - 1]
         }
-        //plus cell
-        if indexPath.row == 0{
-            cell.backgroundColor = .white
-            cell.photoView.addGestureRecognizer(tap)
-            cell.deleteButton.isHidden = true
-        }
+        
+        cell.template = template
         
         return cell
     }
     
     //remove image mechanism
     @objc func removeImage(button: UIButton){
-        
-//        photoArray.remove(at: button.tag)
-        self.delegate?.deleteUrl(int: button.tag)
+        photoArray.remove(at: button.tag - 1)
         imageCollectionView.reloadData()
-    }
-    
-    //add image mechanism
-    @objc func handleTap(_ sender: UITapGestureRecognizer){
-        //delegate callback function
-        self.delegate?.showImagePicker()
+        
     }
 }
 
 class ImageCollectionViewCell: UICollectionViewCell, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    var template: NewStepImageCellTemplate? {
+        didSet{
+            guard let unwrappedTemplate = template else {return}
+            if unwrappedTemplate.tag == 0{
+                photoView.image = UIImage(named: "plusIconV2")
+                deleteButton.isHidden = true
+            }else{
+                if let url = unwrappedTemplate.imageURL{
+                    photoView.retreaveImageUsingURLString(myUrl: url)
+                    deleteButton.isHidden = false
+                }else{
+                    photoView.image = UIImage(named: "border")
+                    deleteButton.isHidden = true
+                }
+            }
+        }
+    }
     
     //initializers
     override init(frame: CGRect) {

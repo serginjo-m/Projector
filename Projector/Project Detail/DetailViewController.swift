@@ -250,43 +250,24 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         projectNumbersCV.projectNumbersCollectionView.reloadData()
         
     }
-    
+    //calls by customDelegate StepsCategoryCollectionView
     func pushToViewController(stepId: String) {
         
-        //--------------------------- not happy, because object is huge! -----------------------------
-        let stepViewController = StepViewController()
-        
-        //        stepDetailVC.stepIndex = index
+        let stepViewController = StepViewController(stepId: stepId)
         stepViewController.stepID = stepId
-        //        stepDetailVC.projectId = self.projectListIdentifier
+        stepViewController.projectId = projectListIdentifier
         
         navigationController?.pushViewController(stepViewController, animated: true)
     }
     
     
-    
-    //perform segue to step detail view controller
-    func showStepDetails(index: Int){
-        
-        
-        //------------------------------------- not happy, because object is huge! -----------------------------
-        let stepDetailVC = StepViewController()
-        
-        stepDetailVC.stepIndex = index
-//        stepDetailVC.stepID = selectedStepId
-        stepDetailVC.projectId = self.projectListIdentifier
-        navigationController?.pushViewController(stepDetailVC, animated: true)
-    }
-    
-    //perforn all positioning configurations
+    //constraints
     private func setupLayout(){
                 
         [editButton, scrollViewContainer, contentUIView, projectName, projectImageView, dismissButton, projectNumbersTitle, projectNumbersCV, stepsTitle, blackView, stepsCollections].forEach { (view) in
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        
-
         blackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         blackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         blackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true

@@ -14,9 +14,8 @@ import Photos
 
 class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
     
-    //most for reload data------------------------------------------------------------------------------------------
+    //push to view controller, reloadViews , perform configurations
     weak var delegate: EditViewControllerDelegate?
-    weak var editDelegate: StepViewControllerDelegate?
     
     //step id passed by detail VC
     var stepID: String?
@@ -24,29 +23,96 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var stepComplete: Bool?
     // list of items in step
     var stepItems = [String]()
+    // step progress category
+    var selectedStepProgress: Int = 0
     
     //MARK: Properties
     var realm: Realm!//create a var
-    var newStepCategory = NewStepCategory()
-    var newStepImages = NewStepImages()
     
-    // need for indicating a selected images inside PHAsset array
-    var selectedPhotoURLStringArray = [String]()
+    let colorArr = [
+        UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),//blue color
+        UIColor.init(red: 248/255, green: 182/255, blue: 24/255, alpha: 1),//orange color
+        UIColor.init(red: 17/255, green: 201/255, blue: 109/255, alpha: 1),//green color
+        UIColor.init(red: 236/255, green: 65/255, blue: 91/255, alpha: 1)//red color
+    ]
     
+    lazy var todoButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("To-do", for: .normal)
+        button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
+        button.setTitleColor(colorArr[0], for: .selected)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.addTarget(self, action: #selector(handleButtonsActiveState(_:)), for: .touchUpInside)
+        button.isSelected = true
+        button.tag = 0
+        return button
+    }()
+    
+    lazy var inProgressButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("In Progress", for: .normal)
+        button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
+        button.setTitleColor(colorArr[1], for: .selected)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.addTarget(self, action: #selector(handleButtonsActiveState(_:)), for: .touchUpInside)
+        button.tag = 1
+        return button
+    }()
+    lazy var doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Done", for: .normal)
+        button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
+        button.setTitleColor(colorArr[2], for: .selected)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.addTarget(self, action: #selector(handleButtonsActiveState(_:)), for: .touchUpInside)
+        button.tag = 2
+        return button
+    }()
+    lazy var blockedButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Blocked", for: .normal)
+        button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
+        button.setTitleColor(colorArr[3], for: .selected)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        button.addTarget(self, action: #selector(handleButtonsActiveState(_:)), for: .touchUpInside)
+        button.tag = 3
+        return button
+    }()
+    lazy var progressCategoryStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [todoButton, inProgressButton, doneButton, blockedButton])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        return stack
+    }()
+
+    lazy var newStepImages: NewStepImages = {
+        var stepImages = NewStepImages()
+        // handle image picker appearance, through delegate callback!! :>)
+        //it is very important to define, what instances of view controllers are
+        //notice that I have this optional delegate var
+        stepImages.delegate = self
+        stepImages.translatesAutoresizingMaskIntoConstraints = false
+        return stepImages
+    }()
+
     //scroll view container
     var scrollViewContainer = UIScrollView()
     var contentUIView = UIView()
     
-    //parent CV
-    var stepsCV: UICollectionView?
-    
     //name text field
-    let stepNameTextField: UITextField = {
+    lazy var stepNameTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.placeholder = "Write Your Step Name Here"
         textField.font = UIFont.boldSystemFont(ofSize: 15)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        // Handle the text field's user input through delegate callback.
+        textField.delegate = self
         return textField
         
     }()
@@ -54,6 +120,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let lineUIView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(white: 0.63, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -65,6 +132,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
         return button
     }()
@@ -77,7 +145,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
-        
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -87,6 +155,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         label.textColor = UIColor.init(white: 0.7, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -95,18 +164,21 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let label = UILabel()
         label.text = "Your Step Name"
         label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let categoryTitle: UILabel = {
         let label = UILabel()
         label.text = "Select Category"
         label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let photoTitle: UILabel = {
         let label = UILabel()
         label.text = "Do You Have Some Photos?"
         label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
    
@@ -142,7 +214,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             guard let self = self else {return}
             
             self.handleAnimate(active: true)
-        })
+    })
     
     //constraints for animation approach
     var maxHeightAnchor: NSLayoutConstraint?
@@ -155,7 +227,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             return realm.object(ofType: ProjectList.self, forPrimaryKey: uniqueID)
         }
     }
-    //is an ID of tapped cell
+    //ID of tapped cell
     var uniqueID: String?
     
     override func viewDidLoad() {
@@ -166,28 +238,31 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, newStepCategory, photoTitle, newStepImages, expandingReminderView].forEach {
+        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, photoTitle, newStepImages, expandingReminderView, progressCategoryStackView].forEach {
             contentUIView.addSubview($0)
         }
         
         //constraints configuration
         setupLayout()
         
-        // Handle the text field's user input through delegate callback.
-        stepNameTextField.delegate = self
-        
-        // handle image picker appearance, through delegate callback!! :>)
-        //it is very important to define, what instances of view controllers are
-        //notice that I have this optional delegate var
-        newStepImages.delegate = self
         
         //Enable the Save button only if the text field has a valid project name.
         updateSaveButtonState()
         
         realm = try! Realm()//create an instance of object
         
-        newStepCategory.backgroundColor = UIColor(white: 0.97, alpha: 1)
-        
+    }
+    
+    
+    @objc func handleButtonsActiveState(_ sender: UIButton){
+        //reset all buttons
+        [todoButton, inProgressButton, doneButton, blockedButton].forEach { (button) in
+            button.isSelected = false
+        }
+        //change button selected state
+        sender.isSelected = true
+        //user progress category selection
+        selectedStepProgress = sender.tag
     }
     
     //animate add item menu
@@ -249,32 +324,22 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
 
-        dismiss(animated: true) {
-            //use func for creating object
-            let stepTemplate: ProjectStep = self.defineStepTemplate()
-            
-            if self.stepID != nil{
-                
-                ProjectListRepository.instance.editStep(step: stepTemplate)
-                
-                //delegate for reload
-                self.editDelegate?.someKindOfFunctionThatPerformRelaod()
-                
-                UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
-            }else{
-                
-                try! self.realm!.write ({//here we actualy add a new object called projectList
-                    self.detailList?.projectStep.append(stepTemplate)
-                })
-                
-                //reload
-                self.delegate?.performAllConfigurations()
-                self.delegate?.reloadViews()
-                
-                UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
-            }
-
+        //use func for creating object
+        let stepTemplate: ProjectStep = self.defineStepTemplate()
+        //update existing step
+        if self.stepID != nil{
+            //update func
+            ProjectListRepository.instance.editStep(step: stepTemplate)
+            UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
+        }else{//save new step instance
+            //
+            try! self.realm!.write ({//here we actualy add a new object called projectList
+                self.detailList?.projectStep.append(stepTemplate)
+            })
+            UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
         }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     //creates step instance from values :)))))))))
@@ -289,9 +354,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         //name
         stepTemplate.name = stepNameTextField.text ?? ""
         //category
-        stepTemplate.category = self.newStepCategory.selectedCategory
+        let categories = ["todo", "inProgress", "done", "blocked"]//switch maybe?
+        stepTemplate.category = categories[selectedStepProgress]
         //photos
-        for item in selectedPhotoURLStringArray {
+        for item in newStepImages.photoArray {
             stepTemplate.selectedPhotosArray.append(item)
         }
         //items
@@ -348,18 +414,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stepSaveButton.isEnabled = !text.isEmpty
     }
     
-    
-    
-    //-------------------------------------------------------------------------------------------------
-    //------------------------ not realy sure ---------------------- for what?
-    //------------------------ 1. Images removement won't work properly -------------------------------
-    //-------------------------------------------------------------------------------------------------
-    
-    
-    func deleteUrl(int: Int){
-        selectedPhotoURLStringArray.remove(at: int)
-    }
-    
     func showImagePicker() {
         // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
@@ -387,21 +441,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     private func setupLayout(){
         
         view.backgroundColor = .white
-        newStepImages.translatesAutoresizingMaskIntoConstraints = false
-        newStepCategory.translatesAutoresizingMaskIntoConstraints = false
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        viewControllerTitle.translatesAutoresizingMaskIntoConstraints = false
-        stepSaveButton.translatesAutoresizingMaskIntoConstraints = false
-        nameTitle.translatesAutoresizingMaskIntoConstraints = false
-        categoryTitle.translatesAutoresizingMaskIntoConstraints = false
-        photoTitle.translatesAutoresizingMaskIntoConstraints = false
-       
-        stepNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        lineUIView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
-   
-        
+        expandingReminderView.translatesAutoresizingMaskIntoConstraints = false
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
@@ -414,6 +456,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
         contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        
+        progressCategoryStackView.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor, constant: 15).isActive = true
+        progressCategoryStackView.trailingAnchor.constraint(equalTo: contentUIView.trailingAnchor, constant: -15).isActive = true
+        progressCategoryStackView.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant: 20).isActive = true
+        progressCategoryStackView.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         
         dismissButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 15).isActive = true
@@ -440,7 +487,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         newStepImages.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         newStepImages.heightAnchor.constraint(equalToConstant: 146).isActive = true
         
-        photoTitle.topAnchor.constraint(equalTo: newStepCategory.bottomAnchor, constant:  20).isActive = true
+        photoTitle.topAnchor.constraint(equalTo: progressCategoryStackView.bottomAnchor, constant:  20).isActive = true
         photoTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         photoTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         photoTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -449,11 +496,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         categoryTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         categoryTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         categoryTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
-        newStepCategory.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant:  20).isActive = true
-        newStepCategory.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
-        newStepCategory.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        newStepCategory.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
         nameTitle.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant:  40).isActive = true
         nameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
@@ -484,17 +526,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        var selectedImageFromPicker: UIImage?
-        
-        if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage{
-            //print("editedImage: \(editedImage)")
-            selectedImageFromPicker = editedImage
-        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
-            //print("originalImage: \(originalImage)")
-            selectedImageFromPicker = originalImage
-        }
-        
+               
         if let imgPHAsset = info["UIImagePickerControllerPHAsset"] as? PHAsset{
             //retreave image URL
             imgPHAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
@@ -507,19 +539,15 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             })
         }
         
+        //a bit trick, because can't append item to array directly, so need to call func
         func assignUrl(url: String){
-            selectedPhotoURLStringArray.append(url)
-        }
-        
-        // Set photoImageView to display the selected image.
-        if let selectedImage = selectedImageFromPicker {
+//            selectedPhotoURLStringArray.append(url)
             //add new item
-            newStepImages.photoArray.append(selectedImage)
+            newStepImages.photoArray.append(url)
             //reload when picker closes
             newStepImages.imageCollectionView.reloadData()
         }
-    
-        //Dismiss the picker.
+         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
     

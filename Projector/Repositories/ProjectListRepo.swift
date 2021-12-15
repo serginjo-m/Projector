@@ -92,10 +92,16 @@ class ProjectListRepository {
         })
     }
     
-    func deleteProjectStep(list: ProjectList, stepAtIndex: Int){
+    func deleteStepFromProject(list: ProjectList, stepAtIndex: Int){
         try! realm.write ({
             //projectDetail?.projectStep.remove(at: indexPath.row)
             list.projectStep.remove(at: stepAtIndex)
+        })
+    }
+    
+    func deleteStep(step: ProjectStep){
+        try! realm.write({
+            realm.delete(step)
         })
     }
     

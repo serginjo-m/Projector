@@ -90,7 +90,6 @@
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
-		CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB7C0E24574F4D00B14349 /* StepCategory.swift */; };
 		CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */; };
 		CFBC3A42258152CF00EEF13D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A41258152CF00EEF13D /* Day.swift */; };
 		CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */; };
@@ -211,7 +210,6 @@
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
-		CFBB7C0E24574F4D00B14349 /* StepCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCategory.swift; sourceTree = "<group>"; };
 		CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		CFBC3A41258152CF00EEF13D /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRepo.swift; sourceTree = "<group>"; };
@@ -506,7 +504,6 @@
 			children = (
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
-				CFBB7C0E24574F4D00B14349 /* StepCategory.swift */,
 				CF321C14245D43D2005CC10E /* StepImages.swift */,
 			);
 			path = "Collection Views";
@@ -839,7 +836,6 @@
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
 				CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */,
-				CFBB7C0F24574F4D00B14349 /* StepCategory.swift in Sources */,
 				CF2472FC2718B4FE002D6DCA /* EditViewControllerDelegate.swift in Sources */,
 				CF1D3E13268B6DA000C10798 /* ProjectExtension.swift in Sources */,
 				CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */,

@@ -15,20 +15,17 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
     //Properties
     private let cellIdent = "cellId"
     //an instance of selected step
-    var step: ProjectStep?
-    //temporary image source
-//    let imagesArray = ["interior","workspace", "river" ]
-    var photosArray = [UIImage]()
+    var step: ProjectStep
     
     //MARK: Initialization
-    override init(frame: CGRect) {
+    init(step: ProjectStep, frame: CGRect) {
+        self.step = step
         super.init(frame: frame)
         setupStepImages()
     }
     
     required init(coder: NSCoder) {
-        super.init(coder: coder)
-        setupStepImages()
+        fatalError("init(coder:) has not been implemented")
     }
     
     let stepImagesCollectionView: UICollectionView = {
@@ -74,36 +71,40 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
     //size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //here we don't need to use view.frame.height becouse our CategoryCell have it
+        //144???
         return CGSize(width: 144, height: frame.height)
     }
     
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        
-        if let urlArray = step?.selectedPhotosArray{
-            return urlArray.count
-        }
-        
-        return 0
+        return step.selectedPhotosArray.count
     }
     
     //define the cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdent, for: indexPath) as! StepImageCell
         
-        cell.stepImage.image = photosArray[indexPath.row]
+        cell.template = step.selectedPhotosArray[indexPath.item]
         return cell
     }
 }
 
 class StepImageCell: UICollectionViewCell{
     
+    var template: String? {
+        didSet{
+            guard let unwrappedTemplate = template else {return}
+            //realy like this new approach
+            stepImage.retreaveImageUsingURLString(myUrl: unwrappedTemplate)
+        }
+    }
+    
     //Properties
     var stepImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "interior")
         image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
@@ -123,6 +124,9 @@ class StepImageCell: UICollectionViewCell{
         backgroundColor = UIColor.lightGray
         
         addSubview(stepImage)
-        stepImage.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        stepImage.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        stepImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        stepImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
+        stepImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
     }
 }

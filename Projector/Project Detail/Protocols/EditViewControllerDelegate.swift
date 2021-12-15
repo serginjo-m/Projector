@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-//Many protocols in app? is it good? ---------------------------------------
 //reload views after changings(add or edit object)
 protocol EditViewControllerDelegate: class{
     // assign all necessary data to objects  in detailVC
