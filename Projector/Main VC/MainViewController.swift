@@ -146,7 +146,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //changing default direction of scrolling
         layout.scrollDirection = .horizontal
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -406,7 +406,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //perforn all positioning configurations
     private func setupLayout(){
         
-        //becouse by default it is black
+        //because by default it is black
         view.backgroundColor = .white
         
         mainTitle.translatesAutoresizingMaskIntoConstraints = false
