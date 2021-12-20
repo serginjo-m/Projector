@@ -83,7 +83,7 @@ extension CalendarViewController {
     }
 }
 //----------------------------------------------------------------------------------------------------------------
-//Should create something like class for it, becouse it repeats 2x times
+//Should create something like class for it, because it repeats 2x times
 extension CalendarViewController{
     private func dayOfWeekLetter(for dayNumber: Int) -> String {
         switch dayNumber {
