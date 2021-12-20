@@ -26,7 +26,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
     //transparent black view that covers all content
     //IMPORTANT:
-    //here I can add gesture recognizer becouse lazy var
+    //here I can add gesture recognizer because lazy var
     lazy var blackView: UIView = {
         let view = UIView()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
@@ -35,7 +35,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         return view
     }()
     
-    //------------------------- a bit trick becouse of constraint error ---------------------------
+    //------------------------- a bit trick because of constraint error ---------------------------
     //need to give a valid frame to event elements when initialize it
     //so error "Unable to simultaneously satisfy constraints" is gone
     let eventElements = EventElementsViewController(frame: CGRect(x: -400, y: 0, width: 400, height: 300))
@@ -81,7 +81,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
