@@ -148,7 +148,7 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
     lazy var recentActivitiesCollectionView: UICollectionView = {
 
        
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -178,7 +178,7 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         
         
         //style configurations
-        //this color is not so important, becouse CV need to fill everything
+        //this color is not so important, because CV need to fill everything
         recentActivitiesCollectionView.backgroundColor = UIColor.init(red: 95/255, green: 74/255, blue: 99/255, alpha: 1)
         recentActivitiesCollectionView.layer.cornerRadius = 6
         recentActivitiesCollectionView.layer.masksToBounds = true
