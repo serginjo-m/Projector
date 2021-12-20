@@ -104,7 +104,7 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 16
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -140,7 +140,7 @@ class ViewByCategoryCollectionView: UIStackView,UICollectionViewDataSource, UICo
     
     //size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //here we don't need to use view.frame.height becouse our CategoryCell have it
+        //here we don't need to use view.frame.height because our CategoryCell have it
         return CGSize(width: 125, height: frame.height)
     }
     //number of cells
@@ -189,7 +189,7 @@ class ViewByCategoryCell: UICollectionViewCell {
         didSet{
             if let setting = configureCell{
                 
-                //constraints func , becouse elements needs to be positioned differently
+                //constraints func , because elements needs to be positioned differently
                 configureConstraints(width: setting.imageWidth, height: setting.imageHeight, top: setting.imageTopAnchor, left: setting.imageLeftAnchor, titleLeft: setting.titleLeftAnchor)
                 
                 //background color
