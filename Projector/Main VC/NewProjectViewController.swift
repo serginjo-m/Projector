@@ -20,7 +20,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     //unique project id for updating
     var projectId: String?
-    //becouse project template needs to contain all steps
+    //because project template needs to contain all steps
     var projectSteps: List<ProjectStep>?
     //most for reload data
     weak var delegate: EditViewControllerDelegate?
@@ -37,7 +37,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         let calendar = Calendar(identifier: .gregorian)
         let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
         guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
+        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
         return myDate
     }()
     
@@ -174,7 +174,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
                 let project: ProjectList = self.defineProjectTemplate(id: ID)
                 
                 
-                //becouse project with that id exist it perform update
+                //because project with that id exist it perform update
                 ProjectListRepository.instance.updateProjectList(list: project)
                 
                 //------------------------------------------------------------------------------------------------------
@@ -281,7 +281,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         // Hide the keyboard.
         nameTextField.resignFirstResponder()
         //check for libraty authorization, that allows PHAsset option using in picker
-        // & it is important, becouse all mechanism is based on PHAsset image address
+        // & it is important, because all mechanism is based on PHAsset image address
         let status = PHPhotoLibrary.authorizationStatus()
         if status == .notDetermined  {
             PHPhotoLibrary.requestAuthorization({status in
