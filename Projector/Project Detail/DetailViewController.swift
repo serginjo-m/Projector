@@ -140,7 +140,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         super.viewDidLoad()
     
         view.backgroundColor = .white
-        //apply becouse side panel visible during animation btwn view controllers
+        //apply because side panel visible during animation btwn view controllers
         view.layer.masksToBounds = true
         
         view.addSubview(scrollViewContainer)
