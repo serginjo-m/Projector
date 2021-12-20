@@ -54,7 +54,7 @@ class StepNumbersCollectionView: UIStackView,UICollectionViewDataSource, UIColle
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 16
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -101,7 +101,7 @@ class StepNumbersCollectionView: UIStackView,UICollectionViewDataSource, UIColle
         itemSize.height = 48
         itemSize.width += 20.0
         
-        //becouse if size too small description will be covered
+        //because if size too small description will be covered
         if itemSize.width < 95 {
             return CGSize(width: 95, height: itemSize.height)
         }
@@ -163,7 +163,7 @@ class StepNumbersCollectionView: UIStackView,UICollectionViewDataSource, UIColle
         let smallFont = UIFont.systemFont(ofSize: 19)
         let attrString = NSMutableAttributedString(string: valueString)
         
-        //becouse distance units is km, perform another configuration
+        //because distance units is km, perform another configuration
         if parameter == "DISTANCE"{
             attrString.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: smallFont, range: NSMakeRange(valueString.count - 2 , 2))
         } else {
