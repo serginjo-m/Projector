@@ -19,7 +19,7 @@ class CameraNote: Object {
     // Date represents a given day in a month.
     @objc dynamic var date = Date()
     
-    //becouse Realm is not support UIImages type
+    //because Realm is not support UIImages type
     @objc dynamic var picture: String = ""
     
     //image height
