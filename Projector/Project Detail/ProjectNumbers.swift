@@ -117,7 +117,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 16
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -167,7 +167,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         itemSize.height = 70.0
         itemSize.width += 40.0
         
-        //becouse if size too small description will be covered
+        //because if size too small description will be covered
         if itemSize.width < 125 {
             return CGSize(width: 125, height: itemSize.height)
         }
@@ -253,7 +253,7 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
         let smallFont = UIFont.systemFont(ofSize: 19)
         let attrString = NSMutableAttributedString(string: valueString)
         
-        //becouse distance units is km, perform another configuration
+        //because distance units is km, perform another configuration
         if parameter == "DISTANCE"{
             attrString.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: smallFont, range: NSMakeRange(valueString.count - 2 , 2))
         } else {
@@ -269,7 +269,7 @@ class ProjectNumbersCell: UICollectionViewCell {
         didSet{
             if let setting = configureCell{
                 
-                //constraints func , becouse elements needs to be positioned differently
+                //constraints func , because elements needs to be positioned differently
                 configureConstraints(width: setting.imageWidth, height: setting.imageHeight, top: setting.imageTopAnchor, left: setting.imageLeftAnchor)
                 
                 //background color
