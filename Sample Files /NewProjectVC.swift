@@ -36,7 +36,7 @@
 //        let calendar = Calendar(identifier: .gregorian)
 //        let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
 //        guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-//        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
+//        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
 //        return myDate
 //    }()
 //
@@ -80,7 +80,7 @@
 //        distanceLabel.text = "\(Int(round(distanceSlider.value))) km"
 //    }
 //
-//    //becouse tap gesture won't work inside constant configurator need to create separate function
+//    //because tap gesture won't work inside constant configurator need to create separate function
 //    private func imageViewConfiguration(){
 //        //Enable User Interaction for UIImageView (tapGesture won't work without this)
 //        projectMainPicture.isUserInteractionEnabled = true
@@ -227,7 +227,7 @@
 //        // Hide the keyboard.
 //        nameTextField.resignFirstResponder()
 //        //check for libraty authorization, that allows PHAsset option using in picker
-//        // & it is important, becouse all mechanism is based on PHAsset image address
+//        // & it is important, because all mechanism is based on PHAsset image address
 //        let status = PHPhotoLibrary.authorizationStatus()
 //        if status == .notDetermined  {
 //            PHPhotoLibrary.requestAuthorization({status in

@@ -53,7 +53,7 @@
 //        //changing default direction of scrolling
 //        layout.scrollDirection = .horizontal
 //        
-//        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+//        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
 //        // & also we need to specify how "big" it needs to be
 //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        
@@ -93,7 +93,7 @@
 //        //increase height for description label
 //        itemSize.height += 20.0
 //       
-//        //becouse if size too small description will be covered
+//        //because if size too small description will be covered
 //        if itemSize.width < 80 {
 //            return CGSize(width: 80.0, height: itemSize.height)
 //        }
@@ -118,7 +118,7 @@
 //        let smallFont = UIFont.systemFont(ofSize: 15)
 //        let attrString = NSMutableAttributedString(string: cell.valueLabel.text!)
 //        
-//        //becouse distance units is km, perform another configuration
+//        //because distance units is km, perform another configuration
 //        if cell.descriptionLabel.text == "Distance"{
 //           attrString.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: smallFont, range: NSMakeRange(cell.valueLabel.text!.count - 2 , 2))
 //        } else {

@@ -212,7 +212,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func addStep(_ sender: UIStoryboardSegue) {}
     
     @IBAction func unwindDetailViewController(sender: UIStoryboardSegue){// !!!--- NAME == TARGET ----!!!
-        //so all this multiple changes is performs becouse:
+        //so all this multiple changes is performs because:
         //row not support distance btwn cells !
         //need performBatchUpdate - multiple changes
         stepTableView.performBatchUpdates({

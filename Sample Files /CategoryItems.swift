@@ -56,7 +56,7 @@
 //        //instance for UICollectionView purposes
 //        let layout = PinterestLayout()
 //        
-//        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
+//        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
 //        // & also we need to specify how "big" it needs to be
 //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        

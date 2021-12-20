@@ -46,7 +46,7 @@ class StepAddItem: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
     
     //Add new item to the step
     @objc func showMenu(){
-        //becouse I can't add blackView to view, created instance of window
+        //because I can't add blackView to view, created instance of window
         if let window = UIApplication.shared.keyWindow{
             blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
             
@@ -124,7 +124,7 @@ class StepAddItem: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        //it is a little bit different, becouse cell is in another file
+        //it is a little bit different, because cell is in another file
         collectionView.register(StepAddItemCell.self, forCellWithReuseIdentifier: cellId)
 
     }

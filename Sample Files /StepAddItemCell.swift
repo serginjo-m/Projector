@@ -33,7 +33,7 @@ class StepAddItemCell: UICollectionViewCell{
     //every time value is changed by collection view this var change name and image!! 
     var setting: Setting? {
         didSet{
-            //becouse setting?.name was set by collectionView
+            //because setting?.name was set by collectionView
             nameLabel.text = setting?.name
             
             if let imageName = setting?.imageName{

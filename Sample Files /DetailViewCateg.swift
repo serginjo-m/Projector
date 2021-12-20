@@ -59,7 +59,7 @@
 //    func updateCategoriesCV(){
 //        //update existing step categories array
 //        updateCategoriesArray()
-//        //clear pointers from array, becouse CV adds new
+//        //clear pointers from array, because CV adds new
 //        categoryPointersArray.removeAll()
 //        //reload step categories collection view
 //        stepCategoryCollectionView.reloadData()
@@ -128,7 +128,7 @@
 //        //changing default direction of scrolling
 //        layout.scrollDirection = .horizontal
 //        
-//        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+//        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
 //        // & also we need to specify how "big" it needs to be
 //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        
@@ -185,7 +185,7 @@
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentificator, for: indexPath) as! StepsCategoriesCell
 //        //set category name
 //        cell.categoryLabel.text = existCategoryNames[indexPath.row]
-//        //have to transfer this here becouse of dequeue problems
+//        //have to transfer this here because of dequeue problems
 //        cell.categoryLabel.frame = CGRect(x: 0, y: 0, width: Int(cell.frame.width), height: 30)
 //        cell.selectedCategoryPointer.frame = CGRect(x: 0, y: 26, width: Int(cell.frame.width), height: 8)
 //        //add pointers to array for changing color

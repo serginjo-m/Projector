@@ -38,7 +38,7 @@
 //        //changing default direction of scrolling
 //        layout.scrollDirection = .vertical
 //        
-//        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+//        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
 //        // & also we need to specify how "big" it needs to be
 //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 //        

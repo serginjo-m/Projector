@@ -167,14 +167,14 @@
 //        let calendar = Calendar(identifier: .gregorian)
 //        let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
 //        guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-//        let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
+//        let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
 //        return myDate
 //    }()
 //    
 //    
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
-//        //need to change becouse by default it is black
+//        //need to change because by default it is black
 //        view.backgroundColor = .white
 //        
 //        [stepNameTextField, stepSaveButton, cancelButton, titleLabel, nameTitle, categoryTitle, photoTitle, stepImages, priceTitle, stepPriceSlider, stepPriceValueLabel, distanceTitle, stepDistanceSlider, stepDistanceValueLabel].forEach {
@@ -415,7 +415,7 @@
 //        // Hide the keyboard.
 //        stepNameTextField.resignFirstResponder()
 //        //check for libraty authorization, that allows PHAsset option using in picker
-//        // & it is important, becouse all mechanism is based on PHAsset image address
+//        // & it is important, because all mechanism is based on PHAsset image address
 //        let status = PHPhotoLibrary.authorizationStatus()
 //        if status == .notDetermined  {
 //            PHPhotoLibrary.requestAuthorization({status in
