@@ -25,7 +25,7 @@ class Event: Object {
     //Type of event
     @objc dynamic var category: String?
     
-    //becouse Realm is not support UIImages type
+    //because Realm is not support UIImages type
     @objc dynamic var picture: String?
     
     //MARK: Methods
