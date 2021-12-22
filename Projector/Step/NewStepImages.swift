@@ -55,7 +55,7 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
         layout.minimumLineSpacing = 28
         
         
-        //becouse every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
+        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
         // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -91,7 +91,7 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
     
     //size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //here we don't need to use view.frame.height becouse our CategoryCell have it
+        //here we don't need to use view.frame.height because our CategoryCell have it
         return CGSize(width: 59, height: 59)
     }
     //number of cells
