@@ -84,10 +84,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
-    let completeStepButton: UIButton = {
+    let stepToEventButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(changeSelectedValue(button:)), for: .touchUpInside)
-        button.setTitle("Complete", for: .normal)
+        button.addTarget(self, action: #selector(addStepToCalendarEvent(button:)), for: .touchUpInside)
+        button.setTitle("Calendar", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.setTitleColor(UIColor.init(red: 104/255, green: 104/255, blue: 104/255, alpha: 1), for: .normal)
         button.setTitleColor(UIColor.init(red: 42/255, green: 192/255, blue: 45/255, alpha: 1), for: .selected)
@@ -159,7 +159,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.addSubview(contentUIView)
         
         //add items to a view
-        [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, completeStepButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
+        [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -175,7 +175,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //------------------------ temporary solution -----------------------------
         guard let step = projectStep else {return}
         stepNameTitle.text = step.name
-        completeStepButton.isSelected = step.complete
+        stepToEventButton.isSelected = step.complete
         reminderStepButton.isSelected = step.reminder != nil ? true : false//convert to bool value
         stepNumbersCV.step = step
         categoryLabel.text = step.category
@@ -201,14 +201,22 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    //COMPLETE
-    @objc func changeSelectedValue(button: UIButton) {
+    //Add to Calendar Event
+    @objc func addStepToCalendarEvent(button: UIButton) {
         guard let step = projectStep else {return}
-        //assign an opposite value to button.isSeleceted
-        button.isSelected = !button.isSelected
-        ProjectListRepository.instance.updateStepCompletionStatus(step: step, isComplete: button.isSelected)
-        let completedString = button.isSelected == true ? "completed" : "not completed"
-        UserActivitySingleton.shared.createUserActivity(description: "\(step.name) is \(completedString)")
+        //create new event view controller based on selected step
+        let newEventViewController = NewEventViewController()
+        //step identifier access data base object
+        newEventViewController.stepId = stepID
+        //if step has some images define event image
+        if step.selectedPhotosArray.count > 0 {
+            //use UIImageView extension function that retreaves image by URL
+            newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: step.selectedPhotosArray[0])
+        }
+        //define event name
+        newEventViewController.nameTextField.text = step.name
+        //show new event view controller
+        navigationController?.present(newEventViewController, animated: true, completion: nil)
     }
     
     //DELETE STEP
@@ -320,7 +328,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         circleImage.translatesAutoresizingMaskIntoConstraints = false
-        completeStepButton.translatesAutoresizingMaskIntoConstraints = false
+        stepToEventButton.translatesAutoresizingMaskIntoConstraints = false
         editStepButton.translatesAutoresizingMaskIntoConstraints = false
         removeStepButton.translatesAutoresizingMaskIntoConstraints = false
         stepNameTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -378,27 +386,27 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepNameTitle.heightAnchor.constraint(equalToConstant: 33).isActive = true
         }
         
-        completeStepButton.topAnchor.constraint(equalTo: stepNameTitle.bottomAnchor, constant: 18).isActive = true
-        completeStepButton.leftAnchor.constraint(equalTo: dismissButton.leftAnchor, constant: 0).isActive = true
-        completeStepButton.widthAnchor.constraint(equalToConstant: 72).isActive = true
-        completeStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        stepToEventButton.topAnchor.constraint(equalTo: stepNameTitle.bottomAnchor, constant: 18).isActive = true
+        stepToEventButton.leftAnchor.constraint(equalTo: dismissButton.leftAnchor, constant: 0).isActive = true
+        stepToEventButton.widthAnchor.constraint(equalToConstant: 72).isActive = true
+        stepToEventButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        editStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
-        editStepButton.leftAnchor.constraint(equalTo: completeStepButton.rightAnchor, constant: 24).isActive = true
+        editStepButton.centerYAnchor.constraint(equalTo: stepToEventButton.centerYAnchor, constant: 0).isActive = true
+        editStepButton.leftAnchor.constraint(equalTo: stepToEventButton.rightAnchor, constant: 24).isActive = true
         editStepButton.widthAnchor.constraint(equalToConstant: 31).isActive = true
         editStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        removeStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
+        removeStepButton.centerYAnchor.constraint(equalTo: stepToEventButton.centerYAnchor, constant: 0).isActive = true
         removeStepButton.leftAnchor.constraint(equalTo: editStepButton.rightAnchor, constant: 24).isActive = true
         removeStepButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         removeStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        reminderStepButton.centerYAnchor.constraint(equalTo: completeStepButton.centerYAnchor, constant: 0).isActive = true
+        reminderStepButton.centerYAnchor.constraint(equalTo: stepToEventButton.centerYAnchor, constant: 0).isActive = true
         reminderStepButton.leftAnchor.constraint(equalTo: removeStepButton.rightAnchor, constant: 24).isActive = true
         reminderStepButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         reminderStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        myStepImagesCV.topAnchor.constraint(equalTo: completeStepButton.bottomAnchor, constant:  30).isActive = true
+        myStepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  30).isActive = true
         myStepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true
         myStepImagesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         myStepImagesCV.heightAnchor.constraint(equalToConstant: 144).isActive = true

@@ -17,10 +17,12 @@ import Photos
 class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //---------------------------- temporary solution --------------------------------------
-    //there I can have many options, becouse event can last more then 1 day or a couple of hours
+    //there I can have many options, because event can last more then 1 day or a couple of hours
     var eventDate: Date?
     var eventStart: Date?
     var eventEnd: Date?
+    var stepId: String?
+    var projectId: String?
     
     private lazy var dateFormatterFullDate: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -45,10 +47,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let viewControllerTitle: UILabel = {
         let label = UILabel()
-        label.text = "Create an Event"
-        label.textColor = UIColor.init(displayP3Red: 55/255, green: 55/255, blue: 55/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textAlignment = .left
+        label.textColor = UIColor.init(white: 0.7, alpha: 1)
+        label.text = "Create New Event"
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -63,6 +66,16 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         button.addTarget(self, action: #selector(saveAction(_:)), for: .touchUpInside)
         button.isEnabled = false
         return button
+    }()
+    
+    var imageHolderView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "workspace")
+        view.contentMode = .scaleAspectFill
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 11
+        view.clipsToBounds = true
+        return view
     }()
     
     let nameTextField: UITextField = {
@@ -202,6 +215,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.addSubview(dismissButton)
         view.addSubview(viewControllerTitle)
         view.addSubview(saveButton)
+        view.addSubview(imageHolderView)
         view.addSubview(nameTextField)
         view.addSubview(lineUIView)
         view.addSubview(dateTitle)
@@ -242,7 +256,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         //unwrap optional date for activity object
         guard let eventDate = event.date else {return}
-        
+        //new one
         if self.eventId == nil{
             
             let notification = Notification()
@@ -259,7 +273,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             
             UserActivitySingleton.shared.createUserActivity(description: "New Event on \(self.dateFormatterFullDate.string(from: eventDate)): \(event.title)")
         }else{
-            //becouse event with that id exist it perform update
+            //because event with that id exist it perform update
             ProjectListRepository.instance.updateEvent(event: event)
             //configure detail VC
             // self.delegate?.performAllConfigurations()
@@ -277,11 +291,24 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         if let text = nameTextField.text{
             eventTemplate.title = text
         }
+        
+        //date from existing event or new date
         if let date = self.eventDate{
             eventTemplate.date = date
         }else{
             eventTemplate.date = Date()
         }
+        
+        //stepId == step event
+        if let stepIdentifier = stepId {
+            eventTemplate.category = "projectStep"
+            if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
+                if step.selectedPhotosArray.count > 0{
+                    eventTemplate.picture = step.selectedPhotosArray[0]
+                }
+            }
+        }
+        
         if let description = descriptionTextView.text{
             eventTemplate.descr = description
         }
@@ -409,17 +436,22 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
-        viewControllerTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 60).isActive = true
-        viewControllerTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        viewControllerTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        viewControllerTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        viewControllerTitle.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
+        viewControllerTitle.widthAnchor.constraint(equalToConstant: 150).isActive = true
         viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
-        
+
         saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
-        nameTextField.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant: 27).isActive = true
+        imageHolderView.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant: 55).isActive = true
+        imageHolderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        imageHolderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        imageHolderView.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        
+        nameTextField.topAnchor.constraint(equalTo: imageHolderView.bottomAnchor, constant: 40).isActive = true
         nameTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         nameTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true

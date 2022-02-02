@@ -187,7 +187,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let calendar = Calendar(identifier: .gregorian)
         let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
         guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-        let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it becouse of guard?
+        let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
         return myDate
     }()
     
@@ -238,7 +238,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, photoTitle, newStepImages, expandingReminderView, progressCategoryStackView].forEach {
+        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -418,7 +418,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
         //check for libraty authorization, that allows PHAsset option using in picker
-        // & it is important, becouse all mechanism is based on PHAsset image address
+        // & it is important, because all mechanism is based on PHAsset image address
         let status = PHPhotoLibrary.authorizationStatus()
         if status == .notDetermined  {
             PHPhotoLibrary.requestAuthorization({status in

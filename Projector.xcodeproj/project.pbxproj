@@ -48,7 +48,7 @@
 		CF2C1298237766A700F3132A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1293237766A700F3132A /* MainViewController.swift */; };
 		CF2C1299237766A700F3132A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1294237766A700F3132A /* AppDelegate.swift */; };
 		CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1295237766A700F3132A /* NewProjectVC.swift */; };
-		CF321C15245D43D2005CC10E /* StepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* StepImages.swift */; };
+		CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF321C14245D43D2005CC10E /* NewStepImages.swift */; };
 		CF3712CF23740BAE00B2D593 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712CD23740BAE00B2D593 /* Main.storyboard */; };
 		CF3712D423740BB200B2D593 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */; };
 		CF3F0FC82602746A00CAC008 /* UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3F0FC72602746A00CAC008 /* UserActivity.swift */; };
@@ -166,7 +166,7 @@
 		CF2C1293237766A700F3132A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CF2C1294237766A700F3132A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF2C1295237766A700F3132A /* NewProjectVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProjectVC.swift; sourceTree = "<group>"; };
-		CF321C14245D43D2005CC10E /* StepImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepImages.swift; sourceTree = "<group>"; };
+		CF321C14245D43D2005CC10E /* NewStepImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepImages.swift; sourceTree = "<group>"; };
 		CF3712C623740BAE00B2D593 /* Projector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Projector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF3712CE23740BAE00B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF3712D323740BB200B2D593 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -399,7 +399,6 @@
 				CF5483B925EC398D00D6A05B /* Step */,
 				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
-				CF9DA835244C499E00DFAEEF /* Collection Views */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
 				CF2C1294237766A700F3132A /* AppDelegate.swift */,
@@ -422,6 +421,7 @@
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
+				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -454,6 +454,8 @@
 			children = (
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
 				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
+				CF321C14245D43D2005CC10E /* NewStepImages.swift */,
+				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
 				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
 				CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */,
@@ -497,16 +499,6 @@
 				CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */,
 			);
 			path = "Sample Files ";
-			sourceTree = "<group>";
-		};
-		CF9DA835244C499E00DFAEEF /* Collection Views */ = {
-			isa = PBXGroup;
-			children = (
-				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
-				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
-				CF321C14245D43D2005CC10E /* StepImages.swift */,
-			);
-			path = "Collection Views";
 			sourceTree = "<group>";
 		};
 		CFB3B297237411E5002E2F9B /* Models */ = {
@@ -565,9 +557,9 @@
 				CF1A411C26E4BDC1009EB276 /* Holidays API */,
 				CF059F462598B47500729A74 /* NewEventVC.swift */,
 				CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */,
+				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
 				CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */,
 				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
-				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
 				CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */,
 				CFD88DFA25961B0600B726FF /* CalendarCell.swift */,
 			);
@@ -828,7 +820,7 @@
 				CFEDDC5326F7C900005E5652 /* UIColorExt.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
-				CF321C15245D43D2005CC10E /* StepImages.swift in Sources */,
+				CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */,
 				CF1D24502741057B00341C26 /* StepProgressMenu.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,

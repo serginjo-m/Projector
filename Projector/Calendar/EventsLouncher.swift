@@ -69,6 +69,8 @@ extension CalendarViewController {
             eventElements.events = events
             
             eventElements.eventsTableView.reloadData()
+            //reveal timeline
+            eventElements.lineView.backgroundColor = UIColor.init(white: 229/255, alpha: 1)
             //show view controller
             showUpEventsView()
         }else{
@@ -77,6 +79,8 @@ extension CalendarViewController {
             //show view controller
             
             eventElements.eventsTableView.reloadData()
+            //hide timeline
+            eventElements.lineView.backgroundColor = .clear
             showUpEventsView()
         }
         
