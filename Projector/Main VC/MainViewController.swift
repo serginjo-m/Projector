@@ -44,6 +44,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     func viewControllerType(for contollerType: Int) -> UIViewController {
+        
         switch contollerType {
         case 0:
             return PhotoNotesCollectionViewController()//photo note
@@ -54,6 +55,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         default:
             return UIViewController()
         }
+        
     }
     
     var statisticsStackView = StatisticsStackView()
@@ -354,7 +356,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //an instance of project detail vc
         let projectDetailViewController = DetailViewController()
         //search step by sected item index
-        let selectedProject = proJects[indexPath.row]
+        let selectedProject = proJects[indexPath.item]
         projectDetailViewController.projectListIdentifier = selectedProject.id
         projectDetailViewController.delegate = self
         navigationController?.pushViewController(projectDetailViewController, animated: true)

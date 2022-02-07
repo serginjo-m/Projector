@@ -304,7 +304,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         var selectedImageFromPicker: UIImage?
-        var stringURL: String?
         
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage{
             //print("editedImage: \(editedImage)")

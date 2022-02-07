@@ -211,7 +211,7 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
         present(alert, animated: true, completion: nil)
         
     }
-    //create note from camera shot
+    //create note object from camera shot
     func createCameraNote(image: String) -> CameraNote{
         guard let height = self.selectedImageHeight, let width = selectedImageWidth else {fatalError()}
         let note = CameraNote()
@@ -251,17 +251,14 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     
     //Present Alert with some information
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        
         if let error = error {
             // we got back an error!
             showAlertWith(title: "Save error", message: error.localizedDescription)
         } else {
-            self.selectedImageWidth = Int(image.size.width)
-            self.selectedImageHeight = Int(image.size.height)
             fetchLastImage(completion: selectedImageURL)
 //            showAlertWith(title: "Saved!", message: "Your image has been saved to your photos.")
         }
-        
-        
     }
     
     //find an address of the last image in photo library
@@ -274,6 +271,9 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
         
         if (fetchResult.firstObject != nil){
             let lastImageAsset: PHAsset = fetchResult.firstObject as! PHAsset
+            //have to transfer it here, so I can grab image dimensions
+            self.selectedImageHeight = lastImageAsset.pixelHeight
+            self.selectedImageWidth = lastImageAsset.pixelWidth
             
             //retreave image URL
             lastImageAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in

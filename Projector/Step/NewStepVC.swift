@@ -191,30 +191,33 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return myDate
     }()
     
-    //Reminder view object
-    lazy var expandingReminderView = ExpandingReminder(
-        //expand,close & remove button (3 in 1)
-        didTapExpandCompletionHandler: { [weak self] in
-            guard let self = self else {return}
-            
-            let applyButton = self.expandingReminderView.applyReminderButton
-            let expandButton = self.expandingReminderView.reminderExpandIcon
-            
-            //Check what kind of animation should run
-            if applyButton.isSelected == false {
-                self.handleAnimate(active: false)
-            }else{
-                
-                applyButton.isSelected = false
-            }
-            
-        },
-        //apply reminder button
-        didTapApplyCompletionHandler: { [weak self] in
-            guard let self = self else {return}
-            
-            self.handleAnimate(active: true)
-    })
+    //wrap to avoid error
+    lazy var expandingReminderView: ExpandingReminder = {
+        let reminder = ExpandingReminder(
+            //expand,close & remove button (3 in 1)
+            didTapExpandCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+    
+                let applyButton = self.expandingReminderView.applyReminderButton
+                let expandButton = self.expandingReminderView.reminderExpandIcon
+    
+                //Check what kind of animation should run
+                if applyButton.isSelected == false {
+                    self.handleAnimate(active: false)
+                }else{
+    
+                    applyButton.isSelected = false
+                }
+    
+            },
+            //apply reminder button
+            didTapApplyCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+    
+                self.handleAnimate(active: true)
+        })
+        return reminder
+    }()
     
     //constraints for animation approach
     var maxHeightAnchor: NSLayoutConstraint?

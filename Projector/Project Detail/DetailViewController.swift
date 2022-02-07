@@ -30,22 +30,27 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     let sideView = SidePanelView()
     //project statistics (money, distance..)
     // 'lazy' give access to self & set controller once
-    lazy var projectNumbersCV = ProjectNumbersCollectionView(
-        didTapMoneyCompletionHandler: { [weak self] in
-            guard let self = self else {return}
-            self.sideView.categoryKey = "money"
-            self.showStatisticsDetail()
-    },
-        didTapTimeCompletionHandler: { [weak self] in
-            guard let self = self else {return}
-            self.sideView.categoryKey = "time"
-            self.showStatisticsDetail()
-    },
-        didTapFuelCompletionHandler: { [weak self] in
-            guard let self = self else {return}
-            self.sideView.categoryKey = "fuel"
-            self.showStatisticsDetail()
-    })
+    //give it some wrap to avoid error
+    lazy var projectNumbersCV: ProjectNumbersCollectionView = {
+        let projectNumbersCV = ProjectNumbersCollectionView(
+            didTapMoneyCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+                self.sideView.categoryKey = "money"
+                self.showStatisticsDetail()
+        },
+            didTapTimeCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+                self.sideView.categoryKey = "time"
+                self.showStatisticsDetail()
+        },
+            didTapFuelCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+                self.sideView.categoryKey = "fuel"
+                self.showStatisticsDetail()
+        })
+        return projectNumbersCV
+    }()
+    
     //transparent black view that covers all content
     lazy var blackView: UIView = {
         let view = UIView()
@@ -137,6 +142,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }()
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
     
         view.backgroundColor = .white

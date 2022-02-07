@@ -52,7 +52,7 @@ class ProjectListRepository {
     //update - project
     func updateProjectList(list: ProjectList){
         try! realm.write ({
-            realm.add(list, update: true)
+            realm.add(list, update: Realm.UpdatePolicy.modified)
         })
     }
     
@@ -77,7 +77,7 @@ class ProjectListRepository {
     //edit step function
     func editStep(step: ProjectStep){
         try! self.realm.write({
-            realm.add(step, update: true)
+            realm.add(step, update: Realm.UpdatePolicy.modified)
         })
     }
     
@@ -121,7 +121,7 @@ class ProjectListRepository {
     //update an event object
     func updateEvent(event: Event){
         try! realm.write ({
-            realm.add(event, update: true)
+            realm.add(event, update: Realm.UpdatePolicy.modified)
         })
     }
     

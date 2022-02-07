@@ -184,7 +184,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
     let valuePicker: UIPickerView = {
         let picker = UIPickerView()
         picker.backgroundColor = .clear
-        picker.selectedRow(inComponent: 5)
+//        picker.selectedRow(inComponent: 5)
         return picker
     }()
     
