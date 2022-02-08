@@ -25,9 +25,9 @@
 
 #include <realm/util/file.hpp>
 #include <realm/alloc.hpp>
+#include <realm/array.hpp>
 #include <realm/impl/array_writer.hpp>
-#include <realm/array_integer.hpp>
-#include <realm/group_shared_options.hpp>
+#include <realm/db_options.hpp>
 
 
 namespace realm {
@@ -39,8 +39,6 @@ class SlabAlloc;
 
 /// This class is not supposed to be reused for multiple write sessions. In
 /// particular, do not reuse it in case any of the functions throw.
-///
-/// FIXME: Move this class to namespace realm::_impl and to subdir src/realm/impl.
 class GroupWriter : public _impl::ArrayWriterBase {
 public:
     // For groups in transactional mode (Group::m_is_shared), this constructor
@@ -52,7 +50,7 @@ public:
     // (Group::m_is_shared), the constructor also adds version tracking
     // information to the group, if it is not already present (6th and 7th entry
     // in Group::m_top).
-    using Durability = SharedGroupOptions::Durability;
+    using Durability = DBOptions::Durability;
     GroupWriter(Group&, Durability dura = Durability::Full);
     ~GroupWriter();
 
@@ -77,22 +75,28 @@ public:
     void dump();
 #endif
 
-    size_t get_free_space_size()
+    size_t get_free_space_size() const
     {
         return m_free_space_size;
+    }
+
+    size_t get_locked_space_size() const
+    {
+        return m_locked_space_size;
     }
 
 private:
     class MapWindow;
     Group& m_group;
     SlabAlloc& m_alloc;
-    ArrayInteger m_free_positions; // 4th slot in Group::m_top
-    ArrayInteger m_free_lengths;   // 5th slot in Group::m_top
-    ArrayInteger m_free_versions;  // 6th slot in Group::m_top
-    uint64_t m_current_version;
+    Array m_free_positions; // 4th slot in Group::m_top
+    Array m_free_lengths;   // 5th slot in Group::m_top
+    Array m_free_versions;  // 6th slot in Group::m_top
+    uint64_t m_current_version = 0;
     uint64_t m_readlock_version;
     size_t m_window_alignment;
-    size_t m_free_space_size;
+    size_t m_free_space_size = 0;
+    size_t m_locked_space_size = 0;
     Durability m_durability;
 
     struct FreeSpaceEntry {
@@ -106,16 +110,21 @@ private:
         size_t size;
         uint64_t released_at_version;
     };
-    std::vector<FreeSpaceEntry> m_free_in_file;
+    class FreeList : public std::vector<FreeSpaceEntry> {
+    public:
+        FreeList() = default;
+        // Merge adjacent chunks
+        void merge_adjacent_entries_in_freelist();
+        // Copy free space entries to structure where entries are sorted by size
+        void move_free_in_file_to_size_map(std::multimap<size_t, size_t>& size_map);
+    };
+    //  m_free_in_file;
     std::vector<FreeSpaceEntry> m_not_free_in_file;
     std::multimap<size_t, size_t> m_size_map;
     using FreeListElement = std::multimap<size_t, size_t>::iterator;
 
-    void sort_freelist();
-    // Merge adjacent chunks
-    void merge_adjacent_entries_in_freelist();
     void read_in_freelist();
-    size_t recreate_freelist(size_t reserve_pos, size_t& free_space_size);
+    size_t recreate_freelist(size_t reserve_pos);
     // Currently cached memory mappings. We keep as many as 16 1MB windows
     // open for writing. The allocator will favor sequential allocation
     // from a modest number of windows, depending upon fragmentation, so
@@ -130,11 +139,8 @@ private:
     // the least recently used and sync'ing it to disk
     MapWindow* get_window(ref_type start_ref, size_t size);
 
-    // Sync all cached memory mappings
-    void sync_all_mappings();
-
-    // Copy free space entries to structure where entries are sorted by size
-    void move_free_in_file_to_size_map();
+    // Flush all cached memory mappings
+    void flush_all_mappings();
 
     /// Allocate a chunk of free space of the specified size. The
     /// specified size must be 8-byte aligned. Extend the file if
@@ -162,7 +168,6 @@ private:
 
     /// Search only a range of the free list for a block as big as the
     /// specified size. Return a pair with index and size of the found chunk.
-    /// \param found indicates whether a suitable block was found.
     FreeListElement search_free_space_in_part_of_freelist(size_t size);
 
     /// Extend the file to ensure that a chunk of free space of the

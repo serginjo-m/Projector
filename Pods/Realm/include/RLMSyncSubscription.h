@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2018 Realm Inc.
+// Copyright 2021 Realm Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,239 +16,321 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#import <Realm/RLMRealm.h>
-#import <Realm/RLMResults.h>
+#import <Foundation/Foundation.h>
+
+@class RLMObjectId;
+
+#pragma mark - Subscription States
+
+/// The current state of the subscription. This can be used for ensuring that
+/// the subscriptions are not errored and that it has been successfully
+/// synced to the server.
+typedef NS_ENUM(NSUInteger, RLMSyncSubscriptionState) {
+    /// The subscription is complete and the server has sent all the data that matched the subscription
+    /// queries at the time the subscription set was updated. The server is now in a steady-state
+    /// synchronization mode where it will stream update as they come.
+    RLMSyncSubscriptionStateComplete,
+    /// The subscription encountered an error and synchronization is paused for this Realm. You can
+    /// find the error calling error in the subscription set to get a description of the error. You can
+    /// still use the current subscription set to write a subscription.
+    RLMSyncSubscriptionStateError,
+    /// The subscription is persisted locally but not yet processed by the server, which means
+    /// the server hasn't yet returned all the data that matched the updated subscription queries.
+    RLMSyncSubscriptionStatePending,
+    /// The subscription set has been super-ceded by an updated one, this typically means that
+    /// someone is trying to write a subscription on a different instance of the subscription set.
+    /// You should not use a superseded subscription set and instead obtain a new instance of
+    /// the subscription set to write a subscription.
+    RLMSyncSubscriptionStateSuperseded
+};
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- `RLMSyncSubscriptionState` is an enumeration representing the possible state of a sync subscription.
- */
-typedef RLM_CLOSED_ENUM(NSInteger, RLMSyncSubscriptionState) {
-    /**
-     An error occurred while creating the subscription or while the server was processing it.
-     */
-    RLMSyncSubscriptionStateError = -1,
-
-    /**
-     The subscription is being created, but has not yet been written to the synced Realm.
-     */
-    RLMSyncSubscriptionStateCreating = 2,
-
-    /**
-     The subscription has been created, and is waiting to be processed by the server.
-     */
-    RLMSyncSubscriptionStatePending = 0,
-
-    /**
-     The subscription has been processed by the server, and objects matching the subscription
-     are now being synchronized to this client.
-     */
-    RLMSyncSubscriptionStateComplete = 1,
-
-    /**
-     This subscription has been removed.
-     */
-    RLMSyncSubscriptionStateInvalidated = 3,
-};
-
-/**
- `RLMSyncSubscription` represents a subscription to a set of objects in a synced Realm.
-
- When query-based sync is enabled for a synchronized Realm, the server only
- synchronizes objects to the client when they match a sync subscription
- registered by that client. A subscription consists of of a query (represented
- by an `RLMResults`) and an optional name.
-
- The state of the subscription can be observed using
- [Key-Value Observing](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html)
- on the `state` property.
-
- Subscriptions are created using `-[RLMResults subscribe]` or
- `-[RLMResults subscribeWithName:]`. Existing subscriptions for a Realm can be
- looked up with `-[RLMRealm subscriptions]` or `-[RLMRealm subscriptionWithName:]`.
+ `RLMSyncSubscription` is  used to define a Flexible Sync subscription obtained from querying a
+ subscription set, which can be used to read or remove/update a committed subscription.
  */
 @interface RLMSyncSubscription : NSObject
 
-/**
- The unique name for this subscription.
-
- This will be `nil` if this object was created with `-[RLMResults subscribe]`.
- Subscription objects read from a Realm with `-[RLMRealm subscriptions]` will
- always have a non-`nil` name and subscriptions which were not explicitly named
- will have an automatically generated one.
- */
+/// Name of the subscription. If not specified it will return nil.
 @property (nonatomic, readonly, nullable) NSString *name;
 
-/**
- The current state of the subscription. See `RLMSyncSubscriptionState`.
- */
-@property (nonatomic, readonly) RLMSyncSubscriptionState state;
+/// When the subscription was created. Recorded automatically.
+@property (nonatomic, readonly) NSDate *createdAt;
+
+/// When the subscription was last updated. Recorded automatically.
+@property (nonatomic, readonly) NSDate *updatedAt;
 
 /**
- The error which occurred when registering this subscription, if any.
+ Updates a Flexible Sync's subscription query with an allowed query which will be used to bootstrap data
+ from the server when committed.
 
- Will be non-nil only when `state` is `RLMSyncSubscriptionStateError`.
+ @warning This method may only be called during a write subscription block.
+
+ @param predicateFormat A predicate format string, optionally followed by a variable number of arguments.
  */
+- (void)updateSubscriptionWhere:(NSString *)predicateFormat, ...;
+
+/// :nodoc:
+- (void)updateSubscriptionWhere:(NSString *)predicateFormat
+                           args:(va_list)args;
+
+/**
+ Updates a Flexible Sync's subscription query with an allowed query which will be used to bootstrap data
+ from the server when committed.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param predicate The predicate with which to filter the objects on the server.
+ */
+- (void)updateSubscriptionWithPredicate:(NSPredicate *)predicate;
+
+@end
+
+/**
+ `RLMSyncSubscriptionSet` is  a collection of `RLMSyncSubscription`s. This is the entry point
+ for adding and removing `RLMSyncSubscription`s.
+ */
+@interface RLMSyncSubscriptionSet : NSObject <NSFastEnumeration>
+
+/// The number of subscriptions in the subscription set.
+@property (readonly) NSUInteger count;
+
+/// Gets the error associated to the subscription set. This will be non-nil in case the current
+/// state of the subscription set is `RLMSyncSubscriptionStateError`.
 @property (nonatomic, readonly, nullable) NSError *error;
 
+/// Gets the state associated to the subscription set.
+@property (nonatomic, readonly) RLMSyncSubscriptionState state;
+
+#pragma mark - Batch Update subscriptions
+
 /**
- Remove this subscription.
+ Synchronously performs any transactions (add/remove/update) to the subscription set within the block,
+ this will not wait for the server to acknowledge and see all the data associated with this collection of subscriptions,
+ and will return after committing the subscription transactions.
 
- Removing a subscription will delete all objects from the local Realm that were
- matched only by that subscription and not any remaining subscriptions. The
- deletion is performed by the server, and so has no immediate impact on the
- contents of the local Realm. If the device is currently offline, the removal
- will not be processed until the device returns online.
-
- Unsubscribing is an asynchronous operation and will not immediately remove the
- subscription from the Realm's list of subscriptions. Observe the state property
- to be notified of when the subscription has actually been removed.
+ @param block The block containing actions to perform to the subscription set.
  */
-- (void)unsubscribe;
-
-#pragma mark - Unavailable Methods
+- (void)write:(__attribute__((noescape)) void(^)(void))block;
 
 /**
- `-[RLMSyncSubscription init]` is not available because `RLMSyncSubscription` cannot be created directly.
+ Synchronously performs any transactions (add/remove/update) to the subscription set within the block,
+ this will not wait for the server to acknowledge and see all the data associated with this collection of subscriptions,
+ and will return after committing the subscription transactions.
+
+ @param block The block containing actions to perform to the subscription set.
+ @param onComplete The block called upon synchronization of subscriptions to the server. Otherwise
+                   an `Error`describing what went wrong will be returned by the block
  */
-- (instancetype)init __attribute__((unavailable("RLMSyncSubscription cannot be created directly")));
+- (void)write:(__attribute__((noescape)) void(^)(void))block onComplete:(void(^)(NSError * _Nullable))onComplete;
+
+#pragma mark - Find subscription
 
 /**
- `+[RLMSyncSubscription new]` is not available because `RLMSyncSubscription` cannot be created directly.
- */
-+ (instancetype)new __attribute__((unavailable("RLMSyncSubscription cannot be created directly")));
+ Finds a subscription by the specified name.
 
-@end
+ @param name The name used  to identify the subscription.
 
-/**
- Support for subscribing to the results of object queries in a synced Realm.
- */
-@interface RLMResults (SyncSubscription)
-
-/**
- Subscribe to the query represented by this `RLMResults`.
-
- Subscribing to a query asks the server to synchronize all objects to the
- client which match the query, along with all objects which are reachable
- from those objects via links. This happens asynchronously, and the local
- client Realm may not immediately have all objects which match the query.
- Observe the `state` property of the returned subscription object to be
- notified of when the subscription has been processed by the server and
- all objects matching the query are available.
-
- The subscription will not be explicitly named. A name will be automatically
- generated for internal use. The exact format of this name may change without
- warning and should not be depended on.
-
- @return An object representing the newly-created subscription.
-
- @see RLMSyncSubscription
-*/
-- (RLMSyncSubscription *)subscribe;
-
-/**
- Subscribe to the query represented by this `RLMResults`.
-
- Subscribing to a query asks the server to synchronize all objects to the
- client which match the query, along with all objects which are reachable
- from those objects via links. This happens asynchronously, and the local
- client Realm may not immediately have all objects which match the query.
- Observe the `state` property of the returned subscription object to be
- notified of when the subscription has been processed by the server and
- all objects matching the query are available.
-
- Creating a new subscription with the same name and query as an existing
- subscription will not create a new subscription, but instead will return
- an object referring to the existing sync subscription. This means that
- performing the same subscription twice followed by removing it once will
- result in no subscription existing.
-
- The newly created subscription will not be reported by
- `-[RLMRealm subscriptions]` or `-[RLMRealm subscriptionWithName:]` until
- `state` has transitioned from `RLMSyncSubscriptionStateCreating` to any of the
- other states.
-
- @param subscriptionName The name of the subscription.
-
- @return An object representing the newly-created subscription.
-
- @see RLMSyncSubscription
-*/
-- (RLMSyncSubscription *)subscribeWithName:(nullable NSString *)subscriptionName;
-
-/**
- Subscribe to a subset of the query represented by this `RLMResults`.
-
- Subscribing to a query asks the server to synchronize all objects to the
- client which match the query, along with all objects which are reachable
- from those objects via links. This happens asynchronously, and the local
- client Realm may not immediately have all objects which match the query.
- Observe the `state` property of the returned subscription object to be
- notified of when the subscription has been processed by the server and
- all objects matching the query are available.
-
- Creating a new subscription with the same name and query as an existing
- subscription will not create a new subscription, but instead will return
- an object referring to the existing sync subscription. This means that
- performing the same subscription twice followed by removing it once will
- result in no subscription existing.
-
- The newly created subscription will not be reported by
- `-[RLMRealm subscriptions]` or `-[RLMRealm subscriptionWithName:]` until
- `state` has transitioned from `RLMSyncSubscriptionStateCreating` to any of the
- other states.
-
- The number of top-level matches may optionally be limited. This limit
- respects the sort and distinct order of the query being subscribed to,
- if any. Please note that the limit does not count or apply to objects
- which are added indirectly due to being linked to by the objects in the
- subscription. If the limit is larger than the number of objects which
- match the query, all objects will be included.
-
- @param subscriptionName The name of the subscription
- @param limit The maximum number of objects to include in the subscription.
-
- @return The subscription
-
- @see RLMSyncSubscription
- */
-- (RLMSyncSubscription *)subscribeWithName:(nullable NSString *)subscriptionName limit:(NSUInteger)limit;
-@end
-
-/**
- Support for managing existing subscriptions to object queries in a Realm.
- */
-@interface RLMRealm (SyncSubscription)
-/**
- Get a list of the query-based sync subscriptions made for this Realm.
-
- This list includes all subscriptions which are currently in the states `Pending`,
- `Created`, and `Error`. Newly created subscriptions which are still in the
- `Creating` state are not included, and calling this immediately after calling
- `-[RLMResults subscribe]` will typically not include that subscription. Similarly,
- because unsubscription happens asynchronously, this may continue to include
- subscriptions after `-[RLMSyncSubscription unsubscribe]` is called on them.
-
- This method can only be called on a Realm which is using query-based sync and
- will throw an exception if called on a non-synchronized or full-sync Realm.
- */
-- (RLMResults<RLMSyncSubscription *> *)subscriptions;
-
-/**
- Look up a specific query-based sync subscription by name.
-
- Subscriptions are created asynchronously, so calling this immediately after
- calling `subscribeWithName:` on a `RLMResults` will typically return `nil`.
- Only subscriptions which are currently in the states `Pending`, `Created`,
- and `Error` can be retrieved with this method.
-
- This method can only be called on a Realm which is using query-based sync and
- will throw an exception if called on a non-synchronized or full-sync Realm.
-
- @return The named subscription, or `nil` if no subscription exists with that name.
+ @return A subscription for the given name.
  */
 - (nullable RLMSyncSubscription *)subscriptionWithName:(NSString *)name;
+
+/**
+ Finds a subscription by the query for the specified object class name.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicateFormat A predicate format string, optionally followed by a variable number of arguments.
+
+ @return A subscription for the given query..
+ */
+- (nullable RLMSyncSubscription *)subscriptionWithClassName:(NSString *)objectClassName
+                                                      where:(NSString *)predicateFormat, ...;
+
+/// :nodoc:
+- (nullable RLMSyncSubscription *)subscriptionWithClassName:(NSString *)objectClassName
+                                                      where:(NSString *)predicateFormat
+                                                       args:(va_list)args;
+
+/**
+ Finds a subscription by the query for the specified object class name.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicate The predicate used to  to filter the objects on the server.
+
+ @return A subscription for the given query..
+ */
+- (nullable RLMSyncSubscription *)subscriptionWithClassName:(NSString *)objectClassName
+                                                  predicate:(NSPredicate *)predicate;
+
+#pragma mark - Add a Subscription
+
+/**
+ Adds a new subscription to the subscription set which will be sent to the server when
+ committed at the end of a write subscription block.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicateFormat A predicate format string, optionally followed by a variable number of arguments.
+ */
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                               where:(NSString *)predicateFormat, ...;
+
+/// :nodoc:
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                               where:(NSString *)predicateFormat
+                                args:(va_list)args;
+
+/**
+ Adds a new subscription to the subscription set which will be sent to the server when
+ committed at the end of a write subscription block.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param name The name used  the identify the subscription.
+ @param predicateFormat A predicate format string, optionally followed by a variable number of arguments.
+ */
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                    subscriptionName:(NSString *)name
+                               where:(NSString *)predicateFormat, ...;
+
+/// :nodoc:
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                    subscriptionName:(NSString *)name
+                               where:(NSString *)predicateFormat
+                                args:(va_list)args;
+
+/**
+ Adds a new subscription to the subscription set which will be sent to the server when
+ committed at the end of a write subscription block.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicate The predicate defining the query for the subscription.
+ */
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                           predicate:(NSPredicate *)predicate;
+
+/**
+ Adds a new subscription to the subscription set which will be sent to the server when
+ committed at the end of a write subscription block.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param name The name used to identify the subscription.
+ @param predicate The predicate defining the query for the subscription.
+ */
+- (void)addSubscriptionWithClassName:(NSString *)objectClassName
+                    subscriptionName:(nullable NSString *)name
+                           predicate:(NSPredicate *)predicate;
+
+#pragma mark - Remove Subscription
+
+/**
+ Removes a subscription with the specified name from the subscription set.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param name The name used  the identify the subscription.
+ */
+- (void)removeSubscriptionWithName:(NSString *)name;
+
+/**
+ Removes a subscription with the specified query for the object class from the subscription set.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicateFormat A predicate format string, optionally followed by a variable number of arguments.
+ */
+- (void)removeSubscriptionWithClassName:(NSString *)objectClassName
+                                  where:(NSString *)predicateFormat, ...;
+
+/// :nodoc:
+- (void)removeSubscriptionWithClassName:(NSString *)objectClassName
+                                  where:(NSString *)predicateFormat
+                                   args:(va_list)args;
+
+/**
+ Removes a subscription with the specified query for the object class from the subscription set.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param objectClassName The class name for the model class to be queried.
+ @param predicate  The predicate which will be used to identify the subscription to be removed.
+ */
+- (void)removeSubscriptionWithClassName:(NSString *)objectClassName
+                              predicate:(NSPredicate *)predicate;
+
+/**
+ Removes the subscription from the subscription set.
+
+ @warning This method may only be called during a write subscription block.
+
+ @param subscription An instance of the subscription to be removed.
+ */
+- (void)removeSubscription:(RLMSyncSubscription *)subscription;
+
+#pragma mark - Remove Subscriptions
+
+/**
+ Removes all subscription from the subscription set.
+
+ @warning This method may only be called during a write subscription block.
+ @warning Removing all subscriptions will result in an error if no new subscription is added. Server should
+          acknowledge at least one subscription.
+ */
+- (void)removeAllSubscriptions;
+
+/**
+ Removes all subscription with the specified class name.
+
+ @param className The class name for the model class to be queried.
+
+ @warning This method may only be called during a write subscription block.
+ */
+- (void)removeAllSubscriptionsWithClassName:(NSString *)className;
+
+#pragma mark - SubscriptionSet Collection
+
+/**
+ Returns the subscription at the given `index`.
+
+ @param index The index.
+
+ @return A subscription for the given index in the subscription set.
+ */
+- (nullable RLMSyncSubscription *)objectAtIndex:(NSUInteger)index;
+
+/**
+ Returns the first object in the subscription set list, or `nil` if the subscriptions are empty.
+
+ @return A subscription.
+ */
+- (nullable RLMSyncSubscription *)firstObject;
+
+/**
+ Returns the last object in the subscription set, or `nil` if the subscriptions are empty.
+
+ @return A subscription.
+ */
+- (nullable RLMSyncSubscription *)lastObject;
+
+#pragma mark - Subscript
+
+/**
+ Returns the subscription at the given `index`.
+
+ @param index The index.
+
+ @return A subscription for the given index in the subscription set.
+ */
+- (id)objectAtIndexedSubscript:(NSUInteger)index;
+
 @end
 
 NS_ASSUME_NONNULL_END

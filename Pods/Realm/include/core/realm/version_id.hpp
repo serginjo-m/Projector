@@ -23,7 +23,9 @@
 #define __STDC_LIMIT_MACROS
 #endif
 
+#include <cstdint>
 #include <limits>
+#include <ostream>
 
 namespace realm {
 
@@ -41,31 +43,37 @@ struct VersionID {
         index = initial_index;
     }
 
-    bool operator==(const VersionID& other)
+    bool operator==(const VersionID& other) const
     {
         return version == other.version;
     }
-    bool operator!=(const VersionID& other)
+    bool operator!=(const VersionID& other) const
     {
         return version != other.version;
     }
-    bool operator<(const VersionID& other)
+    bool operator<(const VersionID& other) const
     {
         return version < other.version;
     }
-    bool operator<=(const VersionID& other)
+    bool operator<=(const VersionID& other) const
     {
         return version <= other.version;
     }
-    bool operator>(const VersionID& other)
+    bool operator>(const VersionID& other) const
     {
         return version > other.version;
     }
-    bool operator>=(const VersionID& other)
+    bool operator>=(const VersionID& other) const
     {
         return version >= other.version;
     }
 };
+
+inline std::ostream& operator<<(std::ostream& os, VersionID id)
+{
+    os << "VersionID(" << id.version << ", " << id.index << ")";
+    return os;
+}
 
 } // namespace realm
 

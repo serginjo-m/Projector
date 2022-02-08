@@ -6,5 +6,5 @@ target 'Projector' do
 use_frameworks!
 
 # Pods for Projector
-pod "RealmSwift", "3.14.1"
+pod "RealmSwift", "10.22.0"
 end
