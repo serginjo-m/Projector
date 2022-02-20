@@ -89,6 +89,7 @@
 		CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
+		CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
 		CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */; };
 		CFBC3A42258152CF00EEF13D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A41258152CF00EEF13D /* Day.swift */; };
@@ -209,6 +210,7 @@
 		CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
+		CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayEvent.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
 		CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		CFBC3A41258152CF00EEF13D /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
@@ -511,6 +513,7 @@
 				CFBC3A41258152CF00EEF13D /* Day.swift */,
 				CF535DD02587DEF600F15DCB /* MonthMetadata.swift */,
 				CF059F442598A9D900729A74 /* Event.swift */,
+				CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */,
 				CF3F0FC72602746A00CAC008 /* UserActivity.swift */,
 				CF3F0FCB2602888D00CAC008 /* DayActivity.swift */,
 				CF7A57F6262C38D7004EAF01 /* CameraNote.swift */,
@@ -748,6 +751,7 @@
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
 				CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */,
+				CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */,
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,
@@ -994,6 +998,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UF353UV4DH;
 				INFOPLIST_FILE = Projector/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1015,6 +1020,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UF353UV4DH;
 				INFOPLIST_FILE = Projector/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -203,6 +203,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         //SET PROJECT DATA TO OBJECTS
         if let project = projectInstance{
             projectNumbersCV.project = project
+            //define side panel data source
+            sideView.projectId = self.projectListIdentifier
             stepsCollections.project = project
             projectName.text = project.name
             stepsTitle.text = "Steps To Do (\(project.projectStep.count))"

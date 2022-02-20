@@ -20,6 +20,22 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         }
     }
     
+    //----------------------------------- Should be improved ---------------------------------------------
+    //------------------------- for multiple countries it can be multiple years --------------------------
+    //a year, when holidays was downloaded
+    var downloadedHolidaysYear: Int {
+        get{
+            let holidays = ProjectListRepository.instance.getHolidays()
+            if holidays.count > 0{
+                if let item = holidays.first{
+                    return item.year
+                }
+            }
+            return 0
+        }
+    }
+    
+    
     //events dictionary grouped by date
     var groupedEventDictionary = [ Date : [Event]]()
     
@@ -165,8 +181,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
     override func viewDidLoad() {
         
-        
-        
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE, MMMM d")
@@ -177,7 +191,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         
         headerView.baseDate = baseDate
         setupConstraints()
-
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -256,7 +269,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let day = days[indexPath.row]
         selectedDateChanged(day.date)
-        
+    
         //define day events data base
         eventsArrayFromDateKey(date: day.date)
     }
@@ -333,12 +346,41 @@ extension CalendarViewController {
         var dateWithEvent = false
         var dateWithHoliday = false
         
-        //iterate through an array of events, to test is event holiday or just user event
+        
+        //check for holidays when user view different year from year when holidays was downloaded
+        let calendar = Calendar(identifier: .gregorian)
+        let ymd = calendar.dateComponents([.year, .month, .day], from: date)
+        
+        if let year = ymd.year, let month = ymd.month, let day = ymd.day{
+            //check if year is different
+            if year != downloadedHolidaysYear{
+                //calculate what difference is
+                let yearDifference =  downloadedHolidaysYear - year
+                            
+                let dateComponents = DateComponents(year: year + yearDifference , month: month, day: day)
+                let holidayDate = calendar.date(from: dateComponents)
+                
+                if let unwrappedHolidayDate = holidayDate{
+                    //ckeck for holiday in given day-month in database for different year
+                    groupedEventDictionary[unwrappedHolidayDate]?.forEach{
+                        //pick holidays only inside array, not user events
+                        if $0.category == "holiday"{
+                            dateWithHoliday = true
+                        }
+                    }
+                }
+            }
+           
+        }
+        
+        //iterate through an array of events, to test category
         groupedEventDictionary[date]?.forEach{
+            
             if $0.category == "holiday"{
                 dateWithHoliday = true
-            }else{
-                dateWithEvent = true//user event category == nil 
+            }else if $0.category != "holiday"{
+                //all user events like calendar event(nil) or step event(projectStep) must have red circle
+                dateWithEvent = true
             }
         }
         

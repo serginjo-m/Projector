@@ -39,9 +39,17 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         
-        //------------------------- optimization needed -------------------------------------------
         //check if holiday data was downloaded
         downloadHolidayEvents()
+        //tab bar style changes at the bottom of view controller, so define constant style to it
+        if #available(iOS 15.0, *) {
+           let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            self.tabBar.standardAppearance = appearance
+            self.tabBar.scrollEdgeAppearance = appearance
+        } else {
+            // Fallback on earlier versions
+        }
         
         self.delegate = self
         
@@ -204,22 +212,23 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
 extension CustomTabBarController {
     
-    //-------------------------- need to find a better way to do this check --------------------------------
     //check if holiday objects was downloaded
     func downloadHolidayEvents() {
-        var holidayArr = [Event]()
-        
-        events.forEach{
-            if let category = $0.category{
-                if category == "holiday"{
-                    holidayArr.append($0)
-                }
+        //Holiday database
+        var holidays: Results<HolidayEvent> {
+            get{
+                return ProjectListRepository.instance.getHolidays()
             }
         }
-        //if no holiday events was founded, send a request to server
-        if holidayArr.count == 0{
+        
+
+        //------------------------------- What if country has no holidays? ------------------------------------
+        //Download only once
+        if holidays.count == 0{
             getHolidayResults()
         }
+        
+       
     }
     
         
@@ -233,13 +242,24 @@ extension CustomTabBarController {
     
     //convert Holiday obj to Event obj
     func convertHolidaysToEvents(){
+        //------------------------- need to optimize a bit 2x holiday version storage ------------------------
         self.listOfHolidays.forEach{
-            let holidayEvent = Event()
+            //Holiday objects database. For now it holds a year when it was downloaded
+            let holidayEvent = HolidayEvent()
             holidayEvent.category = "holiday"
             holidayEvent.title = $0.name
             holidayEvent.date = $0.date.datetime.dateObject
             holidayEvent.descr = $0.description
-            ProjectListRepository.instance.createEvent(event: holidayEvent)
+            holidayEvent.year = $0.date.datetime.year
+            ProjectListRepository.instance.createHoliday(holidayEvent: holidayEvent)
+            //All Events database (holidays, steps, user events)
+            let event = Event()
+            event.category = holidayEvent.category
+            event.title = holidayEvent.title
+            event.date = holidayEvent.date
+            event.descr = holidayEvent.descr
+            ProjectListRepository.instance.createEvent(event: event)
+            
         }
     }
 }

@@ -52,21 +52,43 @@ extension CalendarViewController {
     
     //define data base for events collection view
     func eventsArrayFromDateKey(date: Date){
+        
+        //clear view controller database
+        eventElements.events.removeAll()
+        
         //need this for side events panel date label
         let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: date)
         if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday {
             let weekDayString = dayOfWeekLetter(for: weekday)
             let monthStr = monthString(for: month)
             eventElements.selectedDateLabel.text = ("\(weekDayString) \(day) \(monthStr) \(year)")
+            
+            
+            //check if user view different year from current
+            if year != downloadedHolidaysYear{
+                //calculate what is difference between year when holiday was downloaded and year thar user view
+                let yearDifference =  downloadedHolidaysYear - year
+                            
+                let dateComponents = DateComponents(year: year + yearDifference , month: month, day: day)
+                let holidayDate = calendar.date(from: dateComponents)
+                
+                if let unwrappedHolidayDate = holidayDate{
+                    //loop through  array to find holiday in given day - month
+                    groupedEventDictionary[unwrappedHolidayDate]?.forEach{
+                        //pick only holidays in this day
+                        if $0.category == "holiday"{
+                            eventElements.events.append($0)
+                        }
+                    }
+                }
+            }
         }
         
-//        eventElements.selectedDateLabel.text = date.description(with: .current)
-        
+        //Add all other type of events (user event, step event)
         if let events = groupedEventDictionary[date] {
-            //clear before
-            eventElements.events.removeAll()
-            //fill new data
-            eventElements.events = events
+            
+            //append events new data
+            eventElements.events.append(contentsOf: events)
             
             eventElements.eventsTableView.reloadData()
             //reveal timeline
@@ -74,10 +96,6 @@ extension CalendarViewController {
             //show view controller
             showUpEventsView()
         }else{
-            //clear before
-            eventElements.events.removeAll()
-            //show view controller
-            
             eventElements.eventsTableView.reloadData()
             //hide timeline
             eventElements.lineView.backgroundColor = .clear

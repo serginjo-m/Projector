@@ -27,13 +27,13 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    //price picker values list
+    //picker values list
     let valuePickerDataSource = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
     
-    //value selected in price picker
+    //selected value in picker
     var selectedValue: Int?
     
     //investments value for label
@@ -55,13 +55,23 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             
+            //only money category has double value
+            switch categoryKey{
+            case "money":
+                totalValueLabel.text = "\(investedValue)$ | \(spendedValue)$"
+            case "time":
+                totalValueLabel.text = "\(spendedValue) Hours"
+            case "fuel":
+                totalValueLabel.text = "\(spendedValue) Liters"
+            default:
+                break
+            }
             
-            totalValueLabel.text = "\(investedValue)$ | \(spendedValue)$"
         }
     }
     
     //once category defined, configure side panel elements and data source
-    var categoryKey = ""{
+    var categoryKey = "" {
         didSet{
             
             //visual configurations
@@ -76,6 +86,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
             valuePicker.selectRow(0, inComponent: 1, animated: false)
             valuePicker.selectRow(0, inComponent: 2, animated: false)
             commentTextField.text = ""
+            selectedValue = nil
             saveButton.isEnabled = false
             
         }
@@ -167,7 +178,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         control.tintColor = UIColor.init(white: 0.9, alpha: 1)
         control.layer.masksToBounds = true
         control.layer.cornerRadius = 5
-        control.setTitleTextAttributes( [NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        control.setTitleTextAttributes( [NSAttributedString.Key.foregroundColor: UIColor.init(red: 56/255, green: 44/255, blue: 57/255, alpha: 1)], for: .normal)
         control.selectedSegmentIndex = 0
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
@@ -240,14 +251,14 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         case "time":
             plusMinusSegmentedControl.isHidden = true
             statisticImage.image = UIImage(named: "budget")
-            selectedStatisticsLabel.text = "Costs | Something"
+            selectedStatisticsLabel.text = "Time Spended"
             backgroundColor = UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1)
             containerView.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
         case "fuel":
             plusMinusSegmentedControl.isHidden = true
             statisticImage.image = UIImage(named: "distance")
-            selectedStatisticsLabel.text = "Acheaved | ToGo"
+            selectedStatisticsLabel.text = "Fuel Spended"
             backgroundColor = UIColor.init(red: 116/255, green: 203/255, blue: 159/255, alpha: 1)
             containerView.backgroundColor = UIColor.init(displayP3Red: 45/255, green: 145/255, blue: 95/255, alpha: 1)
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 45/255, green: 145/255, blue: 95/255, alpha: 1)
@@ -258,7 +269,9 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
     
     //this func creates datasource for my table view from groupedDataDictionary or clear data and then reaload
     func createTableViewDataSource(key: String){
+        
         guard let project = project else {return}
+        
         //clear
         tableViewDataSource.removeAll()
         

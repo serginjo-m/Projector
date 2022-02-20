@@ -249,4 +249,21 @@ class ProjectListRepository {
             user.isLogined = isLogined
         }
     }
+    
+    //create holiday object
+    func createHoliday(holidayEvent: HolidayEvent){
+        try! realm.write ({
+            realm.add(holidayEvent)
+        })
+    }
+    
+    func getHolidays() -> Results<HolidayEvent> {
+        return realm.objects(HolidayEvent.self)
+    }
+    
+    func deleteHoliday(holiday: HolidayEvent){
+        try! realm.write ({
+            realm.delete(holiday)
+        })
+    }
 }
