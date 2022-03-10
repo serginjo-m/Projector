@@ -205,7 +205,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 if applyButton.isSelected == false {
                     self.handleAnimate(active: false)
                 }else{
-    
                     applyButton.isSelected = false
                 }
     
@@ -482,7 +481,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         expandingReminderView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         //height constraints animation
         minHeightAnchor = expandingReminderView.heightAnchor.constraint(equalToConstant: 46)
-        maxHeightAnchor = expandingReminderView.heightAnchor.constraint(equalToConstant: 432)
+        maxHeightAnchor = expandingReminderView.heightAnchor.constraint(equalToConstant: 190)
         minHeightAnchor?.isActive = true
 
         newStepImages.topAnchor.constraint(equalTo: photoTitle.bottomAnchor, constant:  20).isActive = true
