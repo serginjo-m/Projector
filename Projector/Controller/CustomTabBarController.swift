@@ -114,6 +114,8 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 
                 for (key, value) in newObjectVC {
                     let action = UIAlertAction(title: key, style: .default) { (action: UIAlertAction) in
+                        //so view did appear update detail view controller
+                        value.modalPresentationStyle = .fullScreen
                         self.present(value, animated: true, completion: nil)
                     }
                     

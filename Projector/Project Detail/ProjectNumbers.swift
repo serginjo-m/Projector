@@ -59,22 +59,22 @@ class ProjectNumbersCollectionView: UIView, UICollectionViewDataSource, UICollec
                 imageLeftAnchor: 0
             ),
             NumberCellSetting(
-                imageName: "budget",
+                imageName: "clock",
                 cellColor:UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),
                 buttonTitle: "TIME SPENT",
-                imageWidth: 68,
-                imageHeight: 81,
-                imageTopAnchor: 3,
-                imageLeftAnchor: -18
+                imageWidth: 110,
+                imageHeight: 110,
+                imageTopAnchor: -40,
+                imageLeftAnchor: -45
             ),
             NumberCellSetting(
-                imageName: "distance",
-                cellColor: UIColor.init(red: 132/255, green: 211/255, blue: 171/255, alpha: 1),
+                imageName: "fuelC",
+                cellColor: UIColor.init(red: 217/255, green: 98/255, blue: 72/255, alpha: 1),
                 buttonTitle: "FUEL SPENT",
-                imageWidth: 76,
-                imageHeight: 82,
-                imageTopAnchor: 8,
-                imageLeftAnchor: -11
+                imageWidth: 56,
+                imageHeight: 63,
+                imageTopAnchor: 7,
+                imageLeftAnchor: 6
             )
         ]
     }()

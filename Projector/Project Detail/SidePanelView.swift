@@ -250,18 +250,18 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 65/255, green: 50/255, blue: 67/255, alpha: 1)
         case "time":
             plusMinusSegmentedControl.isHidden = true
-            statisticImage.image = UIImage(named: "budget")
+            statisticImage.image = UIImage(named: "clock")
             selectedStatisticsLabel.text = "Time Spended"
             backgroundColor = UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1)
             containerView.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
             openViewButton.backgroundColor = UIColor.init(displayP3Red: 17/255, green: 85/255, blue: 187/255, alpha: 1)
         case "fuel":
             plusMinusSegmentedControl.isHidden = true
-            statisticImage.image = UIImage(named: "distance")
+            statisticImage.image = UIImage(named: "fuelC")
             selectedStatisticsLabel.text = "Fuel Spended"
-            backgroundColor = UIColor.init(red: 116/255, green: 203/255, blue: 159/255, alpha: 1)
-            containerView.backgroundColor = UIColor.init(displayP3Red: 45/255, green: 145/255, blue: 95/255, alpha: 1)
-            openViewButton.backgroundColor = UIColor.init(displayP3Red: 45/255, green: 145/255, blue: 95/255, alpha: 1)
+            backgroundColor = UIColor.init(red: 217/255, green: 98/255, blue: 72/255, alpha: 1)
+            containerView.backgroundColor = UIColor.init(displayP3Red: 121/255, green: 51/255, blue: 35/255, alpha: 1)
+            openViewButton.backgroundColor = UIColor.init(displayP3Red: 121/255, green: 51/255, blue: 35/255, alpha: 1)
         default:
             break
         }
@@ -437,7 +437,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
        
         
         
-        statisticImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        statisticImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
         statisticImage.topAnchor.constraint(equalTo: selectedStatisticsLabel.topAnchor, constant: 0).isActive = true
         statisticImage.widthAnchor.constraint(equalToConstant: 69).isActive = true
         statisticImage.heightAnchor.constraint(equalToConstant: 73).isActive = true

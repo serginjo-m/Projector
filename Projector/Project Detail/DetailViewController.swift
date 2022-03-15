@@ -166,8 +166,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         //adds gradient to image view
         projectImageView.layer.insertSublayer(gradient, at: 0)
         
-        
-
         //setup constraints
         setupLayout()
         //includes keyboard dismiss func from extension
@@ -182,7 +180,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     override func viewDidLayoutSubviews() {
         gradient.frame = projectImageView.bounds
     }
-    
+        
     //back to previous view
     @objc func backAction(_ sender: Any) {
         self.delegate?.reloadTableView()
