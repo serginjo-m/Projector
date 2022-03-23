@@ -12,9 +12,14 @@ import Foundation
 import os
 import Photos
 
-class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
+class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CircleTransitionable  {
     
     
+
+    //animation required
+    var mainView: UIView {
+        return view
+    }
     
     lazy var recentActivitiesCV: RecentActivitiesCollectionView = {
         let collectionView = RecentActivitiesCollectionView()
@@ -91,24 +96,24 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     var recentProjectsStackView = UIStackView()
     
     //Profile Button
-    lazy var userProfileButton: UIButton = {
+    lazy var transitionButton: UIButton = {
         let button = UIButton()
         button.layer.backgroundColor = UIColor.yellow.cgColor
         button.layer.cornerRadius = 18
         let image = UIImage(named: "profile")
         button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(openProfileSettings), for: .touchUpInside)
         button.contentMode = .center
         button.clipsToBounds = true
         return button
     }()
-   
     //Titles
-    var mainTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Hi Sergiy. Let's do it today!"
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = UIColor.init(red: 101/255, green: 101/255, blue: 101/255, alpha: 1)
-        return label
+    var contentTextView: UITextView = {
+        let textView = UITextView()
+        textView.text = "Hi Sergiy. Let's do it today!"
+        textView.font = UIFont.boldSystemFont(ofSize: 15)
+        textView.textColor = UIColor.init(red: 101/255, green: 101/255, blue: 101/255, alpha: 1)
+        return textView
     }()
 
     var projectsTitle: UILabel = {
@@ -191,9 +196,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(recentProjectsStackView)
-        contentUIView.addSubview(mainTitle)
+        contentUIView.addSubview(contentTextView)
         contentUIView.addSubview(projectsTitle)
-        contentUIView.addSubview(userProfileButton)
+        contentUIView.addSubview(transitionButton)
         contentUIView.addSubview(recentActivitiesTitle)
         contentUIView.addSubview(recentActivitiesCV)
         contentUIView.addSubview(viewByCategoryTitle)
@@ -219,7 +224,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //MARK: Methods
-    
+    @objc func openProfileSettings(){
+        if let navController = navigationController{
+            let transitionCoordinator = TransitionCoordinator()
+            navController.delegate = transitionCoordinator
+            let userProfileVC = UserProfileViewController()
+            navController.pushViewController(userProfileVC, animated: true)
+        }
+    }
     
     //user activity object for today
     func createDayActivity (){
@@ -411,12 +423,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //because by default it is black
         view.backgroundColor = .white
         
-        mainTitle.translatesAutoresizingMaskIntoConstraints = false
+        contentTextView.translatesAutoresizingMaskIntoConstraints = false
         projectsTitle.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
         recentProjectsStackView.translatesAutoresizingMaskIntoConstraints = false
-        userProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        transitionButton.translatesAutoresizingMaskIntoConstraints = false
         recentActivitiesTitle.translatesAutoresizingMaskIntoConstraints = false
         recentActivitiesCV.translatesAutoresizingMaskIntoConstraints = false
         viewByCategoryTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -464,15 +476,15 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
         viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
     
-        userProfileButton.bottomAnchor.constraint(equalTo: projectsTitle.topAnchor, constant: -29).isActive = true
-        userProfileButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        userProfileButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        userProfileButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        transitionButton.bottomAnchor.constraint(equalTo: projectsTitle.topAnchor, constant: -29).isActive = true
+        transitionButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        transitionButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
                 
-        mainTitle.centerYAnchor.constraint(equalTo: userProfileButton.centerYAnchor, constant: 0).isActive = true
-        mainTitle.leftAnchor.constraint(equalTo: userProfileButton.rightAnchor, constant: 15).isActive = true
-        mainTitle.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        mainTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        contentTextView.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
+        contentTextView.leftAnchor.constraint(equalTo: transitionButton.rightAnchor, constant: 15).isActive = true
+        contentTextView.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        contentTextView.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true

@@ -90,6 +90,9 @@
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */; };
+		CFB40CD527E619EC00D6EEA4 /* TransitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CD427E619EC00D6EEA4 /* TransitionCoordinator.swift */; };
+		CFB40CD727E6261600D6EEA4 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CD627E6261600D6EEA4 /* CircularTransition.swift */; };
+		CFB40CD927E6379000D6EEA4 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CD827E6379000D6EEA4 /* UserProfileViewController.swift */; };
 		CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB5E204244883F400E304EC /* DetailProjectData.swift */; };
 		CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */; };
 		CFBC3A42258152CF00EEF13D /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBC3A41258152CF00EEF13D /* Day.swift */; };
@@ -211,6 +214,9 @@
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
 		CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayEvent.swift; sourceTree = "<group>"; };
+		CFB40CD427E619EC00D6EEA4 /* TransitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionCoordinator.swift; sourceTree = "<group>"; };
+		CFB40CD627E6261600D6EEA4 /* CircularTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
+		CFB40CD827E6379000D6EEA4 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		CFB5E204244883F400E304EC /* DetailProjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProjectData.swift; sourceTree = "<group>"; };
 		CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		CFBC3A41258152CF00EEF13D /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
@@ -416,6 +422,7 @@
 		CF3F0FC6260269B500CAC008 /* Main VC */ = {
 			isa = PBXGroup;
 			children = (
+				CFB40CD327E619D100D6EEA4 /* Profile */,
 				CFCD789E26823EC60066294A /* Statistics */,
 				CFDA030226711F5B00772E32 /* QuickNotesCollViews */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
@@ -522,6 +529,16 @@
 				CF2472F62713606E002D6DCA /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		CFB40CD327E619D100D6EEA4 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				CFB40CD427E619EC00D6EEA4 /* TransitionCoordinator.swift */,
+				CFB40CD627E6261600D6EEA4 /* CircularTransition.swift */,
+				CFB40CD827E6379000D6EEA4 /* UserProfileViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		CFBEB8A123C23118001E96B9 /* Repositories */ = {
@@ -744,6 +761,7 @@
 				CFFA4ED52737D17400071F01 /* StepsCategoryCollectionView.swift in Sources */,
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
+				CFB40CD927E6379000D6EEA4 /* UserProfileViewController.swift in Sources */,
 				CFFA4EC6272B1C6100071F01 /* Steps.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
 				CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */,
@@ -772,12 +790,14 @@
 				CF0DD7DF2451E8780028ABB1 /* StepImagesCV.swift in Sources */,
 				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
 				CFCD78A126823F1E0066294A /* CountingLabel.swift in Sources */,
+				CFB40CD527E619EC00D6EEA4 /* TransitionCoordinator.swift in Sources */,
 				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
 				CF2472F72713606E002D6DCA /* User.swift in Sources */,
 				CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */,
 				CFEDDC5526F91678005E5652 /* SwipingController.swift in Sources */,
 				CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */,
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
+				CFB40CD727E6261600D6EEA4 /* CircularTransition.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
 				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
 				CF2472FA2718B49C002D6DCA /* DetailViewControllerDelegate.swift in Sources */,
