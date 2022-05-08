@@ -244,6 +244,12 @@ class ProjectListRepository {
         return realm.objects(User.self)
     }
     
+    func deleteUser(user: User){
+        try! realm.write ({
+            realm.delete(user)
+        })
+    }
+    
     func updateUserStatus(isLogined: Bool, user: User){
         try! realm.write {
             user.isLogined = isLogined

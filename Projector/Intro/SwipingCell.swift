@@ -12,11 +12,6 @@ import RealmSwift
 class SwipingCell: UICollectionViewCell{
     
     var parentVC: SwipingController?//call dismiss on parent VC
-    var users: Results<User> {
-        get{
-            return ProjectListRepository.instance.getAllUsers()
-        }
-    }
     
     var page: SwipingPage? {
         didSet{
@@ -124,11 +119,29 @@ class SwipingCell: UICollectionViewCell{
         let view = NewUserInputView(
             //register button
             didTapRegisterCompletionHandler: { [weak self] in//weak self helps to avoid retaining cycles
-                guard let self = self, let unwrappedParentVC = self.parentVC else {return}
-                //performs new user saving
-                self.saveNewUser()
-                //call dismiss on parent vc
-                unwrappedParentVC.dismiss(animated: true, completion: nil)
+                
+                guard let self = self,
+                      //SwipingController link
+                      let unwrappedParentVC = self.parentVC,
+                      let inputPassword = self.newUserInputContainer.passwordTextField.textField.text,
+                      let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
+                      let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
+                
+                //REST API Service called. Here I try to create user inside Mongo DB using Sails.js
+                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
+                    switch res {
+                    case .success(let apiRes):
+                        
+                        //call parent VC to create and update user in MainViewController
+                        unwrappedParentVC.didTapDismissCompletionHandler()
+                        //
+                        unwrappedParentVC.dismiss(animated: true, completion: nil)
+                    case .failure(let err):
+                        //here I need to create pop-up message to user
+                        print("Error message pop-up", err)
+                    }
+                }
+                
             }
         )
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -139,26 +152,23 @@ class SwipingCell: UICollectionViewCell{
         let view = RegisteredUserInputView(
             //register button
             didTapLoginCompletionHandler: { [weak self] in//weak self helps to avoid retaining cycles
+                //unwrap optionals
                 guard let self = self,
                     let unwrappedParentVC = self.parentVC,
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
                     let inputEmail = self.registeredUserInputContainer.emailTextField.textField.text else {return}
                 
-                //simple login logic
-                //group all user by email
-                let groupedDictionary: [ String: [User]] = Dictionary(grouping: self.users, by: { (user) -> String in
-                    let email = user.email
-                    return email
-                })
-                //check for user by input
-                let allUsersByEmail = groupedDictionary[inputEmail]
-                //check password
-                if let unwAllUsers = allUsersByEmail{
-                    for user in unwAllUsers {
-                        if user.password == inputPassword{
-                            ProjectListRepository.instance.updateUserStatus(isLogined: true, user: user)
-                            unwrappedParentVC.dismiss(animated: true, completion: nil)
-                        }
+                //Try to login user inside Mongo DB using Sails.js app.
+                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
+                    switch res {
+                    case .success(let apiResponse):
+                        print(apiResponse.message)
+                        //call parent to call parent :) (MainViewController) for updates
+                        unwrappedParentVC.didTapDismissCompletionHandler()
+                        
+                        unwrappedParentVC.dismiss(animated: true, completion: nil)
+                    case .failure(let err):
+                        print("Failed to fetch user: ", err)
                     }
                 }
                 
@@ -231,17 +241,6 @@ class SwipingCell: UICollectionViewCell{
         })
     }
     
-    //save new user
-    func saveNewUser() {
-        guard let name = newUserInputContainer.nameTextField.textField.text, let email = newUserInputContainer.emailTextField.textField.text, let password = newUserInputContainer.passwordTextField.textField.text else {return}
-        
-        let user = User()
-        user.name = name
-        user.email = email
-        user.password = password
-        
-        ProjectListRepository.instance.createUser(user: user)
-    }
     
     //setup constraints
     func setupLayout(){

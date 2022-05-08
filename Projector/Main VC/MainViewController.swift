@@ -14,7 +14,9 @@ import Photos
 
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CircleTransitionable  {
     
-    
+    //MARK: Properties
+    //user defines title format
+    var user: User?
 
     //animation required
     var mainView: UIView {
@@ -41,46 +43,20 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return category
     }()
     
-    //this func is for elements that have no access to navigation controller
-    func pushToViewController(controllerType: Int){
-        
-        let viewController = viewControllerType(for: controllerType)
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-    
-    func viewControllerType(for contollerType: Int) -> UIViewController {
-        
-        switch contollerType {
-        case 0:
-            return PhotoNotesCollectionViewController()//photo note
-        case 1:
-            return CanvasNotesCollectionViewController()//canvas note
-        case 2:
-            return TextNotesCollectionViewController()// text note
-        default:
-            return UIViewController()
-        }
-        
-    }
-    
     var statisticsStackView = StatisticsStackView()
-    
-    //MARK: Properties
     var proJects: Results<ProjectList> {//This property is actually get updated version of my project list
         get {
             return ProjectListRepository.instance.getProjectLists()
         }
     }
     
-    //Widget data source & to find out: is object already exist of need to create new one
+    //Widget data source & to find out: is object already exist or need to create new one
     var dayActivities: Results<DayActivity> {
         get {
             return ProjectListRepository.instance.getDayActivities()
         }
     }
 
-    
-    //MARK: Properties
     let cellID = "cellId"
     
     //container for all items on the page
@@ -98,11 +74,10 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //Profile Button
     lazy var transitionButton: UIButton = {
         let button = UIButton()
-        button.layer.backgroundColor = UIColor.yellow.cgColor
+        button.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
         button.layer.cornerRadius = 18
-        let image = UIImage(named: "profile")
-        button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(openProfileSettings), for: .touchUpInside)
+        button.setImage(UIImage(named: "settings"), for: .normal)
         button.contentMode = .center
         button.clipsToBounds = true
         return button
@@ -110,9 +85,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //Titles
     var contentTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "Hi Sergiy. Let's do it today!"
-        textView.font = UIFont.boldSystemFont(ofSize: 15)
-        textView.textColor = UIColor.init(red: 101/255, green: 101/255, blue: 101/255, alpha: 1)
+        textView.font = UIFont.boldSystemFont(ofSize: 18)
+        textView.textColor = UIColor.init(white: 55/255, alpha: 1)
         return textView
     }()
 
@@ -170,7 +144,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     // seems it speed up loading?
     let status = PHPhotoLibrary.authorizationStatus()
     
-    
+    //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         //Camera
@@ -214,7 +188,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        //if user is logged in update view controllers title
+        checkUserProfile()
+        //transition progress inside statistics widget
         statisticsStackView.progressAnimation()
         
         //dayActivity object for today
@@ -224,6 +200,43 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //MARK: Methods
+    //this func is for elements that have no access to navigation controller
+    func pushToViewController(controllerType: Int){
+        
+        let viewController = viewControllerType(for: controllerType)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func viewControllerType(for contollerType: Int) -> UIViewController {
+        
+        switch contollerType {
+        case 0:
+            return PhotoNotesCollectionViewController()//photo note
+        case 1:
+            return CanvasNotesCollectionViewController()//canvas note
+        case 2:
+            return TextNotesCollectionViewController()// text note
+        default:
+            return UIViewController()
+        }
+        
+    }
+    
+    fileprivate func checkUserProfile(){
+        
+        //check if user exist in database or logout
+        let users = ProjectListRepository.instance.getAllUsers()
+        if users.count > 0 {
+            
+            user = users.first
+            guard let user = user else {return}
+            contentTextView.text = "Hello \(user.name)!"
+        }else if users.count == 0 {
+            user = nil
+            contentTextView.text = "Hi there! Let's start projecting."
+        }
+    }
+    //transition to profile VC with custom animation
     @objc func openProfileSettings(){
         if let navController = navigationController{
             let transitionCoordinator = TransitionCoordinator()
@@ -236,11 +249,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //user activity object for today
     func createDayActivity (){
         
-        //------------------------------------------------------------------------------------------------------------
-        
+        //---------------------------------------------------------------------------------------------------
         //Here I want to have a logic that keep my database up to 30 items
-        
-        //------------------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------
         
         //keep recent activities CV always updated
         recentActivitiesCV.collectionViewDataSource = self.dayActivities
@@ -270,18 +281,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     func setupProjectCollectionView(){
         
-        
-        
         // Add a collectionView to the stackView
         recentProjectsStackView.addSubview(projectsCollectionView)
         
         // ?? here we specify delegate & datasourse for generating our individual horizontal cells
         projectsCollectionView.dataSource = self
         projectsCollectionView.delegate = self
-        
         projectsCollectionView.showsHorizontalScrollIndicator = false
         projectsCollectionView.showsVerticalScrollIndicator = false
-        
         
         //Class is need to be registered in order of using inside
         projectsCollectionView.register(ProjectCell.self, forCellWithReuseIdentifier: cellID)
@@ -326,52 +333,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
     }
     
-    //open new step VC
+    //open new project VC
     @objc func addNewProject(_ sender: Any){
         show(NewProjectViewController(), sender: sender)
-    }
-    
-    
-    
-    //number of cells
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return proJects.count
-    }
-    
-    //don't know what was an issue with index path, but it works right now!?
-    //defining what actually our cell is
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ProjectCell
-        //data for every project cell
-        cell.template = proJects[indexPath.item]
-        
-        //image configuration
-        if let validUrl = proJects[indexPath.item].selectedImagePathUrl{
-            cell.projectImage.image = retreaveImageForProject(myUrl: validUrl)
-        }else{
-            cell.projectImage.image = UIImage(named: "defaultImage")
-        }
-        //configure delete feature
-        cell.deleteButton.tag = indexPath.item
-        cell.deleteButton.addTarget(self, action: #selector(deleteProject(button:)), for: .touchUpInside)
-        return cell
-    }
-    
-    //size
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 188, height: recentProjectsStackView.frame.height)
-    }
-    
-    //action when user selects the cell
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        //an instance of project detail vc
-        let projectDetailViewController = DetailViewController()
-        //search step by sected item index
-        let selectedProject = proJects[indexPath.item]
-        projectDetailViewController.projectListIdentifier = selectedProject.id
-        projectDetailViewController.delegate = self
-        navigationController?.pushViewController(projectDetailViewController, animated: true)
     }
     
     //delete project function
@@ -417,6 +381,51 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return projectImage
     }
     
+    //MARK: Collection View Section
+    //number of cells
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return proJects.count
+    }
+    
+    //don't know what was an issue with index path, but it works right now!?
+    //defining what actually our cell is
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ProjectCell
+        //data for every project cell
+        cell.template = proJects[indexPath.item]
+        
+        //image configuration
+        if let validUrl = proJects[indexPath.item].selectedImagePathUrl{
+            cell.projectImage.image = retreaveImageForProject(myUrl: validUrl)
+        }else{
+            cell.projectImage.image = UIImage(named: "defaultImage")
+        }
+        //configure delete feature
+        cell.deleteButton.tag = indexPath.item
+        cell.deleteButton.addTarget(self, action: #selector(deleteProject(button:)), for: .touchUpInside)
+        return cell
+    }
+    
+    //size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 188, height: recentProjectsStackView.frame.height)
+    }
+    
+    //action when user selects the cell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        //an instance of project detail vc
+        let projectDetailViewController = DetailViewController()
+        //search step by sected item index
+        let selectedProject = proJects[indexPath.item]
+        projectDetailViewController.projectListIdentifier = selectedProject.id
+        projectDetailViewController.delegate = self
+        navigationController?.pushViewController(projectDetailViewController, animated: true)
+    }
+    
+    
+    
+    //MARK: Constraints
     //perforn all positioning configurations
     private func setupLayout(){
         
@@ -435,6 +444,18 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         viewByCategoryCV.translatesAutoresizingMaskIntoConstraints = false
         statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
         statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        scrollViewContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
+        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
+        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
+        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
+        contentUIView.heightAnchor.constraint(equalToConstant: 920).isActive = true
         
         //animation approach
         minTopAnchor = recentActivitiesCV.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 433)
@@ -482,21 +503,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
                 
         contentTextView.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
-        contentTextView.leftAnchor.constraint(equalTo: transitionButton.rightAnchor, constant: 15).isActive = true
-        contentTextView.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        contentTextView.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        
-        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
-        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
-        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
-        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
-        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 920).isActive = true
+        contentTextView.leftAnchor.constraint(equalTo: transitionButton.rightAnchor, constant: 5).isActive = true
+        contentTextView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        contentTextView.heightAnchor.constraint(equalToConstant: 37).isActive = true
         
         projectsTitle.bottomAnchor.constraint(equalTo: recentProjectsStackView.topAnchor, constant: -11).isActive = true//constant: 20
         projectsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
@@ -510,105 +519,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
 }
 
-class ProjectCell: UICollectionViewCell{
-    
-    //It'll be like a template for our cell
-    var template: ProjectList? {
-        //didSet uses for logic purposes!
-        didSet{
-            
-            if let name = template?.name {
-                projectName.text = name
-            }
-            
-        }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.cornerRadius = 8
-        layer.masksToBounds = true
-        setupViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-        
-    }
-    
-    let projectName:UILabel = {
-        let pn = UILabel()
-        pn.text = "Travel to Europe on Motorcycle"
-        pn.textAlignment = NSTextAlignment.left
-        pn.font = UIFont.boldSystemFont(ofSize: 15)
-        pn.textColor = UIColor.white
-        pn.numberOfLines = 3
-        return pn
-    }()
-    
-    let projectImage: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "interior")
-        image.contentMode = .scaleAspectFill
-        return image
-    }()
-    //adds contrast to project title
-    let gradient: CAGradientLayer =  {
-        let gradient = CAGradientLayer()
-        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
-        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.16).cgColor//black 16% opacity
-        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.56).cgColor//black 56% opacity
-        gradient.colors = [topColor, middleColor, bottomColor]
-        gradient.locations = [0.0, 0.5, 1.0]
-        return gradient
-    }()
-    
-    let deleteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
-        button.isUserInteractionEnabled = true
-        return button
-    }()
-    
-    func setupViews(){
-        
-        
-        backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
-        
-        //deleteButton.frame = CGRect(x:frame.width - 25, y: 9, width:16, height: 16)
-        
-        addSubview(projectImage)
-        addSubview(projectName)
-        
-        
-        //gradient under project title
-        layer.insertSublayer(gradient, at: 2)
-        gradient.frame = CGRect(x: 0, y: 188, width: frame.width, height: frame.height - 188)
-        
-        addSubview(deleteButton)
-        
-        projectName.translatesAutoresizingMaskIntoConstraints = false
-        projectImage.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
-        deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
-        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        
-        projectName.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20).isActive = true
-        projectName.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 13).isActive = true
-        projectName.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        projectName.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        
-        projectImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-        projectImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
-        projectImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
-        projectImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-        
-    }
-}
-
 extension ProjectViewController {
     
     func isAppAlreadyLaunchedOnce(){
@@ -617,11 +527,47 @@ extension ProjectViewController {
         
         if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
             
-//                       app is already launched once!
+           //app is already launched once!
 //            let layout = UICollectionViewFlowLayout()
 //            layout.scrollDirection = .horizontal
 //
-//            navigationController?.present(SwipingController(collectionViewLayout: layout), animated: true, completion: nil)
+//            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
+//                guard let self = self else {return}
+//
+//                Service.shared.fetchUserProfile { (res) in
+//                    switch res {
+//                    case .success(let res):
+//
+//                        //check for any user inside DB before creating new one
+//                        let users = ProjectListRepository.instance.getAllUsers()
+//                        if users.count > 0{
+//                            for user in users {
+//                                ProjectListRepository.instance.deleteUser(user: user)
+//                            }
+//                        }
+//
+//                        let user = User()
+//                        user.name = res.fullName
+//                        user.email = res.emailAddress
+//                        user.isLogined = true
+//
+//                        ProjectListRepository.instance.createUser(user: user)
+//
+//                        self.user = user
+//
+//                        self.contentTextView.text = "Hello \(user.name)!"
+//
+//
+//                    case .failure(let err):
+//                        print("Failed to fetch user: ", err)
+//
+//                    }
+//                }
+//
+//
+//            }, collectionViewLayout: layout)
+//
+//            navigationController?.present(swipingController, animated: true, completion: nil)
             
             
         } else {
@@ -634,7 +580,44 @@ extension ProjectViewController {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
 
-            navigationController?.present(SwipingController(collectionViewLayout: layout), animated: true, completion: nil)
+            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
+                guard let self = self else {return}
+                //as user is logged in, try to fetch user from WEB, create user inside local DB an update VC elem.
+                Service.shared.fetchUserProfile { (res) in
+                    switch res {
+                    case .success(let res):
+                        
+                        //check and clear any user inside DB before creating new one
+                        let users = ProjectListRepository.instance.getAllUsers()
+                        if users.count > 0{
+                            for user in users {
+                                ProjectListRepository.instance.deleteUser(user: user)
+                            }
+                        }
+                        //create
+                        let user = User()
+                        user.name = res.fullName
+                        user.email = res.emailAddress
+                        user.isLogined = true
+                        
+                        ProjectListRepository.instance.createUser(user: user)
+                        //update user object inside VC
+                        self.user = user
+                        //update VC title
+                        self.contentTextView.text = "Hello \(user.name)!"
+                        
+                        
+                    case .failure(let err):
+                        print("Failed to fetch user: ", err)
+
+                    }
+                }
+                
+            }, collectionViewLayout: layout)
+
+
+            navigationController?.present(swipingController, animated: true, completion: nil)
+            
         }
     }
 }

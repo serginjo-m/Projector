@@ -42,6 +42,7 @@
 		CF27A06D254D7449007D06D3 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */; };
 		CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF27A06E254DA091007D06D3 /* Assets.xcassets */; };
 		CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A072254E0158007D06D3 /* ProjectNumbers.swift */; };
+		CF295C802827FFE30092FA5C /* ProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF295C7F2827FFE30092FA5C /* ProjectCell.swift */; };
 		CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */; };
 		CF29D9CB26C437DC00B3FEE2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9CA26C437DC00B3FEE2 /* Notification.swift */; };
 		CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1292237766A700F3132A /* DetailViewController.swift */; };
@@ -58,7 +59,10 @@
 		CF4197C62691FBE300405EC5 /* GenericController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C52691FBE300405EC5 /* GenericController.swift */; };
 		CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4197C72691FC1000405EC5 /* GenericCell.swift */; };
 		CF43240A272B177600421226 /* PinterestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF432409272B177600421226 /* PinterestDelegate.swift */; };
+		CF4436D32812C3BA002F009C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4436D22812C3BA002F009C /* Service.swift */; };
 		CF535DD12587DEF600F15DCB /* MonthMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF535DD02587DEF600F15DCB /* MonthMetadata.swift */; };
+		CF550E0B2819E13200C9DD00 /* AccessUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF550E0A2819E13200C9DD00 /* AccessUserViewController.swift */; };
+		CF550E0D281EE78900C9DD00 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF550E0C281EE78900C9DD00 /* ApiResponse.swift */; };
 		CF55239C26A307AB0079EE12 /* OrderChartsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF55239B26A307AB0079EE12 /* OrderChartsExtension.swift */; };
 		CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF594360252BA2F10036641B /* RecentActivitiesCV.swift */; };
 		CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5943622531B1700036641B /* ViewByCategoryCV.swift */; };
@@ -86,7 +90,6 @@
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
 		CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */; };
 		CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */; };
-		CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */; };
@@ -164,6 +167,7 @@
 		CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		CF27A06E254DA091007D06D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Projector/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		CF27A072254E0158007D06D3 /* ProjectNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectNumbers.swift; sourceTree = "<group>"; };
+		CF295C7F2827FFE30092FA5C /* ProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCell.swift; sourceTree = "<group>"; };
 		CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsHeaderImage.swift; sourceTree = "<group>"; };
 		CF29D9CA26C437DC00B3FEE2 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		CF2C1292237766A700F3132A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -182,7 +186,10 @@
 		CF4197C52691FBE300405EC5 /* GenericController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericController.swift; sourceTree = "<group>"; };
 		CF4197C72691FC1000405EC5 /* GenericCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericCell.swift; sourceTree = "<group>"; };
 		CF432409272B177600421226 /* PinterestDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestDelegate.swift; sourceTree = "<group>"; };
+		CF4436D22812C3BA002F009C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		CF535DD02587DEF600F15DCB /* MonthMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthMetadata.swift; sourceTree = "<group>"; };
+		CF550E0A2819E13200C9DD00 /* AccessUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessUserViewController.swift; sourceTree = "<group>"; };
+		CF550E0C281EE78900C9DD00 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		CF55239B26A307AB0079EE12 /* OrderChartsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderChartsExtension.swift; sourceTree = "<group>"; };
 		CF594360252BA2F10036641B /* RecentActivitiesCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivitiesCV.swift; sourceTree = "<group>"; };
 		CF5943622531B1700036641B /* ViewByCategoryCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewByCategoryCV.swift; sourceTree = "<group>"; };
@@ -258,7 +265,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFEDDC4826F7A150005E5652 /* Foundation.framework in Frameworks */,
-				CFB0D92626334C4C00F67C65 /* AssetsLibrary.framework in Frameworks */,
 				2528C037002617B26AC128D5 /* Pods_Projector.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +372,6 @@
 		CF27A066254AB1E7007D06D3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */,
 				CF27A06C254D7449007D06D3 /* CustomTabBarController.swift */,
 			);
 			path = Controller;
@@ -431,6 +436,7 @@
 				CFF34C3025FA97B3009F8452 /* UltraLayout.swift */,
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
+				CF295C7F2827FFE30092FA5C /* ProjectCell.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -527,6 +533,7 @@
 				CFCD7897267FCB530066294A /* TextNote.swift */,
 				CF29D9CA26C437DC00B3FEE2 /* Notification.swift */,
 				CF2472F62713606E002D6DCA /* User.swift */,
+				CF550E0C281EE78900C9DD00 /* ApiResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -534,9 +541,11 @@
 		CFB40CD327E619D100D6EEA4 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				CF4436D22812C3BA002F009C /* Service.swift */,
 				CFB40CD427E619EC00D6EEA4 /* TransitionCoordinator.swift */,
 				CFB40CD627E6261600D6EEA4 /* CircularTransition.swift */,
 				CFB40CD827E6379000D6EEA4 /* UserProfileViewController.swift */,
+				CF550E0A2819E13200C9DD00 /* AccessUserViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -552,6 +561,7 @@
 		CFCD789B268236DD0066294A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				CF27A0642548B5C4007D06D3 /* SketchShadowExtension.swift */,
 				CFCD789C268237010066294A /* UIViewExtension.swift */,
 				CFD5288326935B8400062DCF /* UIView+Stacking.swift */,
 				CFEDDC5226F7C900005E5652 /* UIColorExt.swift */,
@@ -769,6 +779,7 @@
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
 				CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */,
+				CF295C802827FFE30092FA5C /* ProjectCell.swift in Sources */,
 				CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */,
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
@@ -804,10 +815,13 @@
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
+				CF550E0D281EE78900C9DD00 /* ApiResponse.swift in Sources */,
 				CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */,
 				CFEDDC5926FD0D8D005E5652 /* SwipingPage.swift in Sources */,
+				CF550E0B2819E13200C9DD00 /* AccessUserViewController.swift in Sources */,
 				CFBEB8A323C23176001E96B9 /* ProjectListRepo.swift in Sources */,
 				CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */,
+				CF4436D32812C3BA002F009C /* Service.swift in Sources */,
 				CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */,
 				CFEDDC5726FCFABA005E5652 /* SwipingCell.swift in Sources */,
 				CFCD789D268237010066294A /* UIViewExtension.swift in Sources */,

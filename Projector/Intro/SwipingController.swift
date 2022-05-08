@@ -95,6 +95,24 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         return pc
     }()
     
+    //update parent VC
+    var didTapDismissCompletionHandler: (() -> Void)
+    
+    //MARK: init
+    
+    
+    init(didTapDismissCompletionHandler: @escaping (() -> Void), collectionViewLayout layout: UICollectionViewLayout) {
+        //Call parent vc, so it tries to update itself
+        self.didTapDismissCompletionHandler = didTapDismissCompletionHandler
+        //collection view controller should accept layout in init
+        super.init(collectionViewLayout: layout)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     override func viewDidLoad() {
         
         collectionView?.backgroundColor = .white
@@ -174,7 +192,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         //skip button
         view.addSubview(skipButton)
         skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
-        skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
+        skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22).isActive = true
         skipButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 19).isActive = true
     }

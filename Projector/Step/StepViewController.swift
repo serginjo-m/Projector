@@ -140,6 +140,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     
     //MARK: View Controller Initialization
+    //Good way to init view controller
     init(stepId: String, nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         self.stepID = stepId
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
