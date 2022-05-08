@@ -35,7 +35,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //MARK: Properties
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         
         button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
@@ -56,7 +56,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }()
     
     //MARK: Properties
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -118,7 +118,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textField
     }()
 
-    let datePicker: UIDatePicker = {
+    lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.date
         picker.backgroundColor = .white
@@ -152,7 +152,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textField
     }()
     
-    let startTimePicker: UIDatePicker = {
+    lazy var startTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.time
         picker.backgroundColor = .white
@@ -177,7 +177,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textField
     }()
     
-    let endTimePicker: UIDatePicker = {
+    lazy var endTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.time
         picker.backgroundColor = .white

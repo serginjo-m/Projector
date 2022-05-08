@@ -50,7 +50,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     let cellId = "cellId"
     
     
-    let skipButton: UIButton = {
+    lazy var skipButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Skip", for: .normal)
@@ -60,7 +60,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         return button
     }()
     
-    private let previousButton: UIButton = {
+    private lazy var previousButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("PREV", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +72,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         return button
     }()
     
-    private let nextButton: UIButton = {
+    private lazy var nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("NEXT", for: .normal)
         button.setTitle("GET STARTED", for: .selected)

@@ -124,7 +124,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return view
     }()
     
-    let stepSaveButton: UIButton = {
+    lazy var stepSaveButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -137,7 +137,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return button
     }()
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)

@@ -88,7 +88,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         PIV.image = UIImage(named: "workspace")
         return PIV
     }()
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -132,7 +132,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         return label
     }()
     
-    let editButton: UIButton = {
+    lazy var editButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(named: "editButton"), for: .normal)

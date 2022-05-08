@@ -199,7 +199,7 @@ class SidePanelView: ElementsViewController, UITableViewDelegate, UITableViewDat
         return picker
     }()
     
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("Add New Element", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)

@@ -54,7 +54,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //step values
     let stepNumbersCV = StepNumbersCollectionView()
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -84,7 +84,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
-    let stepToEventButton: UIButton = {
+    lazy var stepToEventButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(addStepToCalendarEvent(button:)), for: .touchUpInside)
         button.setTitle("Calendar", for: .normal)
@@ -94,7 +94,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
     
-    let editStepButton: UIButton = {
+    lazy var editStepButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
         button.setTitle("Edit", for: .normal)
@@ -104,7 +104,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
     
-    let removeStepButton: UIButton = {
+    lazy var removeStepButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(deleteStep(button:)), for: .touchUpInside)
         button.setTitle("Remove", for: .normal)
@@ -114,7 +114,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
     
-    let reminderStepButton: UIButton = {
+    lazy var reminderStepButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(setReminder(button:)), for: .touchUpInside)

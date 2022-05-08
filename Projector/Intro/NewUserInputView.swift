@@ -13,7 +13,7 @@ class RegisteredUserInputView: UIView{
     let emailTextField = CustomTextField(textFieldPlaceholder: "Email address")
     let passwordTextField = CustomTextField(textFieldPlaceholder: "Password")
     
-    let loginButton: UIButton = {
+    lazy var loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("Login", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +90,7 @@ class NewUserInputView: UIView{
     let emailTextField = CustomTextField(textFieldPlaceholder: "Email address")
     let passwordTextField = CustomTextField(textFieldPlaceholder: "Password")
     
-    let registerButton: UIButton = {
+    lazy var registerButton: UIButton = {
         let button = UIButton()
         button.setTitle("REGISTER", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

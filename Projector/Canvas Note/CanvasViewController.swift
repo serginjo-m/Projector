@@ -13,7 +13,7 @@ class CanvasViewController: UIViewController {
     
     let canvas = CanvasView()
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -35,7 +35,7 @@ class CanvasViewController: UIViewController {
         return label
     }()
     
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("    Save to...", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -47,7 +47,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let undoButton: UIButton = {
+    lazy var undoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Undo", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -55,7 +55,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let clearButton: UIButton = {
+    lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Clear", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -63,7 +63,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let yellowButton: UIButton = {
+    lazy var yellowButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .yellow
         button.layer.borderWidth = 1
@@ -71,7 +71,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let redButton: UIButton = {
+    lazy var redButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .red
         button.layer.borderWidth = 1
@@ -79,7 +79,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let  blueButton: UIButton = {
+    lazy var  blueButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .blue
         button.layer.borderWidth = 1
@@ -87,7 +87,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let blackButton: UIButton = {
+    lazy var blackButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .black
         button.layer.borderWidth = 1
@@ -95,7 +95,7 @@ class CanvasViewController: UIViewController {
         return button
     }()
     
-    let slider: UISlider = {
+    lazy var slider: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 1
         slider.maximumValue = 10

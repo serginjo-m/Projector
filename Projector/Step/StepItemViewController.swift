@@ -26,7 +26,7 @@ class StepItemViewController: UIViewController {
     var stepItemsTableView: UITableView?
     
     //cancel button
-    let closeButton: UIButton = {
+    lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "close"), for: .normal)
         button.imageView?.contentMode = .center
@@ -41,7 +41,7 @@ class StepItemViewController: UIViewController {
         return label
     }()
     //save button
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "save"), for: .normal)
         button.imageView?.contentMode = .center

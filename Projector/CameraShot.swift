@@ -14,7 +14,7 @@ import Photos
 
 class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -36,7 +36,7 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
         return label
     }()
     
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("    Save to...", for: .normal)
         button.setTitleColor(.white, for: .normal)

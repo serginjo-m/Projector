@@ -41,7 +41,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return myDate
     }()
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -63,7 +63,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     }()
     
     //MARK: Properties
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)

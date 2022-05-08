@@ -80,7 +80,7 @@ class ExpandingReminder: UIView {
         return label
     }()
     
-    let datePicker: UIDatePicker = {
+    lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.datePickerMode = UIDatePicker.Mode.date
@@ -101,7 +101,7 @@ class ExpandingReminder: UIView {
         return label
     }()
     
-    let timePicker: UIDatePicker = {
+    lazy var timePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.datePickerMode = UIDatePicker.Mode.time
@@ -112,7 +112,7 @@ class ExpandingReminder: UIView {
         return picker
     }()
     
-    let applyReminderButton: UIButton = {
+    lazy var applyReminderButton: UIButton = {
         let button = UIButton()
         button.setTitle("Apply", for: .normal)
         button.setTitleColor(UIColor.init(white: 61/255, alpha: 1) , for: .normal)

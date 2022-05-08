@@ -11,7 +11,7 @@ import RealmSwift
 
 class TextNoteViewController: UIViewController,  UINavigationControllerDelegate, UITextViewDelegate{
     
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
@@ -33,7 +33,7 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         return label
     }()
     
-    let saveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("    Save to...", for: .normal)
         button.setTitleColor(.white, for: .normal)

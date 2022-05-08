@@ -26,7 +26,7 @@ class StepProgressMenu: UIView {
         return view
     }()
     
-    let todoOptionButton: UIButton = {
+    lazy var todoOptionButton: UIButton = {
         let button = UIButton()
         button.setTitle("To-do", for: .normal)
         button.setTitleColor(UIColor.init(white: 0.2, alpha: 1), for: .normal)
@@ -35,7 +35,7 @@ class StepProgressMenu: UIView {
         return button
     }()
     
-    let inProgressOptionButton: UIButton = {
+    lazy var inProgressOptionButton: UIButton = {
         let button = UIButton()
         button.setTitle("In Progress", for: .normal)
         button.setTitleColor(UIColor.init(white: 0.2, alpha: 1), for: .normal)
@@ -44,7 +44,7 @@ class StepProgressMenu: UIView {
         return button
     }()
     
-    let doneOptionButton: UIButton = {
+    lazy var doneOptionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Done", for: .normal)
         button.setTitleColor(UIColor.init(white: 0.2, alpha: 1), for: .normal)
@@ -53,7 +53,7 @@ class StepProgressMenu: UIView {
         return button
     }()
     
-    let blockedOptionButton: UIButton = {
+    lazy var blockedOptionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Blocked", for: .normal)
         button.setTitleColor(UIColor.init(white: 0.2, alpha: 1), for: .normal)

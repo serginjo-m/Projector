@@ -36,7 +36,7 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
     var items = [U]()
     
     //navigation
-    let dismissButton: UIButton = {
+    lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.darkGray, for: .normal)
