@@ -326,7 +326,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
 
-        //use func for creating object
+        //prepare object ready to save
         let stepTemplate: ProjectStep = self.defineStepTemplate()
         //update existing step
         if self.stepID != nil{
@@ -344,8 +344,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         dismiss(animated: true, completion: nil)
     }
     
-    //creates step instance from values :)))))))))
+    //prepare object before saving or updating inside DB
     func defineStepTemplate() -> ProjectStep{
+        //create project step instance
         let stepTemplate = ProjectStep()
         //if id exist(edit mode), replace it
         if let id = stepID {
@@ -388,6 +389,18 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         if let complete = stepComplete{
             stepTemplate.complete = complete
         }
+        
+        //TODO: This is dummy attempt to create notification. It's only template
+        if #available(iOS 13.0, *) {
+            stepTemplate.reminder?.timeInterval = TimeInterval(60)
+            stepTemplate.reminder?.eventDate = self.expandingReminderView.timePicker.date
+            stepTemplate.reminder?.reminderType = .calendar
+            stepTemplate.reminderEnabled = true
+            NotificationManager.shared.scheduleNotification(task: stepTemplate)
+        } else {
+            // Fallback on earlier versions
+        }
+        
         return stepTemplate
     }
     

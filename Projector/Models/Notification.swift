@@ -9,7 +9,14 @@
 import UIKit
 import RealmSwift
 
-class Notification: Object {
+class Notification: Object, Codable {
+    //New functionality added
+    //---------------------------------------
+    var timeInterval: TimeInterval?
+    var reminderType: ReminderType = .time//.time, .calendar, .location
+    var location: LocationReminder?
+    var repeats = false
+    //---------------------------------------
     
     
     //notification title
@@ -35,6 +42,17 @@ class Notification: Object {
     override var description: String{
         return "\(name)"
     }
-    
-    
+}
+
+struct LocationReminder: Codable {
+  var latitude: Double
+  var longitude: Double
+  var radius: Double
+}
+
+enum ReminderType: Int, CaseIterable, Identifiable, Codable {
+  case time
+  case calendar
+  case location
+  var id: Int { self.rawValue }
 }

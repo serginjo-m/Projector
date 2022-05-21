@@ -43,6 +43,8 @@
 		CF27A06F254DA092007D06D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF27A06E254DA091007D06D3 /* Assets.xcassets */; };
 		CF27A073254E0158007D06D3 /* ProjectNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF27A072254E0158007D06D3 /* ProjectNumbers.swift */; };
 		CF295C802827FFE30092FA5C /* ProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF295C7F2827FFE30092FA5C /* ProjectCell.swift */; };
+		CF295C86283137040092FA5C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF295C85283137040092FA5C /* NotificationManager.swift */; };
+		CF295C8A28340D580092FA5C /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF295C8928340D570092FA5C /* LocationManager.swift */; };
 		CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */; };
 		CF29D9CB26C437DC00B3FEE2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF29D9CA26C437DC00B3FEE2 /* Notification.swift */; };
 		CF2C1297237766A700F3132A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2C1292237766A700F3132A /* DetailViewController.swift */; };
@@ -168,6 +170,8 @@
 		CF27A06E254DA091007D06D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Projector/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		CF27A072254E0158007D06D3 /* ProjectNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectNumbers.swift; sourceTree = "<group>"; };
 		CF295C7F2827FFE30092FA5C /* ProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCell.swift; sourceTree = "<group>"; };
+		CF295C85283137040092FA5C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		CF295C8928340D570092FA5C /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsHeaderImage.swift; sourceTree = "<group>"; };
 		CF29D9CA26C437DC00B3FEE2 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		CF2C1292237766A700F3132A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -355,6 +359,8 @@
 			children = (
 				CF242F4C26BC5C2900F44A2F /* NotificationsVC.swift */,
 				CF29D9C826C25F7F00B3FEE2 /* NotificationsHeaderImage.swift */,
+				CF295C85283137040092FA5C /* NotificationManager.swift */,
+				CF295C8928340D570092FA5C /* LocationManager.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -876,7 +882,9 @@
 				CF888DA42427D01A00312407 /* FeaturedAppsController.swift in Sources */,
 				CF4197C22691E14000405EC5 /* StatisticsVC.swift in Sources */,
 				CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */,
+				CF295C86283137040092FA5C /* NotificationManager.swift in Sources */,
 				CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */,
+				CF295C8A28340D580092FA5C /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -955,7 +963,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1014,7 +1022,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

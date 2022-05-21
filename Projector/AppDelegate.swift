@@ -21,9 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 20,
+            schemaVersion: 21,
             migrationBlock: { migration , oldSchemaVersion in
-                if oldSchemaVersion < 20 {
+                if oldSchemaVersion < 21 {
                     
                 }
             }
@@ -35,9 +35,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //turn off dark mode
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
+            //ask for notification based on user location
+            let locationManager = LocationManager()
+            locationManager.requestAuthorization()
+
+            //request permission for sending notifications
+            NotificationManager.shared.requestAuthorization { granted in
+              
+              if granted {
+//                  print("Notification permission was granted!")
+//                showNotificationSettingsUI = true
+              }
+            }
         } else {
             // Fallback on earlier versions
         }
+//      set  notification delegate as soon as the app launches
+        configureUserNotifications()
+        
         return true
     }
     
@@ -71,3 +86,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+// MARK: - UNUserNotificationCenterDelegate
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void
+  ) {
+      if #available(iOS 14.0, *) {
+          completionHandler(.banner)
+      } else {
+          // Fallback on earlier versions
+      }
+  }
+    
+    //can config fast actions on notifications
+    private func configureUserNotifications() {
+      UNUserNotificationCenter.current().delegate = self
+        
+        // declare two actions
+        let dismissAction = UNNotificationAction(//dismiss action
+          identifier: "dismiss",//uniquely identifies the action
+          title: "Dismiss",
+          options: [])//denotes the behavior associated with the action
+        let markAsDone = UNNotificationAction(//mark as done
+          identifier: "markAsDone",//uniquely identifies the action
+          title: "Mark As Done",
+          options: [])//denotes the behavior associated with the action
+        // define a notification category
+        let category = UNNotificationCategory(
+          identifier: "OrganizerPlusCategory",
+          actions: [dismissAction, markAsDone],
+          intentIdentifiers: [],
+          options: [])
+        // register the new actionable notification
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+
+    }
+    
+    //calls when the user acts on the notification.
+    func userNotificationCenter(
+      _ center: UNUserNotificationCenter,
+      didReceive response: UNNotificationResponse,
+      withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+      // Check if the response’s actionIdentifier is set to markAsDone. Then, you decode the task from userInfo
+      if response.actionIdentifier == "markAsDone" {
+        let userInfo = response.notification.request.content.userInfo
+          //decode the task from userInfo.
+        if let taskData = userInfo["Task"] as? Data {
+          if let task = try? JSONDecoder().decode(Notification.self, from: taskData) {
+            // After the decode succeeds, you remove the task using the shared instance of the TaskManager
+//            TaskManager.shared.remove(task: task)
+          }
+        }
+      }
+      completionHandler()
+    }
+
+
+}

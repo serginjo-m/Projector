@@ -18,9 +18,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //---------------------------- temporary solution --------------------------------------
     //there I can have many options, because event can last more then 1 day or a couple of hours
+    //MARK: Properties
     var eventDate: Date?
     var eventStart: Date?
     var eventEnd: Date?
+    
     var stepId: String?
     var projectId: String?
     
@@ -32,8 +34,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //unique project id for updating
     var eventId: String?
-    
-    //MARK: Properties
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -55,7 +55,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return label
     }()
     
-    //MARK: Properties
     lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -97,105 +96,103 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let dateTitle: UILabel = {
         let label = UILabel()
-        label.text = "Date"
+        label.text = "  Date"
         label.textColor = UIColor.init(white: 96/255, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
         return label
     }()
     
-    let dateTextField: UITextField = {
-        let textField = UITextField()
-        textField.keyboardType = .default
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.attributedPlaceholder = NSAttributedString(string: "    day / month / year",
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
-        return textField
+    let startTimeTitle: UILabel = {
+        let label = UILabel()
+        label.text = "  Start"
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textAlignment = .left
+        return label
     }()
-
+    
+    let endTimeTitle: UILabel = {
+        let label = UILabel()
+        label.text = "  End"
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textAlignment = .left
+        return label
+    }()
+    
     lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
+        picker.contentHorizontalAlignment = .left
         picker.datePickerMode = UIDatePicker.Mode.date
-        picker.backgroundColor = .white
+        
+        picker.clipsToBounds = true
         picker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        picker.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        picker.layer.borderWidth = 1
-        picker.isHidden = true
         return picker
     }()
     
-    let timeTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Time*"
-        label.textColor = UIColor.init(white: 96/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        label.textAlignment = .left
-        return label
-    }()
-    
-    let startTimeTextField: UITextField = {
-        let textField = UITextField()
-        textField.keyboardType = .default
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.attributedPlaceholder = NSAttributedString(string: "    start at: 00:00",
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
-        return textField
-    }()
     
     lazy var startTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.time
-        picker.backgroundColor = .white
+        picker.contentHorizontalAlignment = .left
+        picker.clipsToBounds = true
         picker.addTarget(self, action: #selector(startTimeChanged(_:)), for: .valueChanged)
-        picker.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        picker.layer.borderWidth = 1
-        picker.isHidden = true
         return picker
     }()
     
-    let endTimeTextField: UITextField = {
-        let textField = UITextField()
-        textField.keyboardType = .default
-        textField.clearButtonMode = UITextField.ViewMode.whileEditing
-        textField.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
-        textField.attributedPlaceholder = NSAttributedString(string: "    end at: 00:00",
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
-        return textField
-    }()
+    
     
     lazy var endTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.time
-        picker.backgroundColor = .white
-        picker.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
-        picker.layer.borderWidth = 1
+        picker.contentHorizontalAlignment = .left
+        picker.clipsToBounds = true
         picker.addTarget(self, action: #selector(endTimeChanged(_:)), for: .valueChanged)
-        picker.isHidden = true
         return picker
+    }()
+    
+    lazy var titleStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [dateTitle, startTimeTitle, endTimeTitle])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    lazy var pickerStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [datePicker, startTimePicker, endTimePicker])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    let reminderTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Add Reminder"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.init(white: 96/255, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textAlignment = .left
+        return label
+    }()
+    
+    lazy var reminderSwitch: UISwitch = {
+        let swtch = UISwitch()
+        swtch.translatesAutoresizingMaskIntoConstraints = false
+        swtch.addTarget(self, action: #selector(switchChangedValue), for: .valueChanged)
+        return swtch
     }()
     
     let descriptionTitle: UILabel = {
         let label = UILabel()
         label.text = "Description*"
         label.textColor = UIColor.init(white: 96/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .left
         return label
     }()
+    
+    
     
     let descriptionTextView: UITextView = {
         let textView = UITextView()
@@ -206,6 +203,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textView
     }()
     
+    //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -218,16 +216,12 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.addSubview(imageHolderView)
         view.addSubview(nameTextField)
         view.addSubview(lineUIView)
-        view.addSubview(dateTitle)
-        view.addSubview(dateTextField)
-        view.addSubview(timeTitle)
-        view.addSubview(startTimeTextField)
-        view.addSubview(endTimeTextField)
+        view.addSubview(reminderTitle)
+        view.addSubview(reminderSwitch)
         view.addSubview(descriptionTitle)
         view.addSubview(descriptionTextView)
-        view.addSubview(datePicker)
-        view.addSubview(startTimePicker)
-        view.addSubview(endTimePicker)
+        view.addSubview(pickerStackView)
+        view.addSubview(titleStackView)
         
         //constraints
         setupLayout()
@@ -239,34 +233,39 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
 
         //set delegate to  text field
         nameTextField.delegate = self
-        dateTextField.delegate = self
-        startTimeTextField.delegate = self
-        endTimeTextField.delegate = self
+        
+        //TODO: Don't realy understand what is delegate for?
+//        dateTextField.delegate = self
+//        startTimeTextField.delegate = self
+//        endTimeTextField.delegate = self
     }
     
+  
+    //MARK: Methods
     //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func switchChangedValue(sender: UISwitch){
+//        print("switch has changed value!", reminderSwitch.isOn)
+    }
+    
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         
+        //-----------------------------  Is it all about user activity? ---------------------------------
+        //---------- So Event is 100% calendar object ----------------
         let event: Event = self.defineEventTemplate()
+        
+        if reminderSwitch.isOn{
+            createNotification(event: event)
+        }
         
         //unwrap optional date for activity object
         guard let eventDate = event.date else {return}
         //new one
         if self.eventId == nil{
-            
-            let notification = Notification()
-            notification.name = event.title
-            notification.category = "event"
-            if let date = event.date{
-                notification.eventDate = date
-            }
-            //creates new notification
-            ProjectListRepository.instance.createNotification(notification: notification)
             
             //creates new project instance
             ProjectListRepository.instance.createEvent(event: event)
@@ -275,14 +274,32 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         }else{
             //because event with that id exist it perform update
             ProjectListRepository.instance.updateEvent(event: event)
-            //configure detail VC
-            // self.delegate?.performAllConfigurations()
-            //reload parents views
-            // self.delegate?.reloadViews()
+            //save event  to activity
             UserActivitySingleton.shared.createUserActivity(description: "\(event.title) on \(self.dateFormatterFullDate.string(from: eventDate)) was updated")
         }
         
         dismiss(animated: true, completion: nil)
+    }
+    
+    fileprivate func createNotification(event: Event){
+        
+        //TODO: this part must be optional, because not every calendar event needs notify user
+        //TODO: Also it creates notification object but not connect it to projectStep!
+        //Solution might be integrated Notification inside Event object
+        
+        
+        
+        let notification = Notification()
+        notification.name = event.title
+        
+        notification.category = stepId != nil ? "step" : "event"
+        
+        
+        if let date = event.date{
+            notification.eventDate = date
+        }
+        //creates new notification
+        ProjectListRepository.instance.createNotification(notification: notification)
     }
     
     //creates event instance
@@ -299,7 +316,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             eventTemplate.date = Date()
         }
         
-        //stepId == step event
+        //if stepId defined == type of event is step event
         if let stepIdentifier = stepId {
             eventTemplate.category = "projectStep"
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
@@ -337,78 +354,37 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateSaveButtonState()
         navigationItem.title = textField.text
-        updatePickerHiddenState(textField: textField)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         //Disable the Save button while editing.
         saveButton.isEnabled = false
         //show date picker
-        updatePickerHiddenState(textField: textField)
     }
     
-    func updatePickerHiddenState(textField: UITextField){
-        switch textField {
-        case _ where textField == dateTextField:
-            datePicker.isHidden = !datePicker.isHidden
-        case _ where textField == startTimeTextField:
-            startTimePicker.isHidden = !startTimePicker.isHidden
-        case _ where textField == endTimeTextField:
-            endTimePicker.isHidden = !endTimePicker.isHidden
-        default:
-            break
-        }
-    }
     
     //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
-        //date
-        self.eventDate = sender.date
-        setTextFieldText(sender: sender, senderDate: sender.date)
+        print("date is changed")
     }
-    
+
     //start time picker action
     @objc func startTimeChanged(_ sender: UIDatePicker) {
-        //start
-        self.eventStart = sender.date
-        setTextFieldText(sender: sender, senderDate: sender.date)
+        print("start time is changed")
     }
-    
+
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
-        //end
-        self.eventEnd = sender.date
-        setTextFieldText(sender: sender, senderDate: sender.date)
+        print("end time is set")
     }
     
-    private func setTextFieldText(sender: UIDatePicker, senderDate: Date){
-        let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: senderDate)
-
-        switch sender{
-            case _ where sender == datePicker:
-                if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday {
-                    let weekDayString = dayOfWeekLetter(for: weekday)
-                    let monthStr = monthString(for: month)
-                    dateTextField.text = ("    \(weekDayString), \(day) \(monthStr) \(year)")
-                }
-            case _ where sender == startTimePicker:
-                if let hour = components.hour, let minute = components.minute{
-                    startTimeTextField.text = "    \(hour):\(minute)"
-                }
-            case _ where sender == endTimePicker:
-                if let hour = components.hour, let minute = components.minute{
-                    endTimeTextField.text = "    \(hour):\(minute)"
-                }
-            default:
-                break
-        }
-    }
     
     private func updateSaveButtonState(){
+        //TODO: check for date is set!
         //Disable the Save button when text field is empty.
         let text = nameTextField.text ?? ""
-        let date = dateTextField.text ?? ""
-        saveButton.isEnabled = !text.isEmpty && !date.isEmpty
+//        let date = dateTextField.text ?? ""
+        saveButton.isEnabled = !text.isEmpty//--------------------- && !date.isEmpty
     }
     
     
@@ -420,14 +396,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         lineUIView.translatesAutoresizingMaskIntoConstraints = false
-        dateTitle.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        dateTextField.translatesAutoresizingMaskIntoConstraints = false
-        timeTitle.translatesAutoresizingMaskIntoConstraints = false
-        startTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-        startTimePicker.translatesAutoresizingMaskIntoConstraints = false
-        endTimeTextField.translatesAutoresizingMaskIntoConstraints = false
-        endTimePicker.translatesAutoresizingMaskIntoConstraints = false
         descriptionTitle.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -461,47 +429,27 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         lineUIView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         lineUIView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
-        dateTitle.topAnchor.constraint(equalTo: lineUIView.bottomAnchor, constant: 30).isActive = true
-        dateTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        dateTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        dateTitle.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        titleStackView.topAnchor.constraint(equalTo: lineUIView.bottomAnchor, constant: 45).isActive = true
+        titleStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        titleStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        titleStackView.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        dateTextField.topAnchor.constraint(equalTo: dateTitle.bottomAnchor, constant: 12).isActive = true
-        dateTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        dateTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        dateTextField.heightAnchor.constraint(equalToConstant: 43).isActive = true
+        pickerStackView.topAnchor.constraint(equalTo: titleStackView.bottomAnchor, constant: 3).isActive = true
+        pickerStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        pickerStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        pickerStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        datePicker.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 0).isActive = true
-        datePicker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        datePicker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        datePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        reminderTitle.topAnchor.constraint(equalTo: pickerStackView.bottomAnchor, constant: 45).isActive = true
+        reminderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        reminderTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        reminderTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        timeTitle.topAnchor.constraint(equalTo: dateTextField.bottomAnchor, constant: 12).isActive = true
-        timeTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        timeTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        timeTitle.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        reminderSwitch.centerYAnchor.constraint(equalTo: reminderTitle.centerYAnchor, constant: 0).isActive = true
+        reminderSwitch.leftAnchor.constraint(equalTo: reminderTitle.rightAnchor, constant: 15).isActive = true
+        reminderSwitch.widthAnchor.constraint(equalToConstant: 51).isActive = true
+        reminderSwitch.heightAnchor.constraint(equalToConstant: 31).isActive = true
         
-        startTimeTextField.topAnchor.constraint(equalTo: timeTitle.bottomAnchor, constant: 12).isActive = true
-        startTimeTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        startTimeTextField.widthAnchor.constraint(equalToConstant: ((view.frame.size.width - 30) / 2) - 6).isActive = true
-        startTimeTextField.heightAnchor.constraint(equalToConstant: 43).isActive = true
-        
-        startTimePicker.topAnchor.constraint(equalTo: startTimeTextField.bottomAnchor, constant: 0).isActive = true
-        startTimePicker.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        startTimePicker.widthAnchor.constraint(equalTo: startTimeTextField.widthAnchor, multiplier: 1).isActive = true
-        startTimePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        endTimeTextField.topAnchor.constraint(equalTo: timeTitle.bottomAnchor, constant: 12).isActive = true
-        endTimeTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        endTimeTextField.widthAnchor.constraint(equalToConstant: ((view.frame.size.width - 30) / 2) - 6).isActive = true
-        endTimeTextField.heightAnchor.constraint(equalToConstant: 43).isActive = true
-        
-        endTimePicker.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 0).isActive = true
-        endTimePicker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        endTimePicker.widthAnchor.constraint(equalTo: endTimeTextField.widthAnchor, multiplier: 1).isActive = true
-        endTimePicker.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        descriptionTitle.topAnchor.constraint(equalTo: endTimeTextField.bottomAnchor, constant: 12).isActive = true
+        descriptionTitle.topAnchor.constraint(equalTo: reminderTitle.bottomAnchor, constant: 45).isActive = true
         descriptionTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         descriptionTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         descriptionTitle.heightAnchor.constraint(equalToConstant: 17).isActive = true

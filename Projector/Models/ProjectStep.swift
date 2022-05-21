@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ProjectStep: Object {
+class ProjectStep: Object, Identifiable, Codable {
     
     //MARK: Properties
     @objc dynamic var name = ""
@@ -21,15 +21,15 @@ class ProjectStep: Object {
     @objc dynamic var distance = 0
     @objc dynamic var reminder: Notification?
     @objc dynamic var complete = false
-    
+    @objc dynamic var reminderEnabled = false
     @objc dynamic var date = "07/06/2020"
     
     
     //an array of images url
-    let selectedPhotosArray = List<String>()//[String]()
+    var selectedPhotosArray = List<String>()//[String]()
     
     //an array of items in table view
-    let itemsArray = List<String>()
+    var itemsArray = List<String>()
     
     //id
     @objc dynamic var id = UUID().uuidString

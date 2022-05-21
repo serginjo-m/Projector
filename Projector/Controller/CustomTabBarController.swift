@@ -244,6 +244,7 @@ extension CustomTabBarController {
     
     //convert Holiday obj to Event obj
     func convertHolidaysToEvents(){
+        //TODO: need to revise it a bit
         //------------------------- need to optimize a bit 2x holiday version storage ------------------------
         self.listOfHolidays.forEach{
             //Holiday objects database. For now it holds a year when it was downloaded

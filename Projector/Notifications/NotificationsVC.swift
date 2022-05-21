@@ -75,9 +75,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     //view controller update point :)
     override func viewWillAppear(_ animated: Bool) {
         
+        updateNotifications()
+    }
+    
+    fileprivate func updateNotifications (){
         
+        //TODO: Is this logic is actually fine? Can it produce BUGS?
+        //fetch notifications
         notifications = ProjectListRepository.instance.getNotificationNotes()
-        //clear
+        //clear old notifications
         items.removeAll()
         
         //filter results to ....
@@ -254,10 +260,6 @@ class NotificationTableViewCell: UITableViewCell {
         string += "left"
         
         return string
-    }
-    
-    fileprivate func countDown(timeInterval: Int){
-        
     }
     
     private lazy var dateFormatterFullDate: DateFormatter = {

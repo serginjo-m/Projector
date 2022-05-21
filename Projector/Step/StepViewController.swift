@@ -173,8 +173,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func performPageConfigurations(){
-        //------------------------ temporary solution -----------------------------
+
         guard let step = projectStep else {return}
+        
         stepNameTitle.text = step.name
         stepToEventButton.isSelected = step.complete
         reminderStepButton.isSelected = step.reminder != nil ? true : false//convert to bool value
@@ -230,9 +231,18 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             
             guard let step = self.projectStep, let projectId = self.projectId else {return}
+            //check if step contain a reminder
+            if step.reminderEnabled == true{
+                if #available(iOS 13.0, *) {
+                    //removes notification from system
+                    NotificationManager.shared.removeScheduledNotification(task: step)
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
             
             UserActivitySingleton.shared.createUserActivity(description: "Deleted \(step.name)")
-            
+            //fetch project for deleting step inside it
             var project: ProjectList? {
                 get{
                     return ProjectListRepository.instance.getProjectList(id: projectId)
@@ -259,7 +269,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func setReminder(button: UIButton){
-        print("button try to set a reminder")
+        print("Show events list?")
     }
     
     //EDIT ACTION
