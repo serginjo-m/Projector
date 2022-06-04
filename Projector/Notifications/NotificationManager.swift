@@ -59,9 +59,8 @@ class NotificationManager: ObservableObject{
 
     
     // takes in a parameter of type ProjectStep
-    func scheduleNotification(task: ProjectStep) {
-        
-        
+    func scheduleNotification(task: Task) {
+      
       //creating notification populating the notification content.
       let content = UNMutableNotificationContent()
       content.title = task.name
@@ -70,7 +69,6 @@ class NotificationManager: ObservableObject{
       content.body = "Gentle reminder for your task!"
     //let the system know that it should assign your notifications to this category.
       content.categoryIdentifier = "OrganizerPlusCategory"
-        
       let taskData = try? JSONEncoder().encode(task)
       if let taskData = taskData {
           //encode the task data and assign it to the notification content’s userInfo
@@ -80,24 +78,27 @@ class NotificationManager: ObservableObject{
 
       // triggers the delivery of a notification
       var trigger: UNNotificationTrigger?
-        guard let taskReminder = task.reminder else {return}
-        switch taskReminder.reminderType {
+        
+        switch task.reminder.reminderType {
         case .time:
-            if let timeInterval = taskReminder.timeInterval {
-              trigger = UNTimeIntervalNotificationTrigger(
-                timeInterval: timeInterval,
-                repeats: taskReminder.repeats)
+            if let timeInterval = task.reminder.timeInterval{
+                trigger = UNTimeIntervalNotificationTrigger(
+                  timeInterval: TimeInterval(timeInterval),
+                  repeats: task.reminder.repeats)
             }
             //threadIdentifier helps group related notifications.
             content.threadIdentifier =
                 NotificationManagerConstants.timeBasedNotificationThreadId
         case .calendar:
             //alendar trigger delivers a notification based on a particular date and time
-            trigger = UNCalendarNotificationTrigger(
-              dateMatching: Calendar.current.dateComponents(
-                [.day, .month, .year, .hour, .minute],
-                from: taskReminder.eventDate),
-              repeats: taskReminder.repeats)
+            if let date = task.reminder.date{
+                trigger = UNCalendarNotificationTrigger(
+                  dateMatching: Calendar.current.dateComponents(
+                    [.day, .month, .year, .hour, .minute],
+                    from: date),
+                  repeats: task.reminder.repeats)
+            }
+            
             //threadIdentifier helps group related notifications.
             content.threadIdentifier =
                 NotificationManagerConstants.calendarBasedNotificationThreadId
@@ -108,8 +109,7 @@ class NotificationManager: ObservableObject{
                     return
                 }
                 
-                // you check to make sure the location data exists for the task reminder.
-                if let location = taskReminder.location {
+                if let location = task.reminder.location{
                   // create location-based triggers using UNLocationNotificationTrigger.
                   let center = CLLocationCoordinate2D(
                     latitude: location.latitude,
@@ -120,17 +120,14 @@ class NotificationManager: ObservableObject{
                     identifier: task.id)
                   trigger = UNLocationNotificationTrigger(
                     region: region,
-                    repeats: taskReminder.repeats)
+                    repeats: task.reminder.repeats)
                 }
-            } else {
-                // Fallback on earlier versions
-            }
             //threadIdentifier helps group related notifications.
             content.threadIdentifier =
                 NotificationManagerConstants.locationBasedNotificationThreadId
-
+            }
         }
-
+        
       // create a notification request
       if let trigger = trigger {
         let request = UNNotificationRequest(

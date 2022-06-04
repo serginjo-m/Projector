@@ -178,7 +178,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         stepNameTitle.text = step.name
         stepToEventButton.isSelected = step.complete
-        reminderStepButton.isSelected = step.reminder != nil ? true : false//convert to bool value
+        if let event = step.event{
+            reminderStepButton.isSelected = event.reminder != nil ? true : false//convert to bool value
+        }
         stepNumbersCV.step = step
         categoryLabel.text = step.category
         myStepImagesCV.step = step
@@ -210,9 +212,12 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         let newEventViewController = NewEventViewController()
         //step identifier access data base object
         newEventViewController.stepId = stepID
+        if let projId = projectId {
+            newEventViewController.projectId = projId
+        }
         //if step has some images define event image
         if step.selectedPhotosArray.count > 0 {
-            //use UIImageView extension function that retreaves image by URL
+            //use UIImageView extension function that retreaves image from URL
             newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: step.selectedPhotosArray[0])
         }
         //define event name
@@ -279,7 +284,13 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         let editStepViewController = NewStepViewController()
         editStepViewController.modalTransitionStyle = .coverVertical
         editStepViewController.modalPresentationStyle = .fullScreen
+        //define step id
         editStepViewController.stepID = stepID
+        //define project id
+        if let projId = projectId {
+            editStepViewController.projectId = projId
+        }
+        editStepViewController.projectId = projectId
         editStepViewController.viewControllerTitle.text = "Edit Step"
         editStepViewController.stepNameTextField.text = step.name
         
@@ -297,9 +308,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }()
         
         editStepViewController.stepComplete = step.complete
-        
-        if let reminder = step.reminder{
-            editStepViewController.expandingReminderView.notification = reminder
+        //configure expanding reminder active state
+        if let event = step.event{
+            if let reminder = event.reminder{
+                editStepViewController.expandingReminderView.notification = reminder
+            }
         }
         
         self.present(editStepViewController, animated: true, completion: nil)

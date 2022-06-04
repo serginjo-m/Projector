@@ -142,8 +142,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
                     
                     let newStep = NewStepViewController()
-                    newStep.uniqueID = detailVC.projectListIdentifier
-                    
+                    newStep.projectId = detailVC.projectListIdentifier
                     newStep.delegate = detailVC
                     
                     let viewControllers = [

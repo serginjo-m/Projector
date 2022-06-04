@@ -14,16 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    //to call it from vaiewDidLoad - (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .all
+    //to call it from viewDidLoad - (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .all
     //disable landscape orientation use
     //var restrictRotation: UIInterfaceOrientationMask = .portrait
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 21,
+            schemaVersion: 31,
             migrationBlock: { migration , oldSchemaVersion in
-                if oldSchemaVersion < 21 {
+                if oldSchemaVersion < 31 {
                     
                 }
             }
@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = CustomTabBarController()
+        
+
         //turn off dark mode
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
@@ -130,18 +132,85 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
       didReceive response: UNNotificationResponse,
       withCompletionHandler completionHandler: @escaping () -> Void
     ) {
+        
+        var projectId: String?
+        var stepId: String?
+        var task: Task?
+        
       // Check if the response’s actionIdentifier is set to markAsDone. Then, you decode the task from userInfo
-      if response.actionIdentifier == "markAsDone" {
-        let userInfo = response.notification.request.content.userInfo
-          //decode the task from userInfo.
-        if let taskData = userInfo["Task"] as? Data {
-          if let task = try? JSONDecoder().decode(Notification.self, from: taskData) {
-            // After the decode succeeds, you remove the task using the shared instance of the TaskManager
-//            TaskManager.shared.remove(task: task)
-          }
-        }
+      //if response.actionIdentifier == "markAsDone" {
+        
+            let userInfo = response.notification.request.content.userInfo
+              //decode the task from userInfo.
+            if let taskData = userInfo["Task"] as? Data {
+                do {
+                    task = try JSONDecoder().decode(Task.self, from: taskData)
+                    if let task = task {
+                        projectId = task.projectId
+                        stepId = task.stepId
+                    }
+                } catch {
+                    print("failed to decode task: ", error)
+            }
+              
+        //}
       }
-      completionHandler()
+        
+        guard let window = UIApplication.shared.keyWindow, let task = task else { return }
+        //That is probably how I get all view controllers stack
+        let controller = window.rootViewController
+        let calendar = Calendar(identifier: .gregorian)
+        switch task.category {
+        case "step":
+            if let tab = controller as? UITabBarController{
+                if let first = tab.viewControllers?.first{
+                    if let nav = first as? UINavigationController {
+                        nav.viewControllers.removeAll()
+                        let mainViewController = ProjectViewController()
+                        nav.viewControllers.append(mainViewController)
+                        let detailViewController = DetailViewController()
+                        detailViewController.delegate = mainViewController
+                        if let projectId = projectId {
+                            detailViewController.projectListIdentifier = projectId
+                        }
+                        nav.viewControllers.append(detailViewController)
+                        if let stepIdentifier = stepId, let projectIdentifier = projectId {
+                            let stepViewController = StepViewController(stepId: stepIdentifier)
+                            stepViewController.projectId = projectIdentifier
+                            nav.viewControllers.append(stepViewController)
+                        }
+                        
+                    }
+                }
+            }
+            (window.rootViewController as? UITabBarController)?.selectedIndex = 0
+        case "event":
+            if let tab = controller as? UITabBarController{
+                if let second = tab.viewControllers?[1]{
+                    if let nav = second as? UINavigationController {
+                        nav.viewControllers.removeAll()
+                        let calendarViewController = CalendarViewController(baseDate: Date()) { date in
+                            //maybe try to open sidebar
+                            
+                        }
+                        //Events data base for calendar
+                        calendarViewController.assembleGroupedEvents()
+                        //day is need to be current everytime calendar appears &
+                        //as date is set, all updateAllPageElements calls
+                        calendarViewController.baseDate = Date()
+                        calendarViewController.eventsArrayFromDateKey(date: calendar.startOfDay(for: task.eventDate))
+                        nav.viewControllers.append(calendarViewController)
+                    }
+                }
+            }
+            (window.rootViewController as? UITabBarController)?.selectedIndex = 1
+            
+        default:
+            break
+        }
+        
+        
+        completionHandler()
     }
 
 

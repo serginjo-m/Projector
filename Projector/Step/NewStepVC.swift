@@ -14,9 +14,11 @@ import Photos
 
 class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
     
+    //MARK: Properties
     //push to view controller, reloadViews , perform configurations
     weak var delegate: EditViewControllerDelegate?
-    
+    //set the project, that step is belongs to
+    var projectId: String?
     //step id passed by detail VC
     var stepID: String?
     //step completion status
@@ -26,7 +28,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     // step progress category
     var selectedStepProgress: Int = 0
     
-    //MARK: Properties
     var realm: Realm!//create a var
     
     let colorArr = [
@@ -223,15 +224,14 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var minHeightAnchor: NSLayoutConstraint?
     
     //define selected project for adding steps to it
-    var detailList: ProjectList? {
+    var projectList: ProjectList? {
         get{
             //Retrieve a single object with unique identifier (projectListIdentifier)
-            return realm.object(ofType: ProjectList.self, forPrimaryKey: uniqueID)
+            return realm.object(ofType: ProjectList.self, forPrimaryKey: projectId)
         }
     }
-    //ID of tapped cell
-    var uniqueID: String?
     
+    //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -255,7 +255,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
     }
     
-    
+    //MARK: Methods
     @objc func handleButtonsActiveState(_ sender: UIButton){
         //reset all buttons
         [todoButton, inProgressButton, doneButton, blockedButton].forEach { (button) in
@@ -328,16 +328,37 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
 
         //prepare object ready to save
         let stepTemplate: ProjectStep = self.defineStepTemplate()
+        
+        //--------------------------- this check is not the best solution -----------------------------------
+        if #available(iOS 13.0, *) {
+            
+            if let event = stepTemplate.event{
+                
+                //TODO: temporary solution with Notification clone
+                //Task include reminder
+                let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
+                //check if event includes reminder
+                if let eventReminder = event.reminder{
+                    //Task is basically an event clone, but uses different property types supported in notifications and not supported in realmSwift :(
+                    let task = Task(reminder: reminder, eventDate: eventReminder.eventDate, eventTime: eventReminder.eventTime, startDate: eventReminder.eventDate, name: eventReminder.name, category: eventReminder.category, complete: eventReminder.complete, projectId: eventReminder.projectId, stepId: eventReminder.stepId, id: eventReminder.id)
+                    //set notification
+                    NotificationManager.shared.scheduleNotification(task: task)
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        
         //update existing step
         if self.stepID != nil{
-            //update func
             ProjectListRepository.instance.editStep(step: stepTemplate)
             UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
         }else{//save new step instance
             //
-            try! self.realm!.write ({//here we actualy add a new object called projectList
-                self.detailList?.projectStep.append(stepTemplate)
+            try! self.realm!.write ({//here we actually add a new object called projectList
+                self.projectList?.projectStep.append(stepTemplate)
             })
+            
             UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
         }
         
@@ -368,37 +389,35 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             stepTemplate.itemsArray.append(item)
         }
         
+        //check if notification exist inside expanding notification reminder widget
         if let existingNotification = self.expandingReminderView.notification{
             
-            //because I won't modify existing in data base notification,
-            //create new one based on existing and assign it to step
-            let notification = Notification()
-            notification.eventDate = existingNotification.eventDate
-            notification.eventTime = existingNotification.eventTime
-            notification.startDate = existingNotification.startDate
+            //TODO: need real event
+            let event = Event()
+            event.title = stepTemplate.name
+            event.date = existingNotification.eventDate
+            
             
             //take some data from step object
-            notification.name = stepTemplate.name
-            notification.category = "step"
-            notification.parentId = stepTemplate.id
-            //finaly assign reminder to step
-            stepTemplate.reminder = notification
+            existingNotification.name = stepTemplate.name
+            existingNotification.category = "step"
+            
+            if let projectId = projectId {
+                existingNotification.projectId = projectId
+            }
+            //edit or new, stepTemplate  always has a correct id
+            existingNotification.stepId = stepTemplate.id
+            
+            //finally assign reminder to step
+            event.reminder = existingNotification
+            stepTemplate.event = event
+            
+            stepTemplate.reminderEnabled = true
         }
         
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
-        }
-        
-        //TODO: This is dummy attempt to create notification. It's only template
-        if #available(iOS 13.0, *) {
-            stepTemplate.reminder?.timeInterval = TimeInterval(60)
-            stepTemplate.reminder?.eventDate = self.expandingReminderView.timePicker.date
-            stepTemplate.reminder?.reminderType = .calendar
-            stepTemplate.reminderEnabled = true
-            NotificationManager.shared.scheduleNotification(task: stepTemplate)
-        } else {
-            // Fallback on earlier versions
         }
         
         return stepTemplate
@@ -432,7 +451,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     func showImagePicker() {
         // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
-        //check for libraty authorization, that allows PHAsset option using in picker
+        //check for library authorization, that allows PHAsset option using in picker
         // & it is important, because all mechanism is based on PHAsset image address
         let status = PHPhotoLibrary.authorizationStatus()
         if status == .notDetermined  {

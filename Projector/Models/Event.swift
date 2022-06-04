@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class Event: Object {
+class Event: Object, Identifiable, Codable{
     
     @objc dynamic var id = UUID().uuidString
     
@@ -18,12 +18,17 @@ class Event: Object {
     
     // Date represents a given day in a month.
     @objc dynamic var date: Date?
-    
+    @objc dynamic var startTime: Date?
+    @objc dynamic var endTime: Date?
+
     //Description
     @objc dynamic var descr: String?
     
     //Type of event
     @objc dynamic var category: String?
+    
+    @objc dynamic var reminder: Notification?
+
     
     //because Realm is not support UIImages type
     @objc dynamic var picture: String?

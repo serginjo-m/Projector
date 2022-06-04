@@ -80,15 +80,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     fileprivate func updateNotifications (){
         
-        //TODO: Is this logic is actually fine? Can it produce BUGS?
         //fetch notifications
         notifications = ProjectListRepository.instance.getNotificationNotes()
+        
         //clear old notifications
         items.removeAll()
         
         //filter results to ....
-        items = notifications.filter{$0.eventDate > Date()}
-        
+        items = notifications.filter{$0.eventDate == $0.eventDate}
+//        items = notifications.filter{$0.eventDate > Date()}
         notificationTableView.reloadData()
         
     }

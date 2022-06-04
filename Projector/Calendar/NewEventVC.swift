@@ -254,12 +254,28 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         
-        //-----------------------------  Is it all about user activity? ---------------------------------
-        //---------- So Event is 100% calendar object ----------------
+        //------------------------  Is it all about user activity? ---------------------------------
+        //------------------------- So Event is 100% calendar object -------------------------------
+        
         let event: Event = self.defineEventTemplate()
         
+        
+        
         if reminderSwitch.isOn{
-            createNotification(event: event)
+            event.reminder = createNotification(event: event)
+            if #available(iOS 13.0, *) {
+                //TODO: temporary solution with Notification clone
+                let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
+                if let eventReminder = event.reminder{
+                    
+                    let task = Task(reminder: reminder, eventDate: eventReminder.eventDate, eventTime: eventReminder.eventTime, startDate: eventReminder.eventDate, name: eventReminder.name, category: eventReminder.category, complete: eventReminder.complete, projectId: eventReminder.projectId, stepId: eventReminder.stepId, id: eventReminder.id)
+                    NotificationManager.shared.scheduleNotification(task: task)
+                }
+                
+                
+            } else {
+                // Fallback on earlier versions
+            }
         }
         
         //unwrap optional date for activity object
@@ -281,25 +297,23 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         dismiss(animated: true, completion: nil)
     }
     
-    fileprivate func createNotification(event: Event){
-        
-        //TODO: this part must be optional, because not every calendar event needs notify user
-        //TODO: Also it creates notification object but not connect it to projectStep!
-        //Solution might be integrated Notification inside Event object
-        
-        
-        
+    fileprivate func createNotification(event: Event) -> Notification {
+       
         let notification = Notification()
         notification.name = event.title
-        
+        notification.timeInterval = 0.0
+        if let projId = projectId, let stepIdentifier = stepId {
+            notification.projectId = projId
+            notification.stepId = stepIdentifier
+        }
+        notification.reminderType = "calendar"
         notification.category = stepId != nil ? "step" : "event"
-        
+        notification.eventTime = self.eventStart != nil ? true : false
         
         if let date = event.date{
             notification.eventDate = date
         }
-        //creates new notification
-        ProjectListRepository.instance.createNotification(notification: notification)
+        return notification
     }
     
     //creates event instance
@@ -309,16 +323,17 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             eventTemplate.title = text
         }
         
-        //date from existing event or new date
-        if let date = self.eventDate{
-            eventTemplate.date = date
-        }else{
-            eventTemplate.date = Date()
-        }
+        eventTemplate.date = eventDate != nil ? eventDate : Date()
+        eventTemplate.startTime = eventStart
+        eventTemplate.endTime = eventEnd
+        
         
         //if stepId defined == type of event is step event
         if let stepIdentifier = stepId {
+            
+            //project step event
             eventTemplate.category = "projectStep"
+            //assign image to step event
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
                 if step.selectedPhotosArray.count > 0{
                     eventTemplate.picture = step.selectedPhotosArray[0]
@@ -365,17 +380,20 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
-        print("date is changed")
+        self.eventDate = sender.date
     }
 
     //start time picker action
     @objc func startTimeChanged(_ sender: UIDatePicker) {
-        print("start time is changed")
+        //change main date
+        self.eventDate = sender.date
+        //define exact time, when event should begin
+        self.eventStart = sender.date
     }
 
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
-        print("end time is set")
+        self.eventEnd = sender.date
     }
     
     

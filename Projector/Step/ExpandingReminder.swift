@@ -142,6 +142,8 @@ class ExpandingReminder: UIView {
         super.init(frame: CGRect.zero)
         setupView()
     }
+    
+    //MARK: Methods
     //-----> call from expand button
     @objc func didTapExpandButton() {
         
@@ -192,8 +194,10 @@ class ExpandingReminder: UIView {
             
             //final string
             var string = "Reminder: "
+            //check which date should be taken
+            let date = timePicker.isSelected ? timePicker.date : datePicker.date
         
-            let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: datePicker.date)
+            let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: date)
                 if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday, let hour = components.hour, let minute = components.minute {
                     
                     let weekDayString = dayOfWeekLetter(for: weekday)
@@ -231,7 +235,7 @@ class ExpandingReminder: UIView {
             setReminderString()
             
             //edit mode requires plus icon transformation when view controller is init
-            if notification.parentId.isEmpty == false{
+            if notification.stepId.isEmpty == false{
                 reminderExpandIcon.transform = reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
             }
         }
