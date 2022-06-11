@@ -236,11 +236,20 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             
             guard let step = self.projectStep, let projectId = self.projectId else {return}
-            //check if step contain a reminder
+//            check if step contain a reminder
             if step.reminderEnabled == true{
                 if #available(iOS 13.0, *) {
-                    //removes notification from system
-                    NotificationManager.shared.removeScheduledNotification(task: step)
+                    
+                    if let event = step.event {
+                        if let notification = event.reminder{
+                            //removes push notification from the system
+                            NotificationManager.shared.removeScheduledNotification(taskId: notification.id)
+                            //remove Notification object( it also removes from Event )
+                            ProjectListRepository.instance.deleteNotificationNote(note: notification)
+                        }
+                        
+                    }
+                    
                 } else {
                     // Fallback on earlier versions
                 }

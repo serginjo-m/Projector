@@ -12,6 +12,7 @@ import RealmSwift
 
 class NotificationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: Properties
     var notifications: Results<Notification> {
         get{
            return ProjectListRepository.instance.getNotificationNotes()
@@ -60,6 +61,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     
     
+    //MARK: VCLifecycle
     override func viewDidLoad() {
         
         view.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
@@ -74,10 +76,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //view controller update point :)
     override func viewWillAppear(_ animated: Bool) {
-        
+
+        //once NotificationsVC opened reset all badges
+        UserDefaults(suiteName: "notificationsDefaultsBadgeCount")?.set(1, forKey: "count")
+        NotificationsRepository.shared.updateTabBarItemBudge()
+        //update VC database
         updateNotifications()
     }
     
+    //MARK: Methods
     fileprivate func updateNotifications (){
         
         //fetch notifications
@@ -86,21 +93,21 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         //clear old notifications
         items.removeAll()
         
-        //filter results to ....
-        items = notifications.filter{$0.eventDate == $0.eventDate}
-//        items = notifications.filter{$0.eventDate > Date()}
+        //filter results, by date descending
+        items = notifications.sorted(by: { (a, b) in return a.eventDate > b.eventDate })
+        
         notificationTableView.reloadData()
         
     }
    
+
+    //MARK: TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if  items.count > 0{
             return items.count
         }
         return 0
     }
-    
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // create a new cell if needed or reuse an old one
@@ -115,6 +122,17 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let notification = items[indexPath.row]
+        //depending on notification type define navigation VC stack
+        if notification.category == "step" {
+            NotificationsRepository.shared.configureVCStack(category: "step", eventDate: Date(), stepId: notification.stepId, projectId: notification.projectId)
+        } else if notification.category == "event" {
+            NotificationsRepository.shared.configureVCStack(category: "event", eventDate: notification.eventDate)
+        }
+    }
+    
+    //MARK: Constraints
     fileprivate func setupConstraints(){
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
@@ -146,7 +164,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
 class NotificationTableViewCell: UITableViewCell {
     
     
-    
+    //MARK: Properties
     var template: Notification? {
         didSet{
             if let object = template {
@@ -169,13 +187,6 @@ class NotificationTableViewCell: UITableViewCell {
                     
                     timeRemainingLabel.text = convertComponentsToString(dateComponents: competitionDifference)
                 
-                
-                
-                
-                //--------------------------------------------------------------------------------------------
-                //---------- 1. table view must include only events that are not expired ---------------------
-                //---------- 2. different types shoud perform different calculations -------------------------
-                //--------------------------------------------------------------------------------------------
                 
                 //constraints update approach
                 categoryIconWidthAnchor?.isActive = false
@@ -202,65 +213,13 @@ class NotificationTableViewCell: UITableViewCell {
                 categoryIconWidthAnchor?.isActive = true
                 categoryIconHeightAnchor?.isActive = true
                 
-               
-                
             }
         }
     }
-    
-    
     
     var progressBarWidthAnchor: NSLayoutConstraint?
     var categoryIconWidthAnchor: NSLayoutConstraint?
     var categoryIconHeightAnchor: NSLayoutConstraint?
-    
-    //return image by category string
-    func setImageToCategory(category: String) -> UIImage {
-        
-        switch category {
-            case "event":
-                return UIImage(named: "calendarIcon")!
-            case "step":
-                return UIImage(named: "projectIcon")!
-            default:
-                return UIImage(named: "calendarIcon")!
-        }
-        
-    }
-    
-    //time to event string
-    func convertComponentsToString(dateComponents: DateComponents) -> String {
-        var string = ""
-        
-        if let years = dateComponents.year {
-            if years > 0 {
-                string += "\(years)y "
-            }
-        }
-        if let months = dateComponents.month{
-            if months > 0{
-                string += "\(months)mth "
-            }
-        }
-        if let days = dateComponents.day{
-            if days > 0{
-                string += "\(days)d "
-            }
-        }
-        if let hours = dateComponents.hour{
-            if hours > 0 {
-                string += "\(hours)h "
-            }
-        }
-        if let minutes = dateComponents.minute{
-            if minutes > 0{
-                string += "\(minutes)min "
-            }
-        }
-        string += "left"
-        
-        return string
-    }
     
     private lazy var dateFormatterFullDate: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -328,6 +287,56 @@ class NotificationTableViewCell: UITableViewCell {
         return label
     }()
     
+    //MARK: Methods
+    //return image by category string
+    func setImageToCategory(category: String) -> UIImage {
+        
+        switch category {
+            case "event":
+                return UIImage(named: "calendarIcon")!
+            case "step":
+                return UIImage(named: "projectIcon")!
+            default:
+                return UIImage(named: "calendarIcon")!
+        }
+        
+    }
+    
+    //time to event string
+    func convertComponentsToString(dateComponents: DateComponents) -> String {
+        var string = ""
+        
+        if let years = dateComponents.year {
+            if years > 0 {
+                string += "\(years)y "
+            }
+        }
+        if let months = dateComponents.month{
+            if months > 0{
+                string += "\(months)mth "
+            }
+        }
+        if let days = dateComponents.day{
+            if days > 0{
+                string += "\(days)d "
+            }
+        }
+        if let hours = dateComponents.hour{
+            if hours > 0 {
+                string += "\(hours)h "
+            }
+        }
+        if let minutes = dateComponents.minute{
+            if minutes > 0{
+                string += "\(minutes)min "
+            }
+        }
+        string += "left"
+        
+        return string
+    }
+    
+    //MARK: Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

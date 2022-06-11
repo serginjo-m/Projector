@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.rootViewController = CustomTabBarController()
         
+        UNUserNotificationCenter.current().delegate = self
 
         //turn off dark mode
         if #available(iOS 13.0, *) {
@@ -45,14 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NotificationManager.shared.requestAuthorization { granted in
               
               if granted {
-//                  print("Notification permission was granted!")
-//                showNotificationSettingsUI = true
+                //print("Notification permission was granted!")
+                //showNotificationSettingsUI = true
               }
             }
         } else {
             // Fallback on earlier versions
         }
-//      set  notification delegate as soon as the app launches
+        //set  notification delegate as soon as the app launches
         configureUserNotifications()
         
         return true
@@ -75,6 +76,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
+
+        //TODO: the tabBarItem updates its badge before notification appears
+//       updateTabBarItemBudge()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -90,12 +95,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: - UNUserNotificationCenterDelegate
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    //run in foreground
   func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification,
     withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void
   ) {
       if #available(iOS 14.0, *) {
+          NotificationsRepository.shared.updateTabBarItemBudge()
           completionHandler(.banner)
       } else {
           // Fallback on earlier versions
@@ -104,7 +111,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     //can config fast actions on notifications
     private func configureUserNotifications() {
-      UNUserNotificationCenter.current().delegate = self
         
         // declare two actions
         let dismissAction = UNNotificationAction(//dismiss action
@@ -155,63 +161,21 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
               
         //}
       }
-        
-        guard let window = UIApplication.shared.keyWindow, let task = task else { return }
-        //That is probably how I get all view controllers stack
-        let controller = window.rootViewController
-        let calendar = Calendar(identifier: .gregorian)
-        switch task.category {
-        case "step":
-            if let tab = controller as? UITabBarController{
-                if let first = tab.viewControllers?.first{
-                    if let nav = first as? UINavigationController {
-                        nav.viewControllers.removeAll()
-                        let mainViewController = ProjectViewController()
-                        nav.viewControllers.append(mainViewController)
-                        let detailViewController = DetailViewController()
-                        detailViewController.delegate = mainViewController
-                        if let projectId = projectId {
-                            detailViewController.projectListIdentifier = projectId
-                        }
-                        nav.viewControllers.append(detailViewController)
-                        if let stepIdentifier = stepId, let projectIdentifier = projectId {
-                            let stepViewController = StepViewController(stepId: stepIdentifier)
-                            stepViewController.projectId = projectIdentifier
-                            nav.viewControllers.append(stepViewController)
-                        }
-                        
-                    }
-                }
-            }
-            (window.rootViewController as? UITabBarController)?.selectedIndex = 0
-        case "event":
-            if let tab = controller as? UITabBarController{
-                if let second = tab.viewControllers?[1]{
-                    if let nav = second as? UINavigationController {
-                        nav.viewControllers.removeAll()
-                        let calendarViewController = CalendarViewController(baseDate: Date()) { date in
-                            //maybe try to open sidebar
-                            
-                        }
-                        //Events data base for calendar
-                        calendarViewController.assembleGroupedEvents()
-                        //day is need to be current everytime calendar appears &
-                        //as date is set, all updateAllPageElements calls
-                        calendarViewController.baseDate = Date()
-                        calendarViewController.eventsArrayFromDateKey(date: calendar.startOfDay(for: task.eventDate))
-                        nav.viewControllers.append(calendarViewController)
-                    }
-                }
-            }
-            (window.rootViewController as? UITabBarController)?.selectedIndex = 1
-            
-        default:
-            break
+        //check if defaults category exist
+        if let defaults = UserDefaults(suiteName: "notificationsDefaultsBadgeCount"){
+            //get value from count key
+            let count: Int = defaults.value(forKey: "count") as! Int
+            //reset budges after
+            defaults.set(count - 1, forKey: "count")
         }
         
+        if let task = task {
+            //configure viewControllers stack view inside navigation controller
+            NotificationsRepository.shared.configureVCStack(category: task.category, eventDate: task.eventDate, stepId: stepId, projectId: projectId)
+        }
         
+        //it will set to nil tab bar item
+        NotificationsRepository.shared.updateTabBarItemBudge()
         completionHandler()
     }
-
-
 }

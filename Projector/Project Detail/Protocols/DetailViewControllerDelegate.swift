@@ -8,13 +8,13 @@
 
 import Foundation
 import UIKit
-
+//TODO: Should understand, what I could modify here.
 //calls functions from MainViewController
-protocol DetailViewControllerDelegate: class {
+protocol DetailViewControllerDelegate: AnyObject {
     //this function is reload mainVC project data
-    func reloadTableView()
+    func reloadTableView()//<----------------- this is the first target
     //General func for retreaving image by URL (BECAUSE Realm can't save images)
-    func retreaveImageForProject(myUrl: String) -> UIImage
+    func retreaveImageForProject(myUrl: String) -> UIImage//<------- ImageView has an extension for this! Even with cache
     //access nav controller for segue
     func pushToViewController(controllerType: Int)
 }

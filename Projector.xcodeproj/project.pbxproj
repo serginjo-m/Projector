@@ -85,6 +85,7 @@
 		CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */; };
 		CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */; };
 		CF9974B7270F6FB2009FD9EB /* NewUserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */; };
+		CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D19002852665E00599ABE /* NotificationsRepository.swift */; };
 		CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */; };
 		CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */; };
 		CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */; };
@@ -214,6 +215,8 @@
 		CF8DFB77264AE79F00ACB4EB /* CanvasNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasNote.swift; sourceTree = "<group>"; };
 		CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCGPoint.swift; sourceTree = "<group>"; };
 		CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserInputView.swift; sourceTree = "<group>"; };
+		CF9D18FF284D170C00599ABE /* Projector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Projector.entitlements; sourceTree = "<group>"; };
+		CF9D19002852665E00599ABE /* NotificationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepository.swift; sourceTree = "<group>"; };
 		CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCateg.swift; sourceTree = "<group>"; };
 		CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewRestoreFile.swift; sourceTree = "<group>"; };
 		CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewSteps.swift; sourceTree = "<group>"; };
@@ -406,6 +409,7 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF9D18FF284D170C00599ABE /* Projector.entitlements */,
 				CFFA4ED62739996900071F01 /* Singletons */,
 				CF1E854426F3AFCA001B0BB7 /* Intro */,
 				CF242F4B26BC5BEB00F44A2F /* Notifications */,
@@ -560,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				CFBEB8A223C23176001E96B9 /* ProjectListRepo.swift */,
+				CF9D19002852665E00599ABE /* NotificationsRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -866,6 +871,7 @@
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
 				CF321C15245D43D2005CC10E /* NewStepImages.swift in Sources */,
+				CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */,
 				CF1D24502741057B00341C26 /* StepProgressMenu.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
@@ -1039,6 +1045,7 @@
 			baseConfigurationReference = 020AF287354E46ED7A1A1D79 /* Pods-Projector.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Projector/Projector.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UF353UV4DH;
@@ -1061,6 +1068,7 @@
 			baseConfigurationReference = 08D7CF4AF407F88049378636 /* Pods-Projector.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Projector/Projector.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UF353UV4DH;
