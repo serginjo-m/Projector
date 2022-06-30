@@ -19,7 +19,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //---------------------------- temporary solution --------------------------------------
     //there I can have many options, because event can last more then 1 day or a couple of hours
     //MARK: Properties
-    var eventDate: Date?
+    var eventDate = Date()
     var eventStart: Date?
     var eventEnd: Date?
     
@@ -148,6 +148,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         picker.datePickerMode = UIDatePicker.Mode.time
         picker.contentHorizontalAlignment = .left
         picker.clipsToBounds = true
+        picker.date = formatTimeBasedDate(date: eventDate, anticipateHours: 1, anticipateMinutes: 0)
         picker.addTarget(self, action: #selector(endTimeChanged(_:)), for: .valueChanged)
         return picker
     }()
@@ -323,10 +324,15 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             eventTemplate.title = text
         }
         
-        eventTemplate.date = eventDate != nil ? eventDate : Date()
-        eventTemplate.startTime = eventStart
-        eventTemplate.endTime = eventEnd
+        eventTemplate.date = eventDate
         
+        //------------> not so perfect, because there can be a couple scenarios that can fail <--------------
+        eventTemplate.startTime = eventStart != nil ? eventStart : eventDate
+        //whatever eventTemplate start time is, if end time is not defined it anticipates 1 hour from event start
+        if let eventStartTime = eventTemplate.startTime{
+            //if end time is not defined, define event duration as 1 hour event
+            eventTemplate.endTime = eventEnd != nil ? eventEnd : formatTimeBasedDate(date: eventStartTime, anticipateHours: 1, anticipateMinutes: 0)
+        }
         
         //if stepId defined == type of event is step event
         if let stepIdentifier = stepId {
@@ -385,17 +391,31 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
 
     //start time picker action
     @objc func startTimeChanged(_ sender: UIDatePicker) {
-        //change main date
-        self.eventDate = sender.date
         //define exact time, when event should begin
-        self.eventStart = sender.date
+        self.eventStart = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        //anticipate end time to 1 hour by default
+        self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 1, anticipateMinutes: 0)
+        //modify time inside eventDate
+        self.eventDate = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
     }
 
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
-        self.eventEnd = sender.date
+        //define exact time, when event should end
+        self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
     }
-    
+    //anticipate time 
+    fileprivate func formatTimeBasedDate(date: Date, anticipateHours: Int, anticipateMinutes: Int) -> Date{
+        //extract hours and minutes from date parameter
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        let hour = components.hour! + anticipateHours
+        let minute = components.minute! + anticipateMinutes
+        
+        //using current date and picker time for date formatting
+        guard let compiledDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: eventDate) else { return date}
+        
+        return compiledDate
+    }
     
     private func updateSaveButtonState(){
         //TODO: check for date is set!

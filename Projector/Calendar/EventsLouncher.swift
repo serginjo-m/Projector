@@ -16,7 +16,7 @@ extension CalendarViewController {
         blackView.frame = view.frame
     
         //70% of width
-        let width = 70 * self.view.frame.width / 100
+        let width = 80 * self.view.frame.width / 100
         
         
         self.eventElements.frame = CGRect(x: -self.view.frame.width, y: 0, width: width, height: self.view.frame.height)
@@ -34,7 +34,7 @@ extension CalendarViewController {
     @objc func handleDismiss(){
         UIView.animate(withDuration: 0.5) {
             //70% of screen width
-            let width = 70 * self.view.frame.width / 100
+            let width = 80 * self.view.frame.width / 100
             
             self.blackView.alpha = 0
             self.eventElements.frame = CGRect(x: -self.view.frame.width, y: 0, width: width, height: self.view.frame.height)
@@ -52,6 +52,8 @@ extension CalendarViewController {
     
     //define data base for events collection view
     func eventsArrayFromDateKey(date: Date){
+        //current date uses cells for sizes configuration
+        eventElements.currentDate = date
         
         //clear view controller database
         eventElements.events.removeAll()
@@ -87,26 +89,80 @@ extension CalendarViewController {
         //Add all other type of events (user event, step event)
         if let events = groupedEventDictionary[date] {
             
+            var eventsByDate = [Event]()
+            
+            //------------- is it finaly needs to be replaced? ---------------------
+            eventsByDate = events.sorted(by: { (a, b) in return a.date! < b.date! })
+            
+            //unite events by interval intersection
+            intersectEvents(events: events)
+            
             //append events new data
-            eventElements.events.append(contentsOf: events)
+            eventElements.events.append(contentsOf: eventsByDate)
             
             eventElements.eventsTableView.reloadData()
             //reveal timeline
-            eventElements.lineView.backgroundColor = UIColor.init(white: 229/255, alpha: 1)
+//            eventElements.lineView.backgroundColor = UIColor.init(white: 229/255, alpha: 1)
             //show view controller
             showUpEventsView()
         }else{
             eventElements.eventsTableView.reloadData()
             //hide timeline
-            eventElements.lineView.backgroundColor = .clear
+//            eventElements.lineView.backgroundColor = .clear
             showUpEventsView()
         }
         
     }
 }
+
 //----------------------------------------------------------------------------------------------------------------
 //Should create something like class for it, because it repeats 2x times
 extension CalendarViewController{
+    
+    //unite events by date interval intersection
+    func intersectEvents(events: [Event]) -> [[Event]] {
+        //array of array to return
+        var nestedArray: [[Event]] = [[]]
+        //set contains event id
+        var id = Set<String>()
+        
+
+        
+        nestedArray = events.compactMap{
+            if id.contains($0.id){
+                return nil
+            }
+            id.insert($0.id)
+            // .map iteration
+            guard let start = $0.date, let end = $0.endTime else {return nil}
+            let mapItemDateInterval = DateInterval(start: start, end: end)
+            
+            // .filter is looking for Bool condition to select item from "events" array
+            let filteredArray = events.filter { item in
+                guard let startDate = item.date, let endDate = item.endTime else {return false}
+                
+                let itemDateInterval = DateInterval(start: startDate, end: endDate)
+                let dateIntersection = mapItemDateInterval.intersects(itemDateInterval)
+                if dateIntersection == true{
+                    id.insert(item.id)
+                }
+                return dateIntersection
+            }
+            
+            return filteredArray
+        }
+        
+       
+        
+        //TODO: Note that where one event ends and other starts, intersection would be applied
+        //--------------> Seems like I don't realy need array to set conversion <----------------------
+//        let setNestedArray: [Set<Event>] = nestedArray.map ({ (item) in
+//            return Set(item)
+//        })
+//        let set: Set<Set<Event>> = Set(setNestedArray)
+        return nestedArray
+    }
+    
     private func dayOfWeekLetter(for dayNumber: Int) -> String {
         switch dayNumber {
         case 1:
@@ -158,4 +214,5 @@ extension CalendarViewController{
             return ""
         }
     }
+
 }

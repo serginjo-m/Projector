@@ -5,7 +5,6 @@
 //  Created by Serginjo Melnik on 23.11.2019.
 //  Copyright © 2019 Serginjo Melnik. All rights reserved.
 //
-
 import UIKit
 import RealmSwift
 import os.log

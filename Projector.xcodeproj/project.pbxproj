@@ -86,6 +86,7 @@
 		CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */; };
 		CF9974B7270F6FB2009FD9EB /* NewUserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */; };
 		CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D19002852665E00599ABE /* NotificationsRepository.swift */; };
+		CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D1904285E1A7F00599ABE /* NewStepVC.swift */; };
 		CF9DA837244C597300DFAEEF /* DetailViewCateg.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */; };
 		CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */; };
 		CF9DA83B244C920800DFAEEF /* DetailViewSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */; };
@@ -113,7 +114,6 @@
 		CFCD78A526823FAE0066294A /* AnimationDisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A426823FAE0066294A /* AnimationDisplayLink.swift */; };
 		CFCD78A7268240220066294A /* DataStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCD78A6268240220066294A /* DataStackView.swift */; };
 		CFCE6D182389984F003A7EFE /* DetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D172389984F003A7EFE /* DetailViewCell.swift */; };
-		CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCE6D192389B852003A7EFE /* NewStepVC.swift */; };
 		CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD5288326935B8400062DCF /* UIView+Stacking.swift */; };
 		CFD528862696085700062DCF /* ChartCalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD528852696085700062DCF /* ChartCalendarExtension.swift */; };
 		CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */; };
@@ -217,6 +217,7 @@
 		CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserInputView.swift; sourceTree = "<group>"; };
 		CF9D18FF284D170C00599ABE /* Projector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Projector.entitlements; sourceTree = "<group>"; };
 		CF9D19002852665E00599ABE /* NotificationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepository.swift; sourceTree = "<group>"; };
+		CF9D1904285E1A7F00599ABE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
 		CF9DA836244C597300DFAEEF /* DetailViewCateg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCateg.swift; sourceTree = "<group>"; };
 		CF9DA838244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewRestoreFile.swift; sourceTree = "<group>"; };
 		CF9DA83A244C920800DFAEEF /* DetailViewSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewSteps.swift; sourceTree = "<group>"; };
@@ -245,7 +246,6 @@
 		CFCD78A426823FAE0066294A /* AnimationDisplayLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDisplayLink.swift; sourceTree = "<group>"; };
 		CFCD78A6268240220066294A /* DataStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStackView.swift; sourceTree = "<group>"; };
 		CFCE6D172389984F003A7EFE /* DetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewCell.swift; sourceTree = "<group>"; };
-		CFCE6D192389B852003A7EFE /* NewStepVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepVC.swift; sourceTree = "<group>"; };
 		CFD5288326935B8400062DCF /* UIView+Stacking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Stacking.swift"; sourceTree = "<group>"; };
 		CFD528852696085700062DCF /* ChartCalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCalendarExtension.swift; sourceTree = "<group>"; };
 		CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
@@ -409,26 +409,21 @@
 		CF3712C823740BAE00B2D593 /* Projector */ = {
 			isa = PBXGroup;
 			children = (
+				CF2C1294237766A700F3132A /* AppDelegate.swift */,
 				CF9D18FF284D170C00599ABE /* Projector.entitlements */,
 				CFFA4ED62739996900071F01 /* Singletons */,
 				CF1E854426F3AFCA001B0BB7 /* Intro */,
-				CF242F4B26BC5BEB00F44A2F /* Notifications */,
-				CF4197C02691E10600405EC5 /* Statistics Group */,
 				CFCD789B268236DD0066294A /* Extensions */,
-				CF17FDC7264D876A0092F5FA /* Canvas Note */,
-				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
-				CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */,
-				CF3F0FC6260269B500CAC008 /* Main VC */,
-				CF5483B925EC398D00D6A05B /* Step */,
-				CF0BCA2325BB457F00A5C172 /* Project Detail */,
 				CF27A066254AB1E7007D06D3 /* Controller */,
 				CFBEB8A123C23118001E96B9 /* Repositories */,
 				CFB3B297237411E5002E2F9B /* Models */,
-				CF2C1294237766A700F3132A /* AppDelegate.swift */,
+				CF4197C02691E10600405EC5 /* Statistics */,
+				CF242F4B26BC5BEB00F44A2F /* Notifications */,
+				CF9D1903285499FE00599ABE /* Home */,
 				CFD88DF52595EBAE00B726FF /* Calendar */,
-				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
-				CF27A06E254DA091007D06D3 /* Assets.xcassets */,
 				CF3712D223740BB200B2D593 /* LaunchScreen.storyboard */,
+				CF27A06E254DA091007D06D3 /* Assets.xcassets */,
+				CF3712CD23740BAE00B2D593 /* Main.storyboard */,
 				CF3712D523740BB200B2D593 /* Info.plist */,
 			);
 			path = Projector;
@@ -437,9 +432,9 @@
 		CF3F0FC6260269B500CAC008 /* Main VC */ = {
 			isa = PBXGroup;
 			children = (
+				CF9D1902285498B600599ABE /* Quick Notes */,
 				CFB40CD327E619D100D6EEA4 /* Profile */,
 				CFCD789E26823EC60066294A /* Statistics */,
-				CFDA030226711F5B00772E32 /* QuickNotesCollViews */,
 				CF2C1293237766A700F3132A /* MainViewController.swift */,
 				CF5943622531B1700036641B /* ViewByCategoryCV.swift */,
 				CF594360252BA2F10036641B /* RecentActivitiesCV.swift */,
@@ -451,7 +446,7 @@
 			path = "Main VC";
 			sourceTree = "<group>";
 		};
-		CF4197C02691E10600405EC5 /* Statistics Group */ = {
+		CF4197C02691E10600405EC5 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
 				CF4197C12691E14000405EC5 /* StatisticsVC.swift */,
@@ -462,7 +457,7 @@
 				CFD528852696085700062DCF /* ChartCalendarExtension.swift */,
 				CF0DBCC326A755030049E40E /* StatisticsContainer.swift */,
 			);
-			path = "Statistics Group";
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		CF432408272B147A00421226 /* Extensions */ = {
@@ -482,8 +477,8 @@
 				CF321C14245D43D2005CC10E /* NewStepImages.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
-				CFCE6D192389B852003A7EFE /* NewStepVC.swift */,
 				CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */,
+				CF9D1904285E1A7F00599ABE /* NewStepVC.swift */,
 			);
 			path = Step;
 			sourceTree = "<group>";
@@ -496,6 +491,27 @@
 				CF17FDC4264B02870092F5FA /* SingleLineObject.swift */,
 			);
 			path = Canvas;
+			sourceTree = "<group>";
+		};
+		CF9D1902285498B600599ABE /* Quick Notes */ = {
+			isa = PBXGroup;
+			children = (
+				CF17FDC7264D876A0092F5FA /* Canvas Note */,
+				CF0B7E41262608DE008AC084 /* CameraShot.swift */,
+				CFCD7899267FCC2E0066294A /* NewTextNoteVC.swift */,
+				CFDA030226711F5B00772E32 /* QuickNotesCollViews */,
+			);
+			path = "Quick Notes";
+			sourceTree = "<group>";
+		};
+		CF9D1903285499FE00599ABE /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				CF0BCA2325BB457F00A5C172 /* Project Detail */,
+				CF5483B925EC398D00D6A05B /* Step */,
+				CF3F0FC6260269B500CAC008 /* Main VC */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		CF9DA834244C479F00DFAEEF /* Sample Files  */ = {
@@ -824,6 +840,7 @@
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
 				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
 				CF2472FA2718B49C002D6DCA /* DetailViewControllerDelegate.swift in Sources */,
+				CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */,
 				CF8792BA247A869C007EBD30 /* ClosureExample.swift in Sources */,
 				CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */,
 				CFBC3A42258152CF00EEF13D /* Day.swift in Sources */,
@@ -866,7 +883,6 @@
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,
 				CF1218C425C6DED900530E54 /* StatisticData.swift in Sources */,
-				CFCE6D1A2389B852003A7EFE /* NewStepVC.swift in Sources */,
 				CFEDDC5326F7C900005E5652 /* UIColorExt.swift in Sources */,
 				CF0C17E5242F9790000FB582 /* ProgressModel.swift in Sources */,
 				CFF34C3125FA97B3009F8452 /* UltraLayout.swift in Sources */,
