@@ -54,7 +54,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //------------------------- a bit trick because of constraint error ---------------------------
     //need to give a valid frame to event elements when initialize it
     //so error "Unable to simultaneously satisfy constraints" is gone
-    let eventElements = EventElementsViewController(frame: CGRect(x: -40, y: 0, width: 40, height: 300))
+    lazy var eventElements : EventElementsViewController = {
+        
+        let eventElementViewController = EventElementsViewController()
+                
+        //80% of width
+        let width = 80 * self.view.frame.width / 100
+        
+        eventElementViewController.frame = CGRect(x: -self.view.frame.width, y: 0, width: width, height: self.view.frame.height)
+        
+        return eventElementViewController
+    }()
     
     
     //MARK: Properties

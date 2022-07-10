@@ -38,3 +38,16 @@ class Event: Object, Identifiable, Codable{
         return "id"
     }
 }
+
+extension Event {
+    
+    var eventTimeInterval: TimeInterval? {
+        guard let date = date, let endTime = endTime else {return TimeInterval()}
+        return endTime.timeIntervalSince(date)
+    }
+    
+    var eventDateInterval: DateInterval? {
+        guard let date = date, let endTime = endTime else {return DateInterval()}
+        return DateInterval(start: date, end: endTime)
+    }
+}

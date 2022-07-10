@@ -397,12 +397,17 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 1, anticipateMinutes: 0)
         //modify time inside eventDate
         self.eventDate = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        updateSaveButtonState()
     }
 
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
         //define exact time, when event should end
         self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        if sender.date < startTimePicker.date {
+            sender.date = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 1, anticipateMinutes: 0)
+        }
+        updateSaveButtonState()
     }
     //anticipate time 
     fileprivate func formatTimeBasedDate(date: Date, anticipateHours: Int, anticipateMinutes: Int) -> Date{
@@ -413,19 +418,26 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         //using current date and picker time for date formatting
         guard let compiledDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: eventDate) else { return date}
-        
         return compiledDate
     }
     
     private func updateSaveButtonState(){
-        //TODO: check for date is set!
         //Disable the Save button when text field is empty.
         let text = nameTextField.text ?? ""
-//        let date = dateTextField.text ?? ""
+        //let date = dateTextField.text ?? ""
         saveButton.isEnabled = !text.isEmpty//--------------------- && !date.isEmpty
+            
+        if startTimePicker.date > endTimePicker.date {
+            endTimeTitle.text = "Is less than start!"
+            endTimeTitle.textColor = .red
+
+            saveButton.isEnabled = false
+        }else{
+            endTimeTitle.text = " End"
+            endTimeTitle.textColor = UIColor.init(white: 96/255, alpha: 1)
+            saveButton.isEnabled = true
+        }
     }
-    
-    
     
     private func setupLayout(){
         

@@ -66,11 +66,35 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
     //MARK: Properties
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
+    //need for tableViewCell height calculations
     var timeInterval: TimeInterval?
+    //if opened day is current day, perform some configurations
+    let calendar = Calendar(identifier: .gregorian)
     var currentDate: Date? {
         didSet{
             if let date =  self.currentDate {
+                //required for tableView timeInterval calculations
                 timeInterval = date.timeIntervalSince1970
+                //check if day is a current day
+                if date == calendar.startOfDay(for: Date()){
+                    let timeIntervalFromSunrise = abs(date.timeIntervalSinceNow)
+                    let totalDayTimeInterval: Double = 86400
+                    let percentageOfPassedDay = timeIntervalFromSunrise / totalDayTimeInterval
+                    let topAnchorConstant: CGFloat = eventsTableView.frame.height * percentageOfPassedDay
+                    
+                    //TODO: Need to adjust timeLine, currentLine, and events properly (+5)
+                    currentTimeLineViewTopAnchor?.constant = topAnchorConstant
+                    //if user open current date side panel, table view scrolls to current time point
+                    scrollViewContainer.setContentOffset(CGPoint(x: 0, y: topAnchorConstant - 200), animated: false)
+                }else{
+                    currentTimeLineViewTopAnchor?.constant = -20
+                    // if day is not current day side panel scrolls to begin
+                    scrollViewContainer.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+                }
+                //set timeLine indicator to current time
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
+                currentTimeLabel.text = dateFormatter.string(from: Date())
             }
         }
     }
@@ -78,8 +102,7 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
     
     
     //data for collection view
-    var events: [Event] = []
-    
+    var events: [[Event]] = []
     
     let selectedDateLabel: UILabel = {
         let label = UILabel()
@@ -104,6 +127,31 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         let view  = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    let currentTimeLineView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.init(red: 243/255, green: 103/255, blue: 115/255, alpha: 1)
+        return view
+    }()
+    let currentTimeBG: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(red: 243/255, green: 103/255, blue: 115/255, alpha: 1)
+        view.layer.cornerRadius = 12
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var currentTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13)
+        
+        label.textAlignment = .center
+        label.text = "20:43"
+        label.textColor = .white
+        return label
     }()
     
     //TABLE VIEW
@@ -147,7 +195,9 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(timelineStack)
         contentUIView.addSubview(eventsTableView)
-
+        contentUIView.addSubview(currentTimeLineView)
+        contentUIView.addSubview(currentTimeBG)
+        contentUIView.addSubview(currentTimeLabel)
         //configure views constraints
         setupConstraints()
     }
@@ -166,21 +216,8 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         timelineStack.addArrangedSubview(timeLineCell)
     }
     
-    //REMOVE ITEM
-    @objc func removeItem(button: UIButton){
-        UserActivitySingleton.shared.createUserActivity(description: "\(self.events[button.tag].title) event was removed")
-
-        //remove event from database
-        ProjectListRepository.instance.deleteEvent(event: self.events[button.tag])
-        //remove from table view datasource
-        events.remove(at: button.tag)
-        //reload tableView
-        self.eventsTableView.reloadData()
-        
-        
-        
-    }
-
+    //move to visible area or hide it. It depends from selected day. If it is current day......
+    var currentTimeLineViewTopAnchor: NSLayoutConstraint?
     //MARK: Constraints
     func setupConstraints(){
         selectedDateLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 38).isActive = true
@@ -201,6 +238,22 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
         contentUIView.heightAnchor.constraint(equalToConstant: 1440).isActive = true
         
+        currentTimeLineView.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor).isActive = true
+        currentTimeLineView.trailingAnchor.constraint(equalTo: contentUIView.trailingAnchor).isActive = true
+        currentTimeLineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        currentTimeLineViewTopAnchor = currentTimeLineView.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: -20)
+        currentTimeLineViewTopAnchor?.isActive = true
+        
+        currentTimeBG.centerYAnchor.constraint(equalTo: currentTimeLineView.centerYAnchor).isActive = true
+        currentTimeBG.leadingAnchor.constraint(equalTo: currentTimeLineView.leadingAnchor, constant: 10).isActive = true
+        currentTimeBG.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        currentTimeBG.widthAnchor.constraint(equalToConstant: 56).isActive = true
+        
+        currentTimeLabel.topAnchor.constraint(equalTo: currentTimeBG.topAnchor).isActive = true
+        currentTimeLabel.leadingAnchor.constraint(equalTo: currentTimeBG.leadingAnchor).isActive = true
+        currentTimeLabel.trailingAnchor.constraint(equalTo: currentTimeBG.trailingAnchor).isActive = true
+        currentTimeLabel.bottomAnchor.constraint(equalTo: currentTimeBG.bottomAnchor).isActive = true
+
         timelineStack.topAnchor.constraint(equalTo: contentUIView.topAnchor).isActive = true
         timelineStack.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor).isActive = true
         timelineStack.leftAnchor.constraint(equalTo: contentUIView.leftAnchor).isActive = true
@@ -225,269 +278,410 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
             fatalError( "The dequeued cell is not an instance of EventTableViewCell." )
         }
         
-        let event = events[indexPath.row]
+        let eventsArr = events[indexPath.row]
         
-        // padding from table view margin or previous event
-        cell.prevCellDate = indexPath.row == 0 ? currentDate : events[indexPath.row - 1].endTime
+        //for first item padding point is a table view bound
+        if indexPath.row == 0 {
+           //calculation from current date always give 0
+            cell.prevCellDate = currentDate
+            
+        }else{
+            //sort prev cell events by date
+            let prevEvents = events[indexPath.row - 1]
+            //take last item, because it's laterest one, so it will be a start point for current cell
+            if let lastItem = prevEvents.last, let endTime = lastItem.endTime{
+                cell.prevCellDate = endTime
+            }else{
+                //just in case something went wrong
+                cell.prevCellDate = currentDate
+            }
+        }
         
-        cell.event = event
-        
-        cell.removeButton.tag = indexPath.row
-        cell.removeButton.addTarget(self, action: #selector(removeItem(button:)), for: .touchUpInside)
+        cell.events = eventsArr
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
+        guard let currentDate = currentDate else {return 0}
+        //current events array
+        let currentEvents = events[indexPath.row]
         //table view height
         let tableViewHeight = tableView.frame.height//1440
         // 1 day interval in seconds
         let dailyTimeInterval: Double = 86400
-        // cell height
+        // cell height to return
         var height: CGFloat = 0
-        // event
-        let event = events[indexPath.row]
+        
+        
         // padding from table view margin or previous event
-        let eventPadding = indexPath.row == 0 ? currentDate : events[indexPath.row - 1].endTime
-        //event.date should always have updated time
-        if let endTime = event.endTime{
-            //date from which calculates padding
-            if let eventPadding = eventPadding {
-                //calculate padding from last cell based on timeInterval
-                let endTimeInterval = endTime.timeIntervalSince(eventPadding)
-                //calculate percentage of interval
-                let intervalPercentage = endTimeInterval / dailyTimeInterval
-                //convert % to Int
-                let heightPercentage = tableViewHeight * intervalPercentage
-                //cell height
-                height = heightPercentage
+        var eventPadding = Date()
+        
+        //for first item padding point is a table view bound
+        if indexPath.row == 0 {
+           //calculation from current date always give 0
+            eventPadding = currentDate
+            
+        }else{
+            //sort prev cell events by date
+            let previousEvent = events[indexPath.row - 1]
+            //take last item, because it's latest one, so it will be a start point for current cell
+            if let lastItem = previousEvent.last, let endTime = lastItem.endTime{
+                eventPadding = endTime
+            }else{
+                //just in case something went wrong
+                eventPadding = currentDate
             }
+        }
+        
+        if let lastItem = currentEvents.last, let endTime = lastItem.endTime{
+            //calculate padding from last cell based on timeInterval
+            let endTimeInterval = endTime.timeIntervalSince(eventPadding)
+            //calculate percentage of interval
+            let intervalPercentage = endTimeInterval / dailyTimeInterval
+            //convert % to Int
+            let heightPercentage = tableViewHeight * intervalPercentage
+            //cell height
+            height = heightPercentage
         }
         
         return height
     }
 }
 
-//MARK: Cell
-class EventTableViewCell: UITableViewCell {
+//different event sizes need different display style
+enum EventBubbleStyle {
+    case halfWidth
+    case fullSize
+    case thin
+    case short
+    case small
+}
+
+//MARK:  Bubble
+//Event view is so complicated, that it needs it own class
+class EventBubbleView: UIView {
+    //event object
+    var event: Event
+    //gives a style to based on size calculations
+    var style: EventBubbleStyle
+    //view constraints configurations immidiately require view sizes
+    var rect: CGSize
     
-    //MARK: Properties
-    //margin calculation should start from here
-    var prevCellDate: Date?
-    var event: Event? {
-        didSet{
-            
-            guard let event = event, let previousCellDate = prevCellDate else {return}
-
-            
-            
-            //Need to calculate time interval from prev event to start of current event
-            if let eventDate =  event.date, let eventEndDate = event.endTime{
-                
-                //total time interval
-                let totalCellTimeInterval = eventEndDate.timeIntervalSince(previousCellDate)
-                //interval between events
-                let timeIntervalBetweenEvents = eventDate.timeIntervalSince(previousCellDate)
-                
-                let heightMultiplier: CGFloat = timeIntervalBetweenEvents / totalCellTimeInterval
-                
-                if heightMultiplier > 0 {
-                    backgroundBubbleHeightAnchor?.constant = self.frame.height * (1 - heightMultiplier)
-                }else{
-                    backgroundBubbleHeightAnchor?.constant = self.frame.height
-                }
-                
-            }
-            
-            taskLabel.text = event.title
-           
-            if let image = event.picture{
-                eventImageView.retreaveImageUsingURLString(myUrl: image)
-                gradientView.isHidden = false
-                shadowLabel.isHidden = false
-                removeButton.isSelected = false
-                descriptionLabel.text = "\n\n\n\n"//adds top spacing to description
-                shadowLabel.text = descriptionLabel.text
-            }else{
-                eventImageView.image = nil
-                gradientView.isHidden = true
-                shadowLabel.isHidden = true
-                removeButton.isSelected = true
-                descriptionLabel.text = ""//remove top spacing if there is no image
-            }
-            
-            //define description
-            if let description = event.descr{
-                descriptionLabel.text! += description
-                shadowLabel.text = descriptionLabel.text
-            }else{
-                descriptionLabel.text = "no description ..."
-                shadowLabel.text = descriptionLabel.text
-            }
-
-            //description label height
-            let rect = NSString(string: descriptionLabel.text!).boundingRect(with: CGSize(width: frame.width , height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
-
-            //----------------------------------------------------------------------------------------
-            //----------------------------- image needs proper sizing --------------------------------
-            //----------------------------------------------------------------------------------------
-
-            //configure image height constraint based on description label height
-            imageHeightAnchor?.constant = rect.height + 100
-
-            if event.category == "projectStep"{
-                descriptionLabel.textColor = .white
-                removeButton.backgroundColor = UIColor.init(white: 32/255, alpha: 1)
-                eventImageView.isHidden = false
-            }else{
-                descriptionLabel.textColor = UIColor.init(white: 85/255, alpha: 1)
-                removeButton.backgroundColor = UIColor.init(white: 230/255, alpha: 1)
-                eventImageView.isHidden = true
-            }
-            
-        }
-    }
-    
-    let taskLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textAlignment = .center
-        label.textColor = UIColor.black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Please show me something!"
-        return label
-    }()
-    
-    let removeButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(UIColor.darkGray, for: .normal)
-        button.setImage(UIImage(named: "big3Dots"), for: .normal)
-        button.setImage(UIImage(named: "bigBlack3Dots"), for: .selected)
-        button.contentMode = .center
-        button.imageView!.contentMode = .scaleAspectFill
-        button.backgroundColor = UIColor.init(white: 230/255, alpha: 1)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.text = "Description label contains explanation text."
-        label.textColor = UIColor.init(white: 85/255, alpha: 1)
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    let shadowLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.text = "Description label contains explanation text."
-        label.textColor = UIColor.init(white: 0.2, alpha: 1)
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.isHidden = true
-        return label
-    }()
-    
-
     let backgroundBubble: UIView = {
         let bg = UIView()
         bg.backgroundColor = UIColor.init(white: 241/255, alpha: 1)
-        bg.layer.cornerRadius = 12
+        bg.layer.cornerRadius = 11
         bg.translatesAutoresizingMaskIntoConstraints = false
         bg.layer.masksToBounds = true
+        bg.backgroundColor = UIColor.init(white: 0.9, alpha: 1)
         return bg
     }()
-
-    let eventImageView: UIImageView = {
+    
+    lazy var taskLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .left
+        label.textColor = event.category == "projectStep" ? .white : .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = event.title
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    lazy var timeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.isHidden = event.category == "projectStep" ? true : false
+        label.numberOfLines = 0
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let startTimeString = dateFormatter.string(from: event.date ?? Date())
+        let endTimeString = dateFormatter.string(from: event.endTime ?? Date())
+        label.text = "\(startTimeString) - \(endTimeString)"
+        return label
+    }()
+   
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.text = event.descr
+        label.isHidden = event.category == "projectStep" ? true : false
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    lazy var eventImageView: UIImageView = {
         let imageView = UIImageView()
-//        imageView.image = UIImage(named: "workspace")
         imageView.contentMode = .scaleAspectFill
-
+        
+        if let pictureURL =  event.picture  {
+            imageView.retreaveImageUsingURLString(myUrl: pictureURL)
+        }else{
+            imageView.image = UIImage(named: "smile")//<---- probably need to have a default image
+        }
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = event.category == "projectStep" ? false : true
         return imageView
     }()
-
-    let gradientView: GradientView = {
-        let topColor = UIColor.init(white: 32/255, alpha: 0)
-        let middleColor = UIColor.init(white: 32/255, alpha: 0.68)
+    lazy var gradientView: GradientView = {
+        let topColor = UIColor.init(white: 32/255, alpha: 1)
+        let middleColor = UIColor.init(white: 32/255, alpha: 1)
         let bottomColor = UIColor.init(white: 32/255, alpha: 1)
         let gradient = GradientView(gradientStartColor: topColor, gradientMiddleColor: middleColor, gradientEndColor: bottomColor)
-        gradient.isHidden = true
+        gradient.isHidden = event.category == "projectStep" ? false : true
         gradient.translatesAutoresizingMaskIntoConstraints = false
         return gradient
     }()
     
-    var imageHeightAnchor: NSLayoutConstraint?
-    var backgroundBubbleHeightAnchor: NSLayoutConstraint?
+    lazy var shadowLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .left
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = event.title
+        label.numberOfLines = 0
+//        label.backgroundColor = .systemGreen
+        label.isHidden = event.category == "projectStep" ? false : true
+        return label
+    }()
+
+    
+    var descriptionLabelTopAnchor: NSLayoutConstraint?
+
+    
     
     //MARK: Initialization
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: EventBubbleStyle, event: Event, viewHeight: CGFloat, viewWidth: CGFloat, frame: CGRect) {
+        self.event = event
+        self.style = style
+        self.rect = CGSize(width: viewWidth, height: viewHeight)
+        super.init(frame: frame)
         
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        addSubview(backgroundBubble)
-        addSubview(taskLabel)
-        addSubview(shadowLabel)
-        addSubview(descriptionLabel)
-        
-        backgroundBubble.addSubview(eventImageView)
-        backgroundBubble.addSubview(gradientView)
-        backgroundBubble.addSubview(removeButton)
-        
-        backgroundBubble.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        backgroundBubble.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        backgroundBubble.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        backgroundBubbleHeightAnchor = backgroundBubble.heightAnchor.constraint(equalToConstant: self.frame.height)
-        backgroundBubbleHeightAnchor?.isActive = true
-        
-        //MARK: Constraints
-        let constraints = [
-            
-            taskLabel.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 15),
-            taskLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0),
-            taskLabel.heightAnchor.constraint(equalToConstant: 17),
-            taskLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 0),
-            descriptionLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0),
-            descriptionLabel.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor, constant: 0),
-            descriptionLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0),
-            
-            shadowLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 0),
-            shadowLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0),
-            shadowLabel.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor, constant: 0),
-            shadowLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0),
-            
-            gradientView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0),
-            gradientView.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor, constant: 0),
-            gradientView.leftAnchor.constraint(equalTo: backgroundBubble.leftAnchor, constant: 0),
-            gradientView.rightAnchor.constraint(equalTo: backgroundBubble.rightAnchor, constant: 0),
-            
-            removeButton.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0),
-            removeButton.rightAnchor.constraint(equalTo: backgroundBubble.rightAnchor, constant: 0),
-            removeButton.widthAnchor.constraint(equalToConstant: 30),
-            removeButton.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor, constant: 0)
-        ]
-        NSLayoutConstraint.activate(constraints)
-
-        
-        eventImageView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0).isActive = true
-        eventImageView.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0).isActive = true
-        eventImageView.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0).isActive = true
-
-        imageHeightAnchor = eventImageView.heightAnchor.constraint(equalToConstant: 100)
-        imageHeightAnchor?.isActive = true
+        setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    fileprivate func calculateRectForLabel(size: CGFloat, text: String) -> CGRect{
+        //description label height
+        let rectangle = NSString(string: text).boundingRect(with: CGSize(width: rect.width - CGFloat(22), height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: size)], context: nil)
+        return rectangle
+    }
+    
+    func setupView(){
+        
+        var taskLabelHeightConstant: CGFloat = 1
+        var taskLabelTopAnchorConstant: CGFloat = 12
+        var timeLabelHeightConstant: CGFloat = 30
+        var descriptionLabelHeightConstant: CGFloat = 0
+
+        switch style {
+            
+        //it so small, that can't realy visualize anything, apart from bubble view
+        case .small:
+            
+            taskLabel.isHidden = true
+            descriptionLabel.isHidden = true
+            shadowLabel.isHidden = true
+            timeLabel.isHidden = true
+            //because if it visible it has 12px padding from top by default
+            taskLabelTopAnchorConstant = 0
+        //can show only title and bubble view
+        case .short://events.count > 2 == .thin, viewHeight <= 60 == .short
+            taskLabel.font = UIFont.boldSystemFont(ofSize: 14)
+            shadowLabel.font = UIFont.boldSystemFont(ofSize: 14)
+
+            let titleHeight = calculateRectForLabel(size: 14, text: taskLabel.text!).height
+            taskLabelHeightConstant = titleHeight <= rect.height - 12 ? titleHeight : rect.height - 24
+            descriptionLabel.isHidden = true
+            timeLabel.isHidden = true
+        //can include anything. The only one thing, fonts must be into small size
+        case .thin://events.count > 2 == .thin, viewHeight <= 60 == .short
+            
+            taskLabel.font = UIFont.boldSystemFont(ofSize: 14)
+            shadowLabel.font = UIFont.boldSystemFont(ofSize: 14)
+            descriptionLabel.font = UIFont.systemFont(ofSize: 14)
+            
+            taskLabelHeightConstant = calculateRectForLabel(size: 14, text: taskLabel.text!).height + CGFloat(10)
+            timeLabelHeightConstant = calculateRectForLabel(size: 14, text: timeLabel.text!).height + CGFloat(10)
+            descriptionLabelHeightConstant = calculateRectForLabel(size: 14, text: descriptionLabel.text!).height
+        //default style. Here I can show everything
+        case .fullSize://by default it is .fullSize
+            
+            taskLabel.font = UIFont.boldSystemFont(ofSize: 16)
+            shadowLabel.font = UIFont.boldSystemFont(ofSize: 16)
+            descriptionLabel.font = UIFont.systemFont(ofSize: 16)
+            taskLabelHeightConstant = calculateRectForLabel(size: 16, text: taskLabel.text!).height
+            descriptionLabelHeightConstant = calculateRectForLabel(size: 16, text: descriptionLabel.text!).height
+        //this style can visualize anything. But I should be accurate with view height
+        case .halfWidth://by default it is .fullSize
+            
+            taskLabel.font = UIFont.boldSystemFont(ofSize: 16)
+            shadowLabel.font = UIFont.boldSystemFont(ofSize: 16)
+            descriptionLabel.font = UIFont.systemFont(ofSize: 16)
+            taskLabelHeightConstant = calculateRectForLabel(size: 16, text: taskLabel.text!).height + CGFloat(10)
+            let descriptionTextHeight = calculateRectForLabel(size: 16, text: descriptionLabel.text!).height
+            //-15  titleLabel topAnchor extra space
+            let availableHeight = rect.height - taskLabelHeightConstant - timeLabelHeightConstant - 15
+            descriptionLabelHeightConstant = descriptionTextHeight > availableHeight ? availableHeight : descriptionTextHeight
+        }
+                        
+        addSubview(backgroundBubble)
+        addSubview(shadowLabel)
+        addSubview(taskLabel)
+        addSubview(timeLabel)
+        addSubview(descriptionLabel)
+
+        backgroundBubble.addSubview(eventImageView)
+        backgroundBubble.addSubview(gradientView)
+
+        backgroundBubble.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+        backgroundBubble.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        backgroundBubble.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6).isActive = true//-10
+        backgroundBubble.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        
+        taskLabel.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: taskLabelTopAnchorConstant).isActive = true
+        taskLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 8).isActive = true
+        taskLabel.heightAnchor.constraint(equalToConstant: taskLabelHeightConstant).isActive = true
+        taskLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: -8).isActive = true
+        
+        timeLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 0).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 8).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: -8).isActive = true
+        timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeightConstant).isActive = true
+        
+        descriptionLabelTopAnchor = descriptionLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 0)
+        descriptionLabelTopAnchor?.isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 8).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabelHeightConstant).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: -8).isActive = true
+
+        shadowLabel.topAnchor.constraint(equalTo: taskLabel.topAnchor, constant: 1).isActive = true
+        shadowLabel.leadingAnchor.constraint(equalTo: taskLabel.leadingAnchor, constant: 1).isActive = true
+        shadowLabel.heightAnchor.constraint(equalToConstant: taskLabelHeightConstant).isActive = true
+        shadowLabel.trailingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 1).isActive = true
+
+        gradientView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0).isActive = true
+        gradientView.bottomAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 12).isActive = true
+        gradientView.leftAnchor.constraint(equalTo: backgroundBubble.leftAnchor, constant: 0).isActive = true
+        gradientView.rightAnchor.constraint(equalTo: backgroundBubble.rightAnchor, constant: 0).isActive = true
+
+        eventImageView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0).isActive = true
+        eventImageView.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0).isActive = true
+        eventImageView.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0).isActive = true
+        eventImageView.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor).isActive = true
+    }
+}
+
+//MARK: Event TableView Cell
+class EventTableViewCell: UITableViewCell {
+    
+    //margin calculation should start from here
+    var prevCellDate: Date?
+    
+    var events: [Event] = [] {
+        didSet{
+            //clear cell for case deque cell reuse something
+            subviews.forEach { $0.removeFromSuperview() }
+            //creates views based on events number
+            for number in 1...events.count{
+                //configure event view and give it a sequent number
+                configureBubbleViews(number: number)
+            }
+        }
+    }
+    
+   
+    
+    //MARK: Initialization
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .clear
+        selectionStyle = .none
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func configureBubbleViews(number: Int){
+        
+        var bubbleStyle: EventBubbleStyle = EventBubbleStyle.fullSize
+        //------------- new approach here: first declare var and then unwrap it for value. Something?
+        
+        //current event interval, that should be unwraped, because it optional, but it calculates inside Event
+        var currentEventInterval = TimeInterval()
+        //total TimeInterval for each cell is the same. So every event must calculate padding and size from it...
+        var totalCellTimeInterval = TimeInterval()
+        //TimeInterval from prev cell to current event
+        var topEndTimeInterval = TimeInterval()
+        //unwrap optionals
+        if let lastEvent = events.last,
+            let lastEndTime = lastEvent.endTime,
+            let prevDate = prevCellDate,
+            let intervalForCurrentEvent = events[number - 1].eventTimeInterval,
+            let currentEventStartDate = events[number - 1].date
+        {
+            //TimeInterval for entire cell
+            totalCellTimeInterval = lastEndTime.timeIntervalSince(prevDate)
+            //unwrap optional Event TimeInterval for future calculations
+            currentEventInterval = intervalForCurrentEvent
+            //TimeInterval from last cell (Event) to current event
+            topEndTimeInterval = currentEventStartDate.timeIntervalSince(prevDate)
+        }
+        
+        //calculate eventBubbleView height percentage of entire cell height
+        let heightPercentage = currentEventInterval / totalCellTimeInterval
+        //calculate height value based on percentage
+        let viewHeight: CGFloat = frame.height * heightPercentage
+        //calculate distance percentage from last event to current event inside cell
+        let topEndPaddingPercentage = topEndTimeInterval / totalCellTimeInterval
+        //value  calculation based on percentage of entire cell height
+        let viewTopPadding = frame.height * topEndPaddingPercentage
+        //left padding calculation
+        let constant = (frame.width / CGFloat(events.count)) * CGFloat(number - 1)
+        //view width
+        let viewWidth = frame.width / CGFloat(events.count)
+        
+        // .small
+        if viewHeight <= 30{
+            bubbleStyle = .small
+        }
+        // .short
+        if  viewHeight <= 180 && viewHeight >= 30 {
+            bubbleStyle = .short
+        }
+        // .thin
+        if events.count > 2 && viewHeight >= 180{
+            bubbleStyle = .thin
+        }
+        // .halfWidth
+        if events.count == 2 && viewHeight >= 180{
+            bubbleStyle = .halfWidth
+        }
+                
+        //creates event view
+        let eventBubbleView = EventBubbleView(style: bubbleStyle ,event: events[number - 1], viewHeight: viewHeight, viewWidth: viewWidth, frame: CGRect.zero)
+        
+        
+        eventBubbleView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(eventBubbleView)
+        
+        eventBubbleView.widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
+        eventBubbleView.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+        eventBubbleView.topAnchor.constraint(equalTo: topAnchor, constant: viewTopPadding).isActive = true
+        eventBubbleView.leftAnchor.constraint(equalTo: leftAnchor, constant:  constant).isActive = true
+    }
+    
+    
 }
 
 

@@ -79,7 +79,7 @@ extension CalendarViewController {
                     groupedEventDictionary[unwrappedHolidayDate]?.forEach{
                         //pick only holidays in this day
                         if $0.category == "holiday"{
-                            eventElements.events.append($0)
+                            eventElements.events.append([$0])
                         }
                     }
                 }
@@ -91,14 +91,18 @@ extension CalendarViewController {
             
             var eventsByDate = [Event]()
             
-            //------------- is it finaly needs to be replaced? ---------------------
+//            //------------- is it finaly needs to be replaced? ---------------------
             eventsByDate = events.sorted(by: { (a, b) in return a.date! < b.date! })
             
             //unite events by interval intersection
-            intersectEvents(events: events)
+            let intersectedEvents = intersectEvents(events: eventsByDate)
+            
+            
+            
+            
             
             //append events new data
-            eventElements.events.append(contentsOf: eventsByDate)
+            eventElements.events.append(contentsOf: intersectedEvents)
             
             eventElements.eventsTableView.reloadData()
             //reveal timeline
@@ -149,17 +153,15 @@ extension CalendarViewController{
                 return dateIntersection
             }
             
-            return filteredArray
+            //Sort events by end time
+            let sortedEvents = filteredArray.sorted(by: {(a, b) in
+                guard let aEndTime = a.endTime, let bEndTime = b.endTime else {return a.title.count > b.title.count}
+                return aEndTime < bEndTime
+            })
+            
+            return sortedEvents
         }
         
-       
-        
-        //TODO: Note that where one event ends and other starts, intersection would be applied
-        //--------------> Seems like I don't realy need array to set conversion <----------------------
-//        let setNestedArray: [Set<Event>] = nestedArray.map ({ (item) in
-//            return Set(item)
-//        })
-//        let set: Set<Set<Event>> = Set(setNestedArray)
         return nestedArray
     }
     
