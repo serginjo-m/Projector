@@ -461,7 +461,6 @@ class EventBubbleView: UIView {
         self.style = style
         self.rect = CGSize(width: viewWidth, height: viewHeight)
         super.init(frame: frame)
-        
         setupView()
     }
     

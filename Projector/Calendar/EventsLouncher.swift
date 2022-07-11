@@ -91,36 +91,29 @@ extension CalendarViewController {
             
             var eventsByDate = [Event]()
             
-//            //------------- is it finaly needs to be replaced? ---------------------
             eventsByDate = events.sorted(by: { (a, b) in return a.date! < b.date! })
             
             //unite events by interval intersection
             let intersectedEvents = intersectEvents(events: eventsByDate)
             
-            
-            
-            
-            
             //append events new data
             eventElements.events.append(contentsOf: intersectedEvents)
             
             eventElements.eventsTableView.reloadData()
-            //reveal timeline
-//            eventElements.lineView.backgroundColor = UIColor.init(white: 229/255, alpha: 1)
+            
             //show view controller
             showUpEventsView()
         }else{
             eventElements.eventsTableView.reloadData()
-            //hide timeline
-//            eventElements.lineView.backgroundColor = .clear
+            
             showUpEventsView()
         }
         
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------
-//Should create something like class for it, because it repeats 2x times
+
+
 extension CalendarViewController{
     
     //unite events by date interval intersection
@@ -130,38 +123,54 @@ extension CalendarViewController{
         //set contains event id
         var id = Set<String>()
         
-
+        //holds united DateInterval for intersected events
+        var commonDateInterval = DateInterval()
         
         nestedArray = events.compactMap{
+            
+            //check if id was in func before
             if id.contains($0.id){
                 return nil
             }
+            
+            //insert current event id into used id's database
             id.insert($0.id)
-            // .map iteration
-            guard let start = $0.date, let end = $0.endTime else {return nil}
-            let mapItemDateInterval = DateInterval(start: start, end: end)
+            //unwrap optional
+            guard let mapItemDateInterval = $0.eventDateInterval else {return nil}
+            
+            //common DateInteval for all intersected events
+            commonDateInterval = mapItemDateInterval
             
             // .filter is looking for Bool condition to select item from "events" array
             let filteredArray = events.filter { item in
-                guard let startDate = item.date, let endDate = item.endTime else {return false}
+                guard let itemDateInterval = item.eventDateInterval else {return false}
                 
-                let itemDateInterval = DateInterval(start: startDate, end: endDate)
-                let dateIntersection = mapItemDateInterval.intersects(itemDateInterval)
+                //check if commonDateInterval intersects with give event DateInterval (Bool)
+                let dateIntersection = commonDateInterval.intersects(itemDateInterval)
+                //confirm that DateIntervals intersects
                 if dateIntersection == true{
+                    //takes smallest start point
+                    let start: Date = commonDateInterval.start > itemDateInterval.start ? itemDateInterval.start : commonDateInterval.start
+                    //takes latest end point
+                    let end: Date = commonDateInterval.end < itemDateInterval.end ? itemDateInterval.end : commonDateInterval.end
+                    //every time it defines common DateInterval it becames larger to fully cover intersected events
+                    commonDateInterval = DateInterval(start: start, end: end)
+                    
+                    //append id that is controlled for intersection
                     id.insert(item.id)
                 }
+                
                 return dateIntersection
             }
-            
+
             //Sort events by end time
             let sortedEvents = filteredArray.sorted(by: {(a, b) in
                 guard let aEndTime = a.endTime, let bEndTime = b.endTime else {return a.title.count > b.title.count}
                 return aEndTime < bEndTime
             })
-            
             return sortedEvents
         }
-        
+
         return nestedArray
     }
     
