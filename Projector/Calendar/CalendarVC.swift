@@ -82,6 +82,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
             
         }
     }
+    
+    //NotificationViewController can request to display date from notification
+    var dateToDisplay: Date?
+    
     //an array of days
     private lazy var days = generateDaysInMonth(for: baseDate)
     
@@ -215,6 +219,20 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         //day is need to be current everytime calendar appears &
         //as date is set, all updateAllPageElements calls
         baseDate = Date()
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if let unwrappedDateToDisplay = dateToDisplay {
+            //define day events data base
+            eventsArrayFromDateKey(date: unwrappedDateToDisplay)
+            //calendar in background
+            self.baseDate = unwrappedDateToDisplay
+            //reset request 
+            dateToDisplay = nil
+        }
     }
     
     private func updateAllPageElements(){

@@ -99,8 +99,6 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         }
     }
     
-    
-    
     //data for collection view
     var events: [[Event]] = []
     
@@ -143,7 +141,7 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         return view
     }()
     
-    lazy var currentTimeLabel: UILabel = {
+    var currentTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 13)
@@ -169,7 +167,7 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         return tableView
     }()
     
-    lazy var timelineStack: UIStackView = {
+    var timelineStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.distribution = .fillEqually
@@ -225,17 +223,16 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         selectedDateLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         selectedDateLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        //TODO: This constraints configuration is raw and needs more attention
         scrollViewContainer.topAnchor.constraint(equalTo: selectedDateLabel.bottomAnchor, constant: 25).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         scrollViewContainer.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+
         
         contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
-        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
-        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
-        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentUIView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
+        //It is exactly 1440 because I want that 1 hour is 60px height (24 * 60)
         contentUIView.heightAnchor.constraint(equalToConstant: 1440).isActive = true
         
         currentTimeLineView.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor).isActive = true

@@ -48,22 +48,19 @@ class NotificationsRepository {
             if let tab = controller as? UITabBarController{
                 if let second = tab.viewControllers?[1]{
                     if let nav = second as? UINavigationController {
-                        nav.viewControllers.removeAll()
-                        let calendarViewController = CalendarViewController(baseDate: Date()) { date in
-                            //maybe try to open sidebar
-                            
+                        let calendarViewController = (nav.viewControllers.first as? CalendarViewController)
+                        if let calendarVC = calendarViewController {
+                            //notification date
+                            let notificationDate = calendar.startOfDay(for: eventDate)
+                            //set notification date that should be displayed after VC did appear
+                            calendarVC.dateToDisplay = notificationDate
                         }
-                        //Events data base for calendar
-                        calendarViewController.assembleGroupedEvents()
-                        //day is need to be current everytime calendar appears &
-                        //as date is set, all updateAllPageElements calls
-                        calendarViewController.baseDate = Date()
-                        calendarViewController.eventsArrayFromDateKey(date: calendar.startOfDay(for: eventDate))
-                        nav.viewControllers.append(calendarViewController)
+                        
                     }
                 }
+                //switch to calendar
+                tab.selectedIndex = 1
             }
-            (window.rootViewController as? UITabBarController)?.selectedIndex = 1
             
         default:
             break
