@@ -93,7 +93,7 @@
 		CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */; };
 		CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA5878A242883A6006367AE /* CategoryCell.swift */; };
 		CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */; };
-		CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */; };
+		CFA76FFE25A6215A00F15E30 /* EventElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA76FFD25A6215A00F15E30 /* EventElements.swift */; };
 		CFB3B29923741214002E2F9B /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29823741214002E2F9B /* ProjectList.swift */; };
 		CFB3B29B2374177E002E2F9B /* ProjectStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB3B29A2374177E002E2F9B /* ProjectStep.swift */; };
 		CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB40CCD27C21EFE00D6EEA4 /* HolidayEvent.swift */; };
@@ -224,7 +224,7 @@
 		CF9DA83C244E182E00DFAEEF /* workVersionDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = workVersionDetailVC.swift; sourceTree = "<group>"; };
 		CFA5878A242883A6006367AE /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLouncher.swift; sourceTree = "<group>"; };
-		CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventElementsVC.swift; sourceTree = "<group>"; };
+		CFA76FFD25A6215A00F15E30 /* EventElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventElements.swift; sourceTree = "<group>"; };
 		CFB0D92526334C4C00F67C65 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		CFB3B29823741214002E2F9B /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
 		CFB3B29A2374177E002E2F9B /* ProjectStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStep.swift; sourceTree = "<group>"; };
@@ -613,7 +613,7 @@
 			children = (
 				CF1A411C26E4BDC1009EB276 /* Holidays API */,
 				CF059F462598B47500729A74 /* NewEventVC.swift */,
-				CFA76FFD25A6215A00F15E30 /* EventElementsVC.swift */,
+				CFA76FFD25A6215A00F15E30 /* EventElements.swift */,
 				CFD88DF62595EBDE00B726FF /* CalendarHeaderView.swift */,
 				CFA76FFB25A5FE4700F15E30 /* EventsLouncher.swift */,
 				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
@@ -830,7 +830,7 @@
 				CFCD7894267FCAC70066294A /* PhotoNoteCV.swift in Sources */,
 				CFCD78A126823F1E0066294A /* CountingLabel.swift in Sources */,
 				CFB40CD527E619EC00D6EEA4 /* TransitionCoordinator.swift in Sources */,
-				CFA76FFE25A6215A00F15E30 /* EventElementsVC.swift in Sources */,
+				CFA76FFE25A6215A00F15E30 /* EventElements.swift in Sources */,
 				CF2472F72713606E002D6DCA /* User.swift in Sources */,
 				CFD5288426935B8400062DCF /* UIView+Stacking.swift in Sources */,
 				CFEDDC5526F91678005E5652 /* SwipingController.swift in Sources */,

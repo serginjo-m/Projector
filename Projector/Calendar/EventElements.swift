@@ -62,7 +62,7 @@ class TimeLineCell: UIView {
     }
 }
 
-class EventElementsViewController: ElementsViewController, UITableViewDelegate, UITableViewDataSource{
+class EventElementsView: ElementsViewController, UITableViewDelegate, UITableViewDataSource{
     //MARK: Properties
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
@@ -228,10 +228,12 @@ class EventElementsViewController: ElementsViewController, UITableViewDelegate, 
         scrollViewContainer.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
 
-        
+        //Here is so many constraints, because it won't scrolls without it
         contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
         contentUIView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
+        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentUIView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor).isActive = true
         //It is exactly 1440 because I want that 1 hour is 60px height (24 * 60)
         contentUIView.heightAnchor.constraint(equalToConstant: 1440).isActive = true
         
@@ -471,7 +473,15 @@ class EventBubbleView: UIView {
         return rectangle
     }
     
+    @objc func zoomIn(tapGesture: UITapGestureRecognizer){
+        print("view tries to zoom!")
+    }
+    
     func setupView(){
+        
+        isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(zoomIn))
+        addGestureRecognizer(tap)
         
         var taskLabelHeightConstant: CGFloat = 1
         var taskLabelTopAnchorConstant: CGFloat = 12
