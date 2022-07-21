@@ -66,6 +66,8 @@ class EventElementsView: ElementsViewController, UITableViewDelegate, UITableVie
     //MARK: Properties
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
+    //CalendarViewConroller -> EventElementsView -> EventTableViewCell -> performZoomForStartingEventView()
+    var calendarViewController: CalendarViewController?
     //need for tableViewCell height calculations
     var timeInterval: TimeInterval?
     //if opened day is current day, perform some configurations
@@ -295,7 +297,8 @@ class EventElementsView: ElementsViewController, UITableViewDelegate, UITableVie
                 cell.prevCellDate = currentDate
             }
         }
-        
+        //CalendarViewConroller -> EventElementsView -> EventTableViewCell -> performZoomForStartingEventView()
+        cell.calendarVC = calendarViewController
         cell.events = eventsArr
         return cell
     }
@@ -473,16 +476,7 @@ class EventBubbleView: UIView {
         return rectangle
     }
     
-    @objc func zoomIn(tapGesture: UITapGestureRecognizer){
-        print("view tries to zoom!")
-    }
-    
     func setupView(){
-        
-        isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(zoomIn))
-        addGestureRecognizer(tap)
-        
         var taskLabelHeightConstant: CGFloat = 1
         var taskLabelTopAnchorConstant: CGFloat = 12
         var timeLabelHeightConstant: CGFloat = 30
@@ -591,6 +585,8 @@ class EventTableViewCell: UITableViewCell {
     
     //margin calculation should start from here
     var prevCellDate: Date?
+    //CalendarViewConroller -> EventElementsView -> EventTableViewCell -> performZoomForStartingEventView()
+    var calendarVC: CalendarViewController?
     
     var events: [Event] = [] {
         didSet{
@@ -676,7 +672,10 @@ class EventTableViewCell: UITableViewCell {
         //creates event view
         let eventBubbleView = EventBubbleView(style: bubbleStyle ,event: events[number - 1], viewHeight: viewHeight, viewWidth: viewWidth, frame: CGRect.zero)
         
-        
+        //add zoom in function to bubble view
+        eventBubbleView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(zoomIn))
+        eventBubbleView.addGestureRecognizer(tap)
         eventBubbleView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(eventBubbleView)
@@ -687,7 +686,13 @@ class EventTableViewCell: UITableViewCell {
         eventBubbleView.leftAnchor.constraint(equalTo: leftAnchor, constant:  constant).isActive = true
     }
     
-    
+    @objc func zoomIn(tapGesture: UITapGestureRecognizer){
+        //Really good trick
+        //Extract view object from tap gesture
+        let bubbleView = tapGesture.view as? EventBubbleView
+        guard let bubble = bubbleView, let calendarViewController = calendarVC else {return}
+        calendarViewController.performZoomForStartingEventView(event: bubble.event ,startingEventView: bubble)
+    }
 }
 
 

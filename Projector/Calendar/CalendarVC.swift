@@ -57,7 +57,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     lazy var eventElements : EventElementsView = {
         
         let eventElementViewController = EventElementsView()
-                
+        //Zoom logic
+        //CalendarViewConroller -> EventElementsView -> EventTableViewCell -> performZoomForStartingEventView()
+        eventElementViewController.calendarViewController = self
         //80% of width
         let width = 80 * self.view.frame.width / 100
         
@@ -65,7 +67,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         
         return eventElementViewController
     }()
-    
+    //hold dimension of event view displayed in side panel before zoomimg it to full dimension
+    var startingFrame: CGRect?
+    //background behind full dimension event, after it zooms in
+    var zoomBackgroundView: UIView?
+    //need to hide it before animation starts
+    var startingEventView: UIView?
     
     //MARK: Properties
     let cellID = "cellId"
@@ -440,5 +447,260 @@ extension CalendarViewController {
     
     enum CalendarDataError: Error {
         case metadataGeneration
+    }
+    
+    //my custom zooming logic
+    func performZoomForStartingEventView(event: Event, startingEventView: UIView){
+        //save reference to the View() , so it can be used later
+        self.startingEventView = startingEventView
+        //hide view
+        self.startingEventView?.isHidden = true
+        //frame from view passed in parameter
+        startingFrame = startingEventView.superview?.convert(startingEventView.frame, to: nil)
+        
+        guard let unwStartingFrame = startingFrame else {return}
+        //bubble view padding from cell
+        let bubblePadding: CGFloat = 6
+        //bubble frame
+        let bubbleFrame = CGRect(x: unwStartingFrame.origin.x, y: unwStartingFrame.origin.y, width: unwStartingFrame.width - bubblePadding, height: unwStartingFrame.height)
+        
+        //expanded view size should start from small
+        let zoomingView = ZoomingView(event: event, frame: bubbleFrame)
+        zoomingView.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
+        zoomingView.layer.cornerRadius = 11
+        zoomingView.isUserInteractionEnabled = true
+        zoomingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOut)))
+        
+        if let keyWindow = UIApplication.shared.keyWindow {
+            
+            //black transpared background
+            self.zoomBackgroundView = UIView(frame: keyWindow.frame)
+            zoomBackgroundView?.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+            zoomBackgroundView?.alpha = 0
+            keyWindow.addSubview(zoomBackgroundView!)
+            //add expanded event view body
+            keyWindow.addSubview(zoomingView)
+
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                zoomingView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width * 0.75, height: keyWindow.frame.height * 0.57)
+                self.zoomBackgroundView?.alpha = 0.5
+                //wherever view is, make view pleced in the center of window
+                zoomingView.center = keyWindow.center
+            } completion: { (completed: Bool) in
+                //do something here later .....
+            }
+        }
+        
+        
+        
+    }
+    // zoom out logic
+    @objc func zoomOut(tapGesture: UITapGestureRecognizer){
+        //extract view from tap gesture
+        if let zoomOutView = tapGesture.view{
+            //corner configuration
+            zoomOutView.layer.cornerRadius = 11
+            zoomOutView.clipsToBounds = true
+            //zoom out animation
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                //back to initial size
+                zoomOutView.frame = self.startingFrame!
+                //set back to transparent background
+                self.zoomBackgroundView?.alpha = 0
+            } completion: { (completed: Bool) in
+                //remove temporary created view from superview
+                zoomOutView.removeFromSuperview()
+                //show back original event (bubble) view
+                self.startingEventView?.isHidden = false
+            }
+            
+        }
+    }
+}
+
+class ZoomingView: UIView {
+
+    var event: Event
+    
+    lazy var dismissButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 6
+        button.setImage(UIImage(named: "close"), for: .normal)
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        button.backgroundColor = .systemBlue
+        return button
+    }()
+    
+    lazy var removeButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 6
+//        button.setImage(UIImage(named: "close"), for: .normal)
+        button.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
+        button.backgroundColor = .systemRed
+        return button
+    }()
+    
+    lazy var editButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 6
+//        button.setImage(UIImage(named: "close"), for: .normal)
+        button.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
+        button.backgroundColor = .systemGreen
+        return button
+    }()
+    
+    lazy var title: UILabel = {
+        let label = UILabel()
+        label.text = event.title
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var clockImageView: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "bin"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var eventTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.numberOfLines = 0
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let startTimeString = dateFormatter.string(from: event.date ?? Date())
+        let endTimeString = dateFormatter.string(from: event.endTime ?? Date())
+        label.text = "\(startTimeString) - \(endTimeString)"
+        return label
+    }()
+    
+    var thinUnderline: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.init(white: 175/255, alpha: 1)
+        return view
+    }()
+    
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15)
+        if let descriptionText = event.descr{
+            label.text = descriptionText
+            
+        }
+        label.isHidden = event.category == "projectStep" ? true : false
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var eventLink: UILabel = {
+        let label = UILabel()
+        label.text = "Application Project"
+        label.font = UIFont.systemFont(ofSize: 17)
+        label.textColor = .systemPurple
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var linkUnderline: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemPurple
+        return view
+    }()
+    
+    init(event: Event, frame: CGRect) {
+        self.event = event
+        super.init(frame: frame)
+        
+        configureViewDisplay()
+        
+    }
+    
+    @objc func handleDismiss(){
+        print("handle dismiss!")
+    }
+    
+    @objc func removeEvent(){
+        print("try to remove event")
+    }
+    
+    @objc func editEvent(){
+        print("user clicked edit button")
+    }
+    
+    func configureViewDisplay(){
+
+        addSubview(dismissButton)
+        addSubview(removeButton)
+        addSubview(editButton)
+        addSubview(title)
+        addSubview(clockImageView)
+        addSubview(eventTimeLabel)
+        addSubview(thinUnderline)
+        addSubview(descriptionLabel)
+        addSubview(eventLink)
+        addSubview(linkUnderline)
+        
+        
+        removeButton.topAnchor.constraint(equalTo: topAnchor, constant: 22).isActive = true
+        removeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 22).isActive = true
+        removeButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        removeButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        editButton.topAnchor.constraint(equalTo: topAnchor, constant: 22).isActive = true
+        editButton.leadingAnchor.constraint(equalTo: removeButton.trailingAnchor, constant: 9).isActive = true
+        editButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        editButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        dismissButton.topAnchor.constraint(equalTo: topAnchor, constant: 26).isActive = true
+        dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26).isActive = true
+        dismissButton.heightAnchor.constraint(equalToConstant: 23).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 23).isActive = true
+        
+        title.topAnchor.constraint(equalTo: topAnchor, constant: 50).isActive = true
+        title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 22).isActive = true
+        title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -22).isActive = true
+        title.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        clockImageView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
+        clockImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 22).isActive = true
+        clockImageView.heightAnchor.constraint(equalToConstant: 13).isActive = true
+        clockImageView.widthAnchor.constraint(equalToConstant: 13).isActive = true
+        
+        eventTimeLabel.centerYAnchor.constraint(equalTo: clockImageView.centerYAnchor).isActive = true
+        eventTimeLabel.leadingAnchor.constraint(equalTo: clockImageView.trailingAnchor, constant: 7).isActive = true
+        eventTimeLabel.heightAnchor.constraint(equalToConstant: 13).isActive = true
+        eventTimeLabel.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true
+        
+        thinUnderline.leadingAnchor.constraint(equalTo: title.leadingAnchor).isActive = true
+        thinUnderline.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        thinUnderline.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true
+        thinUnderline.topAnchor.constraint(equalTo: clockImageView.bottomAnchor, constant: 20).isActive = true
+        
+        descriptionLabel.topAnchor.constraint(equalTo: thinUnderline.bottomAnchor, constant: 20).isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: title.leadingAnchor).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        eventLink.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20).isActive = true
+        eventLink.leadingAnchor.constraint(equalTo: title.leadingAnchor).isActive = true
+        eventLink.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true
+        eventLink.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        
+        linkUnderline.leadingAnchor.constraint(equalTo: eventLink.leadingAnchor).isActive = true
+        linkUnderline.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        linkUnderline.trailingAnchor.constraint(equalTo: eventLink.trailingAnchor).isActive = true
+        linkUnderline.topAnchor.constraint(equalTo: eventLink.bottomAnchor, constant: 5).isActive = true
+
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
