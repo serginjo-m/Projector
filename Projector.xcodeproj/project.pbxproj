@@ -75,6 +75,7 @@
 		CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
+		CF7045342889D21F00048542 /* ZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7045332889D21F00048542 /* ZoomingView.swift */; };
 		CF72D3902467E86F007FA034 /* StepItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF72D38F2467E86F007FA034 /* StepItemViewController.swift */; };
 		CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7A57F6262C38D7004EAF01 /* CameraNote.swift */; };
 		CF7ECB7624634B47006CC7FF /* StepAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7ECB7524634B47006CC7FF /* StepAddItem.swift */; };
@@ -205,6 +206,7 @@
 		CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingReminder.swift; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
+		CF7045332889D21F00048542 /* ZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingView.swift; sourceTree = "<group>"; };
 		CF72D38F2467E86F007FA034 /* StepItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemViewController.swift; sourceTree = "<group>"; };
 		CF7A57F6262C38D7004EAF01 /* CameraNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraNote.swift; sourceTree = "<group>"; };
 		CF7ECB7524634B47006CC7FF /* StepAddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepAddItem.swift; sourceTree = "<group>"; };
@@ -619,6 +621,7 @@
 				CFBC3A3F25814A3300EEF13D /* CalendarVC.swift */,
 				CFD88DF82595EC9400B726FF /* CalendarFooterView.swift */,
 				CFD88DFA25961B0600B726FF /* CalendarCell.swift */,
+				CF7045332889D21F00048542 /* ZoomingView.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 				CFD88DF72595EBDE00B726FF /* CalendarHeaderView.swift in Sources */,
 				CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */,
 				CFD88DF92595EC9400B726FF /* CalendarFooterView.swift in Sources */,
+				CF7045342889D21F00048542 /* ZoomingView.swift in Sources */,
 				CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */,
 				CF295C802827FFE30092FA5C /* ProjectCell.swift in Sources */,
 				CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */,

@@ -377,7 +377,6 @@ class EventBubbleView: UIView {
         bg.layer.cornerRadius = 11
         bg.translatesAutoresizingMaskIntoConstraints = false
         bg.layer.masksToBounds = true
-        bg.backgroundColor = UIColor.init(white: 0.9, alpha: 1)
         return bg
     }()
     
@@ -408,7 +407,7 @@ class EventBubbleView: UIView {
    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 15)
         label.text = event.descr
         label.isHidden = event.category == "projectStep" ? true : false
         label.numberOfLines = 0
@@ -424,7 +423,7 @@ class EventBubbleView: UIView {
         }else{
             imageView.image = UIImage(named: "smile")//<---- probably need to have a default image
         }
-        
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isHidden = event.category == "projectStep" ? false : true
         return imageView
@@ -451,11 +450,12 @@ class EventBubbleView: UIView {
         label.isHidden = event.category == "projectStep" ? false : true
         return label
     }()
-
     
-    var descriptionLabelTopAnchor: NSLayoutConstraint?
-
-    
+    //save configurations for expanded event view
+    var taskLabelHeightConstant: CGFloat = 1
+    var taskLabelTopAnchorConstant: CGFloat = 12
+    var timeLabelHeightConstant: CGFloat = 30
+    var descriptionLabelHeightConstant: CGFloat = 0    
     
     //MARK: Initialization
     init(style: EventBubbleStyle, event: Event, viewHeight: CGFloat, viewWidth: CGFloat, frame: CGRect) {
@@ -473,15 +473,17 @@ class EventBubbleView: UIView {
     fileprivate func calculateRectForLabel(size: CGFloat, text: String) -> CGRect{
         //description label height
         let rectangle = NSString(string: text).boundingRect(with: CGSize(width: rect.width - CGFloat(22), height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: size)], context: nil)
-        return rectangle
+
+        //rounded away from zero original values
+        let rect = CGRect(x: rectangle.origin.x, y: rectangle.origin.y, width: rectangle.width.rounded(.awayFromZero), height: rectangle.height.rounded(.awayFromZero))
+        
+        return rect
     }
     
     func setupView(){
-        var taskLabelHeightConstant: CGFloat = 1
-        var taskLabelTopAnchorConstant: CGFloat = 12
-        var timeLabelHeightConstant: CGFloat = 30
-        var descriptionLabelHeightConstant: CGFloat = 0
-
+        
+        self.clipsToBounds = true
+        
         switch style {
             
         //it so small, that can't realy visualize anything, apart from bubble view
@@ -527,9 +529,9 @@ class EventBubbleView: UIView {
             shadowLabel.font = UIFont.boldSystemFont(ofSize: 16)
             descriptionLabel.font = UIFont.systemFont(ofSize: 16)
             taskLabelHeightConstant = calculateRectForLabel(size: 16, text: taskLabel.text!).height + CGFloat(10)
-            let descriptionTextHeight = calculateRectForLabel(size: 16, text: descriptionLabel.text!).height
-            //-15  titleLabel topAnchor extra space
-            let availableHeight = rect.height - taskLabelHeightConstant - timeLabelHeightConstant - 15
+            let descriptionTextHeight: CGFloat = calculateRectForLabel(size: 16, text: descriptionLabel.text!).height
+            let titleLabelTopAnchorSpace: CGFloat = -15
+            let availableHeight: CGFloat = rect.height - taskLabelHeightConstant - timeLabelHeightConstant - titleLabelTopAnchorSpace
             descriptionLabelHeightConstant = descriptionTextHeight > availableHeight ? availableHeight : descriptionTextHeight
         }
                         
@@ -557,22 +559,22 @@ class EventBubbleView: UIView {
         timeLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: -8).isActive = true
         timeLabel.heightAnchor.constraint(equalToConstant: timeLabelHeightConstant).isActive = true
         
-        descriptionLabelTopAnchor = descriptionLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 0)
-        descriptionLabelTopAnchor?.isActive = true
-        descriptionLabel.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 8).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 0).isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: taskLabel.leadingAnchor).isActive = true
         descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabelHeightConstant).isActive = true
-        descriptionLabel.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: -8).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: taskLabel.trailingAnchor).isActive = true
 
         shadowLabel.topAnchor.constraint(equalTo: taskLabel.topAnchor, constant: 1).isActive = true
         shadowLabel.leadingAnchor.constraint(equalTo: taskLabel.leadingAnchor, constant: 1).isActive = true
         shadowLabel.heightAnchor.constraint(equalToConstant: taskLabelHeightConstant).isActive = true
         shadowLabel.trailingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 1).isActive = true
-
-        gradientView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0).isActive = true
-        gradientView.bottomAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 12).isActive = true
+        
+        gradientView.topAnchor.constraint(equalTo: taskLabel.topAnchor, constant: -30).isActive = true
         gradientView.leftAnchor.constraint(equalTo: backgroundBubble.leftAnchor, constant: 0).isActive = true
         gradientView.rightAnchor.constraint(equalTo: backgroundBubble.rightAnchor, constant: 0).isActive = true
-
+        gradientView.heightAnchor.constraint(equalTo: taskLabel.heightAnchor, constant: 42).isActive = true
+        
+        
         eventImageView.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0).isActive = true
         eventImageView.leadingAnchor.constraint(equalTo: backgroundBubble.leadingAnchor, constant: 0).isActive = true
         eventImageView.trailingAnchor.constraint(equalTo: backgroundBubble.trailingAnchor, constant: 0).isActive = true
@@ -592,7 +594,7 @@ class EventTableViewCell: UITableViewCell {
         didSet{
             //clear cell for case deque cell reuse something
             subviews.forEach { $0.removeFromSuperview() }
-            //creates views based on events number
+            //creates views based on events number            
             for number in 1...events.count{
                 //configure event view and give it a sequent number
                 configureBubbleViews(number: number)
