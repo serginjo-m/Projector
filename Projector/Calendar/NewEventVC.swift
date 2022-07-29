@@ -19,10 +19,13 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //---------------------------- temporary solution --------------------------------------
     //there I can have many options, because event can last more then 1 day or a couple of hours
     //MARK: Properties
+    
+    //start & end time can be different from datePicker Date()
+    //so I use function to format the same Date() for all
     var eventDate = Date()
     var eventStart: Date?
     var eventEnd: Date?
-    
+    //project step events need some configuration
     var stepId: String?
     var projectId: String?
     
@@ -32,8 +35,23 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return dateFormatter
     }()
     
+    //update event needs some information about event
+    var event: Event?
     //unique project id for updating
-    var eventId: String?
+    var eventId: String? {
+        didSet{
+            if let eventId = eventId {
+                let currentEvent = ProjectListRepository.instance.getEvent(id: eventId)
+                self.event = currentEvent
+                guard let unwCurrentEvent = currentEvent else {return}
+                if let projectIdentifier = unwCurrentEvent.projectId, let stepIdentifier = unwCurrentEvent.stepId{
+                    self.stepId = stepIdentifier
+                    self.projectId = projectIdentifier
+                }
+                
+            }
+        }
+    }
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -180,6 +198,9 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     lazy var reminderSwitch: UISwitch = {
         let swtch = UISwitch()
         swtch.translatesAutoresizingMaskIntoConstraints = false
+        if let eventObject = self.event {
+            swtch.isOn = eventObject.reminder != nil ? true : false
+        }
         swtch.addTarget(self, action: #selector(switchChangedValue), for: .valueChanged)
         return swtch
     }()
@@ -234,54 +255,55 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
 
         //set delegate to  text field
         nameTextField.delegate = self
-        
-        //TODO: Don't realy understand what is delegate for?
-//        dateTextField.delegate = self
-//        startTimeTextField.delegate = self
-//        endTimeTextField.delegate = self
     }
     
   
     //MARK: Methods
-    //back to previous view
-    @objc func backAction(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func switchChangedValue(sender: UISwitch){
-//        print("switch has changed value!", reminderSwitch.isOn)
-    }
-    
-    //back to previous view
     @objc func saveAction(_ sender: Any) {
-        
-        //------------------------  Is it all about user activity? ---------------------------------
-        //------------------------- So Event is 100% calendar object -------------------------------
-        
+        //creates new or update existing
         let event: Event = self.defineEventTemplate()
-        
-        
-        
-        if reminderSwitch.isOn{
+        if reminderSwitch.isOn == true {
+            
+            //check if current event has previously created notification/reminder
+            //If so, remove previous one
+            if let currentEvent = self.event, let currentReminder = currentEvent.reminder {
+                if #available(iOS 13.0, *) {
+                    NotificationManager.shared.removeScheduledNotification(taskId: currentReminder.id)
+                }
+                ProjectListRepository.instance.deleteNotificationNote(note: currentReminder)
+            }
+            
+            //Notification displays in Notification Tab
             event.reminder = createNotification(event: event)
+            
             if #available(iOS 13.0, *) {
+                
                 //TODO: temporary solution with Notification clone
+                //Task object, that passing in NotificationManager, contains reminder
                 let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
+                //if Event contains Notification (unwrap optional value)
                 if let eventReminder = event.reminder{
-                    
+                    //create Task from Notification properties
                     let task = Task(reminder: reminder, eventDate: eventReminder.eventDate, eventTime: eventReminder.eventTime, startDate: eventReminder.eventDate, name: eventReminder.name, category: eventReminder.category, complete: eventReminder.complete, projectId: eventReminder.projectId, stepId: eventReminder.stepId, id: eventReminder.id)
+                    //schedule notification
                     NotificationManager.shared.scheduleNotification(task: task)
                 }
-                
-                
-            } else {
-                // Fallback on earlier versions
+            }
+            
+        }else{ //reminder switch.isOn == false
+
+            //check if current event has previously created notification/reminder
+            if let currentEvent = self.event, let currentReminder = currentEvent.reminder {
+                if #available(iOS 13.0, *) {
+                    NotificationManager.shared.removeScheduledNotification(taskId: currentReminder.id)
+                }
+                ProjectListRepository.instance.deleteNotificationNote(note: currentReminder)
             }
         }
         
         //unwrap optional date for activity object
         guard let eventDate = event.date else {return}
-        //new one
+        //new event
         if self.eventId == nil{
             
             //creates new project instance
@@ -319,32 +341,48 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //creates event instance
     func defineEventTemplate() -> Event{
+        
         let eventTemplate = Event()
+        
         if let text = nameTextField.text{
             eventTemplate.title = text
         }
         
+        //as picker change it save Date to this var
         eventTemplate.date = eventDate
         
-        //------------> not so perfect, because there can be a couple scenarios that can fail <--------------
+        //startTime must have the same Date as eventDate
         eventTemplate.startTime = eventStart != nil ? eventStart : eventDate
+        
         //whatever eventTemplate start time is, if end time is not defined it anticipates 1 hour from event start
         if let eventStartTime = eventTemplate.startTime{
             //if end time is not defined, define event duration as 1 hour event
             eventTemplate.endTime = eventEnd != nil ? eventEnd : formatTimeBasedDate(date: eventStartTime, anticipateHours: 1, anticipateMinutes: 0)
         }
         
-        //if stepId defined == type of event is step event
-        if let stepIdentifier = stepId {
+        
+        
+        //TODO: Attention here, because category type, stepId, projectId should be optimized
+        //try to set properties
+        eventTemplate.projectId = self.projectId
+        eventTemplate.stepId = self.stepId
+        
+        
+        if let stepIdentifier = self.stepId{
             
-            //project step event
+            //if NewEventViewController has a step identifier, it means that event type is a project step
             eventTemplate.category = "projectStep"
             //assign image to step event
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
                 if step.selectedPhotosArray.count > 0{
                     eventTemplate.picture = step.selectedPhotosArray[0]
+                    
                 }
             }
+        }
+        
+        if let eventIdentifier = eventId {
+            eventTemplate.id = eventIdentifier
         }
         
         if let description = descriptionTextView.text{
@@ -353,6 +391,14 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return eventTemplate
     }
     
+    //back to previous view
+    @objc func backAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func switchChangedValue(sender: UISwitch){
+
+    }
     //close date picker after touch outside textField
     @objc func tap(sender: UITapGestureRecognizer) {
         //calls textFieldDidEndEditing
@@ -395,18 +441,22 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         self.eventStart = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
         //anticipate end time to 1 hour by default
         self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 1, anticipateMinutes: 0)
+        //also update eventEnd Date
+        self.eventEnd = self.endTimePicker.date
         //modify time inside eventDate
         self.eventDate = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
         updateSaveButtonState()
+        
     }
 
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
-        //define exact time, when event should end
-        self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        
         if sender.date < startTimePicker.date {
             sender.date = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 1, anticipateMinutes: 0)
         }
+        //define exact time, when event should end
+        self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
         updateSaveButtonState()
     }
     //anticipate time 
@@ -439,6 +489,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         }
     }
     
+    //MARK: Constraints
     private func setupLayout(){
         
         dismissButton.translatesAutoresizingMaskIntoConstraints = false

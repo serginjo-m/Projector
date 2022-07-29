@@ -98,17 +98,13 @@ extension CalendarViewController {
             
             //append events new data
             eventElements.events.append(contentsOf: intersectedEvents)
-            
-            eventElements.eventsTableView.reloadData()
-            
-            //show view controller
-            showUpEventsView()
-        }else{
-            eventElements.eventsTableView.reloadData()
-            
-            showUpEventsView()
         }
         
+        //reload table view
+        eventElements.eventsTableView.reloadData()
+        
+        //show view controller
+        showUpEventsView()
     }
 }
 
@@ -125,7 +121,7 @@ extension CalendarViewController{
         
         //holds united DateInterval for intersected events
         var commonDateInterval = DateInterval()
-        
+        //compactMap - because it can return nil
         nestedArray = events.compactMap{
             
             //check if id was in func before

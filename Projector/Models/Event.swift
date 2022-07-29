@@ -26,6 +26,9 @@ class Event: Object, Identifiable, Codable{
     
     //Type of event
     @objc dynamic var category: String?
+    //project step configuration
+    @objc dynamic var stepId: String?
+    @objc dynamic var projectId: String?
     
     @objc dynamic var reminder: Notification?
 

@@ -27,7 +27,6 @@ class ZoomingView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 10
         button.setImage(UIImage(named: "binIcon"), for: .normal)
-        button.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
         button.backgroundColor = UIColor.init(displayP3Red: 255/255, green: 224/255, blue: 224/255, alpha: 1)
         button.alpha = 0
         return button
@@ -38,7 +37,6 @@ class ZoomingView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 6
         button.setImage(UIImage(named: "editIcon"), for: .normal)
-        button.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
         button.backgroundColor = UIColor.init(displayP3Red: 198/255, green: 250/255, blue: 211/255, alpha: 1)
         button.alpha = 0
         return button
@@ -159,14 +157,6 @@ class ZoomingView: UIView {
         
         configureViewDisplay()
         
-    }
-    
-    @objc func removeEvent(){
-        print("try to remove event")
-    }
-    
-    @objc func editEvent(){
-        print("user clicked edit button")
     }
     
     func configureViewDisplay(){

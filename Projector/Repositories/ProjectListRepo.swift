@@ -135,6 +135,12 @@ class ProjectListRepository {
         return realm.objects(Event.self)
     }
     
+    
+    func getEvent(id: String) -> Event? {
+        return realm.object(ofType: Event.self, forPrimaryKey: id)
+    }
+   
+    
     //create an event object
     func createDayActivity(dayActivity: DayActivity){
         try! realm.write ({
@@ -216,6 +222,13 @@ class ProjectListRepository {
     func createNotification(notification: Notification){
         try! realm.write ({
             realm.add(notification)
+        })
+    }
+    
+    //update an event object
+    func updateNotification(notification: Notification){
+        try! realm.write ({
+            realm.add(notification, update: Realm.UpdatePolicy.modified)
         })
     }
     

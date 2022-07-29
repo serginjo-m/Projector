@@ -227,6 +227,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         //as date is set, all updateAllPageElements calls
         baseDate = Date()
         
+        //if sidebar is visible, perform updating
+        if eventElements.frame.origin.x >= 0.0 {
+            guard let currentDate = self.eventElements.currentDate else {return}
+            self.eventsArrayFromDateKey(date: self.calendar.startOfDay(for: currentDate))
+        }
         
     }
     
@@ -474,6 +479,10 @@ extension CalendarViewController {
         let zoomingView = ZoomingView(event: event, frame: bubbleFrame)
         //dismiss is not a button. It is a view
         zoomingView.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOut)))
+        //button actions are located in parent viewController
+        zoomingView.removeButton.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
+        zoomingView.editButton.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
+
         zoomingView.descriptionLabel.font = unwEventBubbleView.descriptionLabel.font
         
         if let keyWindow = UIApplication.shared.keyWindow {
@@ -509,6 +518,86 @@ extension CalendarViewController {
         
         
     }
+    
+    
+    @objc func removeEvent(sender: UIButton){
+        
+        guard let zoomingView = sender.superview as? ZoomingView else {return}
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Event?", message: "Are You sure want delete this event?", preferredStyle: .alert)
+        //cancel button
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        //delete button
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+        
+            let deletedDate = self.calendar.startOfDay(for: zoomingView.event.date!)
+            
+            //write action to user activity journal
+            UserActivitySingleton.shared.createUserActivity(description: "Deleted \(zoomingView.event.title) event")
+
+            
+            if #available(iOS 13.0, *) {
+                
+                if let notification = zoomingView.event.reminder {
+                    //removes push notification from the system
+                    NotificationManager.shared.removeScheduledNotification(taskId: notification.id)
+                    //
+                    ProjectListRepository.instance.deleteNotificationNote(note: notification)
+                }
+                
+            } else {
+                // Fallback on earlier versions
+            }
+            //remove Event object
+            ProjectListRepository.instance.deleteEvent(event: zoomingView.event)
+            
+            //-------------------- for now it works but maybe here is better solution ----------------------
+            guard let tap = zoomingView.dismissView.gestureRecognizers?.first as? UITapGestureRecognizer else {return}
+            
+            self.zoomOut(tapGesture: tap)
+            self.assembleGroupedEvents()
+            self.eventsArrayFromDateKey(date: self.calendar.startOfDay(for: deletedDate))
+        })
+        
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(deleteAction)
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    
+    @objc func editEvent(sender: UIButton){
+
+        guard let zoomingView = sender.superview as? ZoomingView else {return}
+        
+        //create new event view controller based on selected step
+        let newEventViewController = NewEventViewController()
+        //full size presentation, so it is more easy to use willAppear
+        newEventViewController.modalPresentationStyle = .fullScreen
+        
+        //step identifier access data base object
+        newEventViewController.eventId = zoomingView.event.id
+        //define event name
+        newEventViewController.nameTextField.text = zoomingView.event.title
+        newEventViewController.imageHolderView.image = zoomingView.eventImageView.image
+        if let startTime = zoomingView.event.startTime, let endTime = zoomingView.event.endTime {
+            newEventViewController.startTimePicker.date = startTime
+            newEventViewController.endTimePicker.date = endTime
+            //during configuration time picker Date() can be different from datePicker
+            newEventViewController.eventDate = startTime
+            newEventViewController.eventStart = startTime
+            newEventViewController.eventEnd = endTime
+        }
+        
+        guard let tap = zoomingView.dismissView.gestureRecognizers?.first as? UITapGestureRecognizer else {return}
+        //hide zooming view, so there is no need to update it
+        self.zoomOut(tapGesture: tap)
+
+        //show new event view controller
+        navigationController?.present(newEventViewController, animated: true, completion: nil)
+    }
+    
+    
     // zoom out logic
     @objc func zoomOut(tapGesture: UITapGestureRecognizer){
         //extract view from tap gesture
