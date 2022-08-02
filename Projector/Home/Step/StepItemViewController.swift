@@ -58,7 +58,7 @@ class StepItemViewController: UIViewController {
     //title
     let titleLabel: UILabel = {
         let title = UILabel()
-        title.text = "Something Long"
+        title.text = "New Step Item"
         title.textAlignment = NSTextAlignment.center
         title.textColor = UIColor.darkGray
         title.font = UIFont.systemFont(ofSize: 15)

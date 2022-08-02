@@ -421,7 +421,7 @@ class EventBubbleView: UIView {
         if let pictureURL =  event.picture  {
             imageView.retreaveImageUsingURLString(myUrl: pictureURL)
         }else{
-            imageView.image = UIImage(named: "smile")//<---- probably need to have a default image
+            imageView.image = UIImage(named: "scheduledStepEvent")
         }
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false

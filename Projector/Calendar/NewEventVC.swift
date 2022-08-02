@@ -65,9 +65,9 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let viewControllerTitle: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.init(white: 0.7, alpha: 1)
+        label.textColor = .black
         label.text = "Create New Event"
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -87,7 +87,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     var imageHolderView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "workspace")
+        view.image = UIImage(named: "newEventDefault")
         view.contentMode = .scaleAspectFill
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 11
@@ -397,8 +397,9 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
     
     @objc func switchChangedValue(sender: UISwitch){
-
+        
     }
+    
     //close date picker after touch outside textField
     @objc func tap(sender: UITapGestureRecognizer) {
         //calls textFieldDidEndEditing

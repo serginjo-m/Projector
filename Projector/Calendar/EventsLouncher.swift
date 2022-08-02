@@ -52,6 +52,15 @@ extension CalendarViewController {
     
     //define data base for events collection view
     func eventsArrayFromDateKey(date: Date){
+        //perform all configurations for database and sidebar
+        updateCalendarContent(date: date)
+        
+        //show view controller
+        showUpEventsView()
+    }
+    
+    func updateCalendarContent(date: Date){
+        
         //current date uses cells for sizes configuration
         eventElements.currentDate = date
         
@@ -102,9 +111,6 @@ extension CalendarViewController {
         
         //reload table view
         eventElements.eventsTableView.reloadData()
-        
-        //show view controller
-        showUpEventsView()
     }
 }
 

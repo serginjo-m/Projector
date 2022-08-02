@@ -98,10 +98,11 @@ class ZoomingView: UIView {
     
     lazy var eventLink: UILabel = {
         let label = UILabel()
-        label.text = "Application Project"
+        label.text = self.event.category == "projectStep" ? "Go To Project Step >>" : "Calendar Event"
         label.font = UIFont.systemFont(ofSize: 17)
         label.textColor = .systemPurple
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = true
         label.alpha = 0
         return label
     }()
@@ -121,7 +122,7 @@ class ZoomingView: UIView {
         if let pictureURL =  event.picture  {
             imageView.retreaveImageUsingURLString(myUrl: pictureURL)
         }else{
-            imageView.image = UIImage(named: "smile")//<---- probably need to have a default image
+            imageView.image = UIImage(named: "scheduledStepEvent")
         }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -184,7 +185,7 @@ class ZoomingView: UIView {
         removeButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
         editButton.topAnchor.constraint(equalTo: topAnchor, constant: 22).isActive = true
-        editButton.leadingAnchor.constraint(equalTo: removeButton.trailingAnchor, constant: 9).isActive = true
+        editButton.leadingAnchor.constraint(equalTo: removeButton.trailingAnchor, constant: 22).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         editButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         

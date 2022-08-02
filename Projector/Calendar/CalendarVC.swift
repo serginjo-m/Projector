@@ -220,19 +220,18 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        //Events data base for calendar
-        assembleGroupedEvents()
-        //day is need to be current everytime calendar appears &
-        //as date is set, all updateAllPageElements calls
-        baseDate = Date()
+        //database update
+        self.assembleGroupedEvents()
         
         //if sidebar is visible, perform updating
         if eventElements.frame.origin.x >= 0.0 {
             guard let currentDate = self.eventElements.currentDate else {return}
-            self.eventsArrayFromDateKey(date: self.calendar.startOfDay(for: currentDate))
+            self.updateCalendarContent(date: currentDate)
         }
         
+        //day is need to be current everytime calendar appears &
+        //as date is set, all updateAllPageElements calls
+        baseDate = Date()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -482,7 +481,8 @@ extension CalendarViewController {
         //button actions are located in parent viewController
         zoomingView.removeButton.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
         zoomingView.editButton.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
-
+        //event link transition to an actual project step
+        zoomingView.eventLink.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(transitionToProjectStep)))
         zoomingView.descriptionLabel.font = unwEventBubbleView.descriptionLabel.font
         
         if let keyWindow = UIApplication.shared.keyWindow {
@@ -519,6 +519,19 @@ extension CalendarViewController {
         
     }
     
+    @objc func transitionToProjectStep(tapGesture: UITapGestureRecognizer){
+        guard let linkLabel = tapGesture.view, let zoomingView = linkLabel.superview as? ZoomingView else {return}
+        if  let date = zoomingView.event.date, let stepId = zoomingView.event.stepId, let projectId = zoomingView.event.projectId{
+            //no animation approach
+            zoomingView.removeFromSuperview()
+            self.zoomBackgroundView?.alpha = 0
+            
+            
+            NotificationsRepository.shared.configureVCStack(category: "step", eventDate: date, stepId: stepId, projectId: projectId)
+        }
+        
+    }
+    
     
     @objc func removeEvent(sender: UIButton){
         
@@ -530,7 +543,7 @@ extension CalendarViewController {
         //delete button
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
         
-            let deletedDate = self.calendar.startOfDay(for: zoomingView.event.date!)
+            let deletedDate = self.eventElements.currentDate
             
             //write action to user activity journal
             UserActivitySingleton.shared.createUserActivity(description: "Deleted \(zoomingView.event.title) event")
@@ -550,13 +563,13 @@ extension CalendarViewController {
             }
             //remove Event object
             ProjectListRepository.instance.deleteEvent(event: zoomingView.event)
-            
-            //-------------------- for now it works but maybe here is better solution ----------------------
-            guard let tap = zoomingView.dismissView.gestureRecognizers?.first as? UITapGestureRecognizer else {return}
-            
-            self.zoomOut(tapGesture: tap)
+            //no animation approach
+            zoomingView.removeFromSuperview()
+            self.zoomBackgroundView?.alpha = 0
+
             self.assembleGroupedEvents()
-            self.eventsArrayFromDateKey(date: self.calendar.startOfDay(for: deletedDate))
+            guard let currentDate = self.eventElements.currentDate else {return}
+            self.updateCalendarContent(date: currentDate)
         })
         
         alertVC.addAction(cancelAction)
@@ -579,7 +592,11 @@ extension CalendarViewController {
         newEventViewController.eventId = zoomingView.event.id
         //define event name
         newEventViewController.nameTextField.text = zoomingView.event.title
-        newEventViewController.imageHolderView.image = zoomingView.eventImageView.image
+        //if event don't have a custom  image, leave default image
+        if zoomingView.event.picture != nil{
+            newEventViewController.imageHolderView.image = zoomingView.eventImageView.image
+        }
+        
         if let startTime = zoomingView.event.startTime, let endTime = zoomingView.event.endTime {
             newEventViewController.startTimePicker.date = startTime
             newEventViewController.endTimePicker.date = endTime
@@ -588,10 +605,9 @@ extension CalendarViewController {
             newEventViewController.eventStart = startTime
             newEventViewController.eventEnd = endTime
         }
-        
-        guard let tap = zoomingView.dismissView.gestureRecognizers?.first as? UITapGestureRecognizer else {return}
-        //hide zooming view, so there is no need to update it
-        self.zoomOut(tapGesture: tap)
+        //no animation approach
+        zoomingView.removeFromSuperview()
+        self.zoomBackgroundView?.alpha = 0
 
         //show new event view controller
         navigationController?.present(newEventViewController, animated: true, completion: nil)
