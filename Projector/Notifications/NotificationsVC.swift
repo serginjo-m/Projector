@@ -76,17 +76,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //view controller update point :)
     override func viewWillAppear(_ animated: Bool) {
-
-        //once NotificationsVC opened reset all badges
+         //once NotificationsVC opened reset all badges
         UserDefaults(suiteName: "notificationsDefaultsBadgeCount")?.set(1, forKey: "count")
-        NotificationsRepository.shared.updateTabBarItemBudge()
+        NotificationsRepository.shared.updateTabBarItemBudge(applyBadge: false)
         //update VC database
         updateNotifications()
     }
     
     //MARK: Methods
     fileprivate func updateNotifications (){
-        
         //fetch notifications
         notifications = ProjectListRepository.instance.getNotificationNotes()
         
@@ -124,6 +122,8 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let notification = items[indexPath.row]
+        
+        ProjectListRepository.instance.updateNotificationCompletionStatus(notification: notification, isComplete: true)
         //depending on notification type define navigation VC stack
         if notification.category == "step" {
             NotificationsRepository.shared.configureVCStack(category: "step", eventDate: Date(), stepId: notification.stepId, projectId: notification.projectId)
@@ -160,7 +160,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
 }
-
+//MARK: Notification Cell
 class NotificationTableViewCell: UITableViewCell {
     
     
@@ -168,25 +168,56 @@ class NotificationTableViewCell: UITableViewCell {
     var template: Notification? {
         didSet{
             if let object = template {
+                
+                guard let template = template else {return}
+
                 notificationTitle.text = object.name
                 
+                var string = "Happen: "
+                string += self.dateFormatterFullDate.string(from: object.eventDate)
+                createdNotificationDateLabel.text = string
                 
-                    var string = "Happen: "
-                    string += self.dateFormatterFullDate.string(from: object.eventDate)
-                    createdNotificationDateLabel.text = string
-                
-                
-                categoryIcon.image = setImageToCategory(category: object.category)
-                
-                let percentageValue = CGFloat(abs(object.startDate.timeIntervalSinceNow) / abs(object.startDate.timeIntervalSince(object.eventDate)))
-                
-                
-                    let notificationCalendar = NSCalendar.current
+                var progressPercentageValue: CGFloat = 1
+                //active
+                if template.eventDate > Date(){
+                    progressPercentageValue = CGFloat(abs(object.startDate.timeIntervalSinceNow) / abs(object.startDate.timeIntervalSince(object.eventDate)))
 
+                    let notificationCalendar = NSCalendar.current
                     let competitionDifference = notificationCalendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date(), to: object.eventDate)
                     
+                    notificationTitle.textColor = UIColor.init(white: 104/255, alpha: 1)
+                    createdNotificationDateLabel.textColor = UIColor.init(white: 120/255, alpha: 1)
+                    timeRemainingLabel.textColor = UIColor.init(white: 120/255, alpha: 1)
                     timeRemainingLabel.text = convertComponentsToString(dateComponents: competitionDifference)
-                
+                    
+                    progressBarTrack.backgroundColor = UIColor.init(white: 236/255, alpha: 1)
+                    progressBar.backgroundColor = UIColor.init(red: 52/255, green: 210/255, blue: 0, alpha: 1)
+                    categoryIcon.image = setImageToCategory(category: object.category, expired: false)
+                    
+                    backgroundBubble.backgroundColor = .white
+                    progressBar.isHidden = false
+                    progressBarTrack.isHidden = false
+                }else if template.eventDate < Date() && template.complete == false {//not displayed
+                    notificationTitle.textColor = .white
+                    createdNotificationDateLabel.textColor = UIColor.init(white: 172/255, alpha: 1)
+                    backgroundBubble.backgroundColor = UIColor.init(white: 46/255, alpha: 1)
+                    timeRemainingLabel.textColor = UIColor.init(white: 172/255, alpha: 1)
+                    timeRemainingLabel.text = "Wasn't Displayed Yet!"
+                    
+                    categoryIcon.image = setImageToCategory(category: object.category, expired: false)
+                    progressBar.isHidden = false
+                    progressBarTrack.isHidden = false
+                } else {//displayed style
+                    notificationTitle.textColor = UIColor.init(white: 104/255, alpha: 1)
+                    createdNotificationDateLabel.textColor = UIColor.init(white: 120/255, alpha: 1)
+                    timeRemainingLabel.textColor = UIColor.init(white: 120/255, alpha: 1)
+                    
+                    backgroundBubble.backgroundColor = .white
+                    progressBar.isHidden = true
+                    progressBarTrack.isHidden = true
+                    timeRemainingLabel.text = "Displayed"
+                    categoryIcon.image = setImageToCategory(category: object.category, expired: true)
+                }
                 
                 //constraints update approach
                 categoryIconWidthAnchor?.isActive = false
@@ -207,7 +238,7 @@ class NotificationTableViewCell: UITableViewCell {
                 }
                 
                 //progress
-                progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: percentageValue)
+                progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: progressPercentageValue)
                 
                 progressBarWidthAnchor?.isActive = true
                 categoryIconWidthAnchor?.isActive = true
@@ -229,7 +260,7 @@ class NotificationTableViewCell: UITableViewCell {
     
     let categoryIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "projectIcon"))
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -288,16 +319,20 @@ class NotificationTableViewCell: UITableViewCell {
     }()
     
     //MARK: Methods
-    //return image by category string
-    func setImageToCategory(category: String) -> UIImage {
+    //icon style 
+    func setImageToCategory(category: String, expired: Bool) -> UIImage {
+        guard let calendarBW = UIImage(named: "calendarIcon"), let calendarColor = UIImage(named: "calendarEventColor"), let projectBW = UIImage(named: "projectIcon"), let projectColor = UIImage(named: "cupColor") else {return UIImage()}
+        var image = UIImage()
         
         switch category {
             case "event":
-                return UIImage(named: "calendarIcon")!
+            image = expired ? calendarBW : calendarColor
+                return image
             case "step":
-                return UIImage(named: "projectIcon")!
+            image = expired ? projectBW : projectColor
+                return image
             default:
-                return UIImage(named: "calendarIcon")!
+                return image
         }
         
     }

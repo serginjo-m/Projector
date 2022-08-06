@@ -77,9 +77,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
-
-        //TODO: the tabBarItem updates its badge before notification appears
-//       updateTabBarItemBudge()
+        //if there is badge on app icon it apply icon on tab bar icon
+        if UIApplication.shared.applicationIconBadgeNumber > 0 {
+            NotificationsRepository.shared.updateTabBarItemBudge(applyBadge: true)
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -102,7 +103,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void
   ) {
       if #available(iOS 14.0, *) {
-          NotificationsRepository.shared.updateTabBarItemBudge()
+          NotificationsRepository.shared.updateTabBarItemBudge(applyBadge: true)
           completionHandler(.banner)
       } else {
           // Fallback on earlier versions
@@ -161,21 +162,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
               
         //}
       }
-        //check if defaults category exist
-        if let defaults = UserDefaults(suiteName: "notificationsDefaultsBadgeCount"){
-            //get value from count key
-            let count: Int = defaults.value(forKey: "count") as! Int
-            //reset budges after
-            defaults.set(count - 1, forKey: "count")
-        }
         
         if let task = task {
             //configure viewControllers stack view inside navigation controller
             NotificationsRepository.shared.configureVCStack(category: task.category, eventDate: task.eventDate, stepId: stepId, projectId: projectId)
+            //if notification was displayed change completion status on object that apply different style to cell
+            let notification = ProjectListRepository.instance.getNotification(id: task.id)
+            if let unwNotification = notification {
+                ProjectListRepository.instance.updateNotificationCompletionStatus(notification: unwNotification, isComplete: true)
+            }
         }
         
         //it will set to nil tab bar item
-        NotificationsRepository.shared.updateTabBarItemBudge()
+        NotificationsRepository.shared.updateTabBarItemBudge(applyBadge: false)
         completionHandler()
     }
 }

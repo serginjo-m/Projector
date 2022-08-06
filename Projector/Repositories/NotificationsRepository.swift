@@ -66,29 +66,26 @@ class NotificationsRepository {
             break
         }
     }
+    
     //updates tab bar item & app icon badge number
-    func updateTabBarItemBudge(){
-        //get a defaults category for notification count
-        let defaults = UserDefaults(suiteName: "notificationsDefaultsBadgeCount")
-        if let defaults = defaults {
-            let count: Int = defaults.value(forKey: "count") as! Int
-            
-            if let window = UIApplication.shared.keyWindow {
+    func updateTabBarItemBudge(applyBadge: Bool){
+
+        if let window = UIApplication.shared.keyWindow {
                 if let tabController = window.rootViewController as? UITabBarController{
                     if let tabItems = tabController.tabBar.items {
                         // In this case we want to modify the badge number of the fifth tab:
                         let tabItem = tabItems[4]
                         
-                        if count <= 1 {
+                        //apply badge or remove?
+                        if applyBadge{
+                            tabItem.badgeValue = "1"
+                        }else{
                             tabItem.badgeValue = nil
                             UIApplication.shared.applicationIconBadgeNumber = 0
-                        }else{
-                            tabItem.badgeValue = "\(count - 1)"
-                            UIApplication.shared.applicationIconBadgeNumber = count - 1
                         }
                     }
                 }
             }
-        }
+
     }
 }

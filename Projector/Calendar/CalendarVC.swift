@@ -228,7 +228,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
             guard let currentDate = self.eventElements.currentDate else {return}
             self.updateCalendarContent(date: currentDate)
         }
-        
+        //TODO: base date doesn't update every time view conroller appears (move it to viewDidAppear)
         //day is need to be current everytime calendar appears &
         //as date is set, all updateAllPageElements calls
         baseDate = Date()

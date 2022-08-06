@@ -53,6 +53,8 @@
 	<string>Allows to add photo to project</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

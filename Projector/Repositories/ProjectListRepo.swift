@@ -218,6 +218,12 @@ class ProjectListRepository {
         })
     }
     
+    func updateNotificationCompletionStatus(notification: Notification, isComplete: Bool) {
+        try! self.realm.write({
+            notification.complete = isComplete
+        })
+    }
+    
     //create Notification
     func createNotification(notification: Notification){
         try! realm.write ({

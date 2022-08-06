@@ -30,9 +30,6 @@ class NotificationManager: ObservableObject{
     
     @Published var settings: UNNotificationSettings?
     
-    //defaults category holds badges notification count
-    let defaults = UserDefaults(suiteName: "notificationsDefaultsBadgeCount")
-
     func requestAuthorization(completion: @escaping  (Bool) -> Void) {
     //handles all notification-related behavior in the app.
       UNUserNotificationCenter.current()
@@ -68,25 +65,11 @@ class NotificationManager: ObservableObject{
       //creating notification populating the notification content.
       let content = UNMutableNotificationContent()
       content.title = task.name
+        
         content.sound = .default
+        content.badge = 1
+        content.body = "Gentle reminder for your task!"
         
-        //check if key/value exist
-        if defaults?.value(forKey: "count") == nil{
-            defaults?.set(1, forKey: "count")
-        }
-        
-        var count: Int = defaults?.value(forKey: "count") as! Int
-        //set badge number
-        content.badge = count as NSNumber
-        
-      
-        //anticipate number to future badges
-        count = count + 1
-        //update defaults count
-        defaults?.set(count, forKey: "count")
-        content.body = "\(count)"//<--------------- Notification title is for debug purposes
-
-        //content.body = "Gentle reminder for your task!"
       //let the system know that it should assign your notifications to this category.
       content.categoryIdentifier = "OrganizerPlusCategory"
       let taskData = try? JSONEncoder().encode(task)
