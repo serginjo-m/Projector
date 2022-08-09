@@ -35,6 +35,8 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
         return tableView
     }()
     

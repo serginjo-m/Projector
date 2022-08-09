@@ -159,8 +159,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return picker
     }()
     
-    
-    
     lazy var endTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = UIDatePicker.Mode.time
@@ -218,8 +216,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.layer.borderWidth = 1
-        textView.layer.borderColor = UIColor.init(displayP3Red: 216/255, green: 216/255, blue: 216/255, alpha: 1).cgColor
+        textView.layer.cornerRadius = 6
+        textView.backgroundColor = UIColor.init(white: 239/255, alpha: 1)
         textView.font = UIFont.boldSystemFont(ofSize: 14)
         textView.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
         return textView
@@ -262,6 +260,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @objc func saveAction(_ sender: Any) {
         //creates new or update existing
         let event: Event = self.defineEventTemplate()
+        
         if reminderSwitch.isOn == true {
             
             //check if current event has previously created notification/reminder
@@ -315,6 +314,14 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             ProjectListRepository.instance.updateEvent(event: event)
             //save event  to activity
             UserActivitySingleton.shared.createUserActivity(description: "\(event.title) on \(self.dateFormatterFullDate.string(from: eventDate)) was updated")
+        }
+        
+        if let stepIdentifier = self.stepId{
+            //assign image to step event
+            if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
+
+                ProjectListRepository.instance.updateStepEvent(step: step, event: event)
+            }
         }
         
         dismiss(animated: true, completion: nil)
@@ -376,7 +383,17 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
                 if step.selectedPhotosArray.count > 0{
                     eventTemplate.picture = step.selectedPhotosArray[0]
+                }
+                //remove existing Event, Notification, Push Notification
+                if let existingEvent = step.event{
                     
+                    if let notification = existingEvent.reminder{
+                        if #available(iOS 13.0, *) {
+                            NotificationManager.shared.removeScheduledNotification(taskId: notification.id)
+                        }
+                        ProjectListRepository.instance.deleteNotificationNote(note: notification)
+                    }
+                    ProjectListRepository.instance.deleteEvent(event: existingEvent)
                 }
             }
         }

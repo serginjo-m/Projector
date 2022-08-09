@@ -256,8 +256,13 @@ class ExpandingReminder: UIView {
             if let id = self.notificationId{
                 //get object by id
                 if let reminderObject = ProjectListRepository.instance.getNotification(id: id) {
+                    //remove push notification before remove object
+                    if #available(iOS 13.0, *) {
+                        NotificationManager.shared.removeScheduledNotification(taskId: reminderObject.id)
+                    }
                     //remove object
                     ProjectListRepository.instance.deleteNotificationNote(note: reminderObject)
+                    
                 }
             }
             

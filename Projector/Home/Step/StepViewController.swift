@@ -11,6 +11,7 @@ import RealmSwift
 
 class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
+    //MARK: Properties
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "stepTableViewCell"
     
@@ -139,7 +140,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
-    //MARK: View Controller Initialization
+    //MARK: Initialization
     //Good way to init view controller
     init(stepId: String, nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         self.stepID = stepId
@@ -148,7 +149,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -172,6 +173,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         performPageConfigurations()
     }
     
+    //MARK: Methods
     private func performPageConfigurations(){
 
         guard let step = projectStep else {return}
@@ -179,13 +181,17 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepNameTitle.text = step.name
         stepToEventButton.isSelected = step.complete
         if let event = step.event{
-            reminderStepButton.isSelected = event.reminder != nil ? true : false//convert to bool value
+            if event.reminder != nil{
+                reminderStepButton.isSelected = true
+            }
+        }else{
+            reminderStepButton.isSelected = false
         }
         stepNumbersCV.step = step
         categoryLabel.text = step.category
         myStepImagesCV.step = step
         myStepImagesCV.stepImagesCollectionView.reloadData()
-        //------------------ only dinamic bits should be updated every time ---------------------------------
+
         setupLayout()
     }
     
@@ -210,6 +216,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let step = projectStep else {return}
         //create new event view controller based on selected step
         let newEventViewController = NewEventViewController()
+        newEventViewController.modalTransitionStyle = .coverVertical
+        newEventViewController.modalPresentationStyle = .fullScreen
         //step identifier access data base object
         newEventViewController.stepId = stepID
         if let projId = projectId {
@@ -247,7 +255,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
                             //remove Notification object( it also removes from Event )
                             ProjectListRepository.instance.deleteNotificationNote(note: notification)
                         }
-                        
+                        //remove event
+                        ProjectListRepository.instance.deleteEvent(event: event)
                     }
                     
                 } else {
@@ -326,7 +335,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.present(editStepViewController, animated: true, completion: nil)
     }
-    
+    //MARK: Table View
     //table view section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let num = projectStep?.itemsArray.count  {
@@ -351,7 +360,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.removeButton.addTarget(self, action: #selector(removeItem(button:)), for: .touchUpInside)
         return cell
     }
-    
+    //MARK: Constraints
     //perforn all positioning configurations
     private func setupLayout(){
         
@@ -465,7 +474,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepTableView.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: 0).isActive = true
     }
 }
-
+//MARK: Table View Cell
 class StepTableViewCell: UITableViewCell {
 
     let titleIcon: UIImageView = {

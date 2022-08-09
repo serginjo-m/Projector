@@ -73,6 +73,11 @@ class ProjectListRepository {
             step.category = status
         })
     }
+    func updateStepEvent(step: ProjectStep, event: Event){
+        try! self.realm.write({
+            step.event = event
+        })
+    }
     
     //edit step function
     func editStep(step: ProjectStep){

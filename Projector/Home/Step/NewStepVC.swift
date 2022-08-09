@@ -19,7 +19,16 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //set the project, that step is belongs to
     var projectId: String?
     //step id passed by detail VC
-    var stepID: String?
+    var stepID: String? {
+        didSet{
+            if let id = self.stepID{
+                self.projectStep = ProjectListRepository.instance.getProjectStep(id: id)
+            }
+        }
+    }
+    
+    var projectStep: ProjectStep?
+    
     //step completion status
     var stepComplete: Bool?
     // list of items in step
@@ -152,8 +161,8 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     let viewControllerTitle: UILabel = {
         let label = UILabel()
         label.text = "New Step"
-        label.textColor = UIColor.init(white: 0.7, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -205,7 +214,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 if applyButton.isSelected == false {
                     self.handleAnimate(active: false)
                 }else{
+                    //if apply button is not selected, it means remove notification action
                     applyButton.isSelected = false
+                    if let unwStep = self.projectStep, let stepEvent = unwStep.event{
+                        ProjectListRepository.instance.deleteEvent(event: stepEvent)
+                    }
+
                 }
     
             },
@@ -328,9 +342,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         //prepare object ready to save
         let stepTemplate: ProjectStep = self.defineStepTemplate()
         
-        //--------------------------- this check is not the best solution -----------------------------------
         if #available(iOS 13.0, *) {
             
+            if let existingNotification = self.expandingReminderView.notification {
+                stepTemplate.event = defineStepEvent(stepTemplate: stepTemplate, notification: existingNotification)
+            }
+
             if let event = stepTemplate.event{
                 
                 //TODO: temporary solution with Notification clone
@@ -388,32 +405,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             stepTemplate.itemsArray.append(item)
         }
         
-        //check if notification exist inside expanding notification reminder widget
-        if let existingNotification = self.expandingReminderView.notification{
-            
-            //TODO: need real event
-            let event = Event()
-            event.title = stepTemplate.name
-            event.date = existingNotification.eventDate
-            
-            
-            //take some data from step object
-            existingNotification.name = stepTemplate.name
-            existingNotification.category = "step"
-            
-            if let projectId = projectId {
-                existingNotification.projectId = projectId
-            }
-            //edit or new, stepTemplate  always has a correct id
-            existingNotification.stepId = stepTemplate.id
-            
-            //finally assign reminder to step
-            event.reminder = existingNotification
-            stepTemplate.event = event
-            
-            stepTemplate.reminderEnabled = true
-        }
-        
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
@@ -422,6 +413,43 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return stepTemplate
     }
     
+    
+    fileprivate func defineStepEvent(stepTemplate: ProjectStep, notification: Notification) -> Event{
+       
+        let event = Event()
+        
+        event.title = stepTemplate.name
+        //add image if exist
+        if let img = stepTemplate.selectedPhotosArray.first{
+            event.picture = img
+        }
+        event.date = notification.eventDate
+        event.startTime = notification.eventDate
+        event.category = "projectStep"
+        //extract hours and minutes from date parameter
+        let components = Calendar.current.dateComponents([.hour, .minute], from: notification.eventDate)
+        //Because expanding reminder don't have an end time, just anticipate 1 hour for it by default
+        if let hour = components.hour, let minute = components.minute {
+            
+            //using current date and picker time for date formatting
+            event.endTime = Calendar.current.date(bySettingHour: hour + 1, minute: minute, second: 0, of: notification.eventDate)
+        }
+        
+        //take some data from step object
+        notification.name = stepTemplate.name
+        notification.category = "step"
+        
+        if let projectId = projectId {
+            notification.projectId = projectId
+        }
+        //edit or new, stepTemplate  always has a correct id
+        notification.stepId = stepTemplate.id
+        
+        //finally assign reminder to event
+        event.reminder = notification
+
+        return event
+    }
     
     //NAME TEXT FIELD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

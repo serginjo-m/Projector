@@ -21,7 +21,6 @@ class ProjectStep: Object{
     @objc dynamic var distance = 0
     @objc dynamic var event: Event?
     @objc dynamic var complete = false
-    @objc dynamic var reminderEnabled = false
     @objc dynamic var date = "07/06/2020"
     
     
@@ -42,4 +41,15 @@ class ProjectStep: Object{
         return "\(name)"
     }
     
+}
+
+extension ProjectStep {
+    var reminderEnabled: Bool? {
+        if let event = self.event{
+            if event.reminder != nil{
+                return true
+            }
+        }
+        return false
+    }
 }
