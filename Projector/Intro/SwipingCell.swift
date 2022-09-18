@@ -114,7 +114,7 @@ class SwipingCell: UICollectionViewCell{
         stack.isHidden = true
         return stack
     }()
-    // view that contains all inputs and button needed for registration of new user
+    // view that contains all inputs and button needed for registration of a new user
     lazy var newUserInputContainer: NewUserInputView = {
         let view = NewUserInputView(
             //register button
@@ -127,20 +127,23 @@ class SwipingCell: UICollectionViewCell{
                       let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
                       let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
                 
+                //TODO: SAILSJS
+                
+                
                 //REST API Service called. Here I try to create user inside Mongo DB using Sails.js
-                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
-                    switch res {
-                    case .success(let apiRes):
-                        
-                        //call parent VC to create and update user in MainViewController
-                        unwrappedParentVC.didTapDismissCompletionHandler()
-                        //
-                        unwrappedParentVC.dismiss(animated: true, completion: nil)
-                    case .failure(let err):
-                        //here I need to create pop-up message to user
-                        print("Error message pop-up", err)
-                    }
-                }
+//                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
+//                    switch res {
+//                    case .success(let apiRes):
+//
+//                        //call parent VC to create and update user in MainViewController
+//                        unwrappedParentVC.didTapDismissCompletionHandler()
+//                        //
+//                        unwrappedParentVC.dismiss(animated: true, completion: nil)
+//                    case .failure(let err):
+//                        //here I need to create pop-up message to user
+//                        print("Error message pop-up", err)
+//                    }
+//                }
                 
             }
         )
@@ -158,19 +161,21 @@ class SwipingCell: UICollectionViewCell{
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
                     let inputEmail = self.registeredUserInputContainer.emailTextField.textField.text else {return}
                 
+                //TODO: SAILSJS
+                
                 //Try to login user inside Mongo DB using Sails.js app.
-                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
-                    switch res {
-                    case .success(let apiResponse):
-                        print(apiResponse.message)
-                        //call parent to call parent :) (MainViewController) for updates
-                        unwrappedParentVC.didTapDismissCompletionHandler()
-                        
-                        unwrappedParentVC.dismiss(animated: true, completion: nil)
-                    case .failure(let err):
-                        print("Failed to fetch user: ", err)
-                    }
-                }
+//                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
+//                    switch res {
+//                    case .success(let apiResponse):
+//                        print(apiResponse.message)
+//                        //call parent to call parent :) (MainViewController) for updates
+//                        unwrappedParentVC.didTapDismissCompletionHandler()
+//                        
+//                        unwrappedParentVC.dismiss(animated: true, completion: nil)
+//                    case .failure(let err):
+//                        print("Failed to fetch user: ", err)
+//                    }
+//                }
                 
             }
         )

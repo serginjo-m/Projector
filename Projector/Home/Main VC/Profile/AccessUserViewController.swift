@@ -69,20 +69,20 @@ class AccessUserViewController: UIViewController {
                       let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
                       let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
                 
-                
-                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
-                    switch res {
-                    case .success(let apiRes):
-                        //not so necessary but for now let's leave it so.....
-                        print(apiRes.message)
-                        //call to update parent vc
-                        self.didTapDismissCompletionHandler()
-                        //call dismiss on parent vc
-                        self.dismiss(animated: true, completion: nil)
-                    case .failure(let err):
-                        print(err)
-                    }
-                }
+                //TODO: SAILSJS
+//                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
+//                    switch res {
+//                    case .success(let apiRes):
+//                        //not so necessary but for now let's leave it so.....
+//                        print(apiRes.message)
+//                        //call to update parent vc
+//                        self.didTapDismissCompletionHandler()
+//                        //call dismiss on parent vc
+//                        self.dismiss(animated: true, completion: nil)
+//                    case .failure(let err):
+//                        print(err)
+//                    }
+//                }
             }
         )
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -99,18 +99,19 @@ class AccessUserViewController: UIViewController {
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
                     let inputEmail = self.registeredUserInputContainer.emailTextField.textField.text else {return}
                 
-                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
-                    switch res {
-                    case .success(let apiResponse):
-                        print(apiResponse.message as Any)
-                        //call to update parent vc
-                        self.didTapDismissCompletionHandler()
-                        //dismiss
-                        self.dismiss(animated: true, completion: nil)
-                    case .failure(let err):
-                        print("Failed to fetch user: ", err)
-                    }
-                }
+                //TODO: SAILSJS
+//                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
+//                    switch res {
+//                    case .success(let apiResponse):
+//                        print(apiResponse.message as Any)
+//                        //call to update parent vc
+//                        self.didTapDismissCompletionHandler()
+//                        //dismiss
+//                        self.dismiss(animated: true, completion: nil)
+//                    case .failure(let err):
+//                        print("Failed to fetch user: ", err)
+//                    }
+//                }
                 
             }
         )

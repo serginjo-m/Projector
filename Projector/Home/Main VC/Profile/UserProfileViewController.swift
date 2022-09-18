@@ -136,29 +136,31 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     @objc fileprivate func loginUser(_ sender: Any){
         //init view controller with callback function
         let accessUserViewController = AccessUserViewController { [weak self] in
-            guard let self = self else {return}
+//            guard let self = self else {return}
+            
+            //TODO: SAILSJS
             //After login or register user, it tries to fetch users object, witch than should be saved for app
-            Service.shared.fetchUserProfile { (res) in
-                switch res{
-                case .success(let user):
-                    let userProfile = User()
-                    userProfile.name = user.fullName
-                    userProfile.email = user.emailAddress
-                    userProfile.isLogined = true
-                    
-                    //It is not the best solution but for this purpose it will be alright
-                    //So the plan is when logged in, create user and delete when logout
-                    ProjectListRepository.instance.createUser(user: userProfile)
-                    //update text
-                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
-                    //for some reasons, need to change it every time text was updated
-                    self.contentTextView.textAlignment = .center
-                    //hide button, so only logout button is visible.
-                    self.loginButton.isHidden = true
-                case .failure(let err):
-                    print("Failed to fetch user profile: ", err)
-                }
-            }
+//            Service.shared.fetchUserProfile { (res) in
+//                switch res{
+//                case .success(let user):
+//                    let userProfile = User()
+//                    userProfile.name = user.fullName
+//                    userProfile.email = user.emailAddress
+//                    userProfile.isLogined = true
+//                    
+//                    //It is not the best solution but for this purpose it will be alright
+//                    //So the plan is when logged in, create user and delete when logout
+//                    ProjectListRepository.instance.createUser(user: userProfile)
+//                    //update text
+//                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
+//                    //for some reasons, need to change it every time text was updated
+//                    self.contentTextView.textAlignment = .center
+//                    //hide button, so only logout button is visible.
+//                    self.loginButton.isHidden = true
+//                case .failure(let err):
+//                    print("Failed to fetch user profile: ", err)
+//                }
+//            }
         }
         
         self.present(accessUserViewController, animated: true)
@@ -189,34 +191,35 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         //cancel button
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         //delete button
-        let deleteAction = UIAlertAction(title: "Logout", style: .destructive, handler: {(UIAlertAction) -> Void in
-
-            Service.shared.handleLogout { (res) in
-                switch res {
-                case .success(let res):
-                    print("user logout status is: ", res.message)
-                    //It is not the best solution but for this purpose it will be alright
-                    //So the plan is when logged in create user and delete when logout
-                    let users = ProjectListRepository.instance.getAllUsers()
-                    //delete from database
-                    for user in users {
-                        ProjectListRepository.instance.deleteUser(user: user)
-                    }
-                    
-                    //reveal login button
-                    self.loginButton.isHidden = false
-                    //update text
-                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hi there!", subtitle: "Access Your profile here.")
-                    //center it
-                    self.contentTextView.textAlignment = .center
-                case .failure(let err):
-                    print(err)
-                }
-            }
+        let logoutAction = UIAlertAction(title: "Logout", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            //TODO: SAILSJS
+//            Service.shared.handleLogout { (res) in
+//                switch res {
+//                case .success(let res):
+//                    print("user logout status is: ", res.message)
+//                    //It is not the best solution but for this purpose it will be alright
+//                    //So the plan is when logged in create user and delete when logout
+//                    let users = ProjectListRepository.instance.getAllUsers()
+//                    //delete from database
+//                    for user in users {
+//                        ProjectListRepository.instance.deleteUser(user: user)
+//                    }
+//                    
+//                    //reveal login button
+//                    self.loginButton.isHidden = false
+//                    //update text
+//                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hi there!", subtitle: "Access Your profile here.")
+//                    //center it
+//                    self.contentTextView.textAlignment = .center
+//                case .failure(let err):
+//                    print(err)
+//                }
+//            }
         })
         
         alertVC.addAction(cancelAction)
-        alertVC.addAction(deleteAction)
+        alertVC.addAction(logoutAction)
         //shows an alert window
         present(alertVC, animated: true, completion: nil)
         

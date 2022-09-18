@@ -184,7 +184,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         setupLayout()
         //setup recent projects collection view
         setupProjectCollectionView()
-//        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -533,7 +533,7 @@ extension ProjectViewController {
 //
 //            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
 //                guard let self = self else {return}
-//
+                //TODO: SAILSJS
 //                Service.shared.fetchUserProfile { (res) in
 //                    switch res {
 //                    case .success(let res):
@@ -581,37 +581,39 @@ extension ProjectViewController {
             layout.scrollDirection = .horizontal
 
             let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
-                guard let self = self else {return}
+                
+                //TODO: SAILSJS
+//                guard let self = self else {return}
                 //as user is logged in, try to fetch user from WEB, create user inside local DB an update VC elem.
-                Service.shared.fetchUserProfile { (res) in
-                    switch res {
-                    case .success(let res):
-                        
-                        //check and clear any user inside DB before creating new one
-                        let users = ProjectListRepository.instance.getAllUsers()
-                        if users.count > 0{
-                            for user in users {
-                                ProjectListRepository.instance.deleteUser(user: user)
-                            }
-                        }
-                        //create
-                        let user = User()
-                        user.name = res.fullName
-                        user.email = res.emailAddress
-                        user.isLogined = true
-                        
-                        ProjectListRepository.instance.createUser(user: user)
-                        //update user object inside VC
-                        self.user = user
-                        //update VC title
-                        self.contentTextView.text = "Hello \(user.name)!"
-                        
-                        
-                    case .failure(let err):
-                        print("Failed to fetch user: ", err)
-
-                    }
-                }
+//                Service.shared.fetchUserProfile { (res) in
+//                    switch res {
+//                    case .success(let res):
+//
+//                        //check and clear any user inside DB before creating new one
+//                        let users = ProjectListRepository.instance.getAllUsers()
+//                        if users.count > 0{
+//                            for user in users {
+//                                ProjectListRepository.instance.deleteUser(user: user)
+//                            }
+//                        }
+//                        //create
+//                        let user = User()
+//                        user.name = res.fullName
+//                        user.email = res.emailAddress
+//                        user.isLogined = true
+//
+//                        ProjectListRepository.instance.createUser(user: user)
+//                        //update user object inside VC
+//                        self.user = user
+//                        //update VC title
+//                        self.contentTextView.text = "Hello \(user.name)!"
+//
+//
+//                    case .failure(let err):
+//                        print("Failed to fetch user: ", err)
+//
+//                    }
+//                }
                 
             }, collectionViewLayout: layout)
 
