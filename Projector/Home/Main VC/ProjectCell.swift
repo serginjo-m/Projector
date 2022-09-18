@@ -10,14 +10,23 @@ import Foundation
 import UIKit
 
 class ProjectCell: UICollectionViewCell{
-    
+
     //It'll be like a template for our cell
     var template: ProjectList? {
         //didSet uses for logic purposes!
         didSet{
             
             if let name = template?.name {
+                
+                //description label height
+                let rectangle = NSString(string: name).boundingRect(with: CGSize(width: self.frame.width - CGFloat(26), height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 17)], context: nil)
+
+//                rounded away from zero original values
+                let rect = CGRect(x: rectangle.origin.x, y: rectangle.origin.y, width: rectangle.width.rounded(.awayFromZero), height: rectangle.height.rounded(.awayFromZero))
+                
+                projectTitleAnchor.constant = rect.height
                 projectName.text = name
+                titleShadowSublayer.text = name
             }
             
         }
@@ -36,19 +45,32 @@ class ProjectCell: UICollectionViewCell{
     }
     
     let projectName:UILabel = {
-        let pn = UILabel()
-        pn.text = "Travel to Europe on Motorcycle"
-        pn.textAlignment = NSTextAlignment.left
-        pn.font = UIFont.boldSystemFont(ofSize: 15)
-        pn.textColor = UIColor.white
-        pn.numberOfLines = 3
-        return pn
+        let label = UILabel()
+        label.text = "Travel to Europe on Motorcycle"
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let titleShadowSublayer: UILabel = {
+        let label = UILabel()
+        label.text = "Shadow Label"
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     let projectImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "interior")
         image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     //adds contrast to project title
@@ -66,29 +88,28 @@ class ProjectCell: UICollectionViewCell{
         let button = UIButton()
         button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
         button.isUserInteractionEnabled = true
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    func setupViews(){
         
+    var projectTitleAnchor: NSLayoutConstraint!
+    
+    func setupViews(){
         
         backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
         
         //deleteButton.frame = CGRect(x:frame.width - 25, y: 9, width:16, height: 16)
         
         addSubview(projectImage)
+        addSubview(titleShadowSublayer)
         addSubview(projectName)
         
-        
         //gradient under project title
-        layer.insertSublayer(gradient, at: 2)
+        layer.insertSublayer(gradient, at: 1)
         gradient.frame = CGRect(x: 0, y: 188, width: frame.width, height: frame.height - 188)
         
         addSubview(deleteButton)
-        
-        projectName.translatesAutoresizingMaskIntoConstraints = false
-        projectImage.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         
         deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
         deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
@@ -97,8 +118,14 @@ class ProjectCell: UICollectionViewCell{
         
         projectName.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20).isActive = true
         projectName.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 13).isActive = true
-        projectName.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5).isActive = true
-        projectName.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        projectName.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -13).isActive = true
+        projectTitleAnchor = projectName.heightAnchor.constraint(equalToConstant: 70)
+        projectTitleAnchor.isActive = true
+        
+        titleShadowSublayer.topAnchor.constraint(equalTo: projectName.topAnchor, constant: 2).isActive = true
+        titleShadowSublayer.leadingAnchor.constraint(equalTo: projectName.leadingAnchor, constant: 2).isActive = true
+        titleShadowSublayer.widthAnchor.constraint(equalTo: projectName.widthAnchor).isActive = true
+        titleShadowSublayer.heightAnchor.constraint(equalTo: projectName.heightAnchor).isActive = true
         
         projectImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         projectImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true

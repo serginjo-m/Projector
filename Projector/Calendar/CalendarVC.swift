@@ -20,8 +20,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         }
     }
     
-    //----------------------------------- Should be improved ---------------------------------------------
-    //------------------------- for multiple countries it can be multiple years --------------------------
     //a year, when holidays was downloaded
     var downloadedHolidaysYear: Int {
         get{
@@ -41,8 +39,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     
     
     //transparent black view that covers all content
-    //IMPORTANT:
-    //here I can add gesture recognizer because lazy var
     lazy var blackView: UIView = {
         let view = UIView()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
@@ -79,14 +75,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     //Creates new calendar
     let calendar = Calendar(identifier: .gregorian)
     //date selected by user
-    private var selectedDate: Date
+    private var selectedDate = Date()
     //current date
     
     var baseDate: Date {
         didSet {
             //update page elements
             updateAllPageElements()
-            
         }
     }
     
@@ -181,9 +176,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     // MARK: Initializers
     init(baseDate: Date, selectedDateChanged: @escaping ((Date) -> Void) ) {
         
-        //what is the diff btwn selectedDate....
+   
         self.selectedDate = baseDate
-        //.... and baseDate
         self.baseDate = baseDate
         self.selectedDateChanged = selectedDateChanged
         
@@ -198,10 +192,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: View Lifecycle
+    //MARK: VC Lifecycle
     
     override func viewDidLoad() {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE, MMMM d")
@@ -239,14 +232,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
             self.baseDate = unwrappedDateToDisplay
             //reset request 
             dateToDisplay = nil
+            
         }else{
-            //TODO: base date doesn't update every time view conroller appears (move it to viewDidAppear)
-            //day is need to be current everytime calendar appears &
-            //as date is set, all updateAllPageElements calls
             baseDate = Date()
+            selectedDate = Date()
         }
     }
     
+    //MARK: Methods
     private func updateAllPageElements(){
         //return an array of days
         days = generateDaysInMonth(for: baseDate)
@@ -289,7 +282,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     }
 }
 
-
+//MARK: Extensions
 extension CalendarViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -423,7 +416,6 @@ extension CalendarViewController {
                 dateWithEvent = true
             }
         }
-        
         return Day( date: date, number: self.dateFormatter.string(from: date), isSelected: calendar.isDate(date, inSameDayAs: selectedDate), isWithinDisplayedMonth: isWithinDisplayedMonth,  containEvent: dateWithEvent, containHoliday: dateWithHoliday)
     }
     

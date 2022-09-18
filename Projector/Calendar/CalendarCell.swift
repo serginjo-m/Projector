@@ -117,8 +117,6 @@ class CalendarCell: UICollectionViewCell{
         // regardless of the values of the old ones
         NSLayoutConstraint.deactivate(selectionBackgroundView.constraints)
         
-        
-        // 1
         let size = traitCollection.horizontalSizeClass == .compact ?
             min(min(frame.width, frame.height) - 10, 60) : 45
         

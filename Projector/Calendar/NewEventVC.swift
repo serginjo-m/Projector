@@ -367,9 +367,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             eventTemplate.endTime = eventEnd != nil ? eventEnd : formatTimeBasedDate(date: eventStartTime, anticipateHours: 1, anticipateMinutes: 0)
         }
         
-        
-        
-        //TODO: Attention here, because category type, stepId, projectId should be optimized
         //try to set properties
         eventTemplate.projectId = self.projectId
         eventTemplate.stepId = self.stepId
