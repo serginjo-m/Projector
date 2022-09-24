@@ -1,0 +1,30 @@
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/ObjectId.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectId.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectId.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectId.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectId.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/ObjectiveCSupport.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/ObjcBridgeable.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjcBridgeable.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjcBridgeable.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjcBridgeable.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjcBridgeable.d"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/ObjectiveCSupport+AnyRealmValue.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+AnyRealmValue.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+AnyRealmValue.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+AnyRealmValue.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+AnyRealmValue.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Object.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Object.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Object.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Object.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Object.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/ObjectiveCSupport+BSON.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+BSON.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+BSON.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+BSON.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ObjectiveCSupport+BSON.o"

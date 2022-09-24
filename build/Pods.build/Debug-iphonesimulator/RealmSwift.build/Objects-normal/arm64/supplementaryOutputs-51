@@ -1,0 +1,30 @@
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/List.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/List.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/List.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/List.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/List.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Map.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Map.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Map.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Map.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Map.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/LinkingObjects.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/LinkingObjects.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/LinkingObjects.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/LinkingObjects.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/LinkingObjects.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Migration.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Migration.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Migration.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Migration.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Migration.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/MongoClient.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MongoClient.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MongoClient.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MongoClient.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MongoClient.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/MutableSet.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MutableSet.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MutableSet.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MutableSet.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/MutableSet.dia"

@@ -8,6 +8,8 @@
 
 import UIKit
 import RealmSwift
+import Firebase
+import FirebaseAuth
 
 class UserProfileViewController: UIViewController, CircleTransitionable {
     
@@ -132,11 +134,23 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         }
         
     }
+    
     //login button action
     @objc fileprivate func loginUser(_ sender: Any){
         //init view controller with callback function
         let accessUserViewController = AccessUserViewController { [weak self] in
-//            guard let self = self else {return}
+            
+            let user = ProjectListRepository.instance.getAllUsers().first
+            
+            guard let self = self, let userProfile = user  else {return}
+            
+            //update text
+            self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
+            //for some reasons, need to change it every time text was updated
+            self.contentTextView.textAlignment = .center
+            //hide button, so only logout button is visible.
+            self.loginButton.isHidden = true
+            
             
             //TODO: SAILSJS
             //After login or register user, it tries to fetch users object, witch than should be saved for app
@@ -192,6 +206,17 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         //delete button
         let logoutAction = UIAlertAction(title: "Logout", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            //logout user
+            FirebaseService.shared.handleLogout {
+                //reveal login button
+                self.loginButton.isHidden = false
+                //update text
+                self.contentTextView.attributedText = self.formatAttributedString(title: "Hi there!", subtitle: "Access Your profile here.")
+                //center it
+                self.contentTextView.textAlignment = .center
+            }
+            
             
             //TODO: SAILSJS
 //            Service.shared.handleLogout { (res) in

@@ -1,0 +1,30 @@
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/CustomPersistable.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CustomPersistable.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CustomPersistable.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CustomPersistable.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CustomPersistable.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Error.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Error.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Error.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Error.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Error.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Decimal128.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Decimal128.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Decimal128.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Decimal128.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Decimal128.d"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/EmbeddedObject.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/EmbeddedObject.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/EmbeddedObject.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/EmbeddedObject.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/EmbeddedObject.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/KeyPathStrings.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/KeyPathStrings.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/KeyPathStrings.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/KeyPathStrings.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/KeyPathStrings.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/ComplexTypes.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ComplexTypes.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ComplexTypes.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ComplexTypes.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/ComplexTypes.o"

@@ -6,7 +6,7 @@
 //  Copyright © 2021 Serginjo Melnik. All rights reserved.
 //
 
-import Foundation
+
 import UIKit
 
 class SwipingController: UICollectionViewController, UICollectionViewDelegateFlowLayout {

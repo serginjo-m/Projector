@@ -1,0 +1,35 @@
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/BasicTypes.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BasicTypes.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BasicTypes.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BasicTypes.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BasicTypes.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/App.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/App.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/App.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/App.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/App.d"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/AnyRealmValue.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/AnyRealmValue.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/AnyRealmValue.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/AnyRealmValue.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/AnyRealmValue.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/BSON.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BSON.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BSON.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BSON.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/BSON.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/CollectionAccess.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CollectionAccess.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CollectionAccess.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CollectionAccess.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/CollectionAccess.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Aliases.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Aliases.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Aliases.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Aliases.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Aliases.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Combine.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Combine.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Combine.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Combine.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Combine.o"

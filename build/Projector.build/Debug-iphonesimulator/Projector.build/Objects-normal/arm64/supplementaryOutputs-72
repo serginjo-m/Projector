@@ -1,0 +1,75 @@
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /PinterestOriginal.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestOriginal.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestOriginal.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestOriginal.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestOriginal.o"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Models/ProjectStep.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectStep.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectStep.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectStep.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectStep.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /FeaturedAppsController.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/FeaturedAppsController.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/FeaturedAppsController.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/FeaturedAppsController.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/FeaturedAppsController.o"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project Detail/DetailViewController.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewController.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewController.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewController.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewController.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/StatisticsVC.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsVC.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsVC.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsVC.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsVC.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project Detail/Protocols/EditViewControllerDelegate.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/EditViewControllerDelegate.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/EditViewControllerDelegate.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/EditViewControllerDelegate.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/EditViewControllerDelegate.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/StepItemViewController.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepItemViewController.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepItemViewController.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepItemViewController.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepItemViewController.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/LocationManager.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/LocationManager.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/LocationManager.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/LocationManager.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/LocationManager.o"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project Detail/Steps/PinterestLayout.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestLayout.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestLayout.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestLayout.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/PinterestLayout.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Models/Project/ProjectList.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectList.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectList.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectList.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectList.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Models/Project/ProjectExtension.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectExtension.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectExtension.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectExtension.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectExtension.d"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/GenericController.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/GenericController.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/GenericController.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/GenericController.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/GenericController.o"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /DetailProjectData.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailProjectData.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailProjectData.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailProjectData.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailProjectData.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Models/UserActivity.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/UserActivity.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/UserActivity.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/UserActivity.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/UserActivity.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/NotificationManager.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationManager.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationManager.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationManager.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationManager.o"

@@ -1,0 +1,30 @@
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/RealmConfiguration.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmConfiguration.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmConfiguration.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmConfiguration.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmConfiguration.d"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Results.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Results.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Results.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Results.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Results.o"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Impl/SchemaDiscovery.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/SchemaDiscovery.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/SchemaDiscovery.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/SchemaDiscovery.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/SchemaDiscovery.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/RealmKeyedCollection.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmKeyedCollection.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmKeyedCollection.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmKeyedCollection.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmKeyedCollection.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/RealmProperty.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmProperty.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmProperty.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmProperty.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/RealmProperty.dia"
+"/Users/serginjomelnik/Desktop/Projector/Pods/RealmSwift/RealmSwift/Schema.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Schema.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Schema.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Schema.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Pods.build/Debug-iphonesimulator/RealmSwift.build/Objects-normal/arm64/Schema.dia"

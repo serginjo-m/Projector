@@ -1,0 +1,75 @@
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /CategoryItems.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CategoryItems.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CategoryItems.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CategoryItems.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CategoryItems.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/StatisticsContainer.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsContainer.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsContainer.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsContainer.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StatisticsContainer.d"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/BarChartView.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/BarChartView.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/BarChartView.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/BarChartView.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/BarChartView.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/SketchShadowExtension.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/SketchShadowExtension.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/SketchShadowExtension.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/SketchShadowExtension.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/SketchShadowExtension.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /DetailViewSteps.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewSteps.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewSteps.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewSteps.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewSteps.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /StepCollectionView.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepCollectionView.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepCollectionView.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepCollectionView.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepCollectionView.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /NewProjectVC.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NewProjectVC.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NewProjectVC.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NewProjectVC.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NewProjectVC.d"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/ChartCalendarExtension.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ChartCalendarExtension.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ChartCalendarExtension.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ChartCalendarExtension.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ChartCalendarExtension.o"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /Restore.swift":
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Restore.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Restore.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Restore.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Restore.swiftdeps"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /DetailViewCateg.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewCateg.swiftdeps"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewCateg.o"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewCateg.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/DetailViewCateg.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main VC/Quick Notes/QuickNotesCollViews/CanvasNotesVC.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CanvasNotesVC.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CanvasNotesVC.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CanvasNotesVC.dia"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/CanvasNotesVC.d"
+"/Users/serginjomelnik/Desktop/Projector/Sample Files /StepAddItem.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepAddItem.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepAddItem.dia"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepAddItem.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/StepAddItem.d"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/NotificationsVC.swift":
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationsVC.o"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationsVC.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationsVC.d"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/NotificationsVC.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Models/Event.swift":
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Event.swiftdeps"
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Event.d"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Event.o"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/Event.dia"
+"/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project Detail/ProjectNumbers.swift":
+  dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectNumbers.d"
+  swift-dependencies: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectNumbers.swiftdeps"
+  diagnostics: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectNumbers.dia"
+  object: "/Users/serginjomelnik/Desktop/Projector/build/Projector.build/Debug-iphonesimulator/Projector.build/Objects-normal/arm64/ProjectNumbers.o"

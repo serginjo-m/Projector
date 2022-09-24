@@ -1,0 +1,185 @@
+Target dependency graph (38 targets)
+Realm in Pods, no dependencies
+RealmSwift in Pods, depends on:
+Realm in Pods (explicit)
+Pods-Projector in Pods, depends on:
+Realm in Pods (explicit)
+RealmSwift in Pods (explicit)
+Firebase in Firebase, no dependencies
+nanopb in nanopb, no dependencies
+nanopb in nanopb, depends on:
+nanopb in nanopb (explicit)
+FBLPromises in Promises, no dependencies
+FBLPromises in Promises, depends on:
+FBLPromises in Promises (explicit)
+GoogleUtilities_Environment in GoogleUtilities, depends on:
+FBLPromises in Promises (explicit)
+GULEnvironment in GoogleUtilities, depends on:
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GoogleDataTransport in GoogleDataTransport, depends on:
+nanopb in nanopb (explicit)
+FBLPromises in Promises (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GoogleDataTransport in GoogleDataTransport, depends on:
+GoogleDataTransport in GoogleDataTransport (explicit)
+nanopb in nanopb (explicit)
+FBLPromises in Promises (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GoogleUtilities_Logger in GoogleUtilities, depends on:
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GULLogger in GoogleUtilities, depends on:
+GoogleUtilities_Logger in GoogleUtilities (explicit)
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+FirebaseCoreDiagnostics in Firebase, depends on:
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GoogleUtilities_NSData in GoogleUtilities, no dependencies
+GULNSData in GoogleUtilities, depends on:
+GoogleUtilities_NSData in GoogleUtilities (explicit)
+FirebaseCoreInternal in Firebase, depends on:
+GULNSData in GoogleUtilities (explicit)
+FirebaseCore in Firebase, depends on:
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GoogleUtilities_Reachability in GoogleUtilities, depends on:
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+GoogleUtilities_Logger in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GoogleUtilities_Network in GoogleUtilities, depends on:
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+GoogleUtilities_Logger in GoogleUtilities (explicit)
+GoogleUtilities_NSData in GoogleUtilities (explicit)
+GoogleUtilities_Reachability in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GoogleUtilities_AppDelegateSwizzler in GoogleUtilities, depends on:
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+GoogleUtilities_Logger in GoogleUtilities (explicit)
+GoogleUtilities_NSData in GoogleUtilities (explicit)
+GoogleUtilities_Reachability in GoogleUtilities (explicit)
+GoogleUtilities_Network in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GULAppDelegateSwizzler in GoogleUtilities, depends on:
+GoogleUtilities_AppDelegateSwizzler in GoogleUtilities (explicit)
+GoogleUtilities_Environment in GoogleUtilities (explicit)
+GoogleUtilities_Logger in GoogleUtilities (explicit)
+GoogleUtilities_NSData in GoogleUtilities (explicit)
+GoogleUtilities_Reachability in GoogleUtilities (explicit)
+GoogleUtilities_Network in GoogleUtilities (explicit)
+FBLPromises in Promises (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher, no dependencies
+GTMSessionFetcherCore in GTMSessionFetcher, depends on:
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+FirebaseAuth in Firebase, depends on:
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GULAppDelegateSwizzler in GoogleUtilities (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+FirebaseAuth in Firebase, depends on:
+FirebaseAuth in Firebase (explicit)
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GULAppDelegateSwizzler in GoogleUtilities (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+leveldb in leveldb, no dependencies
+leveldb in leveldb, depends on:
+leveldb in leveldb (explicit)
+FirebaseDatabase in Firebase, depends on:
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+leveldb in leveldb (explicit)
+FirebaseDatabase in Firebase, depends on:
+FirebaseDatabase in Firebase (explicit)
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+leveldb in leveldb (explicit)
+FirebaseAppCheckInterop in Firebase, no dependencies
+FirebaseAuthInterop in Firebase, no dependencies
+FirebaseCoreExtension in Firebase, no dependencies
+FirebaseStorageInternal in Firebase, depends on:
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+FirebaseStorage in Firebase, depends on:
+FirebaseAppCheckInterop in Firebase (explicit)
+FirebaseAuthInterop in Firebase (explicit)
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+FirebaseCoreExtension in Firebase (explicit)
+FirebaseStorageInternal in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+FirebaseStorage in Firebase, depends on:
+FirebaseStorage in Firebase (explicit)
+FirebaseAppCheckInterop in Firebase (explicit)
+FirebaseAuthInterop in Firebase (explicit)
+Firebase in Firebase (explicit)
+FirebaseCoreDiagnostics in Firebase (explicit)
+FirebaseCoreInternal in Firebase (explicit)
+FirebaseCore in Firebase (explicit)
+FirebaseCoreExtension in Firebase (explicit)
+FirebaseStorageInternal in Firebase (explicit)
+GoogleDataTransport in GoogleDataTransport (explicit)
+GULEnvironment in GoogleUtilities (explicit)
+GULLogger in GoogleUtilities (explicit)
+nanopb in nanopb (explicit)
+GULNSData in GoogleUtilities (explicit)
+GTMSessionFetcherCore in GTMSessionFetcher (explicit)
+Projector in Projector, depends on:
+Pods-Projector in Pods (implicit dependency via file 'Pods_Projector.framework' in build phase 'Link Binary')
+Realm in Pods (implicit dependency via options '-framework Realm' in build setting 'OTHER_LDFLAGS')
+RealmSwift in Pods (implicit dependency via options '-framework RealmSwift' in build setting 'OTHER_LDFLAGS')
+FirebaseAuth in Firebase (explicit)
+FirebaseDatabase in Firebase (explicit)
+FirebaseStorage in Firebase (explicit)

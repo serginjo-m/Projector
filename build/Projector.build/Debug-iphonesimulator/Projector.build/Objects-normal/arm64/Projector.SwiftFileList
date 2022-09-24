@@ -1,0 +1,120 @@
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Notification.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DataStackView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Statistics/StatisticsStackView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/CalendarCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/EventsLouncher.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/Canvas\ Note/Views/Canvas\ View.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/NewTextNoteVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Steps/StepsCategoryCollectionView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/StepViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /CategoryCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Profile/UserProfileViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Steps/Steps.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/RecentActivitiesCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/CalendarVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/CalendarHeaderView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Canvas/LineCGPoint.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/CalendarFooterView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/ZoomingView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/ExpandingReminder.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/ProjectCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/HolidayEvent.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/QuickNotesCollViews/BaseCVController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/TextNote.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/Canvas\ Note/CanvasViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Protocols/StepViewControllerDelegate.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Extensions/PinterestDelegate.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Statistics/ProgressShape.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Singletons/StringToImage.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/AppDelegate.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/MainViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /EditStepVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Controller/CustomTabBarController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/UIImageView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Steps/StepCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/MonthMetadata.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/NewProjectViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/Holidays\ API/HolidayRequest.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DetailViewCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/StepImagesCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/QuickNotesCollViews/PhotoNoteCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Statistics/CountingLabel.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Profile/TransitionCoordinator.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/EventElements.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/User.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/UIView+Stacking.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Intro/SwipingController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Canvas/SingleLineObject.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /GenericsScheme.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Profile/CircularTransition.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Canvas/CanvasNote.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/QuickNotesCollViews/TextNoteCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Protocols/DetailViewControllerDelegate.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/NewStepVC.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /ClosureExample.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/Holidays\ API/Holiday.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Day.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/ApiResponse.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Extensions/DetailViewPanelExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Intro/SwipingPage.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Profile/AccessUserViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Repositories/ProjectListRepo.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /workVersionDetailVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Profile/Service.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/NotificationsHeaderImage.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/AccessUserVC\ +\ handlers.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Intro/SwipingCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/UIViewExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/NewProjectCateg.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Intro/NewUserInputView.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /StepAddItemCell.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /StepStackView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/OrderChartsExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DetailTableViewRestoreFile.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/GenericCell.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/StepNumbersCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Event.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /StepCollectionView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/StatisticsContainer.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /Restore.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/SketchShadowExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/BarChartView.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /CategoryItems.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DetailViewSteps.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DetailViewCateg.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/NotificationsVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/ProjectNumbers.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/QuickNotesCollViews/CanvasNotesVC.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /StepAddItem.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/ChartCalendarExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /NewProjectVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Calendar/NewEventVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/QuickNotesCollViews/DrawCanvasView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/CameraNote.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/ViewByCategoryCV.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/DayActivity.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/StatisticData.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Extensions/UIColorExt.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /ProgressModel.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/UltraLayout.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/NewStepImages.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Repositories/NotificationsRepository.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Steps/StepProgressMenu.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/SidePanelView.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Quick\ Notes/CameraShot.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Main\ VC/Statistics/AnimationDisplayLink.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /DetailProjectData.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /PinterestOriginal.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Project/ProjectList.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Protocols/EditViewControllerDelegate.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/Project/ProjectExtension.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/UserActivity.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/DetailViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/GenericController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Models/ProjectStep.swift
+/Users/serginjomelnik/Desktop/Projector/Sample\ Files\ /FeaturedAppsController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Statistics/StatisticsVC.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Project\ Detail/Steps/PinterestLayout.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/NotificationManager.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Home/Step/StepItemViewController.swift
+/Users/serginjomelnik/Desktop/Projector/Projector/Notifications/LocationManager.swift

@@ -127,6 +127,13 @@ class SwipingCell: UICollectionViewCell{
                       let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
                       let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
                 
+                FirebaseService.shared.handleRegister(name: inputName, email: inputEmail, password: inputPassword) {
+                    //call to update parent vc
+                    unwrappedParentVC.didTapDismissCompletionHandler()
+                    //call dismiss on parent vc
+                    unwrappedParentVC.dismiss(animated: true, completion: nil)
+                }
+                
                 //TODO: SAILSJS
                 
                 
@@ -160,6 +167,11 @@ class SwipingCell: UICollectionViewCell{
                     let unwrappedParentVC = self.parentVC,
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
                     let inputEmail = self.registeredUserInputContainer.emailTextField.textField.text else {return}
+                
+                FirebaseService.shared.handleLogin(email: inputEmail, password: inputPassword) {
+                    unwrappedParentVC.didTapDismissCompletionHandler()
+                    unwrappedParentVC.dismiss(animated: true)
+                }
                 
                 //TODO: SAILSJS
                 

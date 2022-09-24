@@ -11,8 +11,13 @@ import RealmSwift
 import Foundation
 import os
 import Photos
+import Firebase
+import FirebaseCore
 
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CircleTransitionable  {
+    
+    //global database reference
+    var ref: DatabaseReference?
     
     //MARK: Properties
     //user defines title format
@@ -87,6 +92,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         let textView = UITextView()
         textView.font = UIFont.boldSystemFont(ofSize: 18)
         textView.textColor = UIColor.init(white: 55/255, alpha: 1)
+        textView.isEditable = false
         return textView
     }()
 
@@ -147,6 +153,10 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //set global database url reference
+        self.ref = Database.database(url: "https://projectorfirebase-default-rtdb.europe-west1.firebasedatabase.app/").reference()
+        
         //Camera
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
             if response {
@@ -184,7 +194,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         setupLayout()
         //setup recent projects collection view
         setupProjectCollectionView()
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
+//        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -526,13 +536,15 @@ extension ProjectViewController {
         let defaults = UserDefaults.standard
         
         if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
-            
-           //app is already launched once!
+//
+////           app is already launched once!
 //            let layout = UICollectionViewFlowLayout()
 //            layout.scrollDirection = .horizontal
 //
 //            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
 //                guard let self = self else {return}
+
+                
                 //TODO: SAILSJS
 //                Service.shared.fetchUserProfile { (res) in
 //                    switch res {
@@ -581,6 +593,8 @@ extension ProjectViewController {
             layout.scrollDirection = .horizontal
 
             let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
+                
+                
                 
                 //TODO: SAILSJS
 //                guard let self = self else {return}

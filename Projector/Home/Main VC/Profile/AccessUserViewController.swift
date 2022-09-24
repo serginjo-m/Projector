@@ -69,6 +69,14 @@ class AccessUserViewController: UIViewController {
                       let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
                       let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
                 
+
+                FirebaseService.shared.handleRegister(name: inputName, email: inputEmail, password: inputPassword) {
+                    //call to update parent vc
+                    self.didTapDismissCompletionHandler()
+                    //call dismiss on parent vc
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
                 //TODO: SAILSJS
 //                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
 //                    switch res {
@@ -95,9 +103,15 @@ class AccessUserViewController: UIViewController {
             didTapLoginCompletionHandler: { [weak self] in//weak self helps to avoid retaining cycles
                 //unwrap optionals
                 guard let self = self,
-
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
                     let inputEmail = self.registeredUserInputContainer.emailTextField.textField.text else {return}
+                                
+                
+                FirebaseService.shared.handleLogin(email: inputEmail, password: inputPassword) {
+                    self.didTapDismissCompletionHandler()
+                    self.dismiss(animated: true)
+                }
+                
                 
                 //TODO: SAILSJS
 //                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
