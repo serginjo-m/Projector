@@ -69,6 +69,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }
     //Identifier of selected project
     var projectListIdentifier = String()
+    
+    
     lazy var stepsCollections: Steps = {
         //it is optional, so I need to set something to view
         guard let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier) else {
@@ -77,6 +79,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         let steps = Steps(project: project, delegate: self)
         return steps
     }()
+    
+    
     
    //Project Image created programatically
     let projectImageView: UIImageView = {
@@ -236,8 +240,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         //information about project object need to be transfered
         editProjectViewController.selectedImageURLString = project.selectedImagePathUrl
         editProjectViewController.projectId = project.id
-        editProjectViewController.projectSteps = project.projectStep
-        editProjectViewController.delegate = self
       
         self.present(editProjectViewController, animated: true, completion: nil)
     }

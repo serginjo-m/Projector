@@ -49,9 +49,13 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }()
     
     var statisticsStackView = StatisticsStackView()
-    var proJects: Results<ProjectList> {//This property is actually get updated version of my project list
+    
+    var projects: Results<ProjectList> {//This property is actually get updated version of my project list
         get {
             return ProjectListRepository.instance.getProjectLists()
+        }
+        set {
+            //update!
         }
     }
     
@@ -171,8 +175,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             PHPhotoLibrary.requestAuthorization({status in})
         }
         
-        //include number of projects to the title text
-        projectsTitle.text = "Your Projects (\(proJects.count))"
+        
         
         //temporary location
         //adjust scroll view
@@ -198,6 +201,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        projects = ProjectListRepository.instance.getProjectLists()
+        
+        self.projectsCollectionView.reloadData()
+        
+        //include number of projects to the title text
+        projectsTitle.text = "Your Projects (\(projects.count))"
         //if user is logged in update view controllers title
         checkUserProfile()
         //transition progress inside statistics widget
@@ -358,9 +367,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //delete button
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             
-            UserActivitySingleton.shared.createUserActivity(description: "\(self.proJects[button.tag].name) was removed")
+            UserActivitySingleton.shared.createUserActivity(description: "\(self.projects[button.tag].name) was removed")
             //remove project from database
-            ProjectListRepository.instance.deleteProjectList(list: self.proJects[button.tag])
+            ProjectListRepository.instance.deleteProjectList(list: self.projects[button.tag])
             //reload view
             self.reloadTableView()
         })
@@ -377,7 +386,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         self.projectsCollectionView.reloadData()
 
         //update number of projects in projects CV title
-        projectsTitle.text = "Your Projects (\(proJects.count))"
+        projectsTitle.text = "Your Projects (\(projects.count))"
     }
     
     //return UIImage by URL
@@ -394,7 +403,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     //MARK: Collection View Section
     //number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return proJects.count
+        return projects.count
     }
     
     //don't know what was an issue with index path, but it works right now!?
@@ -402,10 +411,10 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ProjectCell
         //data for every project cell
-        cell.template = proJects[indexPath.item]
+        cell.template = projects[indexPath.item]
         
         //image configuration
-        if let validUrl = proJects[indexPath.item].selectedImagePathUrl{
+        if let validUrl = projects[indexPath.item].selectedImagePathUrl{
             cell.projectImage.image = retreaveImageForProject(myUrl: validUrl)
         }else{
             cell.projectImage.image = UIImage(named: "defaultImage")
@@ -427,7 +436,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //an instance of project detail vc
         let projectDetailViewController = DetailViewController()
         //search step by sected item index
-        let selectedProject = proJects[indexPath.item]
+        let selectedProject = projects[indexPath.item]
         projectDetailViewController.projectListIdentifier = selectedProject.id
         projectDetailViewController.delegate = self
         navigationController?.pushViewController(projectDetailViewController, animated: true)

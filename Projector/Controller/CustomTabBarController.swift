@@ -143,7 +143,6 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                     
                     let newStep = NewStepViewController()
                     newStep.projectId = detailVC.projectListIdentifier
-                    newStep.delegate = detailVC
                     
                     let viewControllers = [
                         "Create New Step": newStep
@@ -153,12 +152,10 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
                 case "ProjectViewController":
                     
-                    guard let  projectVC = currentViewController as? ProjectViewController else {return false}
-                    //because new project view controller need preconfiguration
+                    
                     //create it out of Dictionary
                     let newProjectViewController = NewProjectViewController()
-                     //want to transfer some data
-                    newProjectViewController.projectCV = projectVC.projectsCollectionView
+                     
                     
                     //Dictionary ["view controller name" : viewController]
                     let viewControllers = [

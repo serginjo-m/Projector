@@ -20,16 +20,13 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     //unique project id for updating
     var projectId: String?
-    //because project template needs to contain all steps
-    var projectSteps: List<ProjectStep>?
-    //most for reload data
-    weak var delegate: EditViewControllerDelegate?
+    
     // need for indicating a selected image inside PHAsset array
     var selectedImageURLString: String?
     //category collection view
     let newProjectCategories = CategoryCollectionView()
     
-    var projectCV: UICollectionView?
+
     
     //MARK: Properties
     //define current date
@@ -166,47 +163,30 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
-        dismiss(animated: true) {
+        
+        //check if id/project exist
+        if let ID = self.projectId{
             
-            //check if id/project exist
-            if let ID = self.projectId{
-                
-                let project: ProjectList = self.defineProjectTemplate(id: ID)
-                
-                
-                //because project with that id exist it perform update
-                ProjectListRepository.instance.updateProjectList(list: project)
-                
-                //------------------------------------------------------------------------------------------------------
-                //------ screaming feature, because it seems like I need to perform updates from outside  --------------
-                //------ should be updated to viewWillTransiotion || viewWillAppear || or something else.........-------
-                //------------------------------------------------------------------------------------------------------
-                
-                //configure detail VC
-                self.delegate?.performAllConfigurations()
-                //reload parents views
-                self.delegate?.reloadViews()
-                
-                UserActivitySingleton.shared.createUserActivity(description: "Updated \(project.name) project")
-                
-            }else{// if it new copy
-                
-                let project: ProjectList = self.defineProjectTemplate(id: nil)
-                //creates new project instance
-                ProjectListRepository.instance.createProjectList(list: project)
-                
-                //------------------------------------------------------------------------------------------------------
-                //------ screaming feature, because it seems like I need to perform updates from outside  --------------
-                //------ should be updated to viewWillTransiotion || viewWillAppear || or something else.........-------
-                //------------------------------------------------------------------------------------------------------
-                self.projectCV?.reloadData()//!!!!!!!!!!!!!!
-                
-                UserActivitySingleton.shared.createUserActivity(description: "Created new \(project.name) project")
-                
-            }
+            let project: ProjectList = self.defineProjectTemplate(id: ID)
             
+            //because project with that id exist it perform update
+            ProjectListRepository.instance.updateProjectList(list: project)
+            
+            UserActivitySingleton.shared.createUserActivity(description: "Updated \(project.name) project")
+            
+        }else{// if it new copy
+            
+            let project: ProjectList = self.defineProjectTemplate(id: nil)
+            //creates new project instance
+            ProjectListRepository.instance.createProjectList(list: project)
+            
+            UserActivitySingleton.shared.createUserActivity(description: "Created new \(project.name) project")
         }
+        
+        dismiss(animated: true)
     }
+    
+    
     
     //creates project instance from values :)))))))))
     func defineProjectTemplate(id: String?) -> ProjectList{
