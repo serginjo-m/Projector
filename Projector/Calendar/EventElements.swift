@@ -371,11 +371,13 @@ class EventBubbleView: UIView {
     //view constraints configurations immidiately require view sizes
     var rect: CGSize
     
-    let backgroundBubble: UIView = {
+    lazy var backgroundBubble: UIView = {
         let bg = UIView()
-        bg.backgroundColor = UIColor.init(white: 241/255, alpha: 1)
         bg.layer.cornerRadius = 11
         bg.translatesAutoresizingMaskIntoConstraints = false
+        let bubbleGray = UIColor.init(white: 241/255, alpha: 1)
+        let bubbleGreen = UIColor(red: 98/255, green: 197/255, blue: 84/255, alpha: 1)
+        bg.backgroundColor = event.category == "holiday" ? bubbleGreen : bubbleGray
         bg.layer.masksToBounds = true
         return bg
     }()
@@ -594,10 +596,14 @@ class EventTableViewCell: UITableViewCell {
         didSet{
             //clear cell for case deque cell reuse something
             subviews.forEach { $0.removeFromSuperview() }
-            //creates views based on events number            
-            for number in 1...events.count{
-                //configure event view and give it a sequent number
-                configureBubbleViews(number: number)
+
+            //prevent error
+            if events.count > 0{
+                //creates views based on events number
+                for number in 1...events.count{
+                    //configure event view and give it a sequent number
+                    configureBubbleViews(number: number)
+                }
             }
         }
     }

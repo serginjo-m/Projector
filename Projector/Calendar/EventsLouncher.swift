@@ -69,48 +69,103 @@ extension CalendarViewController {
         
         //need this for side events panel date label
         let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: date)
-        if let day = components.day, let month = components.month, let year = components.year, let weekday = components.weekday {
-            let weekDayString = dayOfWeekLetter(for: weekday)
-            let monthStr = monthString(for: month)
-            eventElements.selectedDateLabel.text = ("\(weekDayString) \(day) \(monthStr) \(year)")
+        
+        
+        
+        guard let day = components.day,
+              let month = components.month,
+              let year = components.year,
+              let weekday = components.weekday else {return}
+        
+        let weekDayString = dayOfWeekLetter(for: weekday)
+        let monthStr = monthString(for: month)
+        eventElements.selectedDateLabel.text = ("\(weekDayString) \(day) \(monthStr) \(year)")
+        
+        //calculate what is difference between year when holiday was downloaded and year that user view
+        let yearDifference =  downloadedHolidaysYear - year
+        let dateComponents = DateComponents(year: year + yearDifference , month: month, day: day)
+        let holidayDate = calendar.date(from: dateComponents)
+        
+        //Nice approach:
+        //first create temporary array, that can be modified more than 1 time.
+        //And only after we have finished, pass it to destination
+        //It prevents unexpected tableView reload.
+        var eventsByDate = [Event]()
+        
+        //check if user view different year from current
+        if year != downloadedHolidaysYear{
             
-            
-            //check if user view different year from current
-            if year != downloadedHolidaysYear{
-                //calculate what is difference between year when holiday was downloaded and year thar user view
-                let yearDifference =  downloadedHolidaysYear - year
-                            
-                let dateComponents = DateComponents(year: year + yearDifference , month: month, day: day)
-                let holidayDate = calendar.date(from: dateComponents)
+            if let unwrappedHolidayDate = holidayDate{
+                //check for holiday
+                let holidayEvents = checkForHoliday(holidayDate: unwrappedHolidayDate, currentDate: date)
                 
-                if let unwrappedHolidayDate = holidayDate{
-                    //loop through  array to find holiday in given day - month
-                    groupedEventDictionary[unwrappedHolidayDate]?.forEach{
-                        //pick only holidays in this day
-                        if $0.category == "holiday"{
-                            eventElements.events.append([$0])
-                        }
-                    }
+                if holidayEvents.isEmpty == false {
+                    
+                    eventsByDate.append(contentsOf: holidayEvents)
                 }
+                
             }
+            
         }
+        
         
         //Add all other type of events (user event, step event)
         if let events = groupedEventDictionary[date] {
             
-            var eventsByDate = [Event]()
+            eventsByDate.append(contentsOf: events)
             
-            eventsByDate = events.sorted(by: { (a, b) in return a.date! < b.date! })
-            
-            //unite events by interval intersection
-            let intersectedEvents = intersectEvents(events: eventsByDate)
-            
-            //append events new data
-            eventElements.events.append(contentsOf: intersectedEvents)
         }
+            
+        eventsByDate = eventsByDate.sorted(by: { (a, b) in return a.date! < b.date! })
+        
+        //unite events by interval intersection
+        let intersectedEvents = intersectEvents(events: eventsByDate)
+        
+        //append events new data
+        eventElements.events.append(contentsOf: intersectedEvents)
+        
         
         //reload table view
         eventElements.eventsTableView.reloadData()
+        
+    }
+    
+    private func checkForHoliday(holidayDate: Date, currentDate: Date) -> [Event] {
+        
+        //Configure new object from  holiday with older date
+        var events = [Event]()
+        
+        //loop through  array to find holiday in given day
+                groupedEventDictionary[holidayDate]?.forEach{
+                    //pick only holidays in this day
+                    if $0.category == "holiday"{
+                        
+                        let event = Event()
+                        
+                        event.id = $0.id
+                        event.title = $0.title
+                        event.descr = $0.descr
+                        event.date = currentDate
+                        event.startTime = currentDate
+                        //configure holiday duration
+                        var dayComponent    = DateComponents()
+                        dayComponent.day    = 1 // For removing one day (yesterday): -1
+                        dayComponent.second = -1 // Actual Holiday duration will be 23:59:59, not one day
+                        let theCalendar     = Calendar.current
+                        
+                        let nextDay = theCalendar.date(byAdding: dayComponent, to: currentDate)
+                        event.endTime = nextDay
+                        event.category = $0.category
+                        event.stepId = $0.stepId
+                        event.projectId = $0.projectId
+                        event.reminder = $0.reminder
+                        event.picture = $0.picture
+                        
+                        events.append(event)
+                    }
+                }
+
+        return events
     }
 }
 

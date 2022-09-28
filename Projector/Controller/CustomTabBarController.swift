@@ -251,11 +251,29 @@ extension CustomTabBarController {
             holidayEvent.descr = $0.description
             holidayEvent.year = $0.date.datetime.year
             ProjectListRepository.instance.createHoliday(holidayEvent: holidayEvent)
+            
+            
             //All Events database (holidays, steps, user events)
             let event = Event()
+            
+            //configure holiday duration
+            var dayComponent    = DateComponents()
+            dayComponent.day    = 1 // For removing one day (yesterday): -1
+            dayComponent.second = -1 // Actual Holiday duration will be 23:59:59, not one day
+            let theCalendar     = Calendar.current
+            if let holidayEventDate = holidayEvent.date {
+                let nextDay = theCalendar.date(byAdding: dayComponent, to: holidayEventDate)
+                event.endTime = nextDay
+            }
+            
+            
+            
+           
             event.category = holidayEvent.category
             event.title = holidayEvent.title
             event.date = holidayEvent.date
+            event.startTime = holidayEvent.date
+
             event.descr = holidayEvent.descr
             ProjectListRepository.instance.createEvent(event: event)
             
