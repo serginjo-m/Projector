@@ -145,6 +145,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         return button
     }()
     
+    lazy var projectWayButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(presentProjectWay), for: .touchUpInside)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 17
+        button.layer.masksToBounds = true
+        return button
+    }()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -158,6 +168,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         contentUIView.addSubview(projectImageView)
         contentUIView.addSubview(dismissButton)
         contentUIView.addSubview(editButton)
+        contentUIView.addSubview(projectWayButton)
         contentUIView.addSubview(projectName)
         contentUIView.addSubview(projectNumbersTitle)
         contentUIView.addSubview(projectNumbersCV)
@@ -212,6 +223,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
             stepsTitle.text = "Steps To Do (\(project.projectStep.count))"
             
         }
+    }
+    
+    @objc func presentProjectWay(){
+        let projectWayVC = ProjectWayViewController(projectId: projectListIdentifier)
+        projectWayVC.modalPresentationStyle = .fullScreen
+        self.present(projectWayVC, animated: true)
     }
     
     //EDIT BUTTON ACTION
@@ -311,6 +328,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         editButton.rightAnchor.constraint(equalTo: projectImageView.rightAnchor, constant: -7).isActive = true
         editButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        projectWayButton.topAnchor.constraint(equalTo: editButton.topAnchor, constant: 0).isActive = true
+        projectWayButton.rightAnchor.constraint(equalTo: editButton.leftAnchor, constant: -18).isActive = true
+        projectWayButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        projectWayButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
         projectName.bottomAnchor.constraint(equalTo: projectImageView.bottomAnchor, constant: -10).isActive = true
         projectName.leftAnchor.constraint(equalTo: projectImageView.leftAnchor, constant: 14).isActive = true

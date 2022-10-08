@@ -296,4 +296,29 @@ class ProjectListRepository {
             realm.delete(holiday)
         })
     }
+    
+    //step way section
+    func createSection(section: StepWaySection){
+        try! realm.write ({
+            realm.add(section)
+        })
+    }
+    
+    func getAllStepSections() -> Results<StepWaySection> {
+        return realm.objects(StepWaySection.self)
+    }
+    
+    func deleteSection(section: StepWaySection){
+        try! realm.write ({
+            realm.delete(section)
+        })
+    }
+    
+    func updateSectionIndex(indexNumber: Int, section: StepWaySection){
+        try! realm.write {
+            section.indexNumber = indexNumber
+        }
+    }
+    
+    
 }

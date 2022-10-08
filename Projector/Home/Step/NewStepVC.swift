@@ -22,7 +22,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var stepID: String? {
         didSet{
             if let id = self.stepID{
-                self.projectStep = ProjectListRepository.instance.getProjectStep(id: id)
+                guard let projectStep = ProjectListRepository.instance.getProjectStep(id: id),
+                      let section = projectStep.section else {return}
+                self.projectStep = projectStep
+                self.stepSection = section
+                self.sectionButton.setTitle("    \(section.name)", for: .normal)
             }
         }
     }
@@ -35,9 +39,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var stepItems = [String]()
     // step progress category
     var selectedStepProgress: Int = 0
+    //this property uses for building a ProjectWayViewController (required)
+    var stepSection: StepWaySection = StepWaySection()//this way I insure that property would be set to object
     
     var realm: Realm!//create a var
-    
+
     let colorArr = [
         UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),//blue color
         UIColor.init(red: 248/255, green: 182/255, blue: 24/255, alpha: 1),//orange color
@@ -176,6 +182,30 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    let sectionTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Select Section"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var sectionButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(selectSection), for: .touchUpInside)
+//        button.backgroundColor = .systemBlue
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 5
+        button.setTitle("   Select Section for Your Step", for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        button.backgroundColor = UIColor.init(white: 237/255, alpha: 1)
+        button.layer.masksToBounds = true
+        return button
+    }()
+    
     let categoryTitle: UILabel = {
         let label = UILabel()
         label.text = "Select Category"
@@ -253,7 +283,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView].forEach {
+        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -278,6 +308,16 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         sender.isSelected = true
         //user progress category selection
         selectedStepProgress = sender.tag
+    }
+     
+    @objc private func selectSection(){
+        guard let projectId = projectId else {return}
+        let newStepSectionsList = NewStepSectionsList(projectId: projectId)
+        newStepSectionsList.parentViewControllerExtension = self
+        newStepSectionsList.modalPresentationStyle = .fullScreen
+        
+        newStepSectionsList.projectId = projectId
+        present(newStepSectionsList, animated: true)
     }
     
     //animate add item menu
@@ -371,7 +411,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
         }else{//save new step instance
             //
-            try! self.realm!.write ({//here we actually add a new object called projectList
+            try! self.realm!.write ({//here we actually add a new object called projectStep
                 self.projectList?.projectStep.append(stepTemplate)
             })
             
@@ -393,6 +433,8 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stepTemplate.date = createdDate
         //name
         stepTemplate.name = stepNameTextField.text ?? ""
+        //section uses for ProjectWayViewController construction
+        stepTemplate.section = stepSection
         //category
         let categories = ["todo", "inProgress", "done", "blocked"]//switch maybe?
         stepTemplate.category = categories[selectedStepProgress]
@@ -553,10 +595,20 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         photoTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         photoTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        categoryTitle.topAnchor.constraint(equalTo: lineUIView.bottomAnchor, constant:  30).isActive = true
+        categoryTitle.topAnchor.constraint(equalTo: sectionButton.bottomAnchor, constant:  20).isActive = true
         categoryTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         categoryTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         categoryTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        sectionTitle.topAnchor.constraint(equalTo: lineUIView.bottomAnchor, constant: 30).isActive = true
+        sectionTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
+        sectionTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        sectionTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        sectionButton.topAnchor.constraint(equalTo: sectionTitle.bottomAnchor, constant: 12).isActive = true
+        sectionButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        sectionButton.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        sectionButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         nameTitle.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant:  40).isActive = true
         nameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true

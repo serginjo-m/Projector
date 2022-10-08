@@ -16,7 +16,7 @@ class ProjectStep: Object{
     
     
     @objc dynamic var category = "Other"
-    
+    @objc dynamic var section: StepWaySection?
     @objc dynamic var cost = 0
     @objc dynamic var distance = 0
     @objc dynamic var event: Event?

@@ -35,7 +35,7 @@ class ExpandingReminder: UIView {
     
     let reminderTitle: UILabel = {
         let label = UILabel()
-        label.text = "Set a Reminder?"
+        label.text = "Set a reminder?"
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.textColor = UIColor.init(white: 42/255, alpha: 1)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +64,7 @@ class ExpandingReminder: UIView {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
         label.textAlignment = .center
-        label.text = "Set a Reminder Date & Time"
+        label.text = "Set a reminder date & time"
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
