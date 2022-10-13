@@ -87,9 +87,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         let PIV = UIImageView()
         PIV.contentMode = UIImageView.ContentMode.scaleAspectFill
         PIV.clipsToBounds = true
-        PIV.layer.cornerRadius = 11
-        //leave like so?
-        PIV.image = UIImage(named: "workspace")
+        PIV.layer.cornerRadius = 13
         return PIV
     }()
     lazy var dismissButton: UIButton = {

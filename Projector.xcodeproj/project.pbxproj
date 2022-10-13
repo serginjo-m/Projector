@@ -89,6 +89,7 @@
 		CF8DFB7E264AF55F00ACB4EB /* LineCGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */; };
 		CF98AEC628E61FD2002C3FE7 /* NewStepSectionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC528E61FD2002C3FE7 /* NewStepSectionsList.swift */; };
 		CF98AEC828EDF1C9002C3FE7 /* StepWaySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */; };
+		CF98AECA28F49CBA002C3FE7 /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */; };
 		CF9974B7270F6FB2009FD9EB /* NewUserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */; };
 		CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D19002852665E00599ABE /* NotificationsRepository.swift */; };
 		CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D1904285E1A7F00599ABE /* NewStepVC.swift */; };
@@ -228,6 +229,7 @@
 		CF8DFB7D264AF55F00ACB4EB /* LineCGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineCGPoint.swift; sourceTree = "<group>"; };
 		CF98AEC528E61FD2002C3FE7 /* NewStepSectionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepSectionsList.swift; sourceTree = "<group>"; };
 		CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWaySection.swift; sourceTree = "<group>"; };
+		CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
 		CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserInputView.swift; sourceTree = "<group>"; };
 		CF9D18FF284D170C00599ABE /* Projector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Projector.entitlements; sourceTree = "<group>"; };
 		CF9D19002852665E00599ABE /* NotificationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepository.swift; sourceTree = "<group>"; };
@@ -618,6 +620,7 @@
 				CFD5288326935B8400062DCF /* UIView+Stacking.swift */,
 				CFEDDC5226F7C900005E5652 /* UIColorExt.swift */,
 				CF8D01052746DC9B009754D8 /* UIImageView.swift */,
+				CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -837,6 +840,7 @@
 				CF1C51E2244F682200FBD1CE /* StepViewController.swift in Sources */,
 				CFA5878B242883A6006367AE /* CategoryCell.swift in Sources */,
 				CFB40CD927E6379000D6EEA4 /* UserProfileViewController.swift in Sources */,
+				CF98AECA28F49CBA002C3FE7 /* ButtonExtension.swift in Sources */,
 				CFFA4EC6272B1C6100071F01 /* Steps.swift in Sources */,
 				CF594361252BA2F20036641B /* RecentActivitiesCV.swift in Sources */,
 				CFBC3A4025814A3300EEF13D /* CalendarVC.swift in Sources */,

@@ -62,12 +62,14 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
     func showView(startingUIButton: UIButton) {
         //view position
         let properCoordinates = self.superview?.convert(self.frame, to: nil)
+        
         //button position
         let startingFrame = startingUIButton.superview?.convert(startingUIButton.frame, to: nil)
         guard let topOffset = startingFrame?.origin.y, let rightOffset = startingFrame?.origin.x else {return}
         statusOptionsTopConstraint?.constant = topOffset - properCoordinates!.origin.y
         statusOptionsRightConstraint?.constant = rightOffset - 30
         progressMenu.isHidden = !progressMenu.isHidden//hide or show progress menu
+        
         self.layoutIfNeeded()
         //select step using buttons tag, that corresponds to the cell number
         progressMenu.projectStep = projectSteps[startingUIButton.tag]

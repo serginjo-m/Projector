@@ -79,6 +79,18 @@ class ProjectListRepository {
         })
     }
     
+    func updateStepDisplayedStatus(step: ProjectStep, displayedStatus: Bool){
+        try! self.realm.write({
+            step.displayed = displayedStatus
+        })
+    }
+    
+    func updateStepSection(step: ProjectStep, section: StepWaySection){
+        try! self.realm.write({
+            step.section = section
+        })
+    }
+    
     //edit step function
     func editStep(step: ProjectStep){
         try! self.realm.write({
@@ -320,5 +332,9 @@ class ProjectListRepository {
         }
     }
     
-    
+    func updateSectionName(name: String, section: StepWaySection){
+        try! realm.write {
+            section.name = name
+        }
+    }
 }

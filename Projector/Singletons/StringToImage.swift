@@ -8,6 +8,8 @@
 
 import UIKit
 
+//retreaveImageForProject && retreaveImageUsingURLString do the same thing
+//but retreaveImageUsingURLString has cache that is better
 class StringToImage {
     
     static let shared = StringToImage()

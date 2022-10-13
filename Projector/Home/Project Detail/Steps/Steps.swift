@@ -9,7 +9,8 @@
 import UIKit
 import RealmSwift
 
-
+//MARK: DetailViewController Steps Section
+//It includes collectionView navigation, stackView that holds four collectionViews
 class Steps: UIView{
     
     //MARK: database

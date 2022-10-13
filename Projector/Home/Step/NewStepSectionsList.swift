@@ -59,9 +59,12 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
+        button.setBackgroundColor(.lightGray, forState: .disabled)
         button.setImage(UIImage(named: "crossIcon"), for: .normal)
         button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         button.layer.cornerRadius = 5
+        button.layer.masksToBounds = true
+        button.isEnabled = false
         return button
     }()
     
@@ -165,6 +168,32 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         dismiss(animated: true)
     }
     
+    private func updatePlusButtonState(){
+        //Disable the Save button when text field is empty.
+        let text = sectionTextField.text ?? ""
+        addSectionButton.isEnabled = !text.isEmpty
+    }
+    
+    
+    //MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //Hide the keyboard
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updatePlusButtonState()
+        navigationItem.title = textField.text
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        //Disable the Save button while editing.
+        addSectionButton.isEnabled = false
+    }
+    
+    
+    
     //MARK: TableView section
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -175,7 +204,7 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         // create a new cell if needed or reuse an old one
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier , for: indexPath) as? SectionCell else {fatalError( "The dequeued cell is not an instance of ProjectTableViewCell." )}
         
-        cell.sectionNameLabel.text = sections[indexPath.row].name
+        cell.sectionNameLabel.text = "\(sections[indexPath.row].indexNumber)   \(sections[indexPath.row].name)"
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
