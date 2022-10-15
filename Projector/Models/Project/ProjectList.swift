@@ -22,7 +22,7 @@ class ProjectList: Object {
     //created
     @objc dynamic var date = "07/06/2020"
     //complete button
-    @objc dynamic var complete = false
+    @objc dynamic var filterIsActive = false
     
     //project step objects
     let projectStep = List<ProjectStep>()//[ProjectStep]() - obj
@@ -35,6 +35,6 @@ class ProjectList: Object {
     }
     
     override var description: String{
-        return "This Value is Changing by Complete Function \(complete)"
+        return "This Value is Changing by Complete Function \(filterIsActive)"
     }
 }

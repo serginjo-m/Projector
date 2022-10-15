@@ -274,7 +274,16 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         })
                 
         projectSections = groupedSteps.map { (key, value) in
-            guard let projectStep = value.first, let stepSectionObject = projectStep.section else {return StepWaySection()}
+            guard let projectStep = value.first, let stepSectionObject = projectStep.section else {
+                //if for some reasons project doesn't have any section - fix it! (older versions)
+                let section = StepWaySection()
+                section.name = "new"
+                section.indexNumber = 10
+                section.projectId = self.project!.id
+                
+                ProjectListRepository.instance.updateStepSection(step: value.first!, section: section)
+                
+                return StepWaySection()}
             
             return stepSectionObject
         }.sorted(by: { a, b in
@@ -585,10 +594,15 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
+        let text = projectSections[section].name
         
-        //TODO: SHOULD CALCULATE HEIGHT RECT BASED ON TEXT
+        //this logic makes stepnamelabel size correct
+        let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 130, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
         
-        let headerView = SectionHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+        
+        let padding: CGFloat = rect.height < 18 ? 32 : 10
+        
+        let headerView = SectionHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: rect.height + padding))
         headerView.menuButton.addTarget(self, action: #selector(showOptions(_:)), for: .touchUpInside)
         headerView.menuButton.tag = section
         
@@ -596,15 +610,22 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         headerView.sectionIndexLabel.text = String(projectSections[section].indexNumber)
         
         
-        headerView.sectionTitle.text = projectSections[section].name
+        headerView.sectionTitle.text = text
         return headerView
         
         
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        //TODO: SHOULD CALCULATE HEIGHT RECT BASED ON TEXT
-        return 50
+
+        let text = projectSections[section].name
+        
+        //this logic makes stepnamelabel size correct
+        let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 130, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
+
+        let padding: CGFloat = rect.height < 18 ? 32 : 10
+        
+        return rect.height + padding
     }
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
@@ -689,6 +710,7 @@ class ProjectWayCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -724,23 +746,29 @@ class ProjectWayCell: UITableViewCell {
         guard let step = template else {return}
         
         ProjectListRepository.instance.updateStepDisplayedStatus(step: step, displayedStatus: !sender.isSelected)
+        
+        //it is more experimental thing
+        //so what I'm trying to do is activate filter inside DetailViewController when one of steps is set to hidden
+        if sender.isSelected == true, let section = step.section {
+            if let project = ProjectListRepository.instance.getProjectList(id: section.projectId){
+                ProjectListRepository.instance.updateProjectFilterStatus(project: project, filterIsActive: true)
+            }
+        }
     }
     
     func setupCell(){
         addSubview(stepTitleLabel)
         addSubview(displayButton)
         
-        
-        
         displayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
         displayButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         displayButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
         displayButton.heightAnchor.constraint(equalToConstant: 26).isActive = true
         
-        stepTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        stepTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15).isActive = true
         stepTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50).isActive = true
         stepTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -36).isActive = true
-        stepTitleLabel.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        stepTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15).isActive = true
     }
     
     

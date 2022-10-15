@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-//TODO: Should understand, what I could modify here.
 //calls functions from MainViewController
 protocol DetailViewControllerDelegate: AnyObject {
     //this function is reload mainVC project data

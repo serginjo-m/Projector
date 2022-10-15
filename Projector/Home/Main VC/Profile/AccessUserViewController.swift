@@ -77,7 +77,7 @@ class AccessUserViewController: UIViewController {
                     self.dismiss(animated: true, completion: nil)
                 }
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
 //                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
 //                    switch res {
 //                    case .success(let apiRes):
@@ -113,7 +113,7 @@ class AccessUserViewController: UIViewController {
                 }
                 
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
 //                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
 //                    switch res {
 //                    case .success(let apiResponse):

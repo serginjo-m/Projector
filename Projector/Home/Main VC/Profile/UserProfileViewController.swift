@@ -152,7 +152,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             self.loginButton.isHidden = true
             
             
-            //TODO: SAILSJS
+            //MARK: SAILSJS
             //After login or register user, it tries to fetch users object, witch than should be saved for app
 //            Service.shared.fetchUserProfile { (res) in
 //                switch res{
@@ -218,7 +218,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             }
             
             
-            //TODO: SAILSJS
+            //MARK: SAILSJS
 //            Service.shared.handleLogout { (res) in
 //                switch res {
 //                case .success(let res):

@@ -50,6 +50,7 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         textField.placeholder = "New Step Section"
         textField.font = UIFont.boldSystemFont(ofSize: 18)
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         // Handle the text field's user input through delegate callback.
         textField.delegate = self
         return textField
@@ -59,7 +60,8 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
-        button.setBackgroundColor(.lightGray, forState: .disabled)
+        let midnightBlack = UIColor.init(white: 55/255, alpha: 1)
+        button.setBackgroundColor(midnightBlack, forState: .disabled)
         button.setImage(UIImage(named: "crossIcon"), for: .normal)
         button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         button.layer.cornerRadius = 5
@@ -162,6 +164,10 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    @objc private func textFieldDidChange(_ sender: UITextField){
+        updatePlusButtonState()
+    }
+    
     private func setStepSectionAndDismiss(stepWaySection: StepWaySection){
         parentViewControllerExtension?.stepSection = stepWaySection
         parentViewControllerExtension?.sectionButton.setTitle("   \(stepWaySection.name)", for: .normal)
@@ -187,15 +193,7 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
         navigationItem.title = textField.text
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //Disable the Save button while editing.
-        addSectionButton.isEnabled = false
-    }
-    
-    
-    
     //MARK: TableView section
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections.count
     }

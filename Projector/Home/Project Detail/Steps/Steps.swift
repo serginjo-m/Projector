@@ -16,6 +16,8 @@ class Steps: UIView{
     //MARK: database
     
     weak var delegate: EditViewControllerDelegate?
+    
+    var projectWayFilter: Bool
    
     var project: ProjectList {
         didSet{
@@ -23,7 +25,7 @@ class Steps: UIView{
         }
     }
     
-    fileprivate func updateAllStepCollectionViews(){
+    func updateAllStepCollectionViews(){
         
         projectSteps = project.projectStep
         groupedStepsByCategory = Dictionary(grouping: projectSteps) { (step) -> String in
@@ -32,12 +34,26 @@ class Steps: UIView{
         let lists = [todoList, inProgressList, doneList, blockedList]
         let progressCategories = ["todo", "inProgress", "done", "blocked"]
         for (index, list) in lists.enumerated(){
+            
             list.projectSteps.removeAll()
+            //full list
             if let unwrappedList = groupedStepsByCategory[progressCategories[index]]{
-                list.projectSteps = unwrappedList
-            }else{
+                
+                //property set by parent VC from button.isSelected state
+                if self.projectWayFilter == true {
+                    //filter steps to show steps that are displayed to true
+                    list.projectSteps  = unwrappedList.filter { step in
+                        step.displayed == true
+                    }
+                } else {//or show everything if filter disabled
+                    list.projectSteps = unwrappedList
+                }
+                
+            }else{//or set to empty if no steps returned from database
                 list.projectSteps = []
             }
+            
+            list.reloadData()
         }
     }
     
@@ -234,8 +250,11 @@ class Steps: UIView{
         currentPosition = sender.tag
     }
     
-    init(project: ProjectList, delegate: EditViewControllerDelegate){
+    
+    //MARK: Initialization
+    init(project: ProjectList, delegate: EditViewControllerDelegate, projectWayFilter: Bool){
         
+        self.projectWayFilter = projectWayFilter
         self.project = project
         self.delegate = delegate
         

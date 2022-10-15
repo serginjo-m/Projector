@@ -56,6 +56,12 @@ class ProjectListRepository {
         })
     }
     
+    func updateProjectFilterStatus(project: ProjectList, filterIsActive: Bool) {
+        try! self.realm.write({
+            project.filterIsActive = filterIsActive
+        })
+    }
+    
     func updateProjectName(name: String, list: ProjectList){
         try! realm.write {
             list.name = name

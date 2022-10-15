@@ -554,7 +554,7 @@ extension ProjectViewController {
 //                guard let self = self else {return}
 
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
 //                Service.shared.fetchUserProfile { (res) in
 //                    switch res {
 //                    case .success(let res):
@@ -605,7 +605,7 @@ extension ProjectViewController {
                 
                 
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
 //                guard let self = self else {return}
                 //as user is logged in, try to fetch user from WEB, create user inside local DB an update VC elem.
 //                Service.shared.fetchUserProfile { (res) in

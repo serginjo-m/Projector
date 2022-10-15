@@ -390,7 +390,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
 
             if let event = stepTemplate.event{
                 
-                //TODO: temporary solution with Notification clone
                 //Task include reminder
                 let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
                 //check if event includes reminder
@@ -427,8 +426,14 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let stepTemplate = ProjectStep()
         //if id exist(edit mode), replace it
         if let id = stepID {
+            
             stepTemplate.id = id
+            //update step displayed status
+            if let step = projectStep{
+                stepTemplate.displayed = step.displayed
+            }
         }
+        
         //date
         stepTemplate.date = createdDate
         //name

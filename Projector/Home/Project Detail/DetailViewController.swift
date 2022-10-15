@@ -72,11 +72,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     
     lazy var stepsCollections: Steps = {
-        //it is optional, so I need to set something to view
+        //it isn't optional, so I need to set something to view
         guard let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier) else {
-            return Steps(project: ProjectList(), delegate: self)//empty instace
+            return Steps(project: ProjectList(), delegate: self, projectWayFilter: self.displayStepsSwitchButton.isSelected)//empty instace
         }
-        let steps = Steps(project: project, delegate: self)
+        let steps = Steps(project: project, delegate: self, projectWayFilter: self.displayStepsSwitchButton.isSelected)
         return steps
     }()
     
@@ -129,14 +129,31 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }()
     var stepsTitle: UILabel = {
         let label = UILabel()
-        label.text = "Steps To Do (0)"
+        label.text = "Steps To Do"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
     
+    lazy var displayStepsSwitchButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(toggleStepsDispalayFilter(_:)), for: .touchUpInside)
+        button.setImage(UIImage(named: "greenEye"), for: .normal)
+        button.setImage(UIImage(named: "redEye"), for: .selected)
+        button.contentMode = .left
+        let redColor = UIColor.init(displayP3Red: 255/255, green: 49/255, blue: 49/255, alpha: 1)
+        let greenColor = UIColor.init(displayP3Red: 27/255, green: 186/255, blue: 28/255, alpha: 1)
+        button.setTitleColor(redColor, for: .selected)
+        button.setTitleColor(greenColor, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        if let project = projectInstance {
+            button.isSelected = project.filterIsActive
+        }
+        return button
+    }()
+    
     lazy var editButton: UIButton = {
         let button = UIButton()
-        button.setTitle("", for: .normal)
         button.setBackgroundImage(UIImage(named: "editButton"), for: .normal)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(editButtonAction(_:)), for: .touchUpInside)
@@ -145,14 +162,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     lazy var projectWayButton: UIButton = {
         let button = UIButton()
+        button.setBackgroundImage(UIImage(named: "projectWayIcon"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(presentProjectWay), for: .touchUpInside)
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 17
-        button.layer.masksToBounds = true
         return button
     }()
     
+    //MARK: Lifecycle
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -172,6 +188,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         contentUIView.addSubview(projectNumbersCV)
         contentUIView.addSubview(stepsTitle)
         contentUIView.addSubview(stepsCollections)
+        contentUIView.addSubview(displayStepsSwitchButton)
         
         view.addSubview(blackView)
         view.addSubview(sideView)
@@ -193,11 +210,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     override func viewDidLayoutSubviews() {
         gradient.frame = projectImageView.bounds
     }
-        
+      
+    //MARK: Methods
     //back to previous view
     @objc func backAction(_ sender: Any) {
         self.delegate?.reloadTableView()
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func toggleStepsDispalayFilter(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        if let project = projectInstance {
+            ProjectListRepository.instance.updateProjectFilterStatus(project: project, filterIsActive: sender.isSelected)
+        }
+        stepsCollections.projectWayFilter = sender.isSelected
+        stepsCollections.updateAllStepCollectionViews()
     }
     
     //set project image, name, statistics DB
@@ -218,8 +245,19 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
             sideView.projectId = self.projectListIdentifier
             stepsCollections.project = project
             projectName.text = project.name
-            stepsTitle.text = "Steps To Do (\(project.projectStep.count))"
+            //displayed steps number
+            let stepsToDisplay = project.projectStep.filter { step in
+                step.displayed == true
+            }
+            //Filter turned off
+            displayStepsSwitchButton.setTitle("  \(project.projectStep.count)/\(project.projectStep.count) displayed", for: .normal)
+            //Filter turned on
+            displayStepsSwitchButton.setTitle("  \(stepsToDisplay.count)/\(project.projectStep.count) displayed", for: .selected)
             
+            //is it really good idea to update every time step is set to hidden inside StepWayVC?
+            displayStepsSwitchButton.isSelected = project.filterIsActive
+            stepsCollections.projectWayFilter = project.filterIsActive
+            stepsCollections.updateAllStepCollectionViews()
         }
     }
     
@@ -284,7 +322,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }
     
     
-    //constraints
+    //MARK: Constraints
     private func setupLayout(){
                 
         [editButton, scrollViewContainer, contentUIView, projectName, projectImageView, dismissButton, projectNumbersTitle, projectNumbersCV, stepsTitle, blackView, stepsCollections].forEach { (view) in
@@ -349,8 +387,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         
         stepsTitle.topAnchor.constraint(equalTo: projectNumbersCV.bottomAnchor, constant: 16).isActive = true
         stepsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        stepsTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        stepsTitle.widthAnchor.constraint(equalToConstant: 110).isActive = true
         stepsTitle.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        
+        displayStepsSwitchButton.centerYAnchor.constraint(equalTo: stepsTitle.centerYAnchor).isActive = true
+        displayStepsSwitchButton.leadingAnchor.constraint(equalTo: stepsTitle.trailingAnchor, constant: 15).isActive = true
+        displayStepsSwitchButton.widthAnchor.constraint(equalToConstant: 155).isActive = true
+        displayStepsSwitchButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         stepsCollections.topAnchor.constraint(equalTo: stepsTitle.bottomAnchor, constant: 19).isActive = true
         stepsCollections.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: 0).isActive = true

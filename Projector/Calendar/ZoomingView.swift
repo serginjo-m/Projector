@@ -224,7 +224,7 @@ class ZoomingView: UIView {
         thinUnderline.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true
         thinUnderline.topAnchor.constraint(equalTo: clockImageView.bottomAnchor, constant: 20).isActive = true
         //TODO: Height needs to be calculated dynamically
-        //TODO: Can I use textField here?
+        // Can I use textField here?
         descriptionLabelTopAnchor = descriptionLabel.topAnchor.constraint(equalTo: eventTimeLabel.bottomAnchor, constant: 33)
         descriptionLabel.leadingAnchor.constraint(equalTo: title.leadingAnchor).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: title.trailingAnchor).isActive = true

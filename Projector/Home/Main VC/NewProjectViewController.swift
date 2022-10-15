@@ -208,7 +208,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
                 //UPDATE EXISTING COPY TO WHAT USER WAS SPECIFIED
                 projectTemplate.id = ID
                 projectTemplate.date = project.date
-                projectTemplate.complete = project.complete
+                projectTemplate.filterIsActive = project.filterIsActive
                 
                 for step in project.projectStep{
                     projectTemplate.projectStep.append(step)

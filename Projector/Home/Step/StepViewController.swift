@@ -414,20 +414,13 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         //this logic makes stepnamelabel size correct
-        let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20)], context: nil)
+        let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
         
-        // 2 or 1 line title
-        if rect.height > 25{
-            stepNameTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 22).isActive = true
-            stepNameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-            stepNameTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-            stepNameTitle.heightAnchor.constraint(equalToConstant: 66).isActive = true
-        }else{
-            stepNameTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 22).isActive = true
-            stepNameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-            stepNameTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-            stepNameTitle.heightAnchor.constraint(equalToConstant: 33).isActive = true
-        }
+        
+        stepNameTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 22).isActive = true
+        stepNameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        stepNameTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        stepNameTitle.heightAnchor.constraint(equalToConstant: rect.height + 20).isActive = true
         
         stepToEventButton.topAnchor.constraint(equalTo: stepNameTitle.bottomAnchor, constant: 18).isActive = true
         stepToEventButton.leftAnchor.constraint(equalTo: dismissButton.leftAnchor, constant: 0).isActive = true

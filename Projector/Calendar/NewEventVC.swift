@@ -277,7 +277,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             
             if #available(iOS 13.0, *) {
                 
-                //TODO: temporary solution with Notification clone
                 //Task object, that passing in NotificationManager, contains reminder
                 let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
                 //if Event contains Notification (unwrap optional value)

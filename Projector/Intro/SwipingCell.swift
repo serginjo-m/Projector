@@ -134,7 +134,7 @@ class SwipingCell: UICollectionViewCell{
                     unwrappedParentVC.dismiss(animated: true, completion: nil)
                 }
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
                 
                 
                 //REST API Service called. Here I try to create user inside Mongo DB using Sails.js
@@ -173,7 +173,7 @@ class SwipingCell: UICollectionViewCell{
                     unwrappedParentVC.dismiss(animated: true)
                 }
                 
-                //TODO: SAILSJS
+                //MARK: SAILSJS
                 
                 //Try to login user inside Mongo DB using Sails.js app.
 //                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
