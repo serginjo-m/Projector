@@ -31,7 +31,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     lazy var recentActivitiesCV: RecentActivitiesCollectionView = {
         let collectionView = RecentActivitiesCollectionView()
         collectionView.isUserInteractionEnabled = true
-        collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapMe(_:))))
+        collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandRecentActivity(_:))))
         return collectionView
     }()
     
@@ -79,6 +79,17 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     //stack view for recent projects collection view
     var recentProjectsStackView = UIStackView()
+    
+    lazy var noProjectsBannerView: NoProjectsBannerView = {
+        let view = NoProjectsBannerView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentViewController)))
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.isHidden = projects.count == 0 ? false : true
+        return view
+    }()
     
     //Profile Button
     lazy var transitionButton: UIButton = {
@@ -149,8 +160,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return collectionView
     }()
     
-    //I realy don't know how it works, but maybe that is solution
-    //to my issue with camera roll access
+    
+    // maybe that is solution to my issue with camera roll access
     // seems it speed up loading?
     let status = PHPhotoLibrary.authorizationStatus()
     
@@ -165,8 +176,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
             if response {
                 //access granted
-            } else {
-                
             }
         }
         
@@ -175,14 +184,10 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             PHPhotoLibrary.requestAuthorization({status in})
         }
         
-        
-        
-        //temporary location
-        //adjust scroll view
-        
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(recentProjectsStackView)
+        contentUIView.addSubview(noProjectsBannerView)
         contentUIView.addSubview(contentTextView)
         contentUIView.addSubview(projectsTitle)
         contentUIView.addSubview(transitionButton)
@@ -207,6 +212,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         //include number of projects to the title text
         projectsTitle.text = "Your Projects (\(projects.count))"
+        //hide or reveal noProjetsBannerView if there is no project for now
+        noProjectsBannerView.isHidden = projects.count == 0 ? false : true
         //if user is logged in update view controllers title
         checkUserProfile()
         //transition progress inside statistics widget
@@ -265,6 +272,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         }
     }
     
+    @objc func presentViewController(){
+        let newProjectViewController = NewProjectViewController()
+        newProjectViewController.modalPresentationStyle = .fullScreen
+        present(newProjectViewController, animated: true)
+    }
+    
     //user activity object for today
     func createDayActivity (){
         
@@ -320,7 +333,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //recent activity tap animation
-    @objc func tapMe(_ sender: UITapGestureRecognizer){
+    @objc func expandRecentActivity(_ sender: UITapGestureRecognizer){
         
         guard let minHeight = minHeightAnchor else {return}
         if minHeight.isActive == true{
@@ -387,11 +400,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
 
         //update number of projects in projects CV title
         projectsTitle.text = "Your Projects (\(projects.count))"
+        
+        //hide or reveal noProjetsBannerView if there is no project for now
+        noProjectsBannerView.isHidden = projects.count == 0 ? false : true
     }
     
     //return UIImage by URL
     func retreaveImageForProject(myUrl: String) -> UIImage{
-        var projectImage: UIImage = UIImage(named: "defaultImage")!
+        var projectImage: UIImage = UIImage(named: "scheduledStepEvent")!
         let url = URL(string: myUrl)
         let data = try? Data(contentsOf: url!)
         if let imageData = data{
@@ -417,7 +433,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         if let validUrl = projects[indexPath.item].selectedImagePathUrl{
             cell.projectImage.image = retreaveImageForProject(myUrl: validUrl)
         }else{
-            cell.projectImage.image = UIImage(named: "defaultImage")
+            cell.projectImage.image = UIImage(named: "scheduledStepEvent")
         }
         //configure delete feature
         cell.deleteButton.tag = indexPath.item
@@ -535,6 +551,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         recentProjectsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
         recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
+        
+        noProjectsBannerView.topAnchor.constraint(equalTo: recentProjectsStackView.topAnchor).isActive = true
+        noProjectsBannerView.bottomAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor).isActive = true
+        noProjectsBannerView.leadingAnchor.constraint(equalTo: recentProjectsStackView.leadingAnchor).isActive = true
+        noProjectsBannerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
 }
 

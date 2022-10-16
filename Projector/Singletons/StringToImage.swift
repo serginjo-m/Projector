@@ -16,7 +16,7 @@ class StringToImage {
     
     //return UIImage by URL
     func retreaveImageForProject(myUrl: String) -> UIImage?{
-        var projectImage: UIImage = UIImage(named: "defaultImage")!
+        var projectImage: UIImage = UIImage(named: "scheduledStepEvent")!
         let url = URL(string: myUrl)
         let data = try? Data(contentsOf: url!)
         if let imageData = data{

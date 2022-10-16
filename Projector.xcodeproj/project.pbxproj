@@ -90,6 +90,7 @@
 		CF98AEC628E61FD2002C3FE7 /* NewStepSectionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC528E61FD2002C3FE7 /* NewStepSectionsList.swift */; };
 		CF98AEC828EDF1C9002C3FE7 /* StepWaySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */; };
 		CF98AECA28F49CBA002C3FE7 /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */; };
+		CF98AECC28FC1C2B002C3FE7 /* NoProjectsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AECB28FC1C2B002C3FE7 /* NoProjectsBannerView.swift */; };
 		CF9974B7270F6FB2009FD9EB /* NewUserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */; };
 		CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D19002852665E00599ABE /* NotificationsRepository.swift */; };
 		CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D1904285E1A7F00599ABE /* NewStepVC.swift */; };
@@ -230,6 +231,7 @@
 		CF98AEC528E61FD2002C3FE7 /* NewStepSectionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStepSectionsList.swift; sourceTree = "<group>"; };
 		CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWaySection.swift; sourceTree = "<group>"; };
 		CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
+		CF98AECB28FC1C2B002C3FE7 /* NoProjectsBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoProjectsBannerView.swift; sourceTree = "<group>"; };
 		CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserInputView.swift; sourceTree = "<group>"; };
 		CF9D18FF284D170C00599ABE /* Projector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Projector.entitlements; sourceTree = "<group>"; };
 		CF9D19002852665E00599ABE /* NotificationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepository.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				CF5A91E6255DB6AB00FB605B /* NewProjectViewController.swift */,
 				CF24FBE22439AE260040D9F8 /* NewProjectCateg.swift */,
 				CF295C7F2827FFE30092FA5C /* ProjectCell.swift */,
+				CF98AECB28FC1C2B002C3FE7 /* NoProjectsBannerView.swift */,
 			);
 			path = "Main VC";
 			sourceTree = "<group>";
@@ -895,6 +898,7 @@
 				CF9DA83D244E182E00DFAEEF /* workVersionDetailVC.swift in Sources */,
 				CF4436D32812C3BA002F009C /* Service.swift in Sources */,
 				CF29D9C926C25F8000B3FEE2 /* NotificationsHeaderImage.swift in Sources */,
+				CF98AECC28FC1C2B002C3FE7 /* NoProjectsBannerView.swift in Sources */,
 				CFEDDC5726FCFABA005E5652 /* SwipingCell.swift in Sources */,
 				CFCD789D268237010066294A /* UIViewExtension.swift in Sources */,
 				CF24FBE32439AE260040D9F8 /* NewProjectCateg.swift in Sources */,

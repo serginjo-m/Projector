@@ -80,16 +80,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         return steps
     }()
     
-    
-    
-   //Project Image created programatically
     let projectImageView: UIImageView = {
-        let PIV = UIImageView()
-        PIV.contentMode = UIImageView.ContentMode.scaleAspectFill
-        PIV.clipsToBounds = true
-        PIV.layer.cornerRadius = 13
-        return PIV
+        let imageView = UIImageView()
+        imageView.contentMode = UIImageView.ContentMode.scaleAspectFill
+        imageView.image = UIImage(named: "newEventDefault")
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 13
+        return imageView
     }()
+    
     lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -235,7 +234,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
             projectImageView.image = self.delegate?.retreaveImageForProject(myUrl: validUrl)
         }else{
             //in case image wasn't selected
-            projectImageView.image = nil
+            projectImageView.image = UIImage(named: "newEventDefault")
         }
         
         //SET PROJECT DATA TO OBJECTS

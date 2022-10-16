@@ -282,7 +282,7 @@ class StatisticCell: UITableViewCell {
                     moneyNumber.text = "\(money) $"
                 }
                 if let time = template.time {
-                    timeNumber.text = "\(time) min."
+                    timeNumber.text = "\(time) h."
                 }
                 if let fuel = template.fuel {
                     fuelNumber.text = "\(fuel) l."
@@ -297,7 +297,7 @@ class StatisticCell: UITableViewCell {
     
     //return UIImage by URL
     func retreaveImageForProject(myUrl: String) -> UIImage{
-        var projectImage: UIImage = UIImage(named: "defaultImage")!
+        var projectImage: UIImage = UIImage(named: "scheduledStepEvent")!
         let url = URL(string: myUrl)
         let data = try? Data(contentsOf: url!)
         if let imageData = data{
