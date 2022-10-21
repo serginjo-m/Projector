@@ -19,6 +19,15 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
             //need this option for updating after delete
         }
     }
+    
+    //animation start point
+    var startingFrame: CGRect?
+    //black bg
+    var blackBackgroundView: UIView?
+    //view to zoom in
+    var startingImageView: UIImageView?
+    
+    
     //reload everything
     override func updateDatabase() {
         //update data base
@@ -37,28 +46,17 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
     
     //convert Realm Result<...> to an array of object.
     func setupDatabase() {
-        
         //clear old data from array
         items.removeAll()
-        
-        //not so efficient, but it works
-        for item in cameraNotes {
-            items.append(item)
-        }
-        
+        items.append(contentsOf: cameraNotes)
     }
     
-    //animation start point
-    var startingFrame: CGRect?
-    //black bg
-    var blackBackgroundView: UIView?
-    //view to zoom in
-    var startingImageView: UIImageView?
     
+   
     //custom zoom in logic
-    override func performZoomInForStartingImageView(startingImageView: UIImageView){
+    override func performZoomInForStartingImageView(startingImageView: UIView){
         
-        self.startingImageView = startingImageView
+        self.startingImageView = startingImageView as? UIImageView
         self.startingImageView?.isHidden = true
         
         startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
@@ -67,7 +65,10 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         zoomingImageView.backgroundColor = .red
-        zoomingImageView.image = startingImageView.image!
+        if let imageView = startingImageView as? UIImageView, let image = imageView.image {
+            zoomingImageView.image = image
+        }
+        
         
         
         if let keyWindow = UIApplication.shared.keyWindow{
@@ -85,6 +86,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
             let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                
                 self.blackBackgroundView?.alpha = 1
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
                 zoomingImageView.center = keyWindow.center

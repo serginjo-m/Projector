@@ -13,14 +13,14 @@ protocol BaseCollectionViewDelegate {
     //update after delete
     func updateDatabase()
     // zooming in & zooming out
-    func performZoomInForStartingImageView(startingImageView: UIImageView)
+    func performZoomInForStartingImageView(startingImageView: UIView)
 }
 
 
 //Base for collection View controller
 class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, BaseCollectionViewDelegate{
     
-    func performZoomInForStartingImageView(startingImageView: UIImageView) {
+    func performZoomInForStartingImageView(startingImageView: UIView) {
         print("basic zoom in...")
     }
     
