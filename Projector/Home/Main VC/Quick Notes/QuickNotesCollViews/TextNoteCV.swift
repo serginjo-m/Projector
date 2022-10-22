@@ -71,29 +71,15 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
 
         //canvas
-        let zoomingImageView = UIView(frame: startingFrame!)
+        let zoomingImageView = TextNoteView(frame: startingFrame!)
         zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         zoomingImageView.backgroundColor = UIColor.init(white: 229/255, alpha: 1)
         
-        let label = UILabel()
+       
         if let textNoteCell = startingImageView as? TextNoteCell {
-            label.text = textNoteCell.textLabel.text
+            zoomingImageView.textLabel.text = textNoteCell.textLabel.text
         }
-        label.textAlignment = NSTextAlignment.left
-        label.font = UIFont.boldSystemFont(ofSize: 25)
-//        label.transform = CGAffineTransform(scaleX: 0.35, y: 0.35) //Scale label area
-        label.textColor = UIColor.black
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        zoomingImageView.addSubview(label)
-        
-        label.topAnchor.constraint(equalTo: zoomingImageView.topAnchor, constant: 10).isActive = true
-        label.leadingAnchor.constraint(equalTo: zoomingImageView.leadingAnchor, constant: 10).isActive = true
-        label.trailingAnchor.constraint(equalTo: zoomingImageView.trailingAnchor, constant: -10).isActive = true
-        label.bottomAnchor.constraint(equalTo: zoomingImageView.bottomAnchor, constant: -10).isActive = true
        
 
 
@@ -240,5 +226,37 @@ extension TextNotesCollectionViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         
         return 100
+    }
+}
+
+class TextNoteView: UIView {
+    
+    let textLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textAlignment = NSTextAlignment.left
+        label.font = UIFont.boldSystemFont(ofSize: 25)
+    //        label.transform = CGAffineTransform(scaleX: 0.35, y: 0.35) //Scale label area
+        label.textColor = UIColor.black
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(textLabel)
+        
+        textLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        textLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -138,7 +138,7 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
         didSet{
             titleLabel.text = item.title != "" ? item.title : ""
             //shared func for all items that need to convert a url to an image
-            image.image = StringToImage.shared.retreaveImageForProject(myUrl: item.picture)
+            image.retreaveImageUsingURLString(myUrl: item.picture)
         }
     }
     
