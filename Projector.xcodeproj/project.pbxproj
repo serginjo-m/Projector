@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		20C3A1B30F798A19C9F52233 /* Pods_Projector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7446D93E864B7E3D7AF07A4 /* Pods_Projector.framework */; };
-		CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF02D7AE256D9606001B522F /* StepNumbersCV.swift */; };
 		CF059F452598A9D900729A74 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F442598A9D900729A74 /* Event.swift */; };
 		CF059F472598B47600729A74 /* NewEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF059F462598B47500729A74 /* NewEventVC.swift */; };
 		CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0B7E41262608DE008AC084 /* CameraShot.swift */; };
@@ -74,6 +73,7 @@
 		CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */; };
 		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
 		CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */; };
+		CF65B35D290AEBC90093C4B9 /* CanvasImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF7045342889D21F00048542 /* ZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7045332889D21F00048542 /* ZoomingView.swift */; };
@@ -91,6 +91,7 @@
 		CF98AEC828EDF1C9002C3FE7 /* StepWaySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */; };
 		CF98AECA28F49CBA002C3FE7 /* ButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */; };
 		CF98AECC28FC1C2B002C3FE7 /* NoProjectsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AECB28FC1C2B002C3FE7 /* NoProjectsBannerView.swift */; };
+		CF98AED029059076002C3FE7 /* NoteOptionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF98AECF29059076002C3FE7 /* NoteOptionsMenu.swift */; };
 		CF9974B7270F6FB2009FD9EB /* NewUserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */; };
 		CF9D19012852665E00599ABE /* NotificationsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D19002852665E00599ABE /* NotificationsRepository.swift */; };
 		CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9D1904285E1A7F00599ABE /* NewStepVC.swift */; };
@@ -147,7 +148,6 @@
 /* Begin PBXFileReference section */
 		C7446D93E864B7E3D7AF07A4 /* Pods_Projector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Projector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB743500F7B47826C6775763 /* Pods-Projector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Projector.debug.xcconfig"; path = "Target Support Files/Pods-Projector/Pods-Projector.debug.xcconfig"; sourceTree = "<group>"; };
-		CF02D7AE256D9606001B522F /* StepNumbersCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepNumbersCV.swift; sourceTree = "<group>"; };
 		CF059F442598A9D900729A74 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		CF059F462598B47500729A74 /* NewEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventVC.swift; sourceTree = "<group>"; };
 		CF0B7E41262608DE008AC084 /* CameraShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraShot.swift; sourceTree = "<group>"; };
@@ -215,6 +215,7 @@
 		CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
 		CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingReminder.swift; sourceTree = "<group>"; };
+		CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasImageView.swift; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF7045332889D21F00048542 /* ZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingView.swift; sourceTree = "<group>"; };
@@ -232,6 +233,7 @@
 		CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWaySection.swift; sourceTree = "<group>"; };
 		CF98AEC928F49CBA002C3FE7 /* ButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtension.swift; sourceTree = "<group>"; };
 		CF98AECB28FC1C2B002C3FE7 /* NoProjectsBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoProjectsBannerView.swift; sourceTree = "<group>"; };
+		CF98AECF29059076002C3FE7 /* NoteOptionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteOptionsMenu.swift; sourceTree = "<group>"; };
 		CF9974B6270F6FB2009FD9EB /* NewUserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserInputView.swift; sourceTree = "<group>"; };
 		CF9D18FF284D170C00599ABE /* Projector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Projector.entitlements; sourceTree = "<group>"; };
 		CF9D19002852665E00599ABE /* NotificationsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepository.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
 				CF29E4FA28E5F9D700BFAB48 /* ProjectWayVC.swift */,
+				CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */,
 			);
 			path = "Project Detail";
 			sourceTree = "<group>";
@@ -500,7 +503,6 @@
 			isa = PBXGroup;
 			children = (
 				CF1C51E1244F682200FBD1CE /* StepViewController.swift */,
-				CF02D7AE256D9606001B522F /* StepNumbersCV.swift */,
 				CF321C14245D43D2005CC10E /* NewStepImages.swift */,
 				CF0DD7DE2451E8780028ABB1 /* StepImagesCV.swift */,
 				CF72D38F2467E86F007FA034 /* StepItemViewController.swift */,
@@ -663,6 +665,7 @@
 				CFDA030326711FC700772E32 /* CanvasNotesVC.swift */,
 				CFCD7893267FCAC70066294A /* PhotoNoteCV.swift */,
 				CFCD7895267FCB080066294A /* TextNoteCV.swift */,
+				CF98AECF29059076002C3FE7 /* NoteOptionsMenu.swift */,
 			);
 			path = QuickNotesCollViews;
 			sourceTree = "<group>";
@@ -883,6 +886,7 @@
 				CF18904F265D724400701943 /* GenericsScheme.swift in Sources */,
 				CFB40CD727E6261600D6EEA4 /* CircularTransition.swift in Sources */,
 				CF8DFB78264AE79F00ACB4EB /* CanvasNote.swift in Sources */,
+				CF98AED029059076002C3FE7 /* NoteOptionsMenu.swift in Sources */,
 				CFCD7896267FCB080066294A /* TextNoteCV.swift in Sources */,
 				CF2472FA2718B49C002D6DCA /* DetailViewControllerDelegate.swift in Sources */,
 				CF9D1905285E1A8000599ABE /* NewStepVC.swift in Sources */,
@@ -908,7 +912,6 @@
 				CF55239C26A307AB0079EE12 /* OrderChartsExtension.swift in Sources */,
 				CF9DA839244C8C1200DFAEEF /* DetailTableViewRestoreFile.swift in Sources */,
 				CF4197C82691FC1000405EC5 /* GenericCell.swift in Sources */,
-				CF02D7AF256D9606001B522F /* StepNumbersCV.swift in Sources */,
 				CF059F452598A9D900729A74 /* Event.swift in Sources */,
 				CFFA4ECB272F00AA00071F01 /* StepCollectionView.swift in Sources */,
 				CF0DBCC426A755030049E40E /* StatisticsContainer.swift in Sources */,
@@ -926,6 +929,7 @@
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
 				CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */,
+				CF65B35D290AEBC90093C4B9 /* CanvasImageView.swift in Sources */,
 				CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,

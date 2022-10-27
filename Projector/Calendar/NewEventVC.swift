@@ -214,7 +214,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     
     
-    let descriptionTextView: UITextView = {
+    var descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.layer.cornerRadius = 6
         textView.backgroundColor = UIColor.init(white: 239/255, alpha: 1)

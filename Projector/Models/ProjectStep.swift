@@ -18,8 +18,7 @@ class ProjectStep: Object{
     @objc dynamic var category = "todo"
     @objc dynamic var section: StepWaySection?
     @objc dynamic var displayed = true
-    @objc dynamic var cost = 0
-    @objc dynamic var distance = 0
+    @objc dynamic var comment = ""
     @objc dynamic var event: Event?
     @objc dynamic var complete = false
     @objc dynamic var date = "07/06/2020"
@@ -27,6 +26,7 @@ class ProjectStep: Object{
     
     //an array of images url
     var selectedPhotosArray = List<String>()//[String]()
+    var selectedCanvasesArray = List<CanvasNote>()//[String]()
     
     //an array of items in table view
     var itemsArray = List<String>()

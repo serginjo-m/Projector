@@ -60,10 +60,86 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         }
         
     }
+    
+    @objc override func convertToEvent(_ sender: UIButton){
+        
+        let newEventViewController = NewEventViewController()
+        newEventViewController.modalTransitionStyle = .coverVertical
+        newEventViewController.modalPresentationStyle = .fullScreen
+                //define event name
+        newEventViewController.descriptionTextView.text = items[sender.tag].text
+        //show new event view controller
+        present(newEventViewController, animated: true, completion: nil)
+       
+    }
+    
+    override func removeQuickNote(_ sender: UIButton) {
+        //TODO: IS it really doesn't have a dequieue issue?
+        let quickNote = self.items[sender.tag]
+        
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Text Note?", message: "Are You sure You want to delete this note?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            ProjectListRepository.instance.deleteTextNote(textNote: quickNote)
+            
+            self.sectionOptionsContainer.isHidden = true
+            
+            self.updateDatabase()
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alertVC.addAction(deleteAction)
+        alertVC.addAction(cancelAction)
+        
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    override func convertNoteToStep(index: Int, project: ProjectList) {
+        
+        let textNote = textNotes[index]
+        
+        let wordsArray = textNote.text.components(separatedBy: " ")
+        
+        var compoundTitleForStep = ""
+        
+        if wordsArray.count < 3 {
+            guard let firstWord = wordsArray.first else {return}
+            compoundTitleForStep = firstWord
+        }else{
+            for number in 0...2 {
+                if number < 2 {
+                    compoundTitleForStep.append("\(wordsArray[number]) ")
+                }else{
+                    compoundTitleForStep.append("\(wordsArray[number])...")
+                }
+            }
+        }
+        
+        let newStepViewController = NewStepViewController()
+        newStepViewController.projectId = project.id
+        newStepViewController.viewControllerTitle.text = project.name
+        newStepViewController.stepNameTextField.text = compoundTitleForStep
+        newStepViewController.comment = textNote.text
+        newStepViewController.descriptionTextView.text = textNote.text
+        newStepViewController.modalPresentationStyle = .fullScreen
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
+        present(newStepViewController, animated: true)
+    }
+    
 
     //custom zoom in logic
     override func performZoomInForStartingImageView(startingImageView: UIView){
         
+        if sectionOptionsContainer.isHidden == false {
+            optionsMenuToggle(toggle: true)
+            sectionOptionsContainer.isHidden = true
+        }
         
         self.startingImageView = startingImageView
         self.startingImageView?.isHidden = true
@@ -80,9 +156,7 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         if let textNoteCell = startingImageView as? TextNoteCell {
             zoomingImageView.textLabel.text = textNoteCell.textLabel.text
         }
-       
-
-
+        
         if let keyWindow = UIApplication.shared.keyWindow{
             
             blackBackgroundView = UIView(frame: keyWindow.frame)
@@ -156,24 +230,6 @@ class TextNoteCell: BaseCollectionViewCell<TextNote> {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var deleteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
-        button.addTarget(self, action: #selector(deleteAction(_:)), for: .touchUpInside)
-        return button
-    }()
-    
-    //remove item
-    @objc func deleteAction (_ sender: UIButton){
-        guard let delegate = self.delegate else {return}
-        //remove object
-        ProjectListRepository.instance.deleteTextNote(textNote: item)
-        //update cv
-        delegate.updateDatabase()
-    }
-    
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
 
@@ -201,7 +257,6 @@ class TextNoteCell: BaseCollectionViewCell<TextNote> {
         isUserInteractionEnabled = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         
-        addSubview(deleteButton)
         addSubview(textLabel)
         
         textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
@@ -209,19 +264,19 @@ class TextNoteCell: BaseCollectionViewCell<TextNote> {
         textLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
         textLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
         
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
-        deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
-        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
+      
     }
 }
 //MARK: Pinterest Extension
 // Pinterest Layout Configurations
 extension TextNotesCollectionViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let cellHeight = CGFloat(items[indexPath.row].height + 20)
-        return cellHeight
+        
+        let text = items[indexPath.row].text
+        
+        let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
+        
+        return rect.height + 30
     }
     func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         

@@ -26,7 +26,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                       let section = projectStep.section else {return}
                 self.projectStep = projectStep
                 self.stepSection = section
+                self.comment = projectStep.comment
                 self.sectionButton.setTitle("    \(section.name)", for: .normal)
+                self.descriptionTextView.text = projectStep.comment
             }
         }
     }
@@ -40,7 +42,23 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     // step progress category
     var selectedStepProgress: Int = 0
     //this property uses for building a ProjectWayViewController (required)
-    var stepSection: StepWaySection = StepWaySection()//this way I insure that property would be set to object
+    var stepSection: StepWaySection? {
+        didSet{
+            sectionButton.titleLabel?.textColor = .black
+        }
+    }
+    
+    var comment = "" {
+        didSet{
+                let textRect = NSString(string: self.comment).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)], context: nil)
+                
+                let commentHeight = textRect.height + 20
+            
+            if commentHeight > 126 {
+                descriptionTextHeightAnchor.constant = commentHeight
+            }
+        }
+    }
     
     var realm: Realm!//create a var
 
@@ -169,6 +187,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         label.text = "New Step"
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -262,9 +281,30 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return reminder
     }()
     
+    let descriptionTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Description"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.layer.cornerRadius = 6
+        textView.backgroundColor = UIColor.init(white: 239/255, alpha: 1)
+        textView.font = UIFont.boldSystemFont(ofSize: 14)
+        textView.textColor = UIColor.init(displayP3Red: 112/255, green: 112/255, blue: 112/255, alpha: 1)
+        return textView
+    }()
+    
     //constraints for animation approach
     var maxHeightAnchor: NSLayoutConstraint?
     var minHeightAnchor: NSLayoutConstraint?
+    
+    var descriptionTextHeightAnchor: NSLayoutConstraint!
+    var contentViewHeightAnchor: NSLayoutConstraint!
     
     //define selected project for adding steps to it
     var projectList: ProjectList? {
@@ -283,7 +323,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView].forEach {
+        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView, descriptionTitle , descriptionTextView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -296,6 +336,17 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         realm = try! Realm()//create an instance of object
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        //it is a bit less than I need, because this sum is not accurate enough, but that's ok
+        let subviewsHeightSum = (contentUIView.subviews.map { $0.frame.height }).reduce(0, +)
+        //calls two times, and first is 0
+        if subviewsHeightSum > 0 {
+            contentViewHeightAnchor.constant = subviewsHeightSum + 200
+            print(subviewsHeightSum)
+        }
     }
     
     //MARK: Methods
@@ -378,7 +429,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
-
+        
+        if self.stepSection == nil {
+            sectionButton.titleLabel?.textColor = .red
+            return
+        }
+        
         //prepare object ready to save
         let stepTemplate: ProjectStep = self.defineStepTemplate()
         
@@ -434,24 +490,26 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             }
         }
         
-        //date
         stepTemplate.date = createdDate
-        //name
+
         stepTemplate.name = stepNameTextField.text ?? ""
+
+        stepTemplate.comment = self.descriptionTextView.text ?? ""
         //section uses for ProjectWayViewController construction
         stepTemplate.section = stepSection
-        //category
+        //categories
         let categories = ["todo", "inProgress", "done", "blocked"]//switch maybe?
         stepTemplate.category = categories[selectedStepProgress]
         //photos
         for item in newStepImages.photoArray {
             stepTemplate.selectedPhotosArray.append(item)
         }
+        stepTemplate.selectedCanvasesArray.append(objectsIn: newStepImages.canvasArray)
+        
         //items
         for item in stepItems{
             stepTemplate.itemsArray.append(item)
         }
-        
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
@@ -498,7 +556,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return event
     }
     
-    //NAME TEXT FIELD
+    //MARK: NAME TEXT FIELD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
         textField.resignFirstResponder()
@@ -563,8 +621,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        contentViewHeightAnchor = contentUIView.heightAnchor.constraint(equalToConstant: 400)
+        contentViewHeightAnchor.isActive = true
         
+                
         progressCategoryStackView.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor, constant: 15).isActive = true
         progressCategoryStackView.trailingAnchor.constraint(equalTo: contentUIView.trailingAnchor, constant: -15).isActive = true
         progressCategoryStackView.topAnchor.constraint(equalTo: categoryTitle.bottomAnchor, constant: 20).isActive = true
@@ -576,11 +636,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
-        viewControllerTitle.centerXAnchor.constraint(equalTo: contentUIView.centerXAnchor, constant: 0).isActive = true
-        viewControllerTitle.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
-        viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
-        
+        viewControllerTitle.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 0).isActive = true
+        viewControllerTitle.bottomAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 15).isActive = true
+        viewControllerTitle.leadingAnchor.constraint(equalTo: dismissButton.trailingAnchor, constant: 15).isActive = true
+        viewControllerTitle.trailingAnchor.constraint(equalTo: stepSaveButton.leadingAnchor, constant: -15).isActive = true
         
         expandingReminderView.bottomAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant: 88).isActive = true
         expandingReminderView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
@@ -615,7 +674,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         sectionButton.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         sectionButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        nameTitle.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant:  40).isActive = true
+        nameTitle.topAnchor.constraint(equalTo: viewControllerTitle.bottomAnchor, constant:  20).isActive = true
         nameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         nameTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         nameTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -634,9 +693,20 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stepSaveButton.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         stepSaveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         stepSaveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        descriptionTitle.topAnchor.constraint(equalTo: expandingReminderView.bottomAnchor, constant:  20).isActive = true
+        descriptionTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
+        descriptionTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        descriptionTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        descriptionTextView.topAnchor.constraint(equalTo: descriptionTitle.bottomAnchor, constant: 12).isActive = true
+        descriptionTextView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        descriptionTextView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        descriptionTextHeightAnchor = descriptionTextView.heightAnchor.constraint(equalToConstant: 126)
+        descriptionTextHeightAnchor.isActive = true
+        
     }
     
-    //?? Am I Need It?
     //MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         // Dismiss the picker if the user canceled.
@@ -659,7 +729,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         //a bit trick, because can't append item to array directly, so need to call func
         func assignUrl(url: String){
-//            selectedPhotoURLStringArray.append(url)
             //add new item
             newStepImages.photoArray.append(url)
             //reload when picker closes

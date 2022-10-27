@@ -63,8 +63,28 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         
     }
     
+    override func convertNoteToStep(index: Int, project: ProjectList) {
+        
+        let canvasNote = canvasNotes[index]
+        
+        let newStepViewController = NewStepViewController()
+        newStepViewController.newStepImages.canvasArray.append(canvasNote)
+        newStepViewController.projectId = project.id
+        newStepViewController.viewControllerTitle.text = project.name
+        newStepViewController.modalPresentationStyle = .fullScreen
+        newStepViewController.stepNameTextField.text = "Canvas Note"
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
+        present(newStepViewController, animated: true)
+    }
+    
     //custom zoom in logic
     override func performZoomInForStartingImageView(startingImageView: UIView){
+        
+        if sectionOptionsContainer.isHidden == false {
+            optionsMenuToggle(toggle: true)
+            sectionOptionsContainer.isHidden = true
+        }
         
         
         self.startingImageView = startingImageView as? DrawCanvasView
@@ -151,25 +171,6 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
         canvas.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         return canvas
     }()
-    
-    
-    lazy var deleteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
-        button.addTarget(self, action: #selector(deleteAction(_:)), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    //remove item
-    @objc func deleteAction (_ sender: UIButton){
-        guard let delegate = self.delegate else {return}
-        //remove object
-        ProjectListRepository.instance.deleteCanvasNote(note: item)
-        //update cv
-        delegate.updateDatabase()
-    }
-    
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
         
@@ -196,12 +197,6 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
         layer.cornerRadius = 5
         
         addSubview(canvas)
-        addSubview(deleteButton)
-                
-        deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
-        deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
-        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
         
         canvas.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         canvas.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true

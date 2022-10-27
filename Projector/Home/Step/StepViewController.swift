@@ -51,9 +51,18 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     var stepID: String
     
     //step photos collection view
-    lazy var myStepImagesCV = StepImagesCollectionView(step: projectStep ?? ProjectStep(), frame: CGRect.zero)
+    lazy var stepImagesCV = StepImagesCollectionView(step: projectStep ?? ProjectStep(), frame: CGRect.zero)
     //step values
-    let stepNumbersCV = StepNumbersCollectionView()
+    let stepComment: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.isHidden = true
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        return label
+    }()
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -126,13 +135,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
     
-    var stepValuesTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Step Values"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        return label
-    }()
-    
     var stepItemsTitle: UILabel = {
         let label = UILabel()
         label.text = "Items Todo"
@@ -162,7 +164,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.addSubview(contentUIView)
         
         //add items to a view
-        [dismissButton, stepTableView, myStepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepValuesTitle, stepNumbersCV, stepItemsTitle].forEach {
+        [dismissButton, stepTableView, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepComment, stepItemsTitle].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -176,10 +178,12 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //MARK: Methods
     private func performPageConfigurations(){
-
+        
         guard let step = projectStep else {return}
         
         stepNameTitle.text = step.name
+        stepComment.text = step.comment
+        
         stepToEventButton.isSelected = step.complete
         if let event = step.event{
             if event.reminder != nil{
@@ -188,11 +192,24 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }else{
             reminderStepButton.isSelected = false
         }
-        stepNumbersCV.step = step
         categoryLabel.text = step.category
-        myStepImagesCV.step = step
-        myStepImagesCV.stepImagesCollectionView.reloadData()
-
+        
+        //hide if no data available
+        if step.selectedCanvasesArray.count == 0 && step.selectedPhotosArray.count == 0 {
+            stepImagesCV.isHidden = true
+        }else{
+            //TODO: here I should also pass canvases
+            stepImagesCV.step = step
+            stepImagesCV.stepImagesCollectionView.reloadData()
+            stepImagesCV.isHidden = false
+        }
+        
+        if step.comment.isEmpty == true {
+            stepComment.isHidden = true
+        }else{
+            stepComment.isHidden = false
+        }
+        
         setupLayout()
     }
     
@@ -366,7 +383,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     private func setupLayout(){
         
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        myStepImagesCV.translatesAutoresizingMaskIntoConstraints = false
+        stepImagesCV.translatesAutoresizingMaskIntoConstraints = false
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -375,8 +392,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         editStepButton.translatesAutoresizingMaskIntoConstraints = false
         removeStepButton.translatesAutoresizingMaskIntoConstraints = false
         stepNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        stepValuesTitle.translatesAutoresizingMaskIntoConstraints = false
-        stepNumbersCV.translatesAutoresizingMaskIntoConstraints = false
         stepItemsTitle.translatesAutoresizingMaskIntoConstraints = false
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -416,6 +431,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //this logic makes stepnamelabel size correct
         let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
         
+        let commentRect = NSString(string: step.comment).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
+        
         
         stepNameTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 22).isActive = true
         stepNameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
@@ -442,22 +459,33 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         reminderStepButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         reminderStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        myStepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  30).isActive = true
-        myStepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true
-        myStepImagesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
-        myStepImagesCV.heightAnchor.constraint(equalToConstant: 144).isActive = true
+        stepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  30).isActive = true
+        stepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true
+        stepImagesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        stepImagesCV.heightAnchor.constraint(equalToConstant: 144).isActive = true
         
-        stepValuesTitle.topAnchor.constraint(equalTo: myStepImagesCV.bottomAnchor, constant: 30).isActive = true
-        stepValuesTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        stepValuesTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
-        stepValuesTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        //TODO: Refine a bit this section
+        //TODO: Asign an external constraints that can be updated from page configuration
+        if step.selectedPhotosArray.count == 0 && step.selectedCanvasesArray.count == 0 {
+            stepComment.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
+        }else{
+            stepComment.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true
+        }
+        stepComment.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        stepComment.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
+        stepComment.heightAnchor.constraint(equalToConstant: commentRect.height + 20).isActive = true
         
-        stepNumbersCV.topAnchor.constraint(equalTo: stepValuesTitle.bottomAnchor, constant: 0).isActive = true
-        stepNumbersCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        stepNumbersCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
-        stepNumbersCV.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        if step.comment.isEmpty == true {
+            if step.selectedPhotosArray.count == 0 && step.selectedCanvasesArray.count == 0 {
+                stepItemsTitle.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
+            }else{
+                stepItemsTitle.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true
+            }
+            
+        }else{
+            stepItemsTitle.topAnchor.constraint(equalTo: stepComment.bottomAnchor, constant: 20).isActive = true
+        }
         
-        stepItemsTitle.topAnchor.constraint(equalTo: stepNumbersCV.bottomAnchor, constant: 20).isActive = true
         stepItemsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         stepItemsTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         stepItemsTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true

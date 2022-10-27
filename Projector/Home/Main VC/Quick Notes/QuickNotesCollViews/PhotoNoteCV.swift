@@ -51,10 +51,29 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         items.append(contentsOf: cameraNotes)
     }
     
-    
+    override func convertNoteToStep(index: Int, project: ProjectList) {
+        
+        let cameraNote = cameraNotes[index]
+        
+        let newStepViewController = NewStepViewController()
+        newStepViewController.newStepImages.photoArray.append(cameraNote.picture)
+        newStepViewController.projectId = project.id
+        newStepViewController.stepNameTextField.text = cameraNote.title
+        newStepViewController.viewControllerTitle.text = project.name
+        newStepViewController.modalPresentationStyle = .fullScreen
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
+        present(newStepViewController, animated: true)
+        
+    }
    
     //custom zoom in logic
     override func performZoomInForStartingImageView(startingImageView: UIView){
+        
+        if sectionOptionsContainer.isHidden == false {
+            optionsMenuToggle(toggle: true)
+            sectionOptionsContainer.isHidden = true
+        }
         
         self.startingImageView = startingImageView as? UIImageView
         self.startingImageView?.isHidden = true
@@ -142,8 +161,6 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
         }
     }
     
-    
-    
     lazy var image: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "river")
@@ -163,23 +180,7 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
         label.textColor = UIColor.white
         return label
     }()
-    
-    lazy var deleteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named:"projectRemoveButton"), for: .normal)
-        button.addTarget(self, action: #selector(deleteAction(_:)), for: .touchUpInside)
-        return button
-    }()
-    
-    //remove item
-    @objc func deleteAction (_ sender: UIButton){
-        guard let delegate = self.delegate else {return}
-        //remove object
-        ProjectListRepository.instance.deleteCameraNote(note: item)
-        //update cv
-        delegate.updateDatabase()
-    }
-    
+ 
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
         guard let delegate = self.delegate else {return}
@@ -199,17 +200,14 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
     }
     
     func setupViews(){
-        
         layer.masksToBounds = true
         layer.cornerRadius = 5
         
         addSubview(image)
         addSubview(titleLabel)
-        addSubview(deleteButton)
         
         image.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         
         image.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         image.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
@@ -220,10 +218,5 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 9).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
         titleLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        
-        deleteButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 11).isActive = true
-        deleteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -11).isActive = true
-        deleteButton.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        deleteButton.heightAnchor.constraint(equalToConstant: 16).isActive = true
     }
 }

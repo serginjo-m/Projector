@@ -17,6 +17,9 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
     //an instance of selected step
     var step: ProjectStep
     
+    //TODO: So here I need to create a united database
+    //Use CanvasImageView
+    
     //MARK: Initialization
     init(step: ProjectStep, frame: CGRect) {
         self.step = step
