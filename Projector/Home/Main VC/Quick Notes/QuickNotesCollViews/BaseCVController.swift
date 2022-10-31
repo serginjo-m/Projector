@@ -201,7 +201,6 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
             //------- Really important thing because it defines object for options menu -----------
             sectionOptionsContainer.currentNoteIndex = sender.tag
         
-        
             optionsMenuToggle(toggle: true)
             let buttonFrame = sender.superview?.convert(sender.frame, to: nil)
             guard let topOffset = buttonFrame?.origin.y, let rightOffset = buttonFrame?.origin.x, let buttonWidth = buttonFrame?.width else {return}

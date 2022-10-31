@@ -43,7 +43,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         downloadHolidayEvents()
         //tab bar style changes at the bottom of view controller, so define constant style to it
         if #available(iOS 15.0, *) {
-           let appearance = UITabBarAppearance()
+            let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
             self.tabBar.standardAppearance = appearance
             self.tabBar.scrollEdgeAppearance = appearance
@@ -83,7 +83,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         return navController
     }
     
-   
+    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         //get index of selected value
         guard let index = viewControllers?.index(of: viewController) else {
@@ -101,12 +101,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
             //base for switch cases logic
             lastVCClass = "\(currentViewController.classForCoder)"
-        
+            
             func configureAddItemAction(newObjectVC: [String: UIViewController]){
                 
-                
                 //get my add items nav view controller for setting its stack view controllers in func
-               // let targetNavController = viewController as! UINavigationController
+                 //let targetNavController = viewController as! UINavigationController
                 
                 //ALERT MENU
                 let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
@@ -134,71 +133,90 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             
             //perform logic based on last visualized view controller class
             switch lastVCClass {
-                case "DetailViewController":
-                    
-                    guard let detailVC = currentViewController as? DetailViewController else {return false}
-                    
-                    //because case: DetailViewController, I can access it property for adding or modification
-                    //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
-                    
-                    let newStep = NewStepViewController()
-                    newStep.projectId = detailVC.projectListIdentifier
-                    
-                    let viewControllers = [
-                        "Create New Step": newStep
-                    ]
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
-            
-                case "ProjectViewController":
-                    
-                    
-                    //create it out of Dictionary
-                    let newProjectViewController = NewProjectViewController()
-                     
-                    
-                    //Dictionary ["view controller name" : viewController]
-                    let viewControllers = [
-                        "New Project": newProjectViewController,
-                        "Qiuck Camera Note": CameraShot(),
-                        "Qiuck Picture Note": CanvasViewController(),
-                        "Qiuck Text Note": TextNoteViewController()
-                    ]
-                    
-                    //configure appearance
-                    for (_, value) in viewControllers{
-                        value.modalTransitionStyle = .coverVertical
-                        value.modalPresentationStyle = .overCurrentContext
-                    }
-                    
                 
-                    configureAddItemAction(newObjectVC: viewControllers)
+            case "PhotoNotesCollectionViewController":
+                let newPhotoNoteVC = CameraShot()
+                newPhotoNoteVC.modalTransitionStyle = .coverVertical
+                newPhotoNoteVC.modalPresentationStyle = .overCurrentContext
+                let viewControllers = ["Create Photo Note": newPhotoNoteVC]
+                configureAddItemAction(newObjectVC: viewControllers)
                 
-                case "StepViewController":
+            case "CanvasNotesCollectionViewController":
+                let newCanvasNoteVC = CanvasViewController()
+                newCanvasNoteVC.modalTransitionStyle = .coverVertical
+                newCanvasNoteVC.modalPresentationStyle = .overCurrentContext
+                let viewControllers = ["Create Canvas Note": newCanvasNoteVC]
+                configureAddItemAction(newObjectVC: viewControllers)
                 
-                    guard let stepVC = currentViewController as? StepViewController else {return false}
+            case "TextNotesCollectionViewController":
+                let newTextNoteVC = TextNoteViewController()
+                newTextNoteVC.modalTransitionStyle = .coverVertical
+                newTextNoteVC.modalPresentationStyle = .overCurrentContext
+                let viewControllers = ["Create Text Note": newTextNoteVC]
+                configureAddItemAction(newObjectVC: viewControllers)
                 
-                    let newStepItemViewController = StepItemViewController()
-                    newStepItemViewController.stepID = stepVC.stepID
-                    newStepItemViewController.stepItemsTableView = stepVC.stepTableView
-                    
-                    let viewControllers = [
-                        "Create Step Item" : newStepItemViewController
-                    ]
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
+            case "DetailViewController":
                 
-                case "CalendarViewController":
+                guard let detailVC = currentViewController as? DetailViewController else {return false}
                 
-                    let viewControllers = [
-                        "Create New Event": NewEventViewController()
-                    ]
-                    
-                    configureAddItemAction(newObjectVC: viewControllers)
+                //because case: DetailViewController, I can access it property for adding or modification
+                //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
                 
-                default:
-                    
-                    break
+                let newStep = NewStepViewController()
+                newStep.projectId = detailVC.projectListIdentifier
+                
+                let viewControllers = [
+                    "Create New Step": newStep
+                ]
+                
+                configureAddItemAction(newObjectVC: viewControllers)
+                
+            case "ProjectViewController":
+                
+                
+                //create it out of Dictionary
+                let newProjectViewController = NewProjectViewController()
+                
+                
+                //Dictionary ["view controller name" : viewController]
+                let viewControllers = [
+                    "New Project": newProjectViewController
+                ]
+                
+                //configure appearance
+                for (_, value) in viewControllers{
+                    value.modalTransitionStyle = .coverVertical
+                    value.modalPresentationStyle = .overCurrentContext
+                }
+                
+                
+                configureAddItemAction(newObjectVC: viewControllers)
+                
+            case "StepViewController":
+                
+                guard let stepVC = currentViewController as? StepViewController else {return false}
+                
+                let newStepItemViewController = StepItemViewController()
+                newStepItemViewController.stepID = stepVC.stepID
+                newStepItemViewController.stepItemsTableView = stepVC.stepTableView
+                
+                let viewControllers = [
+                    "Create Step Item" : newStepItemViewController
+                ]
+                
+                configureAddItemAction(newObjectVC: viewControllers)
+                
+            case "CalendarViewController":
+                
+                let viewControllers = [
+                    "Create New Event": NewEventViewController()
+                ]
+                
+                configureAddItemAction(newObjectVC: viewControllers)
+                
+            default:
+                
+                break
             }
             
             return false
@@ -219,19 +237,19 @@ extension CustomTabBarController {
             }
         }
         
-
+        
         //------------------------------- What if country has no holidays? ------------------------------------
         //Download only once
         if holidays.count == 0{
             getHolidayResults()
         }
         
-       
+        
     }
     
-        
-    func getHolidayResults() {
     
+    func getHolidayResults() {
+        
         let holidayRequest = HolidayRequest(countryCode: "IT")//Italian Holidays
         holidayRequest.getHolidays {[weak self] result in//weak self prevent any retain cycles
             self?.listOfHolidays = result
@@ -266,14 +284,11 @@ extension CustomTabBarController {
                 event.endTime = nextDay
             }
             
-            
-            
-           
             event.category = holidayEvent.category
             event.title = holidayEvent.title
             event.date = holidayEvent.date
             event.startTime = holidayEvent.date
-
+            
             event.descr = holidayEvent.descr
             ProjectListRepository.instance.createEvent(event: event)
             

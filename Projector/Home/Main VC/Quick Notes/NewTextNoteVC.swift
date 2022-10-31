@@ -93,44 +93,13 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
+        guard let textNoteString = self.noteTextView.text else {return}
         
-        //ALERT MENU
-        let alert = UIAlertController(title: "Select Save Option", message: "Please select the desired Save Option", preferredStyle: .actionSheet)
+        let textNote = self.createTextNote(text: textNoteString)
         
-        //creates save options
-        ["Save To Project", "Save To Project Step", "Save To Events"].forEach {
-            let action = UIAlertAction(title: $0, style: .default) { (action: UIAlertAction) in
-                self.dismiss(animated: true, completion: {
-                    //perform something
-                })
-            }
-            
-            alert.addAction(action)
-        }
-        
-        //SAVE TO QUICK NOTES
-        let action1 = UIAlertAction(title: "Save To Quick Notes", style: .default) { (action: UIAlertAction) in
-            
-            guard let textNoteString = self.noteTextView.text else {return}
-            
-            let textNote = self.createTextNote(text: textNoteString)
-            
-            ProjectListRepository.instance.createTextNote(textNote: textNote)
-            UserActivitySingleton.shared.createUserActivity(description: "Text Note was Created")
-            self.dismiss(animated: true, completion: {
-                
-            })
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            // Do nothing
-        }
-        
-        alert.addAction(action1)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true, completion: nil)
-        
+        ProjectListRepository.instance.createTextNote(textNote: textNote)
+        UserActivitySingleton.shared.createUserActivity(description: "Text Note was Created")
+        self.dismiss(animated: true)
     }
     
     //create text note object

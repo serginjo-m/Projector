@@ -22,7 +22,6 @@
 		CF17A69226371DB9002337C0 /* CategoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17A69126371DB9002337C0 /* CategoryItems.swift */; };
 		CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */; };
 		CF17FDC5264B02870092F5FA /* SingleLineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC4264B02870092F5FA /* SingleLineObject.swift */; };
-		CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF17FDC9264D87D20092F5FA /* Canvas View.swift */; };
 		CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904C2656E7DE00701943 /* BaseCVController.swift */; };
 		CF18904F265D724400701943 /* GenericsScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF18904E265D724400701943 /* GenericsScheme.swift */; };
 		CF1A411E26E4C13B009EB276 /* Holiday.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A411D26E4C13B009EB276 /* Holiday.swift */; };
@@ -73,7 +72,7 @@
 		CF5C683E2552F86600EA6E79 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */; };
 		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
 		CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */; };
-		CF65B35D290AEBC90093C4B9 /* CanvasImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */; };
+		CF65B35F290F036C0093C4B9 /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B35E290F036C0093C4B9 /* Canvas View.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF7045342889D21F00048542 /* ZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7045332889D21F00048542 /* ZoomingView.swift */; };
@@ -162,7 +161,6 @@
 		CF17A69126371DB9002337C0 /* CategoryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItems.swift; sourceTree = "<group>"; };
 		CF17C2E9266C08C9002C5454 /* DrawCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawCanvasView.swift; sourceTree = "<group>"; };
 		CF17FDC4264B02870092F5FA /* SingleLineObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineObject.swift; sourceTree = "<group>"; };
-		CF17FDC9264D87D20092F5FA /* Canvas View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
 		CF18904C2656E7DE00701943 /* BaseCVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCVController.swift; sourceTree = "<group>"; };
 		CF18904E265D724400701943 /* GenericsScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericsScheme.swift; sourceTree = "<group>"; };
 		CF1A411D26E4C13B009EB276 /* Holiday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Holiday.swift; sourceTree = "<group>"; };
@@ -215,7 +213,7 @@
 		CF5C683D2552F86600EA6E79 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
 		CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingReminder.swift; sourceTree = "<group>"; };
-		CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasImageView.swift; sourceTree = "<group>"; };
+		CF65B35E290F036C0093C4B9 /* Canvas View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF7045332889D21F00048542 /* ZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingView.swift; sourceTree = "<group>"; };
@@ -333,7 +331,6 @@
 				CF27A072254E0158007D06D3 /* ProjectNumbers.swift */,
 				CF2C1292237766A700F3132A /* DetailViewController.swift */,
 				CF29E4FA28E5F9D700BFAB48 /* ProjectWayVC.swift */,
-				CF65B35C290AEBC90093C4B9 /* CanvasImageView.swift */,
 			);
 			path = "Project Detail";
 			sourceTree = "<group>";
@@ -350,7 +347,7 @@
 		CF17FDC8264D87B90092F5FA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				CF17FDC9264D87D20092F5FA /* Canvas View.swift */,
+				CF65B35E290F036C0093C4B9 /* Canvas View.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -838,7 +835,6 @@
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
 				CFA76FFC25A5FE4800F15E30 /* EventsLouncher.swift in Sources */,
-				CF17FDCA264D87D20092F5FA /* Canvas View.swift in Sources */,
 				CF29E4FB28E5F9D700BFAB48 /* ProjectWayVC.swift in Sources */,
 				CFA6C9E228DF30330070C036 /* FirebaseService.swift in Sources */,
 				CFCD789A267FCC2E0066294A /* NewTextNoteVC.swift in Sources */,
@@ -859,6 +855,7 @@
 				CFB40CCE27C21EFE00D6EEA4 /* HolidayEvent.swift in Sources */,
 				CF18904D2656E7DE00701943 /* BaseCVController.swift in Sources */,
 				CFCD7898267FCB530066294A /* TextNote.swift in Sources */,
+				CF65B35F290F036C0093C4B9 /* Canvas View.swift in Sources */,
 				CF8DFB75264ADA5400ACB4EB /* CanvasViewController.swift in Sources */,
 				CFFA4EC9272B243500071F01 /* StepViewControllerDelegate.swift in Sources */,
 				CF43240A272B177600421226 /* PinterestDelegate.swift in Sources */,
@@ -929,7 +926,6 @@
 				CF2C129A237766A700F3132A /* NewProjectVC.swift in Sources */,
 				CF059F472598B47600729A74 /* NewEventVC.swift in Sources */,
 				CF17C2EA266C08C9002C5454 /* DrawCanvasView.swift in Sources */,
-				CF65B35D290AEBC90093C4B9 /* CanvasImageView.swift in Sources */,
 				CF7A57F7262C38D7004EAF01 /* CameraNote.swift in Sources */,
 				CF5943632531B1700036641B /* ViewByCategoryCV.swift in Sources */,
 				CF3F0FCC2602888D00CAC008 /* DayActivity.swift in Sources */,

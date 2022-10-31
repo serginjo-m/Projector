@@ -37,6 +37,10 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         view.backgroundColor = .white
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        updateDatabase()
+    }
+    
     //MARK: Methods
     //reload everything
     override func updateDatabase() {
@@ -63,20 +67,23 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
     
     @objc override func convertToEvent(_ sender: UIButton){
         
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+        let quickNote = items[index]
         let newEventViewController = NewEventViewController()
         newEventViewController.modalTransitionStyle = .coverVertical
         newEventViewController.modalPresentationStyle = .fullScreen
                 //define event name
-        newEventViewController.descriptionTextView.text = items[sender.tag].text
+        newEventViewController.descriptionTextView.text = quickNote.text
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
         //show new event view controller
         present(newEventViewController, animated: true, completion: nil)
        
     }
     
     override func removeQuickNote(_ sender: UIButton) {
-        //TODO: IS it really doesn't have a dequieue issue?
-        let quickNote = self.items[sender.tag]
-        
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+        let quickNote = items[index]
         //create new alert window
         let alertVC = UIAlertController(title: "Delete Text Note?", message: "Are You sure You want to delete this note?", preferredStyle: .alert)
         
@@ -85,7 +92,7 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
             ProjectListRepository.instance.deleteTextNote(textNote: quickNote)
             
             self.sectionOptionsContainer.isHidden = true
-            
+
             self.updateDatabase()
             
         })

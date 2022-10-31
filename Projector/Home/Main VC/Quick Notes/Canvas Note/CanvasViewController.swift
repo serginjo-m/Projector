@@ -160,42 +160,16 @@ class CanvasViewController: UIViewController {
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
-        //ALERT MENU
-        let alert = UIAlertController(title: "Select Save Option", message: "Please select the desired Save Option", preferredStyle: .actionSheet)
         
-        //creates save options
-        ["Save To Project", "Save To Project Step", "Save To Events"].forEach {
-            let action = UIAlertAction(title: $0, style: .default) { (action: UIAlertAction) in
-                self.dismiss(animated: true, completion: {
-                    //perform something
-                })
-            }
-            
-            alert.addAction(action)
-        }
+        //get canvas object
+        let canvasNote = self.canvas.canvasObject
+        //save to data base
+        ProjectListRepository.instance.createCanvasNote(canvasNote: canvasNote)
+        //add action to activity journal
+        UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
+        //exit from view
+        self.dismiss(animated: true)
         
-        //SAVE TO QUICK NOTES
-        let action1 = UIAlertAction(title: "Save To Quick Notes", style: .default) { (action: UIAlertAction) in
-            //get canvas object
-            let canvasNote = self.canvas.canvasObject
-            //save to data base
-            ProjectListRepository.instance.createCanvasNote(canvasNote: canvasNote)
-            //add action to activity journal
-            UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
-            //exit from view
-            self.dismiss(animated: true, completion: {
-                
-            })
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            // Do nothing
-        }
-        
-        alert.addAction(action1)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true, completion: nil)
     }
     
     func setupConstraints(){

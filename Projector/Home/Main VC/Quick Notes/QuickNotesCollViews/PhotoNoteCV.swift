@@ -11,6 +11,7 @@ import RealmSwift
 
 class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNoteCell, CameraNote> {
     
+    //MARK: Properties
     var cameraNotes: Results<CameraNote>{
         get{
             return ProjectListRepository.instance.getCameraNotes()
@@ -27,7 +28,18 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
     //view to zoom in
     var startingImageView: UIImageView?
     
+    //MARK: Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //define database from realm List<Result>
+        setupDatabase()
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        updateDatabase()
+    }
+    
+    //MARK: Methods
     //reload everything
     override func updateDatabase() {
         //update data base
@@ -36,12 +48,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         setupDatabase()
         //reload cv
         itemsCollectionView.reloadData()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //define database from realm List<Result>
-        setupDatabase()
     }
     
     //convert Realm Result<...> to an array of object.
@@ -65,6 +71,47 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         sectionOptionsContainer.isHidden = true
         present(newStepViewController, animated: true)
         
+    }
+    
+    @objc override func convertToEvent(_ sender: UIButton){
+       
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+        let quickNote = items[index]
+        let newEventViewController = NewEventViewController()
+        newEventViewController.modalTransitionStyle = .coverVertical
+        newEventViewController.modalPresentationStyle = .fullScreen
+        newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: quickNote.picture)
+        newEventViewController.nameTextField.text = quickNote.title
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
+        //show new event view controller
+        present(newEventViewController, animated: true, completion: nil)
+       
+    }
+    
+    override func removeQuickNote(_ sender: UIButton) {
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+        let quickNote = items[index]
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Text Note?", message: "Are You sure You want to delete this note?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            ProjectListRepository.instance.deleteCameraNote(note: quickNote)
+
+            self.sectionOptionsContainer.isHidden = true
+
+            self.updateDatabase()
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alertVC.addAction(deleteAction)
+        alertVC.addAction(cancelAction)
+        
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
     }
    
     //custom zoom in logic
@@ -136,7 +183,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         }
     }
 }
-
+//MARK: Extension
 // Pinterest Layout Configurations
 extension PhotoNotesCollectionViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
@@ -147,7 +194,7 @@ extension PhotoNotesCollectionViewController: PinterestLayoutDelegate {
     }
 }
 
-
+//MARK: Cell
 //Photo note cell
 class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
     

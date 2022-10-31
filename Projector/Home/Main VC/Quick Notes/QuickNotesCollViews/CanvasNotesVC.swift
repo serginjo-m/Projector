@@ -32,35 +32,26 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
     //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //define database from realm List<Result>
-        setupDatabase()
         viewControllerTitle.text = "Canvas Notes"
         viewControllerTitle.textColor = UIColor.init(white: 0.1, alpha: 1)
         view.backgroundColor = UIColor.init(white: 0.91, alpha: 1)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        updateDatabase()
+    }
+    
+    
     //MARK: Methods
     //reload everything
     override func updateDatabase() {
-        //update data base
-        canvasNotes = ProjectListRepository.instance.getCanvasNotes()
-        //from realm to array
-        setupDatabase()
-        //reload cv
-        itemsCollectionView.reloadData()
-    }
-    
-    //convert Realm Result<...> to an array of object.
-    func setupDatabase() {
-        
         //clear old data from array
         items.removeAll()
-        
-        //not so efficient, but it works
-        for item in canvasNotes {
-            items.append(item)
-        }
-        
+        //update data base
+        items.append(contentsOf: ProjectListRepository.instance.getCanvasNotes())
+        //from realm to array
+        //reload cv
+        itemsCollectionView.reloadData()
     }
     
     override func convertNoteToStep(index: Int, project: ProjectList) {
@@ -76,6 +67,47 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
         present(newStepViewController, animated: true)
+    }
+    
+    @objc override func convertToEvent(_ sender: UIButton){
+       
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+        let quickNote = items[index]
+        let newEventViewController = NewEventViewController()
+        newEventViewController.modalTransitionStyle = .coverVertical
+        newEventViewController.modalPresentationStyle = .fullScreen
+        newEventViewController.canvasId = quickNote.id
+        //show new event view controller
+        optionsMenuToggle(toggle: true)
+        sectionOptionsContainer.isHidden = true
+        present(newEventViewController, animated: true, completion: nil)
+       
+    }
+    
+    override func removeQuickNote(_ sender: UIButton) {
+        guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
+
+        let quickNote = items[index]
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Text Note?", message: "Are You sure You want to delete this note?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            ProjectListRepository.instance.deleteCanvasNote(note: quickNote)
+
+            self.sectionOptionsContainer.isHidden = true
+
+            self.updateDatabase()
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alertVC.addAction(deleteAction)
+        alertVC.addAction(cancelAction)
+        
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
     }
     
     //custom zoom in logic
@@ -151,7 +183,7 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         }
     }
 }
-
+//MARK: Cell
 //canvas note cell
 class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
     
@@ -159,18 +191,27 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
     override var item: CanvasNote! {
         //didSet uses for logic purposes!
         didSet{
+            
+            let canvas = DrawCanvasView()
+            canvas.backgroundColor = .white
+            canvas.translatesAutoresizingMaskIntoConstraints = false
+            canvas.isUserInteractionEnabled = true
+            
             canvas.canvasObject = item
+            
+            
+            addSubview(canvas)
+            canvas.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
+
+            
+            canvas.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
+            canvas.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
+            canvas.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
+            canvas.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
         }
     }
+
     
-    lazy var canvas: DrawCanvasView = {
-        let canvas = DrawCanvasView()
-        canvas.backgroundColor = .white
-        canvas.translatesAutoresizingMaskIntoConstraints = false
-        canvas.isUserInteractionEnabled = true
-        canvas.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
-        return canvas
-    }()
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
         
@@ -196,12 +237,7 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
         layer.masksToBounds = true
         layer.cornerRadius = 5
         
-        addSubview(canvas)
         
-        canvas.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-        canvas.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
-        canvas.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
-        canvas.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
     }
 }
 

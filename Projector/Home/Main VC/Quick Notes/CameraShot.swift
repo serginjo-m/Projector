@@ -167,48 +167,13 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     //back to previous view
     @objc func saveAction(_ sender: Any) {
         
-        //save to ..
-        //camera quick note
-        //project Step
-        //project step item
-        //Events
+        guard let imageString = self.selectedImageURL else {return}
         
-        //ALERT MENU
-        let alert = UIAlertController(title: "Select Save Option", message: "Please select the desired Save Option", preferredStyle: .actionSheet)
+        let cameraNote = self.createCameraNote(image: imageString)
         
-        //creates save options
-        ["Save To Project", "Save To Project Step", "Save To Events"].forEach {
-            let action = UIAlertAction(title: $0, style: .default) { (action: UIAlertAction) in
-                self.dismiss(animated: true, completion: {
-                    //perform something
-                })
-            }
-            
-            alert.addAction(action)
-        }
-        
-        //SAVE TO QUICK NOTES
-        let action1 = UIAlertAction(title: "Save To Quick Notes", style: .default) { (action: UIAlertAction) in
-        
-            guard let imageString = self.selectedImageURL else {return}
-            
-            let cameraNote = self.createCameraNote(image: imageString)
-            
-            ProjectListRepository.instance.createCameraNote(cameraNote: cameraNote)
-            UserActivitySingleton.shared.createUserActivity(description: "Photo Note was Created")
-            self.dismiss(animated: true, completion: {
-               
-            })
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            // Do nothing
-        }
-        
-        alert.addAction(action1)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true, completion: nil)
+        ProjectListRepository.instance.createCameraNote(cameraNote: cameraNote)
+        UserActivitySingleton.shared.createUserActivity(description: "Photo Note was Created")
+        self.dismiss(animated: true)
         
     }
     //create note object from camera shot
