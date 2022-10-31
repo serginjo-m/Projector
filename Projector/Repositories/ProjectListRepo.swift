@@ -212,6 +212,12 @@ class ProjectListRepository {
         return realm.object(ofType: CanvasNote.self, forPrimaryKey: id)
     }
     
+    func updateCanvasUrl(url: String, note: CanvasNote){
+        try! self.realm.write({
+            note.imageUrl = url
+        })
+    }
+    
     func deleteCanvasNote(note: CanvasNote){
         try! realm.write ({
             realm.delete(note)

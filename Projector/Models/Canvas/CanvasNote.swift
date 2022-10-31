@@ -15,6 +15,8 @@ class CanvasNote: Object {
     
     @objc dynamic var canvasMaxHeight = 0
     
+    @objc dynamic var imageUrl: String = ""
+    
     let canvasLines = List<SingleLineObject>()
     //MARK: Methods
     override static func primaryKey() -> String {

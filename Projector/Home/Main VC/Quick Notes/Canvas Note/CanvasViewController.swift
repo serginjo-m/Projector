@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Photos
 
 class CanvasViewController: UIViewController {
     
@@ -160,16 +161,51 @@ class CanvasViewController: UIViewController {
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
-        
         //get canvas object
         let canvasNote = self.canvas.canvasObject
+        //newly created image
+        let image = canvas.renderImageFromCanvas()
+        //save newly created image to photo library
+        saveImage(image: image)
+        //write url to canvas note
+        queryLastPhoto()
         //save to data base
         ProjectListRepository.instance.createCanvasNote(canvasNote: canvasNote)
         //add action to activity journal
         UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
         //exit from view
         self.dismiss(animated: true)
+    }
+    
+    
+
+    func saveImage(image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            print(error.localizedDescription)
+        } else {
+            //print("Success")
+        }
+    }
+    
+    func queryLastPhoto() {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
+        let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
+        if let asset = fetchResult.firstObject {
+            //retreave image URL
+            asset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
+                if asset.mediaType == .image {
+                    if let strURL = contentEditingInput?.fullSizeImageURL?.description {
+                        let canvasNote = self.canvas.canvasObject
+                        ProjectListRepository.instance.updateCanvasUrl(url: strURL, note: canvasNote)
+                    }
+                }
+            })
+        }
     }
     
     func setupConstraints(){

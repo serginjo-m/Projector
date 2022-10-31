@@ -79,6 +79,53 @@ class CanvasView: UIView {
         }
     }
     
+    
+    func renderImageFromCanvas() -> UIImage{
+        
+        let fmt = UIGraphicsImageRendererFormat()
+        
+        fmt.scale = 1
+        
+        fmt.opaque = true
+        
+        let rndr = UIGraphicsImageRenderer(size: CGSize(width: self.frame.width, height: self.frame.height), format: fmt)
+        
+        let image = rndr.image { ctx in
+            //a bit gray background
+            ctx.cgContext.setFillColor(UIColor.init(white: 239/255, alpha: 1).cgColor)
+            ctx.cgContext.fill(self.bounds)
+            
+            canvasObject.canvasLines.forEach { (line) in
+                for (i, p) in line.singleLine.enumerated(){
+                    let color = IntToStrokeColor(color: line.color)
+                    
+                    ctx.cgContext.setStrokeColor(color.cgColor)
+                    ctx.cgContext.setLineWidth(CGFloat(line.strokeWidth))
+                    ctx.cgContext.setLineCap(.round)
+                    
+                    //convert object to CGPoint
+                    let point = CGPoint(x: CGFloat(p.x), y: CGFloat(p.y))
+
+                    //line first point
+                    if i == 0{
+                        //starts
+                        ctx.cgContext.move(to: point)
+                        
+                    }else{
+                        //ends
+                        ctx.cgContext.addLine(to: point)
+                        
+                    }
+                }
+
+                ctx.cgContext.strokePath()
+            }
+            
+        }
+        
+        return image
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         canvasObject.canvasLines.append(SingleLineObject())
     }

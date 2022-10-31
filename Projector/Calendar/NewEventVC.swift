@@ -239,8 +239,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return label
     }()
     
-    
-    
     var descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.layer.cornerRadius = 6
