@@ -120,6 +120,7 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //use DetailViewController for segue
+        progressMenu.isHidden = true
         self.customDelegate?.pushToViewController(stepId: projectSteps[indexPath.item].id)
     }
     

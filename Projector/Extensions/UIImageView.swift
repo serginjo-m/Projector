@@ -13,16 +13,8 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
     
-    
-    //---------------------------- can I do it outside main queue asyncr? ----------------------------
-    //---------------------------------------- thumbnails --------------------------------------------
-    //---------------------------------------- clear cache? ------------------------------------------
-    //------------------------------------------------------------------------------------------------
-    
     //return UIImage by URL
     func retreaveImageUsingURLString(myUrl: String){
-        
-        
         
         if let imageFromCache = imageCache.object(forKey: myUrl as AnyObject) as? UIImage{
             self.image = imageFromCache

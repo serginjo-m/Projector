@@ -16,6 +16,11 @@ class CanvasNote: Object {
     @objc dynamic var canvasMaxHeight = 0
     
     @objc dynamic var imageUrl: String = ""
+    //image height
+    @objc dynamic var height = 0
+    //image width
+    @objc dynamic var width = 0
+    
     
     let canvasLines = List<SingleLineObject>()
     //MARK: Methods

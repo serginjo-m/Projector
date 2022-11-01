@@ -32,12 +32,8 @@ class Event: Object, Identifiable, Codable{
     
     @objc dynamic var reminder: Notification?
 
-    
     //because Realm is not support UIImages type
     @objc dynamic var picture: String?
-    //in order to save canvas, just keep reference to canvas note id
-    @objc dynamic var canvasNoteId: String?
-    
     
     //MARK: Methods
     override static func primaryKey() -> String {

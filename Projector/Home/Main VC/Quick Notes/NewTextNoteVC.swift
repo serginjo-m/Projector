@@ -45,27 +45,25 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         button.isEnabled = false
         return button
     }()
-    
-    
+
     let noteTitle: UILabel = {
         let label = UILabel()
         label.text = "Add Your Note Here"
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = UIColor.darkGray
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = UIColor.black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     lazy var noteTextView: UITextView = {
-        let view = UITextView()
-        view.layer.borderColor = UIColor(white: 0.85, alpha: 1).cgColor
-        view.layer.borderWidth = 1
-        view.layer.cornerRadius = 4
-        view.font = UIFont.systemFont(ofSize: 14)
-        view.textColor = UIColor.darkGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.delegate = self
-        return view
+        let textView = UITextView()
+        textView.layer.cornerRadius = 6
+        textView.backgroundColor = UIColor.init(white: 239/255, alpha: 1)
+        textView.font = UIFont.boldSystemFont(ofSize: 17)
+        textView.textColor = UIColor.init(white: 0.3, alpha: 1)
+        textView.delegate = self
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
     }()
     
     override func viewDidLoad() {
@@ -79,9 +77,6 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         view.addSubview(noteTextView)
         
         setupConstraints()
-        
-        
-        
         //includes keyboard dismiss func from extension
         self.hideKeyboardWhenTappedAround()
     }
@@ -141,14 +136,14 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         viewControllerTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
         viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        noteTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 50).isActive = true
+        noteTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 20).isActive = true
         noteTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         noteTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        noteTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        noteTitle.heightAnchor.constraint(equalToConstant: 37).isActive = true
         
-        noteTextView.topAnchor.constraint(equalTo: noteTitle.bottomAnchor, constant: 50).isActive = true
+        noteTextView.topAnchor.constraint(equalTo: noteTitle.bottomAnchor, constant: 10).isActive = true
         noteTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        noteTextView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }

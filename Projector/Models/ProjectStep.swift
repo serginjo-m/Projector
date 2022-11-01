@@ -26,7 +26,6 @@ class ProjectStep: Object{
     
     //an array of images url
     var selectedPhotosArray = List<String>()//[String]()
-    var selectedCanvasesArray = List<CanvasNote>()//[String]()
     
     //an array of items in table view
     var itemsArray = List<String>()

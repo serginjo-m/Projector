@@ -195,10 +195,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         categoryLabel.text = step.category
         
         //hide if no data available
-        if step.selectedCanvasesArray.count == 0 && step.selectedPhotosArray.count == 0 {
+        if step.selectedPhotosArray.count == 0 {
             stepImagesCV.isHidden = true
         }else{
-            //TODO: here I should also pass canvases
+            
             stepImagesCV.step = step
             stepImagesCV.stepImagesCollectionView.reloadData()
             stepImagesCV.isHidden = false
@@ -466,7 +466,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //TODO: Refine a bit this section
         //TODO: Asign an external constraints that can be updated from page configuration
-        if step.selectedPhotosArray.count == 0 && step.selectedCanvasesArray.count == 0 {
+        if step.selectedPhotosArray.count == 0 {
             stepComment.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
         }else{
             stepComment.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true
@@ -476,7 +476,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepComment.heightAnchor.constraint(equalToConstant: commentRect.height + 20).isActive = true
         
         if step.comment.isEmpty == true {
-            if step.selectedPhotosArray.count == 0 && step.selectedCanvasesArray.count == 0 {
+            if step.selectedPhotosArray.count == 0 {
                 stepItemsTitle.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
             }else{
                 stepItemsTitle.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true

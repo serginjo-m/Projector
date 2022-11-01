@@ -34,7 +34,7 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         super.viewDidLoad()
         viewControllerTitle.text = "Canvas Notes"
         viewControllerTitle.textColor = UIColor.init(white: 0.1, alpha: 1)
-        view.backgroundColor = UIColor.init(white: 0.91, alpha: 1)
+        view.backgroundColor = UIColor.init(white: 1, alpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +59,7 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
         let canvasNote = canvasNotes[index]
         
         let newStepViewController = NewStepViewController()
-        newStepViewController.newStepImages.canvasArray.append(canvasNote)
+        newStepViewController.newStepImages.photoArray.append(canvasNote.imageUrl)
         newStepViewController.projectId = project.id
         newStepViewController.viewControllerTitle.text = project.name
         newStepViewController.modalPresentationStyle = .fullScreen
@@ -70,18 +70,17 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
     }
     
     @objc override func convertToEvent(_ sender: UIButton){
-       
         guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
         let quickNote = items[index]
         let newEventViewController = NewEventViewController()
         newEventViewController.modalTransitionStyle = .coverVertical
         newEventViewController.modalPresentationStyle = .fullScreen
-        newEventViewController.canvasId = quickNote.id
-        //show new event view controller
+        newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: quickNote.imageUrl)
+        newEventViewController.pictureUrl = quickNote.imageUrl
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
+        //show new event view controller
         present(newEventViewController, animated: true, completion: nil)
-       
     }
     
     override func removeQuickNote(_ sender: UIButton) {
@@ -117,48 +116,38 @@ class CanvasNotesCollectionViewController: BaseCollectionViewController<CanvasNo
             optionsMenuToggle(toggle: true)
             sectionOptionsContainer.isHidden = true
         }
-        
-        
-        self.startingImageView = startingImageView as? DrawCanvasView
-        
+        self.startingImageView = startingImageView as? UIImageView
         self.startingImageView?.isHidden = true
-        
         startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
-        
-        //canvas
-        let zoomingImageView = DrawCanvasView(frame: startingFrame!)
+        let zoomingImageView = UIImageView(frame: startingFrame!)
         zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
-        zoomingImageView.backgroundColor = .white
-        
-        if let drawCanvas = startingImageView as? DrawCanvasView {
-            zoomingImageView.canvasObject = drawCanvas.canvasObject
+        zoomingImageView.backgroundColor = .red
+        if let imageView = startingImageView as? UIImageView, let image = imageView.image {
+            zoomingImageView.image = image
         }
-        
-       
-        
-        
         if let keyWindow = UIApplication.shared.keyWindow{
             blackBackgroundView = UIView(frame: keyWindow.frame)
             blackBackgroundView?.alpha = 0
             blackBackgroundView?.backgroundColor = .black
-
+            
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
-
+            
             //math? of proportion with one side
             //h2 / w2 = h1 / w1
             //h2 = h1 / w1 * w2
-
+            
             let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
-
+            
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                
                 self.blackBackgroundView?.alpha = 1
-
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
                 zoomingImageView.center = keyWindow.center
-                zoomingImageView.transform = CGAffineTransform(scaleX: 2, y: 2)
+                
             }, completion: nil)
-
+            
         }
         
     }
@@ -191,35 +180,28 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
     override var item: CanvasNote! {
         //didSet uses for logic purposes!
         didSet{
-            
-            let canvas = DrawCanvasView()
-            canvas.backgroundColor = .white
-            canvas.translatesAutoresizingMaskIntoConstraints = false
-            canvas.isUserInteractionEnabled = true
-            
-            canvas.canvasObject = item
-            
-            
-            addSubview(canvas)
-            canvas.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
-
-            
-            canvas.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
-            canvas.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
-            canvas.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
-            canvas.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
+            image.retreaveImageUsingURLString(myUrl: item.imageUrl)
         }
     }
+    
+    lazy var image: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "river")
+        image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
+        image.isUserInteractionEnabled = true
+        image.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
 
     
     //call to zoom in logic
     @objc func handleZoomTap(sender: UITapGestureRecognizer){
-        
         guard let delegate = self.delegate else {return}
-        
-        if let canvasView = sender.view as? DrawCanvasView{
+        if let imageView = sender.view as? UIImageView{
             //parent func that run all logic
-            delegate.performZoomInForStartingImageView(startingImageView: canvasView)
+            delegate.performZoomInForStartingImageView(startingImageView: imageView)
         }
     }
     
@@ -237,6 +219,12 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
         layer.masksToBounds = true
         layer.cornerRadius = 5
         
+        addSubview(image)
+        
+        image.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        image.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        image.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        image.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
         
     }
 }
@@ -244,11 +232,11 @@ class CanvasNoteCell: BaseCollectionViewCell<CanvasNote> {
 // Pinterest Layout Configurations
 extension CanvasNotesCollectionViewController: PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let imageHeight = Double(items[indexPath.item].canvasMaxHeight) / 3.5
-        return CGFloat(imageHeight)
+        
+        return CGFloat(items[indexPath.item].height)
     }
     func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         
-        return 100
+        return CGFloat(items[indexPath.item].width)
     }
 }

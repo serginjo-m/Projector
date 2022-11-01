@@ -45,7 +45,7 @@ class ZoomingView: UIView {
     lazy var title: UILabel = {
         let label = UILabel()
         label.text = event.title
-        label.textColor = event.category == "projectStep" ? .white : .black
+        label.textColor = event.picture != nil ? .white : .black
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
@@ -56,7 +56,7 @@ class ZoomingView: UIView {
         let originalImage = UIImage(named: "clock-1")
         let tintedImage = originalImage?.withRenderingMode(.alwaysTemplate)
         let image = UIImageView(image: tintedImage)
-        image.tintColor = event.category == "projectStep" ? .white : UIColor.init(white: 0.3, alpha: 1)
+        image.tintColor = event.picture != nil ? .white : UIColor.init(white: 0.3, alpha: 1)
         image.translatesAutoresizingMaskIntoConstraints = false
         image.alpha = 0
         return image
@@ -64,7 +64,7 @@ class ZoomingView: UIView {
     
     lazy var eventTimeLabel: UILabel = {
         let label = UILabel()
-        label.textColor = event.category == "projectStep" ? .white : .black
+        label.textColor = event.picture != nil ? .white : .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 0
@@ -90,7 +90,7 @@ class ZoomingView: UIView {
         if let descriptionText = event.descr{
             label.text = descriptionText
         }
-        label.textColor = event.category == "projectStep" ? .white : .black
+        label.textColor = event.picture != nil ? .white : .black
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -127,14 +127,14 @@ class ZoomingView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isHidden = event.category == "projectStep" ? false : true
+        imageView.isHidden = event.picture != nil ? false : true
         return imageView
     }()
     
     lazy var darkView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(white: 32/255, alpha: 1)
-        view.isHidden = event.category == "projectStep" ? false : true
+        view.isHidden = event.picture != nil ? false : true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -163,7 +163,7 @@ class ZoomingView: UIView {
     func configureViewDisplay(){
         
         self.clipsToBounds = true
-        self.backgroundColor = event.category == "projectStep" ? UIColor.init(white: 32/255, alpha: 1) : UIColor.init(white: 241/255, alpha: 1)
+        self.backgroundColor = event.picture != nil ? UIColor.init(white: 32/255, alpha: 1) : UIColor.init(white: 241/255, alpha: 1)
         self.layer.cornerRadius = 11
 
         addSubview(eventImageView)

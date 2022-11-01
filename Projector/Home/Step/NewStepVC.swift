@@ -345,7 +345,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         //calls two times, and first is 0
         if subviewsHeightSum > 0 {
             contentViewHeightAnchor.constant = subviewsHeightSum + 200
-            print(subviewsHeightSum)
         }
     }
     
@@ -429,7 +428,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
-        
+        //check for section
         if self.stepSection == nil {
             sectionButton.titleLabel?.textColor = .red
             return
@@ -504,7 +503,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         for item in newStepImages.photoArray {
             stepTemplate.selectedPhotosArray.append(item)
         }
-        stepTemplate.selectedCanvasesArray.append(objectsIn: newStepImages.canvasArray)
+        
         
         //items
         for item in stepItems{

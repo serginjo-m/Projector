@@ -28,16 +28,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //project step events need some configuration
     var stepId: String?
     var projectId: String?
-    
-    var canvasId: String? {
-        didSet{
-            if let identifier = canvasId, let canvasNote = ProjectListRepository.instance.getCanvasNote(id: identifier){
-                
-                let canvasView = DrawCanvasView()
-                canvasView.canvasObject = canvasNote
-            }
-        }
-    }
+    //quick notes save image url here
+    var pictureUrl: String?
     
     private lazy var dateFormatterFullDate: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -104,24 +96,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.clipsToBounds = true
         return view
     }()
-    
-    lazy var canvas: DrawCanvasView = {
-        let canvas = DrawCanvasView()
-
-        if let identifier = self.canvasId, let canvasNote = ProjectListRepository.instance.getCanvasNote(id: identifier){
-            canvas.canvasObject = canvasNote
-            canvas.transform = CGAffineTransform(scaleX: 2, y: 2)
-            canvas.isHidden = false
-        }else{
-            canvas.isHidden = true
-        }
         
-        canvas.backgroundColor = UIColor.init(white: 239/255, alpha: 1)
-        canvas.translatesAutoresizingMaskIntoConstraints = false
-        canvas.isUserInteractionEnabled = true
-        return canvas
-    }()
-    
     let nameTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
@@ -259,7 +234,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.addSubview(viewControllerTitle)
         view.addSubview(saveButton)
         view.addSubview(imageHolderView)
-        imageHolderView.addSubview(canvas)
         view.addSubview(nameTextField)
         view.addSubview(lineUIView)
         view.addSubview(reminderTitle)
@@ -398,7 +372,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         
         if let stepIdentifier = self.stepId{
-            
             //if NewEventViewController has a step identifier, it means that event type is a project step
             eventTemplate.category = "projectStep"
             //assign image to step event
@@ -427,6 +400,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         if let description = descriptionTextView.text{
             eventTemplate.descr = description
         }
+        //quick notes with images define url
+        if let url = pictureUrl {
+            eventTemplate.picture = url
+        }
+        
         return eventTemplate
     }
     
@@ -559,11 +537,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         imageHolderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         imageHolderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         imageHolderView.heightAnchor.constraint(equalToConstant: 75).isActive = true
-        
-        canvas.widthAnchor.constraint(equalTo: imageHolderView.widthAnchor, multiplier: 0.5).isActive = true
-        canvas.heightAnchor.constraint(equalTo: imageHolderView.heightAnchor, multiplier: 4).isActive = true
-        canvas.centerYAnchor.constraint(equalTo: imageHolderView.centerYAnchor).isActive = true
-        canvas.centerXAnchor.constraint(equalTo: imageHolderView.centerXAnchor).isActive = true
         
         nameTextField.topAnchor.constraint(equalTo: imageHolderView.bottomAnchor, constant: 40).isActive = true
         nameTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true

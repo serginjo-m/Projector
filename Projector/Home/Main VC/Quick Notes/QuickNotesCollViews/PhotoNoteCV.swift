@@ -82,6 +82,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         newEventViewController.modalPresentationStyle = .fullScreen
         newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: quickNote.picture)
         newEventViewController.nameTextField.text = quickNote.title
+        newEventViewController.pictureUrl = quickNote.picture
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
         //show new event view controller

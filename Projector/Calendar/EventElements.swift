@@ -386,7 +386,7 @@ class EventBubbleView: UIView {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .left
-        label.textColor = event.category == "projectStep" ? .white : .black
+        label.textColor = event.picture != nil ? .white : .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = event.title
         label.numberOfLines = 0
@@ -397,7 +397,7 @@ class EventBubbleView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14)
-        label.isHidden = event.category == "projectStep" ? true : false
+        label.isHidden = event.picture != nil ? true : false
         label.numberOfLines = 0
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
@@ -411,7 +411,7 @@ class EventBubbleView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.text = event.descr
-        label.isHidden = event.category == "projectStep" ? true : false
+        label.isHidden = event.picture != nil ? true : false
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -427,7 +427,7 @@ class EventBubbleView: UIView {
         }
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isHidden = event.category == "projectStep" ? false : true
+        imageView.isHidden = event.picture != nil ? false : true
         return imageView
     }()
     lazy var gradientView: GradientView = {
@@ -435,7 +435,7 @@ class EventBubbleView: UIView {
         let middleColor = UIColor.init(white: 32/255, alpha: 1)
         let bottomColor = UIColor.init(white: 32/255, alpha: 1)
         let gradient = GradientView(gradientStartColor: topColor, gradientMiddleColor: middleColor, gradientEndColor: bottomColor)
-        gradient.isHidden = event.category == "projectStep" ? false : true
+        gradient.isHidden = event.picture != nil ? false : true
         gradient.translatesAutoresizingMaskIntoConstraints = false
         return gradient
     }()
@@ -449,7 +449,7 @@ class EventBubbleView: UIView {
         label.text = event.title
         label.numberOfLines = 0
 //        label.backgroundColor = .systemGreen
-        label.isHidden = event.category == "projectStep" ? false : true
+        label.isHidden = event.picture != nil ? false : true
         return label
     }()
     

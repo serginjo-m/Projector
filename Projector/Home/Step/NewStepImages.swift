@@ -29,7 +29,6 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
     private let cellID = "cellId"
     //array contains default 'plus' image
     var photoArray = List<String>()
-    var canvasArray = List<CanvasNote>()
     
     //here creates a horizontal collectionView inside stackView
     let imageCollectionView: UICollectionView = {
@@ -137,11 +136,6 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
         //not all 8 initial cells has an image
         if photoArray.count >= indexPath.item && indexPath.item != 0{
             template.imageURL = photoArray[indexPath.item - 1]
-        }
-        
-        //not all 8 initial cells has an image
-        if canvasArray.count >= indexPath.item && indexPath.item != 0{
-            template.canvas = canvasArray[indexPath.item - 1]
         }
         
         cell.template = template

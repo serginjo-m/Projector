@@ -161,51 +161,64 @@ class CanvasViewController: UIViewController {
     
     //back to previous view
     @objc func saveAction(_ sender: Any) {
-        //get canvas object
-        let canvasNote = self.canvas.canvasObject
+        
         //newly created image
         let image = canvas.renderImageFromCanvas()
         //save newly created image to photo library
         saveImage(image: image)
-        //write url to canvas note
-        queryLastPhoto()
-        //save to data base
-        ProjectListRepository.instance.createCanvasNote(canvasNote: canvasNote)
-        //add action to activity journal
-        UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
-        //exit from view
-        self.dismiss(animated: true)
     }
     
     
 
     func saveImage(image: UIImage) {
+        //save action
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        
     }
+    
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             print(error.localizedDescription)
         } else {
-            //print("Success")
+            queryLastPhoto()
         }
     }
     
     func queryLastPhoto() {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.fetchLimit = 1
         
-        let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-        if let asset = fetchResult.firstObject {
+        let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        
+        if (fetchResult.firstObject != nil){
+            let lastImageAsset: PHAsset = fetchResult.firstObject as! PHAsset
+            //have to transfer it here, so I can grab image dimensions
+            let imageHeight = lastImageAsset.pixelHeight
+            let imageWidth = lastImageAsset.pixelWidth
+            
+            
             //retreave image URL
-            asset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
-                if asset.mediaType == .image {
+            lastImageAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
+                if lastImageAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
-                        let canvasNote = self.canvas.canvasObject
-                        ProjectListRepository.instance.updateCanvasUrl(url: strURL, note: canvasNote)
+                        self.completeSaving(imageHeight: imageHeight, imageWidth: imageWidth, url: strURL, note: self.canvas.canvasObject)
                     }
                 }
             })
         }
+        
+        
+    }
+
+    func completeSaving(imageHeight: Int, imageWidth: Int, url: String, note: CanvasNote){
+        ProjectListRepository.instance.updateCanvasUrl(height: imageHeight, width: imageWidth, url: url, note: note)
+        //save to data base
+        ProjectListRepository.instance.createCanvasNote(canvasNote: note)
+        //add action to activity journal
+        UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
+        //exit from view
+        self.dismiss(animated: true)
     }
     
     func setupConstraints(){

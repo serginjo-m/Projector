@@ -586,10 +586,11 @@ extension CalendarViewController {
         //define event name
         newEventViewController.nameTextField.text = zoomingView.event.title
         //if event don't have a custom  image, leave default image
-        if zoomingView.event.picture != nil{
-            newEventViewController.imageHolderView.image = zoomingView.eventImageView.image
+        if let pictureUrl = zoomingView.event.picture{
+            newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: pictureUrl)
         }
-        
+        newEventViewController.descriptionTextView.text = zoomingView.event.descr
+        newEventViewController.pictureUrl = zoomingView.event.picture
         if let startTime = zoomingView.event.startTime, let endTime = zoomingView.event.endTime {
             newEventViewController.startTimePicker.date = startTime
             newEventViewController.endTimePicker.date = endTime
