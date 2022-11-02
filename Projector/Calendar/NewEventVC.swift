@@ -447,36 +447,61 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         //show date picker
     }
     
-    
     //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
+        guard let startDate = eventStart, let endDate = eventEnd else {return}
+        
         self.eventDate = sender.date
+        
+        self.startTimePicker.date = formatTimeBasedDate(date: startDate, anticipateHours: 0, anticipateMinutes: 0)
+        self.eventStart = self.startTimePicker.date
+        
+        
+        self.endTimePicker.date = formatTimeBasedDate(date: endDate, anticipateHours: 0, anticipateMinutes: 0)
+        self.eventEnd = self.endTimePicker.date
     }
 
     //start time picker action
     @objc func startTimeChanged(_ sender: UIDatePicker) {
+        
+        //because format function takes event date like a day parameter, set picker date first
+        self.datePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        self.eventDate = self.datePicker.date
+        
+        //-------------> start time picker is changed
         //define exact time, when event should begin
         self.eventStart = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        
+        
         //anticipate end time to 1 hour by default
         self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 1, anticipateMinutes: 0)
-        //also update eventEnd Date
         self.eventEnd = self.endTimePicker.date
-        //modify time inside eventDate
-        self.eventDate = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
-        updateSaveButtonState()
         
+        updateSaveButtonState()
     }
 
     //end time picker action
     @objc func endTimeChanged(_ sender: UIDatePicker) {
         
+        //--------> so it did not change the main date
+        // that's why I should leave it as it is
+        
+        //---------> it did not affect start time
+        //so even here I haven't to do something
+        
+        //---------> sender date is changed in picker
+        //prevent error, when end time is less than start time
         if sender.date < startTimePicker.date {
             sender.date = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 1, anticipateMinutes: 0)
         }
+        
         //define exact time, when event should end
         self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
+        
+        
         updateSaveButtonState()
     }
+    
     //anticipate time 
     fileprivate func formatTimeBasedDate(date: Date, anticipateHours: Int, anticipateMinutes: Int) -> Date{
         //extract hours and minutes from date parameter

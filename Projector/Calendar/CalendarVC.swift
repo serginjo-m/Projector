@@ -592,9 +592,10 @@ extension CalendarViewController {
         newEventViewController.descriptionTextView.text = zoomingView.event.descr
         newEventViewController.pictureUrl = zoomingView.event.picture
         if let startTime = zoomingView.event.startTime, let endTime = zoomingView.event.endTime {
+            newEventViewController.datePicker.date = startTime
             newEventViewController.startTimePicker.date = startTime
             newEventViewController.endTimePicker.date = endTime
-            //during configuration time picker Date() can be different from datePicker
+
             newEventViewController.eventDate = startTime
             newEventViewController.eventStart = startTime
             newEventViewController.eventEnd = endTime

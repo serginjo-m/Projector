@@ -248,6 +248,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         //define event name
         newEventViewController.nameTextField.text = step.name
+        //define comment
+        newEventViewController.descriptionTextView.text = step.comment
         //show new event view controller
         navigationController?.present(newEventViewController, animated: true, completion: nil)
     }
