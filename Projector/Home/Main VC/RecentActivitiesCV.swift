@@ -252,7 +252,7 @@ class RecentActivitiesCell: UICollectionViewCell {
             if let setting = cellTemplate{
                 
                 //if object exist, meens app was opened that day
-                var str = "Looking!\n\n"
+                var str = "Look\n\n\n\n"
                 
                 for item in setting.userActivities{
                 str += "\(item.descr)\n\n"
@@ -267,6 +267,8 @@ class RecentActivitiesCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = UIColor.init(white: 1, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
@@ -274,10 +276,12 @@ class RecentActivitiesCell: UICollectionViewCell {
     let listLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 15)
         label.text = "This is Dummy text, that \n will be used for developing."
         label.textAlignment = .center
         label.numberOfLines = 0
+//        label.backgroundColor = .mainPink
         return label
     }()
     
@@ -285,7 +289,7 @@ class RecentActivitiesCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = UIColor.init(white: 1, alpha: 0.28)
         label.font = UIFont.boldSystemFont(ofSize: 50)
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -298,14 +302,16 @@ class RecentActivitiesCell: UICollectionViewCell {
         addSubview(dayNumberLabel)
         addSubview(listLabel)
         
-        dayOfWeekLabel.translatesAutoresizingMaskIntoConstraints = false
-        dayNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        listLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+//        listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
+//        listLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
+//        listLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+//        listLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
         
         listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
-        listLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
-        listLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        listLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
+        listLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        listLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        listLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.87).isActive = true
         
         dayOfWeekLabel.topAnchor.constraint(equalTo: topAnchor, constant: 13).isActive = true
         dayOfWeekLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
