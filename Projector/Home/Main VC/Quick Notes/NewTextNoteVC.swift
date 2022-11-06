@@ -35,7 +35,7 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
     
     lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("    Save to...", for: .normal)
+        button.setTitle("Save", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.setBackgroundImage(UIImage(named: "saveTo"), for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)

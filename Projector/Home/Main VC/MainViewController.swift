@@ -47,7 +47,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         category.delegate = self
         return category
     }()
-    
+
     var statisticsStackView = StatisticsStackView()
     
     var projects: Results<ProjectList> {//This property is actually get updated version of my project list
@@ -134,7 +134,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     var statisticsTitle: UILabel = {
         let label = UILabel()
-        label.text = "Achievements"
+        label.text = "Progress"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -397,12 +397,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     func reloadTableView() {
         //projects collection view reload data
         self.projectsCollectionView.reloadData()
-
         //update number of projects in projects CV title
         projectsTitle.text = "Your Projects (\(projects.count))"
-        
         //hide or reveal noProjetsBannerView if there is no project for now
         noProjectsBannerView.isHidden = projects.count == 0 ? false : true
+        //update progress widget
+        statisticsStackView.progressAnimation()
     }
     
     //return UIImage by URL
@@ -467,18 +467,9 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //because by default it is black
         view.backgroundColor = .white
         
-        contentTextView.translatesAutoresizingMaskIntoConstraints = false
-        projectsTitle.translatesAutoresizingMaskIntoConstraints = false
-        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentUIView.translatesAutoresizingMaskIntoConstraints = false
-        recentProjectsStackView.translatesAutoresizingMaskIntoConstraints = false
-        transitionButton.translatesAutoresizingMaskIntoConstraints = false
-        recentActivitiesTitle.translatesAutoresizingMaskIntoConstraints = false
-        recentActivitiesCV.translatesAutoresizingMaskIntoConstraints = false
-        viewByCategoryTitle.translatesAutoresizingMaskIntoConstraints = false
-        viewByCategoryCV.translatesAutoresizingMaskIntoConstraints = false
-        statisticsTitle.translatesAutoresizingMaskIntoConstraints = false
-        statisticsStackView.translatesAutoresizingMaskIntoConstraints = false
+        [contentTextView, projectsTitle, scrollViewContainer, contentUIView, recentProjectsStackView, transitionButton, recentActivitiesTitle, recentActivitiesCV, viewByCategoryTitle, viewByCategoryCV, statisticsTitle, statisticsStackView].forEach { view in
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true

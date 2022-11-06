@@ -209,6 +209,7 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         let int = (reversedWeekday + indexPath.row) % 7
         
         cell.backgroundColor = cellColors[int]
+        cell.dayNumberLabel.backgroundColor = cellColors[int]
         //day of week
         cell.dayOfWeekLabel.text = daysOfWeek[int]
         //day number
@@ -250,7 +251,7 @@ class RecentActivitiesCell: UICollectionViewCell {
     var cellTemplate: DayActivity? {
         didSet{
             if let setting = cellTemplate{
-                
+
                 //if object exist, meens app was opened that day
                 var str = "Look\n\n\n\n"
                 
@@ -281,7 +282,6 @@ class RecentActivitiesCell: UICollectionViewCell {
         label.text = "This is Dummy text, that \n will be used for developing."
         label.textAlignment = .center
         label.numberOfLines = 0
-//        label.backgroundColor = .mainPink
         return label
     }()
     
@@ -299,9 +299,8 @@ class RecentActivitiesCell: UICollectionViewCell {
         layer.masksToBounds = true
         
         addSubview(dayOfWeekLabel)
-        addSubview(dayNumberLabel)
         addSubview(listLabel)
-        
+        addSubview(dayNumberLabel)
         
 //        listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
 //        listLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
