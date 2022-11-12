@@ -15,6 +15,14 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "stepTableViewCell"
     
+    //All this stuff is for zooming items
+    //hold dimension of event view displayed in side panel before zoomimg it to full dimension
+    var startingFrame: CGRect?
+    //background behind full dimension event, after it zooms in
+    var zoomBackgroundView: UIView?
+    //need to hide it before animation starts
+    var startingView: UIView?
+    
     //TABLE VIEW
     lazy var stepTableView: UITableView = {
         let tableView = UITableView()
@@ -56,7 +64,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     let stepComment: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = UIColor.init(white: 0.3, alpha: 1)
         label.textAlignment = .left
         label.numberOfLines = 0
         label.isHidden = true
@@ -142,6 +150,15 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
+    //zooming stuff (because same items need different anchors for zoomingOUt and ZoomingIN)
+    var stepCommentHeightConstraint: NSLayoutConstraint!
+    var stepCommentTopAnchorHigherConstraint: NSLayoutConstraint!
+    var stepCommentTopAnchorLowerConstraint: NSLayoutConstraint!
+    var stepItemsTitleTopAnchorHigherConstraint: NSLayoutConstraint!
+    var stepItemsTitleTopAnchorMiddleConstraint: NSLayoutConstraint!
+    var stepItemsTitleTopAnchorLowerConstraint: NSLayoutConstraint!
+    var stepNameTitleHeightAnchor: NSLayoutConstraint!
+    
     //MARK: Initialization
     //Good way to init view controller
     //Good way to init viewController
@@ -167,6 +184,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         [dismissButton, stepTableView, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepComment, stepItemsTitle].forEach {
             contentUIView.addSubview($0)
         }
+        
+        //constraints that are constant and don't need to be updated
+        setupLayout()
         
     }
     
@@ -204,13 +224,12 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepImagesCV.isHidden = false
         }
         
-        if step.comment.isEmpty == true {
-            stepComment.isHidden = true
-        }else{
-            stepComment.isHidden = false
-        }
+        //hide or not, if no content is available for element
+        stepComment.isHidden = step.comment.isEmpty == true ? true : false
+        stepImagesCV.isHidden = step.selectedPhotosArray.count == 0 ? true : false
         
-        setupLayout()
+        //constraints and visibility of some views, that needs update after each update
+        updateDynamicConstraints()
     }
     
     //back to previous view
@@ -218,16 +237,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.popViewController(animated: true)
     }
     
-    //REMOVE ITEM
-    @objc func removeItem(button: UIButton){
-        guard let myStep = projectStep else {return}
-        
-        UserActivitySingleton.shared.createUserActivity(description: "\(myStep.itemsArray[button.tag]) removed from \(myStep.name)")
-        
-        ProjectListRepository.instance.deleteStepItem(step: myStep, itemAtIndex: button.tag)
-        stepTableView.reloadData()
-        
-    }
+    
     
     //Add to Calendar Event
     @objc func addStepToCalendarEvent(button: UIButton) {
@@ -355,10 +365,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.present(editStepViewController, animated: true, completion: nil)
     }
+    
     //MARK: Table View
     //table view section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let num = projectStep?.itemsArray.count  {
+        if let num = projectStep?.stepItemsList.count  {
             return num
         }
         return 0
@@ -370,31 +381,20 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier , for: indexPath) as? StepTableViewCell else {
             fatalError( "The dequeued cell is not an instance of ProjectTableViewCell." )
         }
-        //turn of change background color from selected cell
-        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-        cell.taskLabel.text = "Description Note"
-        if let string = projectStep?.itemsArray[indexPath.row] {
-            cell.descriptionLabel.text = string
+        
+        if let step = projectStep {
+            let template = step.stepItemsList[indexPath.row]
+            cell.template = template
         }
-        cell.removeButton.tag = indexPath.row
-        cell.removeButton.addTarget(self, action: #selector(removeItem(button:)), for: .touchUpInside)
+        
+        cell.stepViewController = self
         return cell
     }
     //MARK: Constraints
     //perforn all positioning configurations
     private func setupLayout(){
         
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        stepImagesCV.translatesAutoresizingMaskIntoConstraints = false
-        contentUIView.translatesAutoresizingMaskIntoConstraints = false
-        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
-        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        circleImage.translatesAutoresizingMaskIntoConstraints = false
-        stepToEventButton.translatesAutoresizingMaskIntoConstraints = false
-        editStepButton.translatesAutoresizingMaskIntoConstraints = false
-        removeStepButton.translatesAutoresizingMaskIntoConstraints = false
-        stepNameTitle.translatesAutoresizingMaskIntoConstraints = false
-        stepItemsTitle.translatesAutoresizingMaskIntoConstraints = false
+        [dismissButton, stepImagesCV, contentUIView, scrollViewContainer, categoryLabel, circleImage, stepToEventButton, editStepButton, removeStepButton, stepNameTitle, stepItemsTitle].forEach{$0.translatesAutoresizingMaskIntoConstraints = false}
         
         scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
@@ -413,15 +413,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
-        //diff size string need width calculation for constraints
-        guard let categoryLabelString = categoryLabel.text, let step = projectStep else {return}
-        let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
-        
-        //not sure is that's better solution, but it works after each reload
         categoryLabel.removeConstraints(categoryLabel.constraints)
         categoryLabel.centerYAnchor.constraint(equalTo: dismissButton.centerYAnchor, constant: 0).isActive = true
         categoryLabel.centerXAnchor.constraint(equalTo: contentUIView.centerXAnchor, constant: 0).isActive = true
-        categoryLabel.widthAnchor.constraint(equalToConstant: categoryLabelSize).isActive = true
         categoryLabel.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         circleImage.centerYAnchor.constraint(equalTo: categoryLabel.centerYAnchor, constant: 0).isActive = true
@@ -429,17 +423,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         circleImage.widthAnchor.constraint(equalToConstant: 8).isActive = true
         circleImage.heightAnchor.constraint(equalToConstant: 8).isActive = true
         
-        
-        //this logic makes stepnamelabel size correct
-        let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
-        
-        let commentRect = NSString(string: step.comment).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
-        
-        
         stepNameTitle.topAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 22).isActive = true
         stepNameTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         stepNameTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        stepNameTitle.heightAnchor.constraint(equalToConstant: rect.height + 20).isActive = true
+        stepNameTitleHeightAnchor = stepNameTitle.heightAnchor.constraint(equalToConstant: 20)
+        stepNameTitleHeightAnchor.isActive = true
         
         stepToEventButton.topAnchor.constraint(equalTo: stepNameTitle.bottomAnchor, constant: 18).isActive = true
         stepToEventButton.leftAnchor.constraint(equalTo: dismissButton.leftAnchor, constant: 0).isActive = true
@@ -466,75 +454,113 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepImagesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         stepImagesCV.heightAnchor.constraint(equalToConstant: 144).isActive = true
         
-        //TODO: Refine a bit this section
-        //TODO: Asign an external constraints that can be updated from page configuration
-        if step.selectedPhotosArray.count == 0 {
-            stepComment.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
-        }else{
-            stepComment.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true
-        }
+        stepCommentHeightConstraint = stepComment.heightAnchor.constraint(equalToConstant: 20)
+        stepCommentHeightConstraint.isActive = true
         stepComment.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         stepComment.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
-        stepComment.heightAnchor.constraint(equalToConstant: commentRect.height + 20).isActive = true
         
-        if step.comment.isEmpty == true {
-            if step.selectedPhotosArray.count == 0 {
-                stepItemsTitle.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25).isActive = true
-            }else{
-                stepItemsTitle.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30).isActive = true
-            }
-            
-        }else{
-            stepItemsTitle.topAnchor.constraint(equalTo: stepComment.bottomAnchor, constant: 20).isActive = true
-        }
+        
+        stepCommentTopAnchorHigherConstraint = stepComment.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant: 20)
+        stepCommentTopAnchorLowerConstraint = stepComment.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30)
+        
         
         stepItemsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         stepItemsTitle.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         stepItemsTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        stepItemsTitleTopAnchorHigherConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25)
+        stepItemsTitleTopAnchorMiddleConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30)
+        stepItemsTitleTopAnchorLowerConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepComment.bottomAnchor, constant: 20)
         
         stepTableView.topAnchor.constraint(equalTo: stepItemsTitle.bottomAnchor, constant:  9).isActive = true
         stepTableView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
         stepTableView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         stepTableView.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: 0).isActive = true
     }
+    
+    func updateDynamicConstraints(){
+        //diff size string need width calculation for constraints
+        guard let categoryLabelString = categoryLabel.text, let step = projectStep else {return}
+        
+       //calculates precise label width needed
+        let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
+        categoryLabel.widthAnchor.constraint(equalToConstant: categoryLabelSize).isActive = true
+        
+        //this logic makes stepNamelabel size correct
+        let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
+        
+        stepNameTitleHeightAnchor.constant = rect.height + 20
+        
+        let commentRect = NSString(string: step.comment).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
+        
+        stepCommentHeightConstraint.constant = commentRect.height + 10
+        
+        if step.selectedPhotosArray.count == 0 {//if no photos, place it under buttons
+            stepCommentTopAnchorLowerConstraint.isActive = false
+            stepCommentTopAnchorHigherConstraint.isActive = true
+        }else{//if it contains photos place it under photos
+            stepCommentTopAnchorHigherConstraint.isActive = false
+            stepCommentTopAnchorLowerConstraint.isActive = true
+        }
+        
+        //Configure items position based on comment and photos visibily
+        if step.comment.isEmpty == true {//if no comments
+            if step.selectedPhotosArray.count == 0 {//if no photos
+                //place it under buttons
+                stepItemsTitleTopAnchorMiddleConstraint.isActive = false
+                stepItemsTitleTopAnchorLowerConstraint.isActive = false
+                stepItemsTitleTopAnchorHigherConstraint.isActive = true
+            }else{
+                //place it under photos
+                stepItemsTitleTopAnchorHigherConstraint.isActive = false
+                stepItemsTitleTopAnchorLowerConstraint.isActive = false
+                stepItemsTitleTopAnchorMiddleConstraint.isActive = true
+            }
+        }else{//place it under comment
+            stepItemsTitleTopAnchorHigherConstraint.isActive = false
+            stepItemsTitleTopAnchorMiddleConstraint.isActive = false
+            stepItemsTitleTopAnchorLowerConstraint.isActive = true
+        }
+        
+    }
 }
+
 //MARK: Table View Cell
 class StepTableViewCell: UITableViewCell {
+    
+    //use for zooming delgate
+    var stepViewController: StepViewController?
+    
+    var template: StepItem? {
+        didSet {
+            guard let template = template else {return}
+            itemTitle.text = template.title
+            descriptionLabel.text = template.text
+        }
+    }
 
     let titleIcon: UIImageView = {
        let image = UIImageView()
         image.image = UIImage(named: "descriptionNote")
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
-    let taskLabel: UILabel = {
+    let itemTitle: UILabel = {
         let label = UILabel()
         label.text = "Something"
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor.darkGray
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    
-    let removeButton: UIButton = {
-        let button = UIButton()
-        
-        button.setTitleColor(UIColor.darkGray, for: .normal)
-        button.setImage(UIImage(named: "removeItem"), for: .normal)
-//        button.imageEdgeInsets = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
-        button.contentMode = .center
-        button.imageView!.contentMode = .scaleAspectFill
-        
-        button.backgroundColor = UIColor.init(red: 231/255, green: 231/255, blue: 231/255, alpha: 1)
-        
-        return button
     }()
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.boldSystemFont(ofSize: 15)
         label.text = "First of all I need to clean and inspect all surface."
         //label.backgroundColor = UIColor.lightGray
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.init(white: 0.3, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         return label
     }()
@@ -543,54 +569,182 @@ class StepTableViewCell: UITableViewCell {
         let bg = UIView()
         bg.backgroundColor = UIColor(displayP3Red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
         bg.layer.cornerRadius = 12
-//        bg.layer.borderWidth = 1
-//        bg.layer.borderColor = UIColor(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 1).cgColor
+        bg.translatesAutoresizingMaskIntoConstraints = false
         bg.layer.masksToBounds = true
         return bg
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //backgroundColor = UIColor.lightGray
         
-        addSubview(taskLabel)
+        //turn of change background color on selected cell
+        selectionStyle = UITableViewCell.SelectionStyle.none
+        let tap = UITapGestureRecognizer(target: self, action: #selector(zoomIn))
+        addGestureRecognizer(tap)
+        
+        addSubview(itemTitle)
         addSubview(titleIcon)
-        
         addSubview(backgroundBubble)
         addSubview(descriptionLabel)
-        backgroundBubble.addSubview(removeButton)
         
-        titleIcon.frame = CGRect(x: 0, y: 8, width: 16, height: 14)
-        taskLabel.frame = CGRect(x: 23, y: 0, width: 250, height: 30)
-       // removeButton.frame = CGRect(x: Int(frame.width) - 67, y: 5, width: 77, height: 17)
+        titleIcon.centerYAnchor.constraint(equalTo: itemTitle.centerYAnchor).isActive = true
+        titleIcon.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
+        titleIcon.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        titleIcon.heightAnchor.constraint(equalToConstant: 14).isActive = true
         
+        itemTitle.leftAnchor.constraint(equalTo: titleIcon.rightAnchor, constant: 7).isActive = true
+        itemTitle.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        itemTitle.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        itemTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundBubble.translatesAutoresizingMaskIntoConstraints = false
-        removeButton.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.topAnchor.constraint(equalTo: itemTitle.bottomAnchor, constant: 20).isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
         
-        let constraints = [
-            descriptionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 48),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
-            backgroundBubble.topAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -16),
-            backgroundBubble.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor, constant: -16),
-            backgroundBubble.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
-            backgroundBubble.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor, constant: 16),
-            
-            removeButton.topAnchor.constraint(equalTo: backgroundBubble.topAnchor, constant: 0),
-            removeButton.rightAnchor.constraint(equalTo: backgroundBubble.rightAnchor, constant: 0),
-            removeButton.widthAnchor.constraint(equalToConstant: 35),
-            removeButton.bottomAnchor.constraint(equalTo: backgroundBubble.bottomAnchor, constant: 0)
-        ]
+        backgroundBubble.topAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -16).isActive = true
+        backgroundBubble.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor, constant: -16).isActive = true
+        backgroundBubble.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16).isActive = true
+        backgroundBubble.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor, constant: 16).isActive = true
         
-        NSLayoutConstraint.activate(constraints)
+        //Small tip
+        //NSLayoutConstraint.activate([CONSTRAINTS])
+    }
+    
+    //from cell to view controller
+    @objc func zoomIn(tapGesture: UITapGestureRecognizer){
+        
+        guard let stepItem = template, let viewController = stepViewController else { return }
+        viewController.performZoomForStartingEventView(stepItem: stepItem, startingView: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension StepViewController {
+    
+    func performZoomForStartingEventView(stepItem: StepItem, startingView: UIView){
+        
+        guard let stepTableViewCell = startingView as? StepTableViewCell else {return}
+        
+        //save reference to the View() , so it can be used later
+        self.startingView = stepTableViewCell
+        //hide original view
+        self.startingView?.isHidden = true
+
+        guard let itemTemplate = stepTableViewCell.template,
+              //it is a whole view frame
+              let unwStartingFrame = startingView.superview?.convert(startingView.frame, to: nil) else {return}
+
+        //bubble frame
+        let zoomFrame = CGRect(x: unwStartingFrame.origin.x, y: unwStartingFrame.origin.y, width: unwStartingFrame.width, height: unwStartingFrame.height)
+        //save frame for future use
+        startingFrame = zoomFrame
+
+        //expanded view size should start from small
+        let zoomingView = StepItemZoomingView(stepItem: itemTemplate, frame: zoomFrame)
+        //dismiss is not a button. It is a view
+        zoomingView.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOutItem)))
+        
+        zoomingView.title.text = stepTableViewCell.itemTitle.text
+        zoomingView.descriptionLabel.text = stepTableViewCell.descriptionLabel.text
+//        //button actions are located in parent viewController
+//        zoomingView.removeButton.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
+//        zoomingView.editButton.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
+        
+        if let keyWindow = UIApplication.shared.keyWindow {
+
+            //black transpared background
+            self.zoomBackgroundView = UIView(frame: keyWindow.frame)
+
+            zoomBackgroundView?.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+            zoomBackgroundView?.alpha = 0
+            keyWindow.addSubview(zoomBackgroundView!)
+            //add expanded event view body
+            keyWindow.addSubview(zoomingView)
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                
+                zoomingView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width * 0.9, height: keyWindow.frame.height * 0.9)
+                
+                self.zoomBackgroundView?.alpha = 0.5
+                zoomingView.dismissView.alpha = 1
+                zoomingView.removeButton.alpha = 1
+                zoomingView.editButton.alpha = 1
+                
+                zoomingView.layoutIfNeeded()
+                
+                //wherever view is, make view pleced in the center of window
+                zoomingView.center = keyWindow.center
+                
+            } completion: { (completed: Bool) in
+                //do something here later .....
+            }
+        }
+    }
+    
+    // zoom out logic
+    @objc func zoomOutItem(tapGesture: UITapGestureRecognizer){
+        
+        //extract view from tap gesture
+        if let zoomOutView = tapGesture.view?.superview{
+            //corner configuration
+            zoomOutView.layer.cornerRadius = 11
+            zoomOutView.clipsToBounds = true
+            
+            guard  let zoom = zoomOutView as? StepItemZoomingView else {return}
+            
+            zoom.dismissView.alpha = 0
+            zoom.removeButton.alpha = 0
+            zoom.editButton.alpha = 0
+            zoom.thinUnderline.alpha = 0
+            
+            //zoom out animation
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                //back to initial size
+                zoomOutView.frame = self.startingFrame!
+                //set back to transparent background
+                self.zoomBackgroundView?.alpha = 0
+                
+                    if let startingView = self.startingView as? StepTableViewCell {
+                        
+                        zoom.bubbleBottomAnchor.isActive = false
+                        zoom.bubbleBottomLabelAnchor.isActive = true
+                        
+                        zoom.bubbleTopAnchor.isActive = false
+                        zoom.bubbleTopLabelAnchor.isActive = true
+                        
+                        zoom.iconLeftAnchor.isActive = false
+                        zoom.iconLeftCompactAnchor.isActive = true
+                        
+                        zoom.titleTopAnchor.constant = 0
+                        zoom.descriptionTopAnchor.constant = 20
+                        
+                        zoom.descriptionHeightAnchor.isActive = false
+                        zoom.descriptionBottomAnchor.isActive = true
+                        
+                        //zoom out fonts before animate
+                        zoom.title.font = startingView.itemTitle.font
+                        zoom.descriptionLabel.font = startingView.descriptionLabel.font
+                        
+                        if startingView.descriptionLabel.isHidden == true{
+                            zoom.descriptionLabel.alpha = 0
+                        }
+                        
+                    }
+                
+                zoomOutView.layoutIfNeeded()
+                
+            } completion: { (completed: Bool) in
+                //remove temporary created view from superview
+                zoomOutView.removeFromSuperview()
+                //show back original event (bubble) view
+                self.startingView?.isHidden = false
+            }
+
+        }
+    }
 }

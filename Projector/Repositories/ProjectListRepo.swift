@@ -41,6 +41,18 @@ class ProjectListRepository {
         }
     }
     
+    func updateStepItemArray(itemsArray: [StepItem], step: ProjectStep){
+        try! realm.write {
+            step.stepItemsList.append(objectsIn: itemsArray)
+        }
+    }
+    
+    func addItemToStep(item: StepItem, step: ProjectStep){
+        try! realm.write {
+            step.stepItemsList.append(item)
+        }
+    }
+    
     //here we actualy add a new object
     // list: - is a param & can have any name
     func createProjectList(list: ProjectList){
@@ -353,6 +365,35 @@ class ProjectListRepository {
     func updateSectionName(name: String, section: StepWaySection){
         try! realm.write {
             section.name = name
+        }
+    }
+    
+    //step way section
+    func createStepItem(stepItem: StepItem){
+        try! realm.write ({
+            realm.add(stepItem)
+        })
+    }
+    
+    func getAllStepItems() -> Results<StepItem> {
+        return realm.objects(StepItem.self)
+    }
+    
+    func deleteStepItem(stepItem: StepItem){
+        try! realm.write ({
+            realm.delete(stepItem)
+        })
+    }
+    
+    func updateStepItemTitle(stepItemTitle: String, stepItem: StepItem){
+        try! realm.write {
+            stepItem.title = stepItemTitle
+        }
+    }
+    
+    func updateStepItemText(text: String, stepItem: StepItem){
+        try! realm.write {
+            stepItem.text = text
         }
     }
 }

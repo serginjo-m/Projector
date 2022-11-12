@@ -25,9 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
                 
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 52,
+            schemaVersion: 53,
             migrationBlock: { migration , oldSchemaVersion in
-                if oldSchemaVersion < 52 {
+                if oldSchemaVersion < 53 {
                     
                 }
             }

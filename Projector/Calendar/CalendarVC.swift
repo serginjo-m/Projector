@@ -446,7 +446,7 @@ extension CalendarViewController {
         case metadataGeneration
     }
     
-    //custom zooming logic
+    //------------------------------------- CUSTOM ZOOM IN LOGIC ----------------------------------------------
     func performZoomForStartingEventView(event: Event, startingEventView: UIView){
         //save reference to the View() , so it can be used later
         self.startingEventView = startingEventView

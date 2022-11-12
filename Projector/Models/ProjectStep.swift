@@ -27,8 +27,11 @@ class ProjectStep: Object{
     //an array of images url
     var selectedPhotosArray = List<String>()//[String]()
     
-    //an array of items in table view
+    //old approach
     var itemsArray = List<String>()
+    //new approach
+    var stepItemsList = List<StepItem>()
+    //use like breadcrums
     var viewControllersStack = List<String>()
     //id
     @objc dynamic var id = UUID().uuidString

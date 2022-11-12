@@ -693,7 +693,7 @@ class EventTableViewCell: UITableViewCell {
         eventBubbleView.topAnchor.constraint(equalTo: topAnchor, constant: viewTopPadding).isActive = true
         eventBubbleView.leftAnchor.constraint(equalTo: leftAnchor, constant:  constant).isActive = true
     }
-    
+    //-----------------------------from cell to view controller-------------------------------------------
     @objc func zoomIn(tapGesture: UITapGestureRecognizer){
         //Really good trick
         //Extract view object from tap gesture

@@ -73,6 +73,8 @@
 		CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */; };
 		CF60A26226CD9BB30046F083 /* ExpandingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */; };
 		CF65B35F290F036C0093C4B9 /* Canvas View.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B35E290F036C0093C4B9 /* Canvas View.swift */; };
+		CF65B363291850070093C4B9 /* StepItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B362291850060093C4B9 /* StepItem.swift */; };
+		CF65B365291C0F2E0093C4B9 /* StepItemZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65B364291C0F2D0093C4B9 /* StepItemZoomingView.swift */; };
 		CF6EF7A525C1F76200F8ADB8 /* DetailViewPanelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */; };
 		CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */; };
 		CF7045342889D21F00048542 /* ZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7045332889D21F00048542 /* ZoomingView.swift */; };
@@ -214,6 +216,8 @@
 		CF5C683F255324F000EA6E79 /* PinterestOriginal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestOriginal.swift; sourceTree = "<group>"; };
 		CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingReminder.swift; sourceTree = "<group>"; };
 		CF65B35E290F036C0093C4B9 /* Canvas View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Canvas View.swift"; sourceTree = "<group>"; };
+		CF65B362291850060093C4B9 /* StepItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItem.swift; sourceTree = "<group>"; };
+		CF65B364291C0F2D0093C4B9 /* StepItemZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepItemZoomingView.swift; sourceTree = "<group>"; };
 		CF6EF7A425C1F76200F8ADB8 /* DetailViewPanelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewPanelExtension.swift; sourceTree = "<group>"; };
 		CF6EF7A625C1FE1700F8ADB8 /* SidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePanelView.swift; sourceTree = "<group>"; };
 		CF7045332889D21F00048542 /* ZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingView.swift; sourceTree = "<group>"; };
@@ -506,6 +510,7 @@
 				CF60A26126CD9BB30046F083 /* ExpandingReminder.swift */,
 				CF9D1904285E1A7F00599ABE /* NewStepVC.swift */,
 				CF98AEC528E61FD2002C3FE7 /* NewStepSectionsList.swift */,
+				CF65B364291C0F2D0093C4B9 /* StepItemZoomingView.swift */,
 			);
 			path = Step;
 			sourceTree = "<group>";
@@ -588,6 +593,7 @@
 				CF2472F62713606E002D6DCA /* User.swift */,
 				CF550E0C281EE78900C9DD00 /* ApiResponse.swift */,
 				CF98AEC728EDF1C9002C3FE7 /* StepWaySection.swift */,
+				CF65B362291850060093C4B9 /* StepItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -831,6 +837,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF29D9CB26C437DC00B3FEE2 /* Notification.swift in Sources */,
+				CF65B365291C0F2E0093C4B9 /* StepItemZoomingView.swift in Sources */,
 				CFCD78A7268240220066294A /* DataStackView.swift in Sources */,
 				CF594365253215670036641B /* StatisticsStackView.swift in Sources */,
 				CFD88DFB25961B0600B726FF /* CalendarCell.swift in Sources */,
@@ -938,6 +945,7 @@
 				CF1D24502741057B00341C26 /* StepProgressMenu.swift in Sources */,
 				CF6EF7A725C1FE1700F8ADB8 /* SidePanelView.swift in Sources */,
 				CF0B7E42262608DE008AC084 /* CameraShot.swift in Sources */,
+				CF65B363291850070093C4B9 /* StepItem.swift in Sources */,
 				CFCD78A526823FAE0066294A /* AnimationDisplayLink.swift in Sources */,
 				CFB5E205244883F400E304EC /* DetailProjectData.swift in Sources */,
 				CF5C6840255324F000EA6E79 /* PinterestOriginal.swift in Sources */,
