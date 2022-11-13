@@ -198,7 +198,6 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 
                 let newStepItemViewController = StepItemViewController()
                 newStepItemViewController.stepID = stepVC.stepID
-                newStepItemViewController.stepItemsTableView = stepVC.stepTableView
                 
                 let viewControllers = [
                     "Create Step Item" : newStepItemViewController

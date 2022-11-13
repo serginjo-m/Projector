@@ -191,7 +191,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        projectStep = ProjectListRepository.instance.getProjectStep(id: stepID)
         //configure view controller
         performPageConfigurations()
     }
@@ -199,12 +198,19 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: Methods
     private func performPageConfigurations(){
         
+        projectStep = ProjectListRepository.instance.getProjectStep(id: stepID)
+        
         guard let step = projectStep else {return}
         
+        categoryLabel.text = step.category
         stepNameTitle.text = step.name
         stepComment.text = step.comment
-        
         stepToEventButton.isSelected = step.complete
+        //hide or not, if no content is available for element
+        stepComment.isHidden = step.comment.isEmpty == true ? true : false
+        stepImagesCV.isHidden = step.selectedPhotosArray.count == 0 ? true : false
+        
+        
         if let event = step.event{
             if event.reminder != nil{
                 reminderStepButton.isSelected = true
@@ -212,24 +218,19 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }else{
             reminderStepButton.isSelected = false
         }
-        categoryLabel.text = step.category
         
         //hide if no data available
         if step.selectedPhotosArray.count == 0 {
             stepImagesCV.isHidden = true
         }else{
-            
             stepImagesCV.step = step
             stepImagesCV.stepImagesCollectionView.reloadData()
             stepImagesCV.isHidden = false
         }
         
-        //hide or not, if no content is available for element
-        stepComment.isHidden = step.comment.isEmpty == true ? true : false
-        stepImagesCV.isHidden = step.selectedPhotosArray.count == 0 ? true : false
-        
         //constraints and visibility of some views, that needs update after each update
         updateDynamicConstraints()
+        self.stepTableView.reloadData()
     }
     
     //back to previous view
@@ -651,16 +652,18 @@ extension StepViewController {
         
         zoomingView.title.text = stepTableViewCell.itemTitle.text
         zoomingView.descriptionLabel.text = stepTableViewCell.descriptionLabel.text
-//        //button actions are located in parent viewController
-//        zoomingView.removeButton.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
-//        zoomingView.editButton.addTarget( self, action: #selector(editEvent), for: .touchUpInside)
+        zoomingView.descriptionTextView.text = zoomingView.descriptionLabel.text
+        
+        //button actions are located in parent viewController
+        zoomingView.removeButton.addTarget(self, action: #selector(removeStepItem(_:)), for: .touchUpInside)
+        zoomingView.editButton.addTarget( self, action: #selector(editStepItem(_:)), for: .touchUpInside)
         
         if let keyWindow = UIApplication.shared.keyWindow {
 
             //black transpared background
             self.zoomBackgroundView = UIView(frame: keyWindow.frame)
 
-            zoomBackgroundView?.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+            zoomBackgroundView?.backgroundColor = UIColor.init(white: 0, alpha: 0.7)
             zoomBackgroundView?.alpha = 0
             keyWindow.addSubview(zoomBackgroundView!)
             //add expanded event view body
@@ -670,7 +673,7 @@ extension StepViewController {
                 
                 zoomingView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width * 0.9, height: keyWindow.frame.height * 0.9)
                 
-                self.zoomBackgroundView?.alpha = 0.5
+                self.zoomBackgroundView?.alpha = 1
                 zoomingView.dismissView.alpha = 1
                 zoomingView.removeButton.alpha = 1
                 zoomingView.editButton.alpha = 1
@@ -701,6 +704,8 @@ extension StepViewController {
             zoom.removeButton.alpha = 0
             zoom.editButton.alpha = 0
             zoom.thinUnderline.alpha = 0
+            zoom.descriptionTextView.alpha = 0
+            zoom.descriptionLabel.alpha = 1
             
             //zoom out animation
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
@@ -746,5 +751,58 @@ extension StepViewController {
             }
 
         }
+    }
+    
+    @objc func removeStepItem(_ sender: UIButton){
+        
+        guard let cell = self.startingView as? StepTableViewCell,
+              let stepItem = cell.template,
+              let zoomingItemView = sender.superview as? StepItemZoomingView else {return}
+        
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Step Item?", message: "Are You sure You want to delete this Step Item?", preferredStyle: .alert)
+                
+        //delete button
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            zoomingItemView.removeFromSuperview()
+            //set back to transparent background
+            self.zoomBackgroundView?.alpha = 0
+            self.startingView?.isHidden = false
+            
+            ProjectListRepository.instance.deleteStepItem(stepItem: stepItem)
+
+            self.stepTableView.reloadData()
+        })
+        
+        alertVC.addAction(deleteAction)
+        //cancel button
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alertVC.addAction(cancelAction)
+        
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    @objc func editStepItem(_ sender: UIButton){
+        guard let cell = self.startingView as? StepTableViewCell,
+              let stepItem = cell.template,
+              let zoomingItemView = sender.superview as? StepItemZoomingView else {return}
+        
+        let newStepItemVC = StepItemViewController()
+        newStepItemVC.stepItem = stepItem
+        newStepItemVC.itemTitleTextField.text = stepItem.title
+        newStepItemVC.noteTextView.text = stepItem.text
+        newStepItemVC.stepID = self.stepID
+        newStepItemVC.modalPresentationStyle = .fullScreen
+        
+        
+        
+        zoomingItemView.removeFromSuperview()
+        //set back to transparent background
+        self.zoomBackgroundView?.alpha = 0
+        self.startingView?.isHidden = false
+        
+        present(newStepItemVC, animated: true)
     }
 }

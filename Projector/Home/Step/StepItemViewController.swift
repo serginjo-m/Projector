@@ -17,13 +17,15 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
     //Instance of Project Selected by User
     var projectStep: ProjectStep? {
         get{
-            //Retrieve a single object with unique identifier (stepID)
-            return ProjectListRepository.instance.getProjectStep(id: stepID!)
+            if let id = self.stepID {
+                //Retrieve a single object with unique identifier (stepID)
+                return ProjectListRepository.instance.getProjectStep(id: id)
+            }
+            return nil
         }
     }
-   
-    
-    var stepItemsTableView: UITableView?
+    //previously created step item, that needs to be updated
+    var stepItem: StepItem?
     
     //cancel button
     lazy var dismissButton: UIButton = {
@@ -210,11 +212,20 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
     @objc func backAction( button: UIButton){
         dismiss(animated: true, completion: nil)
     }
+    
     @objc func saveAction(button: UIButton){
-        dismiss(animated: true) {
-            guard let step = self.projectStep,
-                  let title = self.itemTitleTextField.text,
-                  let text = self.noteTextView.text else {return}
+        
+        guard let step = self.projectStep,
+              let title = self.itemTitleTextField.text,
+              let text = self.noteTextView.text else {return}
+        //update old one
+        if let item = self.stepItem  {
+            UserActivitySingleton.shared.createUserActivity(description: "Step Item : \(text) was updated in \(step.name)")
+            
+            ProjectListRepository.instance.updateStepItemTitle(stepItemTitle: title, stepItem: item)
+            ProjectListRepository.instance.updateStepItemText(text: text, stepItem: item)
+            
+        }else{//create new one
             
             UserActivitySingleton.shared.createUserActivity(description: "New Item: \(text) was added to \(step.name) step")
             
@@ -223,12 +234,9 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
             stepItem.text = text
             
             ProjectListRepository.instance.addItemToStep(item: stepItem, step: step)
-            
-            if let tableView = self.stepItemsTableView {
-                tableView.reloadData()
-            }
         }
         
+        dismiss(animated: true)
     }
     
 }

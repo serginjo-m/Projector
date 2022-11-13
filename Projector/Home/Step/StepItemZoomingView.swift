@@ -66,12 +66,24 @@ class StepItemZoomingView: UIView {
         return view
     }()
     
+    //scrollable version of description label
+    lazy var descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.boldSystemFont(ofSize: 20)
+        textView.isEditable = false
+        textView.textColor = .darkGray
+        textView.backgroundColor = .clear
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .darkGray
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.alpha = 0
         return label
     }()
     
@@ -123,6 +135,7 @@ class StepItemZoomingView: UIView {
         addSubview(title)
         addSubview(thinUnderline)
         addSubview(descriptionLabel)
+        addSubview(descriptionTextView)
         
         
         titleIcon.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive = true
@@ -159,8 +172,7 @@ class StepItemZoomingView: UIView {
         dismissView.heightAnchor.constraint(equalToConstant: 22).isActive = true
         dismissView.widthAnchor.constraint(equalToConstant: 22).isActive = true
         
-        
-        
+        //description
         descriptionTopAnchor = descriptionLabel.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 30)
         descriptionTopAnchor.isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
@@ -172,7 +184,7 @@ class StepItemZoomingView: UIView {
         descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
         descriptionBottomAnchor = descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30)//
         
-        
+        //bubble
         bubbleTopAnchor = backgroundBubble.topAnchor.constraint(equalTo: topAnchor, constant: 0)
         bubbleTopAnchor.isActive = true
         backgroundBubble.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor, constant: -16).isActive = true
@@ -184,6 +196,10 @@ class StepItemZoomingView: UIView {
         bubbleBottomAnchor = backgroundBubble.bottomAnchor.constraint(equalTo: bottomAnchor)
         bubbleBottomAnchor.isActive = true
         
+        descriptionTextView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 20).isActive = true
+        descriptionTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
+        descriptionTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        descriptionTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
     }
     
     required init?(coder: NSCoder) {
