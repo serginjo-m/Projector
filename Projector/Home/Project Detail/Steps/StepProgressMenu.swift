@@ -28,7 +28,7 @@ class StepProgressMenu: UIView {
     
     lazy var todoOptionButton: UIButton = {
         let button = UIButton()
-        button.setTitle("To-do", for: .normal)
+        button.setTitle("To do", for: .normal)
         button.setTitleColor(UIColor.init(white: 0.2, alpha: 1), for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         button.addTarget(self, action: #selector(handleTodo(_:)), for: .touchUpInside)
@@ -102,6 +102,7 @@ class StepProgressMenu: UIView {
        self.isHidden = true
         //because changing has been made
         ProjectListRepository.instance.updateStepProgressStatus(step: step, status: status)
+        UserActivitySingleton.shared.createUserActivity(description: "\(step) status was changed to \(status)")
         //call DetailViewController for update database and reload views
         delegate.reloadViews()
     }

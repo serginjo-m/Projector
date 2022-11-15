@@ -71,7 +71,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     lazy var todoButton: UIButton = {
         let button = UIButton()
-        button.setTitle("To-do", for: .normal)
+        button.setTitle("To do", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[0], for: .selected)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -234,7 +234,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }()
     let photoTitle: UILabel = {
         let label = UILabel()
-        label.text = "Do You Have Some Photos?"
+        label.text = "Add an Image to Your Step"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

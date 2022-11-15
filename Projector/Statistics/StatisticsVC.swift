@@ -59,7 +59,7 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     let categoriesTitle: UILabel = {
         let label = UILabel()
-        label.text = "Projects Spendings"
+        label.text = "Total Projects Expenses"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 17)
         return label
@@ -74,7 +74,7 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     let chartTitle: UILabel = {
         let label = UILabel()
-        label.text = "Month Activity"
+        label.text = "Current Month Expenses"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 17)
         return label
@@ -84,7 +84,7 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     let projectsTVTitle: UILabel = {
         let label = UILabel()
-        label.text = "Projects Overview"
+        label.text = "Expenses by Projects"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 17)
         return label

@@ -91,7 +91,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             title = "Hello \(user.name)!"
             subtitle = "\(user.email)"
         }else{
-            title = "Hi there!"
+            title = "Hello!"
             subtitle = "Access Your profile here."
         }
         
@@ -212,7 +212,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
                 //reveal login button
                 self.loginButton.isHidden = false
                 //update text
-                self.contentTextView.attributedText = self.formatAttributedString(title: "Hi there!", subtitle: "Access Your profile here.")
+                self.contentTextView.attributedText = self.formatAttributedString(title: "Hello!", subtitle: "Access Your profile here.")
                 //center it
                 self.contentTextView.textAlignment = .center
             }

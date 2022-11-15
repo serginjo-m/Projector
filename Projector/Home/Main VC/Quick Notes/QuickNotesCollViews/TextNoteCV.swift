@@ -90,7 +90,7 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             
             ProjectListRepository.instance.deleteTextNote(textNote: quickNote)
-            
+            UserActivitySingleton.shared.createUserActivity(description: "Text note was deleted" )
             self.sectionOptionsContainer.isHidden = true
 
             self.updateDatabase()

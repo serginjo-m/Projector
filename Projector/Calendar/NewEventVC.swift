@@ -187,7 +187,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let reminderTitle: UILabel = {
         let label = UILabel()
-        label.text = "Add Reminder"
+        label.text = "Add a Reminder"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.init(white: 96/255, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 17)
@@ -207,7 +207,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     let descriptionTitle: UILabel = {
         let label = UILabel()
-        label.text = "Description*"
+        label.text = "Description"
         label.textColor = UIColor.init(white: 96/255, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .left
@@ -585,7 +585,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         reminderTitle.topAnchor.constraint(equalTo: pickerStackView.bottomAnchor, constant: 45).isActive = true
         reminderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        reminderTitle.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        reminderTitle.widthAnchor.constraint(equalToConstant: 130).isActive = true
         reminderTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
         reminderSwitch.centerYAnchor.constraint(equalTo: reminderTitle.centerYAnchor, constant: 0).isActive = true

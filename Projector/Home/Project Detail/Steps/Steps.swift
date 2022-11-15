@@ -87,7 +87,7 @@ class Steps: UIView{
     }()
     lazy var todoButton: UIButton = {
         let button = UIButton()
-        button.setTitle("To-do", for: .normal)
+        button.setTitle("To do", for: .normal)
         button.setTitleColor(UIColor.init(white: 101/255, alpha: 1), for: .normal)
         button.setTitleColor(colorArr[0], for: .selected)
         button.translatesAutoresizingMaskIntoConstraints = false

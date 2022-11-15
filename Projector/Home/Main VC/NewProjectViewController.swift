@@ -74,7 +74,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var projectNameTitle: UILabel = {
         let label = UILabel()
-        label.text = "Your Project Name"
+        label.text = "Project Name"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -107,7 +107,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var imagePickerTitle: UILabel = {
         let label = UILabel()
-        label.text = "Do You Have Some Image?"
+        label.text = "Add an Image to Your Project"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
         return label
@@ -121,7 +121,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var categoryTitle: UILabel = {
         let label = UILabel()
-        label.text = "What Type Your Project Is?"
+        label.text = "Project Category"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()

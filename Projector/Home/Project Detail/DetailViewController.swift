@@ -122,7 +122,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }()
     var projectNumbersTitle: UILabel = {
         let label = UILabel()
-        label.text = "Project Numbers"
+        label.text = "Project Expenses"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()

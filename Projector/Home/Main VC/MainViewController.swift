@@ -120,7 +120,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     var recentActivitiesTitle: UILabel = {
         let label = UILabel()
-        label.text = "Last 30 Days Activity"
+        label.text = "Activity History"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
@@ -259,7 +259,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             contentTextView.text = "Hello \(user.name)!"
         }else if users.count == 0 {
             user = nil
-            contentTextView.text = "Hi there! Let's start projecting."
+            contentTextView.text = "Hi! Let's start projecting."
         }
     }
     //transition to profile VC with custom animation

@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 //Bottom Navigation
 class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
+    //MARK: Properties
     
     //------------------------under construction var -----------------------
     //date as a start point for calendar
@@ -37,6 +38,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
+    //MARK: Lifecycle
     override func viewDidLoad() {
         
         //check if holiday data was downloaded
@@ -64,6 +66,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         ]
     }
     
+    //MARK: Methods
     //Build Calendar and then calls create nav controller
     private func createCalendarViewController() -> UINavigationController {
         let calendarViewController = CalendarViewController(baseDate: date) { (date) in
@@ -225,6 +228,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     
 }
 
+//MARK: Extension
 extension CustomTabBarController {
     
     //check if holiday objects was downloaded
