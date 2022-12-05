@@ -133,7 +133,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }()
 
     //scroll view container
-    var scrollViewContainer = UIScrollView()
+    var scrollViewContainer: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
+    }()
+    
     var contentUIView = UIView()
     
     //name text field
@@ -305,6 +310,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     var descriptionTextHeightAnchor: NSLayoutConstraint!
     var contentViewHeightAnchor: NSLayoutConstraint!
+    var scrollViewTopAnchor: NSLayoutConstraint!
+    //textView animation properties, when keyboard pop-up
+    var additionalHeight: CGFloat = 0
+    var totalContentHeight: CGFloat = 0
     
     //define selected project for adding steps to it
     var projectList: ProjectList? {
@@ -335,7 +344,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         updateSaveButtonState()
         
         realm = try! Realm()//create an instance of object
-        
+        //keyboard configurations
+        setupKeyboardObservers()
+        hideKeyboardWhenTappedAround()
     }
     
     override func viewDidLayoutSubviews() {
@@ -344,7 +355,13 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let subviewsHeightSum = (contentUIView.subviews.map { $0.frame.height }).reduce(0, +)
         //calls two times, and first is 0
         if subviewsHeightSum > 0 {
-            contentViewHeightAnchor.constant = subviewsHeightSum + 200
+            //103 is a correct value (771 is a content size)
+            
+            totalContentHeight = subviewsHeightSum + 103
+            additionalHeight = totalContentHeight - self.view.frame.height
+            
+            contentViewHeightAnchor.constant = additionalHeight > 0 ? subviewsHeightSum + (additionalHeight * 2) : totalContentHeight
+            
         }
     }
     
@@ -368,6 +385,49 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         newStepSectionsList.projectId = projectId
         present(newStepSectionsList, animated: true)
+    }
+    
+    private func setupKeyboardObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func handleKeyboardWillHide(notification: NSNotification){
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            
+            scrollViewTopAnchor.constant = 0
+            
+            UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc func handleKeyboardWillShow(notification: NSNotification){
+        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            if let keyboardRectangle = keyboardFrame?.cgRectValue {
+                
+                let extraHeightBit = additionalHeight * 2
+                
+                scrollViewTopAnchor.constant = additionalHeight > 0 ? -(keyboardRectangle.height) - extraHeightBit : -(keyboardRectangle.height)
+                
+                UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    //fix memory leak issue
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //prevent multiple keyboard observers
+        NotificationCenter.default.removeObserver(self)
     }
     
     //animate add item menu
@@ -606,11 +666,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     private func setupLayout(){
         
         view.backgroundColor = .white
-        scrollViewContainer.translatesAutoresizingMaskIntoConstraints = false
+        
         contentUIView.translatesAutoresizingMaskIntoConstraints = false
         expandingReminderView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollViewTopAnchor = scrollViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0)
+        scrollViewTopAnchor.isActive = true
         scrollViewContainer.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         scrollViewContainer.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true

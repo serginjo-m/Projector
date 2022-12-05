@@ -38,6 +38,13 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
+    //message that displays if plus button hasn't action to current viewController
+    lazy var popoverMessageView: PopoverMessageView = {
+        let view = PopoverMessageView()
+        view.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height , width: 250, height: 50)
+        return view
+    }()
+    
     //MARK: Lifecycle
     override func viewDidLoad() {
         
@@ -66,6 +73,13 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         ]
     }
     
+    override func viewDidLayoutSubviews() {
+        
+        if let keyWindow = UIApplication.shared.keyWindow{
+            keyWindow.addSubview(popoverMessageView)
+        }
+    }
+    
     //MARK: Methods
     //Build Calendar and then calls create nav controller
     private func createCalendarViewController() -> UINavigationController {
@@ -86,10 +100,24 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         return navController
     }
     
+    private func handlePopoverMessageAnimation(){
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            
+            self.popoverMessageView.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height - 170, width: 250, height: 50)
+            
+        }) { completed in
+            
+            UIView.animate(withDuration: 0.5, delay: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut) {
+                self.popoverMessageView.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height, width: 250, height: 50)
+            }
+            
+        }
+    }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         //get index of selected value
-        guard let index = viewControllers?.index(of: viewController) else {
+        guard let index = viewControllers?.firstIndex(of: viewController) else {
             return false
         }
         
@@ -217,7 +245,8 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 configureAddItemAction(newObjectVC: viewControllers)
                 
             default:
-                
+                //show info message
+                handlePopoverMessageAnimation()
                 break
             }
             
@@ -297,4 +326,37 @@ extension CustomTabBarController {
             
         }
     }
+}
+
+class PopoverMessageView: UIView {
+    
+    var textMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Nothing to Add Here"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(textMessageLabel)
+        
+        self.backgroundColor = UIColor.init(red: 100/255, green: 209/255, blue: 130/255, alpha: 1)
+        self.layer.cornerRadius = 11
+        self.layer.masksToBounds = true
+        
+        textMessageLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        textMessageLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        textMessageLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        textMessageLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }

@@ -22,7 +22,7 @@ class SwipingCell: UICollectionViewCell{
             
             let attributedText = NSMutableAttributedString(string: unwrappedPage.headerString, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
             
-            attributedText.append(NSAttributedString(string: "\n\n\n\(unwrappedPage.bodyText)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.gray]))
+            attributedText.append(NSAttributedString(string: "\n\n\n\(unwrappedPage.bodyText)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.gray]))
             
             descriptionTextView.attributedText = attributedText
             descriptionTextView.textAlignment = .center
@@ -87,7 +87,7 @@ class SwipingCell: UICollectionViewCell{
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Register", for: .normal)
         button.setTitleColor(UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1), for: .selected)
-        button.setTitleColor(UIColor.init(white: 160/255, alpha: 1), for: .normal)
+        button.setTitleColor(UIColor.gray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.addTarget(self, action: #selector(toggleRegisterButton(_:)), for: .touchUpInside)
         button.isSelected = true
@@ -99,7 +99,7 @@ class SwipingCell: UICollectionViewCell{
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Login", for: .normal)
         button.setTitleColor(UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1), for: .selected)
-        button.setTitleColor(UIColor.init(white: 160/255, alpha: 1), for: .normal)
+        button.setTitleColor(UIColor.gray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.addTarget(self, action: #selector(toggleLoginButton(_:)), for: .touchUpInside)
         button.isSelected = false
@@ -290,7 +290,7 @@ class SwipingCell: UICollectionViewCell{
             registerLoginNavStack.heightAnchor.constraint(equalToConstant: 50),
         ])
         
-        image.widthAnchor.constraint(equalTo: widthAnchor, constant: -60)
+//        image.widthAnchor.constraint(equalTo: widthAnchor, constant: -60)
         imageHeightConstraint = image.heightAnchor.constraint(equalToConstant: 150)
         imageCenterYAnchorConstraint = image.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100)
         imageCenterXAnchorConstraint = image.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 30)

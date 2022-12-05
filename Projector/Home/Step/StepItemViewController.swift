@@ -123,6 +123,9 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         return textView
     }()
     
+    var noteTextViewBottomAnchor: NSLayoutConstraint!
+    
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -131,8 +134,51 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         setupLayout()
         
         realm = try! Realm()//create an instance of object
-    
+        
+        configureKeyboardObservers()
+        hideKeyboardWhenTappedAround()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //prevent multiple keyboard observers
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    //MARK: Methods
+    fileprivate func configureKeyboardObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func handleKeyboardWillHide(notification: NSNotification){
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            
+            noteTextViewBottomAnchor.constant = -10
+            
+            UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc func handleKeyboardWillShow(notification: NSNotification){
+        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            if let keyboardRectangle = keyboardFrame?.cgRectValue {
+                noteTextViewBottomAnchor.constant = -(keyboardRectangle.height - 15)
+                
+                UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
     
     private func setupLayout(){
         //calls closure for each item
@@ -188,8 +234,8 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         noteTextView.topAnchor.constraint(equalTo: descriptionTitle.bottomAnchor, constant: 10).isActive = true
         noteTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-        
+        noteTextViewBottomAnchor = noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        noteTextViewBottomAnchor.isActive = true
         
         
 //        noteTitle.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 80, left: 16, bottom: 0, right: 0), size: .init(width: 170, height: 30))

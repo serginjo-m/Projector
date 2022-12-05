@@ -23,6 +23,13 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //need to hide it before animation starts
     var startingView: UIView?
     
+    //animation start point
+    var startingImageFrame: CGRect?
+    //black bg
+    var blackBackgroundView: UIView?
+    //view to zoom in
+    var startingImageView: UIView?
+    
     //TABLE VIEW
     lazy var stepTableView: UITableView = {
         let tableView = UITableView()
@@ -59,7 +66,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     var stepID: String
     
     //step photos collection view
-    lazy var stepImagesCV = StepImagesCollectionView(step: projectStep ?? ProjectStep(), frame: CGRect.zero)
+    lazy var stepImagesCV = StepImagesCollectionView(parentVC: self, step: projectStep ?? ProjectStep(), frame: CGRect.zero)
     //step values
     let stepComment: UILabel = {
         let label = UILabel()
@@ -626,6 +633,68 @@ class StepTableViewCell: UITableViewCell {
 }
 
 extension StepViewController {
+    
+    func performZoomForCollectionImageView(startingImageView: UIView){
+        
+        self.startingImageView = startingImageView
+        self.startingImageView?.isHidden = true
+        
+        startingImageFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
+
+        let zoomingImageView = UIImageView(frame: startingImageFrame!)
+        zoomingImageView.isUserInteractionEnabled = true
+        zoomingImageView.contentMode = .scaleAspectFill
+        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleImageZoomOut)))
+        zoomingImageView.backgroundColor = .red
+        if let cellImageView = startingImageView as? StepImageCell, let url = cellImageView.template {
+            zoomingImageView.retreaveImageUsingURLString(myUrl: url)
+        }
+
+        if let keyWindow = UIApplication.shared.keyWindow{
+            blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView?.alpha = 0
+            blackBackgroundView?.backgroundColor = .black
+
+            keyWindow.addSubview(blackBackgroundView!)
+            keyWindow.addSubview(zoomingImageView)
+
+            //math? of proportion with one side
+            //h2 / w2 = h1 / w1
+            //h2 = h1 / w1 * w2
+
+            let height = self.startingImageFrame!.height / self.startingImageFrame!.width * keyWindow.frame.width
+
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+
+                self.blackBackgroundView?.alpha = 1
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                zoomingImageView.center = keyWindow.center
+
+            }, completion: nil)
+
+        }
+
+    }
+    
+    @objc func handleImageZoomOut(tapGesture: UITapGestureRecognizer){
+        if let zoomOutImageView = tapGesture.view {
+            
+            zoomOutImageView.layer.cornerRadius = 5
+            zoomOutImageView.clipsToBounds = true
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                
+                zoomOutImageView.frame = self.startingImageFrame!
+                self.blackBackgroundView?.alpha = 0
+                
+            }) { (completed: Bool) in
+                
+                //remove it completely
+                zoomOutImageView.removeFromSuperview()
+                self.startingImageView?.isHidden = false
+            }
+        }
+    }
     
     func performZoomForStartingEventView(stepItem: StepItem, startingView: UIView){
         
