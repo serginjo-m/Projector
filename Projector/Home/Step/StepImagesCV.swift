@@ -17,13 +17,11 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
     //an instance of selected step
     var step: ProjectStep
     
-    var parentViewController: StepViewController
+    //TODO: So here I need to create a united database
+    //Use CanvasImageView
     
     //MARK: Initialization
-    init(parentVC: StepViewController, step: ProjectStep, frame: CGRect) {
-        
-        self.parentViewController = parentVC
-        
+    init(step: ProjectStep, frame: CGRect) {
         self.step = step
         super.init(frame: frame)
         setupStepImages()
@@ -90,16 +88,8 @@ class StepImagesCollectionView: UIStackView, UICollectionViewDataSource, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdent, for: indexPath) as! StepImageCell
         
         cell.template = step.selectedPhotosArray[indexPath.item]
-        cell.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomInCell(_:))))
         return cell
     }
-    
-    @objc func zoomInCell(_ tapGestrure: UITapGestureRecognizer){
-        if let cell = tapGestrure.view as? StepImageCell{
-            self.parentViewController.performZoomForCollectionImageView(startingImageView: cell)
-        }
-    }
-    
 }
 
 class StepImageCell: UICollectionViewCell{
