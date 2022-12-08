@@ -169,7 +169,7 @@ class CanvasViewController: UIViewController {
     }
     
     
-
+    //TODO: As I understood, it writes images to photo library without asking any permission
     func saveImage(image: UIImage) {
         //save action
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)

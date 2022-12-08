@@ -122,10 +122,12 @@ class NewUserInputView: UIView{
         guard let name = nameTextField.textField.text,
             let email = emailTextField.textField.text,
             let password = passwordTextField.textField.text else {return}
-            
-        nameTextField.lineView.backgroundColor = name.isEmpty == true ? .red : .gray
-        emailTextField.lineView.backgroundColor = email.isEmpty == true ? .red : .gray
-        passwordTextField.lineView.backgroundColor = password.isEmpty == true ? .red : .gray
+        
+        let greyColor = UIColor.init(white: 215/255, alpha: 1)
+    
+        nameTextField.lineView.backgroundColor = name.isEmpty == true ? .red : greyColor
+        emailTextField.lineView.backgroundColor = email.isEmpty == true ? .red : greyColor
+        passwordTextField.lineView.backgroundColor = password.isEmpty == true ? .red : greyColor
         
         if name.isEmpty || email.isEmpty || password.isEmpty{
             return
@@ -179,18 +181,14 @@ class CustomTextField: UIView, UITextFieldDelegate {
     let lineView: UIView = {
         let line = UIView()
         line.translatesAutoresizingMaskIntoConstraints = false
-        line.backgroundColor = UIColor.init(white: 0.85, alpha: 1)
+        line.backgroundColor = UIColor.init(white: 215/255, alpha: 1)
         return line
     }()
     
     //same input diff placeholder
     init(textFieldPlaceholder: String) {
         super.init(frame: CGRect.zero)
-        //textFieldPlaceholder
-        textField.attributedPlaceholder = NSAttributedString(
-            string: textFieldPlaceholder,
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
-        )
+        textField.placeholder = textFieldPlaceholder
         setupLayout()
     }
     
