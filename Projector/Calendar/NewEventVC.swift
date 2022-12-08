@@ -223,8 +223,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textView
     }()
     
-    var dismissButtonTopAnchor: NSLayoutConstraint!
-    
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -255,59 +253,33 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
 
         //set delegate to  text field
         nameTextField.delegate = self
+<<<<<<< HEAD
         configureKeyboardObservers()
         hideKeyboardWhenTappedAround()
+        
+        //request permission for sending notifications
+        if #available(iOS 13.0, *) {
+            NotificationManager.shared.requestAuthorization { granted in
+                
+                if granted {
+                    //showNotificationSettingsUI = true
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         //prevent multiple keyboard observers
         NotificationCenter.default.removeObserver(self)
+=======
+>>>>>>> parent of 372361c (Zoom step images & keyboard)
     }
     
   
     //MARK: Methods
-    
-    fileprivate func configureKeyboardObservers(){
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
-    }
-    
-    @objc fileprivate func handleKeyboardWillHide(notification: NSNotification){
-        
-        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            
-            dismissButtonTopAnchor.constant = 15
-            
-            UIView.animate(withDuration: keyboardDuration, delay: 0) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    
-    @objc fileprivate func handleKeyboardWillShow(notification: NSNotification){
-                
-        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
-        //keyboard pop-up animation time
-        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            if let keyboardRectangle = keyboardFrame?.cgRectValue {
-                
-                let  frameContentDifference = self.view.frame.height - 680
-                
-                dismissButtonTopAnchor.constant = -(keyboardRectangle.height - frameContentDifference)
-                
-                UIView.animate(withDuration: keyboardDuration, delay: 0) {
-                    self.view.layoutIfNeeded()
-                }
-            }
-        }
-       
-    }
-    
     @objc func saveAction(_ sender: Any) {
         //creates new or update existing
         let event: Event = self.defineEventTemplate()
@@ -465,10 +437,23 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
     
     @objc func switchChangedValue(sender: UISwitch){
-        
+        if #available(iOS 13.0, *) {
+            if NotificationManager.shared.settings?.authorizationStatus == .authorized{
+
+            }else if NotificationManager.shared.settings?.authorizationStatus == .notDetermined{
+
+            }else{
+                //present alert message, that invites user for enable notifications
+                let ac = UIAlertController(title: "Notifications are Disabled", message: "To turn on notifications, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(ac, animated: true)
+                sender.isOn = false
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
-    //MARK: TextField
     //close date picker after touch outside textField
     @objc func tap(sender: UITapGestureRecognizer) {
         //calls textFieldDidEndEditing
@@ -595,8 +580,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         descriptionTitle.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         
-        dismissButtonTopAnchor = dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15)
-        dismissButtonTopAnchor.isActive = true
+        dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         dismissButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         dismissButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
@@ -606,7 +590,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         viewControllerTitle.widthAnchor.constraint(equalToConstant: 150).isActive = true
         viewControllerTitle.heightAnchor.constraint(equalToConstant: 21).isActive = true
 
-        saveButton.topAnchor.constraint(equalTo: dismissButton.topAnchor, constant: 0).isActive = true
+        saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
