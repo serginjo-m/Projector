@@ -257,7 +257,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     //add image mechanism
     @objc func handleTap(_ sender: UITapGestureRecognizer){
-        
+        //TODO: It's not a bad idea, it check for status if not it asks for permission, but need to expand it to where  status was denied and other
         // Hide the keyboard.
         nameTextField.resignFirstResponder()
         //check for libraty authorization, that allows PHAsset option using in picker

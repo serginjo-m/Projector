@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class TextNoteViewController: UIViewController,  UINavigationControllerDelegate, UITextViewDelegate{
-    //MARK: Properties
+    
     lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -66,9 +66,6 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         return textView
     }()
     
-    var textNoteTextViewBottomAnchor: NSLayoutConstraint!
-    
-    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -80,20 +77,10 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         view.addSubview(noteTextView)
         
         setupConstraints()
-        
-        configureKeyboardObservers()
         //includes keyboard dismiss func from extension
         self.hideKeyboardWhenTappedAround()
     }
     
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        //prevent multiple keyboard observers
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    //MARK: Methods
     //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -132,42 +119,6 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         }
     }
     
-    fileprivate func configureKeyboardObservers(){
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
-    }
-    
-    @objc fileprivate func handleKeyboardWillHide(notification: NSNotification){
-        
-        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            
-            textNoteTextViewBottomAnchor.constant = -10
-            
-            UIView.animate(withDuration: keyboardDuration, delay: 0) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    
-    @objc fileprivate func handleKeyboardWillShow(notification: NSNotification){
-        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
-        
-        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            if let keyboardRectangle = keyboardFrame?.cgRectValue {
-                textNoteTextViewBottomAnchor.constant = -(keyboardRectangle.height - 15)
-                
-                UIView.animate(withDuration: keyboardDuration, delay: 0) {
-                    self.view.layoutIfNeeded()
-                }
-            }
-        }
-    }
-    
-    //MARK: Constraints
     func setupConstraints(){
         
         dismissButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
@@ -193,7 +144,6 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
         noteTextView.topAnchor.constraint(equalTo: noteTitle.bottomAnchor, constant: 10).isActive = true
         noteTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        textNoteTextViewBottomAnchor = noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-        textNoteTextViewBottomAnchor.isActive = true
+        noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }
