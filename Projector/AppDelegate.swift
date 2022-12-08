@@ -40,23 +40,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
 
         //turn off dark mode
+        
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
-            //ask for notification based on user location
-            let locationManager = LocationManager()
-            locationManager.requestAuthorization()
-
-            //request permission for sending notifications
-            NotificationManager.shared.requestAuthorization { granted in
-              
-              if granted {
-                //print("Notification permission was granted!")
-                //showNotificationSettingsUI = true
-              }
-            }
         } else {
             // Fallback on earlier versions
         }
+        //ask for notification based on user location
+        //let locationManager = LocationManager()
+        //locationManager.requestAuthorization()
+        
+        
         //set  notification delegate as soon as the app launches
         configureUserNotifications()
         
