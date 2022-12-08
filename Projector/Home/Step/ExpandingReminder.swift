@@ -134,10 +134,13 @@ class ExpandingReminder: UIView {
     //apply reminder
     let didTapApplyCompletionHandler: (() -> Void)
     
-    init(didTapExpandCompletionHandler: @escaping (() -> Void), didTapApplyCompletionHandler: @escaping (() -> Void)){
+    let presentAlertView: (() -> Void)
+    
+    init(didTapExpandCompletionHandler: @escaping (() -> Void), didTapApplyCompletionHandler: @escaping (() -> Void), presentAlertView: @escaping (() -> Void)){
         
         self.didTapExpandCompletionHandler = didTapExpandCompletionHandler
         self.didTapApplyCompletionHandler = didTapApplyCompletionHandler
+        self.presentAlertView = presentAlertView
         
         super.init(frame: CGRect.zero)
         setupView()
@@ -146,6 +149,23 @@ class ExpandingReminder: UIView {
     //MARK: Methods
     //-----> call from expand button
     @objc func didTapExpandButton() {
+        
+        if #available(iOS 13.0, *) {
+            if NotificationManager.shared.settings?.authorizationStatus == .authorized{
+
+            }else if NotificationManager.shared.settings?.authorizationStatus == .notDetermined{
+
+            }else{
+                //present alert message, that invites user for enable notifications
+                presentAlertView()
+                return
+                
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        
         
         //hide or reveal all reminder form
         //----> calls when apply or expand

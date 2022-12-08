@@ -191,7 +191,7 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     
     //Is camera available or not?
     @objc func takePhoto(_ sender: UITapGestureRecognizer) {
-        
+        //TODO: No permission, if camera is not available is saves photo to photo library
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             selectImageFrom(.photoLibrary)
             return

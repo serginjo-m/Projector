@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 //reload views after changings(add or edit object)
-protocol EditViewControllerDelegate: class{
+protocol EditViewControllerDelegate: AnyObject{
     // assign all necessary data to objects  in detailVC
     func performAllConfigurations()
     //reload mainVC TV & detailVC CV after make changes to stepsCV
