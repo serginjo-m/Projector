@@ -25,20 +25,19 @@ enum NotificationManagerConstants {
 @available(iOS 13.0, *)
 class NotificationManager: ObservableObject{
     
-    
     static let shared = NotificationManager()
     
     @Published var settings: UNNotificationSettings?
-    
+    //TODO: Request for notifications
     func requestAuthorization(completion: @escaping  (Bool) -> Void) {
-    //handles all notification-related behavior in the app.
-      UNUserNotificationCenter.current()
-        //request authorization to show notifications.
-        .requestAuthorization(options: [.alert, .sound, .badge]) { granted, _  in
-            //fetch the notification settings
-            self.fetchNotificationSettings()
-          completion(granted)
-        }
+        //handles all notification-related behavior in the app.
+        UNUserNotificationCenter.current()
+            //request authorization to show notifications.
+            .requestAuthorization(options: [.alert, .sound, .badge]) { granted, _  in
+                //fetch the notification settings
+                self.fetchNotificationSettings()
+                completion(granted)
+            }
     }
 
     func fetchNotificationSettings() {
