@@ -8,11 +8,13 @@
 
 import UIKit
 import RealmSwift
+import Photos
 //Bottom Navigation
 class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     //MARK: Properties
     
-    //------------------------under construction var -----------------------
+    var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
+    
     //date as a start point for calendar
     let date = Date()
     
@@ -27,7 +29,6 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
-    //---------------------------------------------------------------------------------------------
     //get ALL events, for checking, is data base contain previously downloaded holidays from server
     var events: Results<Event>{
         get{
@@ -81,6 +82,50 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     //MARK: Methods
+    
+    private func showPermissionAlert(){
+        let ac = UIAlertController(title: "Access to Photo Library is Denied", message: "To turn on access to photo library, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
+    }
+    
+    fileprivate func configureCanvasViewController(){
+        let newCanvasNoteVC = CanvasViewController()
+        newCanvasNoteVC.modalTransitionStyle = .coverVertical
+        newCanvasNoteVC.modalPresentationStyle = .overCurrentContext
+        let viewControllers = ["Create Canvas Note": newCanvasNoteVC]
+        configureAddItemAction(newObjectVC: viewControllers)
+    }
+    
+    func configureAddItemAction(newObjectVC: [String: UIViewController]){
+        
+        //get my add items nav view controller for setting its stack view controllers in func
+         //let targetNavController = viewController as! UINavigationController
+        
+        //ALERT MENU
+        let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
+        
+        
+        for (key, value) in newObjectVC {
+            let action = UIAlertAction(title: key, style: .default) { (action: UIAlertAction) in
+                //so view did appear update detail view controller
+                value.modalPresentationStyle = .fullScreen
+                self.present(value, animated: true, completion: nil)
+            }
+            
+            alert.addAction(action)
+        }
+        
+        let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
+            // Do nothing
+        }
+        
+        
+        alert.addAction(action3)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     //Build Calendar and then calls create nav controller
     private func createCalendarViewController() -> UINavigationController {
         let calendarViewController = CalendarViewController(baseDate: date) { (date) in
@@ -133,34 +178,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             //base for switch cases logic
             lastVCClass = "\(currentViewController.classForCoder)"
             
-            func configureAddItemAction(newObjectVC: [String: UIViewController]){
-                
-                //get my add items nav view controller for setting its stack view controllers in func
-                 //let targetNavController = viewController as! UINavigationController
-                
-                //ALERT MENU
-                let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
-                
-                
-                for (key, value) in newObjectVC {
-                    let action = UIAlertAction(title: key, style: .default) { (action: UIAlertAction) in
-                        //so view did appear update detail view controller
-                        value.modalPresentationStyle = .fullScreen
-                        self.present(value, animated: true, completion: nil)
-                    }
-                    
-                    alert.addAction(action)
-                }
-                
-                let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-                    // Do nothing
-                }
-                
-                
-                alert.addAction(action3)
-                
-                present(alert, animated: true, completion: nil)
-            }
+            
             
             //perform logic based on last visualized view controller class
             switch lastVCClass {
@@ -173,11 +191,32 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 configureAddItemAction(newObjectVC: viewControllers)
                 
             case "CanvasNotesCollectionViewController":
-                let newCanvasNoteVC = CanvasViewController()
-                newCanvasNoteVC.modalTransitionStyle = .coverVertical
-                newCanvasNoteVC.modalPresentationStyle = .overCurrentContext
-                let viewControllers = ["Create Canvas Note": newCanvasNoteVC]
-                configureAddItemAction(newObjectVC: viewControllers)
+                
+                switch self.photoLibraryStatus {
+                case .authorized:
+                    
+                    configureCanvasViewController()
+                    
+                case .denied:
+                    showPermissionAlert()
+                case .notDetermined:
+                    PHPhotoLibrary.requestAuthorization({status in
+                        self.photoLibraryStatus = status
+                        
+                        if self.photoLibraryStatus == .authorized {
+                            DispatchQueue.main.async {
+                                self.configureCanvasViewController()
+                            }
+                        }
+                    })
+                case .restricted:
+                    print("restricted")
+                    // probably alert the user that photo access is restricted
+                case .limited:
+                    print("limited")
+                @unknown default:
+                    print("unknown case!")
+                }
                 
             case "TextNotesCollectionViewController":
                 let newTextNoteVC = TextNoteViewController()

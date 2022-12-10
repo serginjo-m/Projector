@@ -257,6 +257,18 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         nameTextField.delegate = self
         configureKeyboardObservers()
         hideKeyboardWhenTappedAround()
+        
+        //request permission for sending notifications
+        if #available(iOS 13.0, *) {
+            NotificationManager.shared.requestAuthorization { granted in
+                
+                if granted {
+                    //showNotificationSettingsUI = true
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -466,6 +478,21 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     @objc func switchChangedValue(sender: UISwitch){
         
+        if #available(iOS 13.0, *) {
+            if NotificationManager.shared.settings?.authorizationStatus == .authorized{
+
+            }else if NotificationManager.shared.settings?.authorizationStatus == .notDetermined{
+
+            }else{
+                //present alert message, that invites user for enable notifications
+                let ac = UIAlertController(title: "Notifications are Disabled", message: "To turn on notifications, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(ac, animated: true)
+                sender.isOn = false
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     //MARK: TextField

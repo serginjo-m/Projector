@@ -14,6 +14,9 @@ import Photos
 
 class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
+    var cameraStatus: Bool = false
+    var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
+    
     lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -121,6 +124,15 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     }
     
     override func viewDidLoad() {
+        
+        //Camera
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
+            if response {
+                //update camera access permission status for the future use
+                self.cameraStatus = true
+            }
+        }
+        
         super.viewDidLoad()
         view.backgroundColor = .white
         
@@ -192,12 +204,34 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     //Is camera available or not?
     @objc func takePhoto(_ sender: UITapGestureRecognizer) {
         
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            selectImageFrom(.photoLibrary)
-            return
+        if self.cameraStatus == true {
+            selectImageFrom(.camera)
+        }else{
+            
+            switch self.photoLibraryStatus {
+            case .authorized:
+                self.selectImageFrom(.photoLibrary)
+            case .denied:
+                showPermissionAlert()
+            case .notDetermined:
+                PHPhotoLibrary.requestAuthorization({status in
+                    self.photoLibraryStatus = status
+                })
+            case .restricted:
+                print("restricted")
+                // probably alert the user that photo access is restricted
+            case .limited:
+                print("limited")
+            @unknown default:
+                print("unknown case!")
+            }
         }
-        
-        selectImageFrom(.camera)
+    }
+    
+    private func showPermissionAlert(){
+        let ac = UIAlertController(title: "Access to Camera & Photo Library are Denied", message: "To turn on access to photo library or camera, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
     }
     
     //lounch image picker

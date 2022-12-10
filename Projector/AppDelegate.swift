@@ -43,17 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
             //ask for notification based on user location
-            let locationManager = LocationManager()
-            locationManager.requestAuthorization()
+            //let locationManager = LocationManager()
+            //locationManager.requestAuthorization()
 
-            //request permission for sending notifications
-            NotificationManager.shared.requestAuthorization { granted in
-              
-              if granted {
-                //print("Notification permission was granted!")
-                //showNotificationSettingsUI = true
-              }
-            }
         } else {
             // Fallback on earlier versions
         }

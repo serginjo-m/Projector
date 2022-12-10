@@ -168,8 +168,6 @@ class CanvasViewController: UIViewController {
         saveImage(image: image)
     }
     
-    
-
     func saveImage(image: UIImage) {
         //save action
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)

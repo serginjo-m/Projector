@@ -14,6 +14,8 @@ import Photos
 class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
     
     //MARK: Properties
+    //photo library accesss permission status
+    var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
     //push to view controller, reloadViews , perform configurations
     weak var delegate: EditViewControllerDelegate?
     //set the project, that step is belongs to
@@ -282,7 +284,15 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 guard let self = self else {return}
     
                 self.handleAnimate(active: true)
-        })
+        },
+            presentAlertView: {[weak self] in
+                guard let self = self else {return}
+                
+                let ac = UIAlertController(title: "Notifications are Disabled", message: "To turn on notifications, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(ac, animated: true)
+            }
+        )
         return reminder
     }()
     
@@ -326,6 +336,19 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        //request permission for sending notifications
+        if #available(iOS 13.0, *) {
+            NotificationManager.shared.requestAuthorization { granted in
+                
+                if granted {
+                    //showNotificationSettingsUI = true
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     
         //add scroll containers
         view.addSubview(scrollViewContainer)
@@ -640,27 +663,47 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     func showImagePicker() {
+
         // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
+        
         //check for library authorization, that allows PHAsset option using in picker
         // & it is important, because all mechanism is based on PHAsset image address
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status == .notDetermined  {
+        switch self.photoLibraryStatus {
+        case .authorized:
+            
+            //lets a user pick media from their photo library.
+            let imagePickerController = UIImagePickerController()
+            
+            // Only allow photos to be picked, not taken.
+            imagePickerController.sourceType = .photoLibrary
+            imagePickerController.allowsEditing = true
+            
+            // Make sure ViewController is notified when the user picks an image.
+            imagePickerController.delegate = self
+            
+            self.present(imagePickerController, animated: true, completion: nil)
+            
+        case .denied:
+            showPermissionAlert()
+        case .notDetermined:
             PHPhotoLibrary.requestAuthorization({status in
-                
+                self.photoLibraryStatus = status
             })
+        case .restricted:
+            print("restricted")
+            // probably alert the user that photo access is restricted
+        case .limited:
+            print("limited")
+        @unknown default:
+            print("unknown case!")
         }
-        // UIImagePickerController is a view controller that lets a user pick media from their photo library.
-        let imagePickerController = UIImagePickerController()
-        
-        // Only allow photos to be picked, not taken.
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.allowsEditing = true
-        
-        // Make sure ViewController is notified when the user picks an image.
-        imagePickerController.delegate = self
-        
-        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    private func showPermissionAlert(){
+        let ac = UIAlertController(title: "Access to Photo Library is Denied", message: "To turn on access to photo library, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
     }
     
     private func setupLayout(){

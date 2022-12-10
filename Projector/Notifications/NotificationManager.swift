@@ -13,11 +13,11 @@ import UIKit
 
 //notifications based on the trigger type.
 enum NotificationManagerConstants {
-  static let timeBasedNotificationThreadId =
+    static let timeBasedNotificationThreadId =
     "TimeBasedNotificationThreadId"
-  static let calendarBasedNotificationThreadId =
+    static let calendarBasedNotificationThreadId =
     "CalendarBasedNotificationThreadId"
-  static let locationBasedNotificationThreadId =
+    static let locationBasedNotificationThreadId =
     "LocationBasedNotificationThreadId"
 }
 
@@ -31,118 +31,118 @@ class NotificationManager: ObservableObject{
     @Published var settings: UNNotificationSettings?
     
     func requestAuthorization(completion: @escaping  (Bool) -> Void) {
-    //handles all notification-related behavior in the app.
-      UNUserNotificationCenter.current()
+        //handles all notification-related behavior in the app.
+        UNUserNotificationCenter.current()
         //request authorization to show notifications.
-        .requestAuthorization(options: [.alert, .sound, .badge]) { granted, _  in
-            //fetch the notification settings
-            self.fetchNotificationSettings()
-          completion(granted)
-        }
+            .requestAuthorization(options: [.alert, .sound, .badge]) { granted, _  in
+                //fetch the notification settings
+                self.fetchNotificationSettings()
+                completion(granted)
+            }
     }
-
+    
     func fetchNotificationSettings() {
-      //requests the notification settings authorized by the app.(async)
-      UNUserNotificationCenter.current().getNotificationSettings { settings in
-        
-        DispatchQueue.main.async {
-            //update settings
-          self.settings = settings
+        //requests the notification settings authorized by the app.(async)
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            
+            DispatchQueue.main.async {
+                //update settings
+                self.settings = settings
+            }
         }
-      }
     }
     
     func removeScheduledNotification(taskId: String) {
-      UNUserNotificationCenter.current()
+        UNUserNotificationCenter.current()
         //removeAllPendingNotificationRequests() - removes all pending tasks
-        .removePendingNotificationRequests(withIdentifiers: [taskId])
+            .removePendingNotificationRequests(withIdentifiers: [taskId])
     }
-
+    
     
     // takes in a parameter of type ProjectStep
     func scheduleNotification(task: Task) {
-      
-      //creating notification populating the notification content.
-      let content = UNMutableNotificationContent()
-      content.title = task.name
+        
+        //creating notification populating the notification content.
+        let content = UNMutableNotificationContent()
+        content.title = task.name
         
         content.sound = .default
         content.badge = 1
         content.body = "Gentle reminder for your task!"
         
-      //let the system know that it should assign your notifications to this category.
-      content.categoryIdentifier = "OrganizerPlusCategory"
-      let taskData = try? JSONEncoder().encode(task)
-      if let taskData = taskData {
-          //encode the task data and assign it to the notification content’s userInfo
-        content.userInfo = ["Task": taskData]//The app will be able to access this content when a user acts on the notification
-      }
-
-
-      // triggers the delivery of a notification
-      var trigger: UNNotificationTrigger?
+        //let the system know that it should assign your notifications to this category.
+        content.categoryIdentifier = "OrganizerPlusCategory"
+        let taskData = try? JSONEncoder().encode(task)
+        if let taskData = taskData {
+            //encode the task data and assign it to the notification content’s userInfo
+            content.userInfo = ["Task": taskData]//The app will be able to access this content when a user acts on the notification
+        }
+        
+        
+        // triggers the delivery of a notification
+        var trigger: UNNotificationTrigger?
         
         switch task.reminder.reminderType {
         case .time:
             if let timeInterval = task.reminder.timeInterval{
                 trigger = UNTimeIntervalNotificationTrigger(
-                  timeInterval: TimeInterval(timeInterval),
-                  repeats: task.reminder.repeats)
+                    timeInterval: TimeInterval(timeInterval),
+                    repeats: task.reminder.repeats)
             }
             //threadIdentifier helps group related notifications.
             content.threadIdentifier =
-                NotificationManagerConstants.timeBasedNotificationThreadId
+            NotificationManagerConstants.timeBasedNotificationThreadId
         case .calendar:
             //calendar trigger delivers a notification based on a particular date and time
             if let date = task.reminder.date{
                 trigger = UNCalendarNotificationTrigger(
-                  dateMatching: Calendar.current.dateComponents(
-                    [.day, .month, .year, .hour, .minute],
-                    from: date),
-                  repeats: task.reminder.repeats)
+                    dateMatching: Calendar.current.dateComponents(
+                        [.day, .month, .year, .hour, .minute],
+                        from: date),
+                    repeats: task.reminder.repeats)
             }
             
             //threadIdentifier helps group related notifications.
             content.threadIdentifier =
-                NotificationManagerConstants.calendarBasedNotificationThreadId
+            NotificationManagerConstants.calendarBasedNotificationThreadId
         case .location:
-          // check if the user has granted at least When In Use location authorization.
+            // check if the user has granted at least When In Use location authorization.
             if #available(iOS 14.0, *) {
                 guard CLLocationManager().authorizationStatus == .authorizedWhenInUse else {
                     return
                 }
                 
                 if let location = task.reminder.location{
-                  // create location-based triggers using UNLocationNotificationTrigger.
-                  let center = CLLocationCoordinate2D(
-                    latitude: location.latitude,
-                    longitude: location.longitude)
-                  let region = CLCircularRegion(//notifyOnEntry and notifyOnExit on CLCircularRegion.
-                    center: center,
-                    radius: location.radius,
-                    identifier: task.id)
-                  trigger = UNLocationNotificationTrigger(
-                    region: region,
-                    repeats: task.reminder.repeats)
+                    // create location-based triggers using UNLocationNotificationTrigger.
+                    let center = CLLocationCoordinate2D(
+                        latitude: location.latitude,
+                        longitude: location.longitude)
+                    let region = CLCircularRegion(//notifyOnEntry and notifyOnExit on CLCircularRegion.
+                        center: center,
+                        radius: location.radius,
+                        identifier: task.id)
+                    trigger = UNLocationNotificationTrigger(
+                        region: region,
+                        repeats: task.reminder.repeats)
                 }
-            //threadIdentifier helps group related notifications.
-            content.threadIdentifier =
+                //threadIdentifier helps group related notifications.
+                content.threadIdentifier =
                 NotificationManagerConstants.locationBasedNotificationThreadId
             }
         }
         
-      // create a notification request
-      if let trigger = trigger {
-        let request = UNNotificationRequest(
-          identifier: task.id,
-          content: content,
-          trigger: trigger)
-        // schedule the notification by adding the request
-        UNUserNotificationCenter.current().add(request) { error in
-          if let error = error {
-            print(error)
-          }
+        // create a notification request
+        if let trigger = trigger {
+            let request = UNNotificationRequest(
+                identifier: task.id,
+                content: content,
+                trigger: trigger)
+            // schedule the notification by adding the request
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print(error)
+                }
+            }
         }
-      }
     }
 }

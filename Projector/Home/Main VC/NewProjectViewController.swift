@@ -11,11 +11,6 @@ import Foundation
 import os
 import Photos
 
-//---------------------------------------------------------------------------------------------------------------------------
-//----------------------- all this view controller works realy strangely (begginer approach) --------------------------------
-//------------------------------------ should be recoded!!!! ----------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------
-
 class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //unique project id for updating
@@ -26,7 +21,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     //category collection view
     let newProjectCategories = CategoryCollectionView()
     
-
+    var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
     
     //MARK: Properties
     //define current date
@@ -260,25 +255,43 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         // Hide the keyboard.
         nameTextField.resignFirstResponder()
-        //check for libraty authorization, that allows PHAsset option using in picker
-        // & it is important, because all mechanism is based on PHAsset image address
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status == .notDetermined  {
+        
+        switch self.photoLibraryStatus {
+        case .authorized:
+            
+            //lets a user pick media from their photo library.
+            let imagePickerController = UIImagePickerController()
+            
+            // Only allow photos to be picked, not taken.
+            imagePickerController.sourceType = .photoLibrary
+            imagePickerController.allowsEditing = true
+            
+            // Make sure ViewController is notified when the user picks an image.
+            imagePickerController.delegate = self
+            
+            self.present(imagePickerController, animated: true, completion: nil)
+            
+        case .denied:
+            showPermissionAlert()
+        case .notDetermined:
             PHPhotoLibrary.requestAuthorization({status in
-
+                self.photoLibraryStatus = status
             })
+        case .restricted:
+            print("restricted")
+            // probably alert the user that photo access is restricted
+        case .limited:
+            print("limited")
+        @unknown default:
+            print("unknown case!")
         }
-
-        // UIImagePickerController is a view controller that lets a user pick media from their photo library.
-        let imagePickerController = UIImagePickerController()
-
-        // Only allow photos to be picked, not taken.
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.allowsEditing = true
-        // Make sure ViewController is notified when the user picks an image.
-        imagePickerController.delegate = self
-
-        present(imagePickerController, animated: true, completion: nil)
+        
+    }
+    
+    private func showPermissionAlert(){
+        let ac = UIAlertController(title: "Access to Photo Library is Denied", message: "To turn on access to photo library, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
     }
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

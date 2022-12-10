@@ -161,8 +161,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }()
     
     
-    // maybe that is solution to my issue with camera roll access
-    // seems it speed up loading?
+    //holds an authorization status to photo library
+    //so app knows right from the beginning, that access is authorized.
     let status = PHPhotoLibrary.authorizationStatus()
     
     //MARK: VC Lifecycle
@@ -171,19 +171,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         //set global database url reference
         self.ref = Database.database(url: "https://projectorfirebase-default-rtdb.europe-west1.firebasedatabase.app/").reference()
-        
-        //Camera
-        AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
-            if response {
-                //access granted
-            }
-        }
-        
-        //helps with camera roll access for app
-        if status == .notDetermined  {
-            PHPhotoLibrary.requestAuthorization({status in})
-        }
-        
+                
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(recentProjectsStackView)
