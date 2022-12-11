@@ -55,14 +55,16 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     }()
     
     //MARK: Properties
+    
     lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("", for: .normal)
-        button.setTitleColor(UIColor.darkGray, for: .normal)
-        button.setBackgroundImage(UIImage(named: "okButton"), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.setTitle("Save", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.setBackgroundImage(UIImage(named: "saveTo"), for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(saveAction(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
         return button
     }()
@@ -362,7 +364,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         saveButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        saveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        saveButton.widthAnchor.constraint(equalToConstant: 85).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
         projectNameTitle.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: 20).isActive = true

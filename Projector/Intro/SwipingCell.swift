@@ -154,6 +154,8 @@ class SwipingCell: UICollectionViewCell{
                 
             }
         )
+        view.passwordTextField.displayButton.isHidden = false
+        view.passwordTextField.textField.isSecureTextEntry = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -191,6 +193,8 @@ class SwipingCell: UICollectionViewCell{
                 
             }
         )
+        view.passwordTextField.displayButton.isHidden = false
+        view.passwordTextField.textField.isSecureTextEntry = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

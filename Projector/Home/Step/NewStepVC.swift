@@ -164,12 +164,12 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return view
     }()
     
-    lazy var stepSaveButton: UIButton = {
+    lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("", for: .normal)
-        button.setTitleColor(UIColor.darkGray, for: .normal)
-        button.setBackgroundImage(UIImage(named: "okButton"), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.setTitle("Save", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.setBackgroundImage(UIImage(named: "saveTo"), for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(saveButtonAction(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -355,7 +355,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         scrollViewContainer.addSubview(contentUIView)
         
         //add all subviews
-        [stepNameTextField, lineUIView, stepSaveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView, descriptionTitle , descriptionTextView].forEach {
+        [stepNameTextField, lineUIView, saveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView, descriptionTitle , descriptionTextView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -652,14 +652,14 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         //Disable the Save button while editing.
-        stepSaveButton.isEnabled = false
+        saveButton.isEnabled = false
     }
     
     //MARK: Private Methods
     private func updateSaveButtonState(){
         //Disable the Save button when text field is empty.
         let text = stepNameTextField.text ?? ""
-        stepSaveButton.isEnabled = !text.isEmpty
+        saveButton.isEnabled = !text.isEmpty
     }
     
     func showImagePicker() {
@@ -740,9 +740,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         dismissButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
         viewControllerTitle.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 0).isActive = true
+        viewControllerTitle.centerXAnchor.constraint(equalTo: contentUIView.centerXAnchor).isActive = true
+        viewControllerTitle.widthAnchor.constraint(equalTo: contentUIView.widthAnchor).isActive = true
         viewControllerTitle.bottomAnchor.constraint(equalTo: dismissButton.bottomAnchor, constant: 15).isActive = true
-        viewControllerTitle.leadingAnchor.constraint(equalTo: dismissButton.trailingAnchor, constant: 15).isActive = true
-        viewControllerTitle.trailingAnchor.constraint(equalTo: stepSaveButton.leadingAnchor, constant: -15).isActive = true
         
         expandingReminderView.bottomAnchor.constraint(equalTo: newStepImages.bottomAnchor, constant: 88).isActive = true
         expandingReminderView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
@@ -792,10 +792,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         stepNameTextField.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         stepNameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        stepSaveButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 15).isActive = true
-        stepSaveButton.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        stepSaveButton.widthAnchor.constraint(equalToConstant: 33).isActive = true
-        stepSaveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        saveButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 15).isActive = true
+        saveButton.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        saveButton.widthAnchor.constraint(equalToConstant: 85).isActive = true
+        saveButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         
         descriptionTitle.topAnchor.constraint(equalTo: expandingReminderView.bottomAnchor, constant:  20).isActive = true
         descriptionTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true

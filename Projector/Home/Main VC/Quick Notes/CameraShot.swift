@@ -204,32 +204,32 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     //Is camera available or not?
     @objc func takePhoto(_ sender: UITapGestureRecognizer) {
         
-        if self.cameraStatus == true {
-            selectImageFrom(.camera)
-        }else{
-            
-            switch self.photoLibraryStatus {
-            case .authorized:
-                self.selectImageFrom(.photoLibrary)
-            case .denied:
-                showPermissionAlert()
-            case .notDetermined:
-                PHPhotoLibrary.requestAuthorization({status in
-                    self.photoLibraryStatus = status
-                })
-            case .restricted:
-                print("restricted")
-                // probably alert the user that photo access is restricted
-            case .limited:
-                print("limited")
-            @unknown default:
-                print("unknown case!")
+        switch self.photoLibraryStatus {
+        case .authorized:
+            if self.cameraStatus == true {
+                selectImageFrom(.camera)
+            }else{
+                selectImageFrom(.photoLibrary)
             }
+        case .denied:
+            showPermissionAlert()
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({status in
+                self.photoLibraryStatus = status
+            })
+        case .restricted:
+            print("restricted")
+            // probably alert the user that photo access is restricted
+        case .limited:
+            print("limited")
+        @unknown default:
+            print("unknown case!")
+            
         }
     }
     
     private func showPermissionAlert(){
-        let ac = UIAlertController(title: "Access to Camera & Photo Library are Denied", message: "To turn on access to photo library or camera, please go to Settings > Notifications > Projector", preferredStyle: .alert)
+        let ac = UIAlertController(title: "Access to Photo Library is Denied", message: "To turn on access to photo library, please go to Settings > Notifications > Projector", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(ac, animated: true)
     }

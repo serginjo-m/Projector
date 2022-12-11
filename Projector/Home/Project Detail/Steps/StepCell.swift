@@ -63,6 +63,8 @@ class StepCell: UICollectionViewCell{
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(named: "scheduledStepEvent")
+        image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         return image
     }()

@@ -640,7 +640,7 @@ extension ProjectViewController {
                 
             }, collectionViewLayout: layout)
 
-
+            swipingController.modalPresentationStyle = .fullScreen
             navigationController?.present(swipingController, animated: true, completion: nil)
             
         }

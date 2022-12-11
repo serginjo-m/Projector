@@ -83,7 +83,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     let projectImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = UIImageView.ContentMode.scaleAspectFill
-        imageView.image = UIImage(named: "newEventDefault")
+        imageView.image = UIImage(named: "scheduledStepEvent")
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 13
         return imageView

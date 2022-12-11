@@ -211,8 +211,8 @@ class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
     
     lazy var image: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "river")
-        image.contentMode = .scaleAspectFit
+        image.image = UIImage(named: "scheduledStepEvent")
+        image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.isUserInteractionEnabled = true
         image.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
