@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ProjectorVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ProjectorVersionString[];
+FOUNDATION_EXPORT double Pods_Project_OrVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_Project_OrVersionString[];
 
