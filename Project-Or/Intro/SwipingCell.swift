@@ -32,10 +32,17 @@ class SwipingCell: UICollectionViewCell{
                 constraint.isActive = false
             }
             
+            var centerY: CGFloat = 0
+            //login page requires percentage based calculation
+            if unwrappedPage.bodyText == "" {
+                let screenHeight = UIScreen.main.bounds.height
+                centerY = screenHeight <= 667 ? -(screenHeight * 0.26) : -(screenHeight * 0.23)
+            }else{
+                centerY = unwrappedPage.imageConstraints.imageCenterYAnchor
+            }
             
             let height = unwrappedPage.imageConstraints.imageHeight
             let centerX = unwrappedPage.imageConstraints.imageCenterXAnchor
-            let centerY = unwrappedPage.imageConstraints.imageCenterYAnchor
             let heightConstraint = Double(frame.width - 60) * height
             
             
@@ -43,24 +50,17 @@ class SwipingCell: UICollectionViewCell{
             imageCenterXAnchorConstraint = image.centerXAnchor.constraint(equalTo: centerXAnchor, constant: centerX)
             imageCenterYAnchorConstraint = image.centerYAnchor.constraint(equalTo: centerYAnchor, constant: centerY)
             
-            
-            
-            
-            
             [imageHeightConstraint, imageCenterYAnchorConstraint, imageCenterXAnchorConstraint].forEach{
                 guard let constraint = $0 else {return}
                 constraint.isActive = true
             }
             
-            //------------------------ a bit weird -----------------------------------
-            //----------- need to have clear logic of what login page is -------------
             registerLoginNavStack.isHidden = unwrappedPage.bodyText == "" ? false : true
             userInputStack.isHidden = unwrappedPage.bodyText == "" ? false : true
         }
     }
     
-    
-    private let image: UIImageView = {
+    var image: UIImageView = {
         let image = UIImageView(image: UIImage(named: "workspace"))
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.masksToBounds = true

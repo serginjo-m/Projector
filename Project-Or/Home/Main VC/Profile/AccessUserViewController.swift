@@ -12,10 +12,11 @@ class AccessUserViewController: UIViewController {
     
     lazy var skipButton: UIButton = {
         let button = UIButton()
+        button.layer.cornerRadius = 18
+        button.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
+        button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
+        button.adjustsImageWhenHighlighted = false
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Skip", for: .normal)
-        button.setTitleColor(UIColor.init(white: 0.43, alpha: 1), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         return button
     }()
@@ -146,6 +147,8 @@ class AccessUserViewController: UIViewController {
         return stack
     }()
     
+    var imageTopAnchor: NSLayoutConstraint!
+    
     //inputs animation approach
     var userInputStackLeftConstraint: NSLayoutConstraint!
     var userInputStackRightConstraint: NSLayoutConstraint!
@@ -181,10 +184,51 @@ class AccessUserViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         setupConstraints()
+        configureKeyboardObservers()
+        hideKeyboardWhenTappedAround()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //prevent multiple keyboard observers
+        NotificationCenter.default.removeObserver(self)
     }
     
     //MARK: Methods
-    //skip button action
+    fileprivate func configureKeyboardObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func handleKeyboardWillHide(notification: NSNotification){
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            
+            imageTopAnchor.constant = -250
+            
+            UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                self.image.alpha = 1
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc func handleKeyboardWillShow(notification: NSNotification){
+        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            if let keyboardRectangle = keyboardFrame?.cgRectValue {
+                imageTopAnchor.constant = -(keyboardRectangle.height + 180)
+                
+                UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                    self.image.alpha = 0
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
     
     @objc private func handleDismiss(){
         dismiss(animated: true, completion: nil)
@@ -233,11 +277,12 @@ class AccessUserViewController: UIViewController {
     fileprivate func setupConstraints(){
         skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
         skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22).isActive = true
-        skipButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        skipButton.heightAnchor.constraint(equalToConstant: 19).isActive = true
+        skipButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        skipButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
         
         image.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        image.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 170).isActive = true
+        imageTopAnchor = image.topAnchor.constraint(equalTo: view.centerYAnchor, constant: -250)
+        imageTopAnchor.isActive = true
         image.widthAnchor.constraint(equalToConstant: 303).isActive = true
         image.heightAnchor.constraint(equalToConstant: 139).isActive = true
         

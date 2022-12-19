@@ -176,7 +176,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
 //                }
 //            }
         }
-        
+        accessUserViewController.modalPresentationStyle = .fullScreen
         self.present(accessUserViewController, animated: true)
     }
     

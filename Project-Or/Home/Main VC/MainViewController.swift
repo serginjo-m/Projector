@@ -586,7 +586,7 @@ extension ProjectViewController {
 //                }
 //
 //
-//            }, collectionViewLayout: layout)
+//            })
 //
 //            navigationController?.present(swipingController, animated: true, completion: nil)
             
@@ -638,7 +638,7 @@ extension ProjectViewController {
 //                    }
 //                }
                 
-            }, collectionViewLayout: layout)
+            })
 
             swipingController.modalPresentationStyle = .fullScreen
             navigationController?.present(swipingController, animated: true, completion: nil)

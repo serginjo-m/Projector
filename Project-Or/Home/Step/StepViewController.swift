@@ -354,14 +354,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         for item in step.selectedPhotosArray{
             editStepViewController.newStepImages.photoArray.append(item)
         }
-        
-        editStepViewController.stepItems = {
-            var stepItems = [String]()
-            for item in step.itemsArray{
-                stepItems.append(item)
-            }
-            return stepItems
-        }()
+        editStepViewController.stepItems.append(objectsIn: step.stepItemsList)
         
         editStepViewController.stepComplete = step.complete
         //configure expanding reminder active state

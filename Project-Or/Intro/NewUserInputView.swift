@@ -168,7 +168,9 @@ class CustomTextField: UIView, UITextFieldDelegate {
     lazy var textField: UITextField = {
         let tField = UITextField()
         tField.translatesAutoresizingMaskIntoConstraints = false
-        tField.keyboardType = .default
+        //hides words suggestions
+        tField.keyboardType = .alphabet//<-
+        tField.autocorrectionType = .no//<-
         tField.clearButtonMode = UITextField.ViewMode.never
         tField.font = UIFont.boldSystemFont(ofSize: 15)
         tField.autocapitalizationType = .none

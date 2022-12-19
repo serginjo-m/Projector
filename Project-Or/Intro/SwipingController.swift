@@ -9,7 +9,7 @@
 
 import UIKit
 
-class SwipingController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class SwipingController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //data for individual page configuration
     let pages = [
@@ -24,7 +24,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         SwipingPage(
             imageName: "statistics_p2",
             headerString: "Create your project management tool",
-            bodyText: "By using Projector, the project you are working on can be managed easily.",
+            bodyText: "By using Project-Or, the project you are working on can be managed easily.",
             imageConstraints:
             SwipingImageConstraints(imageHeight: 0.91390,//276,//0,91390
                                     imageCenterYAnchor: -103,
@@ -49,6 +49,29 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     
     let cellId = "cellId"
     
+    var pagesCollectionViewTopAnchor: NSLayoutConstraint!
+    
+    //keyboard animation need to hide image when it at the top, so we save reference here
+    var imageView: UIImageView?
+    
+    lazy var pagesCollectionView: UICollectionView = {
+        
+        let layout = UICollectionViewFlowLayout()//BEWARE!!!! UICollectionViewLayout != UICollectionViewFlowLayout
+        //changing default direction of scrolling
+        layout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(SwipingCell.self, forCellWithReuseIdentifier: self.cellId)
+        collectionView.isPagingEnabled = true
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        //this is really good solution for this error that leaves a gap in cell!
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        return collectionView
+        
+    }()
     
     lazy var skipButton: UIButton = {
         let button = UIButton()
@@ -95,17 +118,26 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         return pc
     }()
     
+    lazy var bottomControlsStackView: UIStackView = {
+        let bottomControlsStackView = UIStackView(arrangedSubviews: [previousButton, pageControl, nextButton])
+        bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
+        bottomControlsStackView.distribution = .fillEqually
+        return bottomControlsStackView
+    }()
+    
     //update parent VC
     var didTapDismissCompletionHandler: (() -> Void)
     
     //MARK: init
     
     
-    init(didTapDismissCompletionHandler: @escaping (() -> Void), collectionViewLayout layout: UICollectionViewLayout) {
-        //Call parent vc, so it tries to update itself
+    init(didTapDismissCompletionHandler: @escaping (() -> Void),  nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
+        
         self.didTapDismissCompletionHandler = didTapDismissCompletionHandler
-        //collection view controller should accept layout in init
-        super.init(collectionViewLayout: layout)
+        
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        
+        view.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {
@@ -114,13 +146,67 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     
     
     override func viewDidLoad() {
+
+        view.addSubview(pagesCollectionView)
+        view.addSubview(bottomControlsStackView)
+        view.addSubview(skipButton)
         
-        collectionView?.backgroundColor = .white
-        collectionView?.register(SwipingCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.isPagingEnabled = true
-        
-        setupControls()
+        setupConstraints()
+        configureKeyboardObservers()
+        hideKeyboardWhenTappedAround()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //prevent multiple keyboard observers
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    //MARK: Methods
+    fileprivate func configureKeyboardObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func handleKeyboardWillHide(notification: NSNotification){
+        //hide image
+        if let view = imageView {
+            view.isHidden = false
+        }
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            
+            pagesCollectionViewTopAnchor.constant = 0
+            
+            UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @objc func handleKeyboardWillShow(notification: NSNotification){
+        //hide image
+        if let view = imageView {
+            view.isHidden = true
+        }
+        
+        let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        
+        if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            if let keyboardRectangle = keyboardFrame?.cgRectValue {
+                
+                pagesCollectionViewTopAnchor.constant = -(keyboardRectangle.height + 100)
+                
+                UIView.animate(withDuration: keyboardDuration, delay: 0) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    
     //skip button action
     @objc private func handleDismiss(){
         dismiss(animated: true, completion: nil)
@@ -138,7 +224,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         //create index path
         let indexPath = IndexPath(item: nextIndex, section: 0)
         //perform scrolling to next page
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        pagesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         //check if button must be changed to selected or not
         modifyButtonState(currentPageIndex: nextIndex)
         
@@ -146,41 +232,34 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     //prev button
     @objc private func handlePrev(){
         
+        pagesCollectionView.delegate = self
+        pagesCollectionView.reloadData()
+        pagesCollectionView.layoutIfNeeded()
+        
         let prevIndex = max(pageControl.currentPage - 1, 0)
         pageControl.currentPage = prevIndex
         
         let indexPath = IndexPath(item: prevIndex, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        
+        pagesCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         previousButton.isEnabled = prevIndex > 0 ? true : false
         
         modifyButtonState(currentPageIndex: prevIndex)
     }
     
-    //align cell to the screen edge
-    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
-        
-        let x = targetContentOffset.pointee.x
-        let currentPageIndex = Int(x / view.frame.width)
-        
-        pageControl.currentPage = currentPageIndex
-
-        modifyButtonState(currentPageIndex: currentPageIndex)
-    }
     //select or enable buttons for page position
     fileprivate func modifyButtonState(currentPageIndex: Int){
         nextButton.isSelected = currentPageIndex == pages.count - 1 ? true : false
         previousButton.isEnabled = currentPageIndex > 0 ? true : false
     }
     
-    fileprivate func setupControls(){
+    fileprivate func setupConstraints(){
        
-        let bottomControlsStackView = UIStackView(arrangedSubviews: [previousButton, pageControl, nextButton])
-        bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
-        bottomControlsStackView.distribution = .fillEqually
+        pagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        pagesCollectionViewTopAnchor = pagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+        pagesCollectionViewTopAnchor.isActive = true
+        pagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        pagesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         
-        view.addSubview(bottomControlsStackView)
         
         NSLayoutConstraint.activate([
             bottomControlsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
@@ -189,27 +268,39 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
             bottomControlsStackView.heightAnchor.constraint(equalToConstant: 50)
             ])
         
-        //skip button
-        view.addSubview(skipButton)
+        
         skipButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25).isActive = true
         skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22).isActive = true
         skipButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 19).isActive = true
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let x = targetContentOffset.pointee.x
+        let currentPageIndex = Int(x / view.frame.width)
+        pageControl.currentPage = currentPageIndex
+        modifyButtonState(currentPageIndex: currentPageIndex)
+    }
+    
+    //MARK: Collection View
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pages.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SwipingCell
         
         let page = pages[indexPath.item]
-
+        //check if login page
+        if page.bodyText == "" {
+            //save image view to external property
+            imageView = cell.image
+        }
+        
         cell.parentVC = self//passing dismiss to parent
         cell.page = page
         return cell
@@ -218,4 +309,6 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: view.frame.height)
     }
+    
+    
 }

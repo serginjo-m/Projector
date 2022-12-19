@@ -40,7 +40,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //step completion status
     var stepComplete: Bool?
     // list of items in step
-    var stepItems = [String]()
+    var stepItems = List<StepItem>()
     // step progress category
     var selectedStepProgress: Int = 0
     //this property uses for building a ProjectWayViewController (required)
@@ -418,6 +418,8 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func handleKeyboardWillHide(notification: NSNotification){
+        //only description requires pushing animation
+        guard descriptionTextView.isFirstResponder == true else {return}
         
         if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
             
@@ -430,6 +432,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func handleKeyboardWillShow(notification: NSNotification){
+        //only description requires pushing animation
+        guard descriptionTextView.isFirstResponder == true else {return}
+        
         let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
         
         if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
@@ -589,9 +594,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         
         //items
-        for item in stepItems{
-            stepTemplate.itemsArray.append(item)
-        }
+        stepTemplate.stepItemsList.append(objectsIn: stepItems)
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
