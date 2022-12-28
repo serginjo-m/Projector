@@ -166,6 +166,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     var stepItemsTitleTopAnchorLowerConstraint: NSLayoutConstraint!
     var stepNameTitleHeightAnchor: NSLayoutConstraint!
     
+    var contentHeightAnchor: NSLayoutConstraint!
+    
     //MARK: Initialization
     //Good way to init view controller
     //Good way to init viewController
@@ -188,7 +190,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.addSubview(contentUIView)
         
         //add items to a view
-        [dismissButton, stepTableView, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepNameTitle, stepComment, stepItemsTitle].forEach {
+        [dismissButton, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepComment, stepNameTitle, stepItemsTitle, stepTableView].forEach {
             contentUIView.addSubview($0)
         }
         
@@ -202,9 +204,49 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         performPageConfigurations()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+       updateContentHeight()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        updateContentHeight()
+    }
+    
     //MARK: Methods
-    private func performPageConfigurations(){
+    
+    private func updateContentHeight(){
         
+        guard let step = projectStep else {return}
+        
+        let totalContentHeight = stepNameTitle.frame.height + stepCommentHeightConstraint.constant + stepTableView.contentSize.height + 367
+        //update content height first
+        if stepItemsTitle.frame.origin.y > 0 {
+                    stepImagesCV.stepImagesCollectionView.reloadData()
+                    contentHeightAnchor.constant = totalContentHeight
+        }
+        
+        //secondary place title, that is the reference for other items constraints
+        if step.comment.isEmpty == true {//if no comments
+            if step.selectedPhotosArray.count == 0 {//if no photos
+                //place it under buttons
+                stepItemsTitleTopAnchorMiddleConstraint.isActive = false
+                stepItemsTitleTopAnchorLowerConstraint.isActive = false
+                stepItemsTitleTopAnchorHigherConstraint.isActive = true
+            }else{
+                //place it under photos
+                stepItemsTitleTopAnchorHigherConstraint.isActive = false
+                stepItemsTitleTopAnchorLowerConstraint.isActive = false
+                stepItemsTitleTopAnchorMiddleConstraint.isActive = true
+            }
+        }else{//place it under comment
+            stepItemsTitleTopAnchorHigherConstraint.isActive = false
+            stepItemsTitleTopAnchorMiddleConstraint.isActive = false
+            stepItemsTitleTopAnchorLowerConstraint.constant = -(stepTableView.contentSize.height  + 40)
+            stepItemsTitleTopAnchorLowerConstraint.isActive = true
+        }
+    }
+    
+    private func performPageConfigurations(){
         projectStep = ProjectListRepository.instance.getProjectStep(id: stepID)
         
         guard let step = projectStep else {return}
@@ -407,7 +449,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        
+        contentHeightAnchor = contentUIView.heightAnchor.constraint(equalToConstant: 1500)
+        contentHeightAnchor.isActive = true
         
         dismissButton.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 15).isActive = true
         dismissButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
@@ -450,7 +494,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         reminderStepButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         reminderStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
         
-        stepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  30).isActive = true
+        stepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant: 30).isActive = true
         stepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true
         stepImagesCV.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         stepImagesCV.heightAnchor.constraint(equalToConstant: 144).isActive = true
@@ -470,7 +514,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepItemsTitle.heightAnchor.constraint(equalToConstant: 25).isActive = true
         stepItemsTitleTopAnchorHigherConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant:  25)
         stepItemsTitleTopAnchorMiddleConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepImagesCV.bottomAnchor, constant: 30)
-        stepItemsTitleTopAnchorLowerConstraint = stepItemsTitle.topAnchor.constraint(equalTo: stepComment.bottomAnchor, constant: 20)
+        stepItemsTitleTopAnchorLowerConstraint = stepItemsTitle.topAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: -20)
         
         stepTableView.topAnchor.constraint(equalTo: stepItemsTitle.bottomAnchor, constant:  9).isActive = true
         stepTableView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  15).isActive = true
@@ -481,7 +525,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     func updateDynamicConstraints(){
         //diff size string need width calculation for constraints
         guard let categoryLabelString = categoryLabel.text, let step = projectStep else {return}
-        
+            
        //calculates precise label width needed
         let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
         categoryLabel.widthAnchor.constraint(equalToConstant: categoryLabelSize).isActive = true
@@ -491,10 +535,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         stepNameTitleHeightAnchor.constant = rect.height + 20
         
-        let commentRect = NSString(string: step.comment).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
+        let commentRect = NSString(string: step.comment).boundingRect(with: CGSize(width: view.frame.width - 15, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
         
         stepCommentHeightConstraint.constant = commentRect.height + 10
-        
+
         if step.selectedPhotosArray.count == 0 {//if no photos, place it under buttons
             stepCommentTopAnchorLowerConstraint.isActive = false
             stepCommentTopAnchorHigherConstraint.isActive = true
@@ -502,26 +546,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepCommentTopAnchorHigherConstraint.isActive = false
             stepCommentTopAnchorLowerConstraint.isActive = true
         }
-        
-        //Configure items position based on comment and photos visibily
-        if step.comment.isEmpty == true {//if no comments
-            if step.selectedPhotosArray.count == 0 {//if no photos
-                //place it under buttons
-                stepItemsTitleTopAnchorMiddleConstraint.isActive = false
-                stepItemsTitleTopAnchorLowerConstraint.isActive = false
-                stepItemsTitleTopAnchorHigherConstraint.isActive = true
-            }else{
-                //place it under photos
-                stepItemsTitleTopAnchorHigherConstraint.isActive = false
-                stepItemsTitleTopAnchorLowerConstraint.isActive = false
-                stepItemsTitleTopAnchorMiddleConstraint.isActive = true
-            }
-        }else{//place it under comment
-            stepItemsTitleTopAnchorHigherConstraint.isActive = false
-            stepItemsTitleTopAnchorMiddleConstraint.isActive = false
-            stepItemsTitleTopAnchorLowerConstraint.isActive = true
-        }
-        
     }
 }
 

@@ -89,8 +89,8 @@ class CircularTransition: NSObject, UIViewControllerAnimatedTransitioning {
         let extremePoint = CGPoint(x: triggerButton.center.x,
                                    y: triggerButton.center.y - fullHeight)
         // Calculates the radius of your new circle by using the Pythagorean Theorem: a² + b² = c².
-        let radius = sqrt((extremePoint.x*extremePoint.x) +
-                          (extremePoint.y*extremePoint.y))
+        let radius = sqrt(((extremePoint.x*extremePoint.x) * 1.2) +
+                          ((extremePoint.y*extremePoint.y) * 1.2))//<- make it a bit bigger by multiplying to 1.2
         // Creates your new bezier path by taking the current frame of the circle and “insetting” it by a negative amount in both directions, thus pushing it out to go fully beyond the bounds of the screen in both directions.
         let circleMaskPathFinal = UIBezierPath(ovalIn: triggerButton.frame.insetBy(dx: -radius,
                                                                                    dy: -radius))

@@ -23,7 +23,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
-    var contentUIView = UIView()
+    var contentUIView: UIView = {
+        let view = UIView()
+//        view.backgroundColor = .yellow
+        return view
+    }()
+    
+    var contentHeightAnchor: NSLayoutConstraint!
     
     //MARK: Project Numbers
     //Project Numbers Side Panel
@@ -207,6 +213,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //perform sublayer configuration after all views sizes and positions are defined
     override func viewDidLayoutSubviews() {
+        var highestCollection: CGFloat = 0
+        let stepBlock = self.stepsCollections
+        let stepCollections =  [stepBlock.todoList, stepBlock.inProgressList, stepBlock.doneList, stepBlock.blockedList]
+        
+        for collection in stepCollections{
+            if highestCollection < collection.collectionViewLayout.collectionViewContentSize.height {
+                highestCollection = collection.collectionViewLayout.collectionViewContentSize.height
+            }
+        }
+        contentHeightAnchor.constant = highestCollection + 540//488
         gradient.frame = projectImageView.bounds
     }
       
@@ -347,7 +363,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
+        contentHeightAnchor = contentUIView.heightAnchor.constraint(equalToConstant: 1150)
+        contentHeightAnchor.isActive = true
         
         projectImageView.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 20).isActive = true
         projectImageView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true

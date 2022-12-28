@@ -207,6 +207,7 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         
         //loop through array of 7 colors & 7 weekdays multiple times
         let int = (reversedWeekday + indexPath.row) % 7
+        print(reversedWeekday, indexPath.row)
         
         cell.backgroundColor = cellColors[int]
         cell.dayNumberLabel.backgroundColor = cellColors[int]

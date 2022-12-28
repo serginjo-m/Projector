@@ -39,22 +39,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.showsHorizontalScrollIndicator = false
         return tableView
     }()
-    
-    //scroll view container
-    //container for all items on the page
-    var scrollViewContainer: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
-    var contentUIView: UIView = {
-        let view  = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+        
     let headerContainerView: UIView = {
         let view = NotificationsHeaderImage()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -68,10 +53,8 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         view.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
         
-        view.addSubview(scrollViewContainer)
-        scrollViewContainer.addSubview(contentUIView)
-        contentUIView.addSubview(headerContainerView)
-        contentUIView.addSubview(notificationTableView)
+        view.addSubview(headerContainerView)
+        view.addSubview(notificationTableView)
        
         setupConstraints()
     }
@@ -137,28 +120,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     //MARK: Constraints
     fileprivate func setupConstraints(){
         
-        scrollViewContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        scrollViewContainer.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        scrollViewContainer.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        
-        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
-        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
-        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
-        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
-        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: 1500).isActive = true
-        
-        headerContainerView.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 20).isActive = true
-        headerContainerView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        headerContainerView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
+        headerContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        headerContainerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        headerContainerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         headerContainerView.heightAnchor.constraint(equalToConstant: 192).isActive = true
         
         notificationTableView.topAnchor.constraint(equalTo: headerContainerView.bottomAnchor, constant: 10).isActive = true
-        notificationTableView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        notificationTableView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
-        notificationTableView.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: 0).isActive = true
-        
+        notificationTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        notificationTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        notificationTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
     }
     
 }

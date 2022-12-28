@@ -13,7 +13,6 @@ import FirebaseAuth
 
 class UserProfileViewController: UIViewController, CircleTransitionable {
     
-    
     var user: User? {
         get{
             let users = ProjectListRepository.instance.getAllUsers()
@@ -108,7 +107,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         view.backgroundColor = UIColor.init(red: 159/255, green: 195/255, blue: 208/255, alpha: 1)
 
         view.addSubview(transitionButton)
@@ -253,14 +251,13 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     
     fileprivate func setupConstraints(){
         
-        
-        contentTextView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 150).isActive = true
+        contentTextView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIScreen.main.bounds.height * 0.22).isActive = true
         contentTextView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         contentTextView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         contentTextView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         
         
-        loginButton.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 200).isActive = true
+        loginButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIScreen.main.bounds.height * 0.526).isActive = true
         loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         loginButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 130).isActive = true
