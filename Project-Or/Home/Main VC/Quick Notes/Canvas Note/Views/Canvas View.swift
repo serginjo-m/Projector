@@ -7,13 +7,23 @@
 //
 
 import UIKit
+import RealmSwift
 
 class CanvasView: UIView {
+    //MARK: Properties
+    //object that fits to realm
+    var canvasObject = CanvasNote()
+    //redo func
+    var removedCanvasLines = List<SingleLineObject>()
     
     //public function
-    fileprivate var strokeColor = UIColor.red
-    fileprivate var strokeWidth: Float = 7
+    let colorPalette = ColorPalette()
     
+    fileprivate var strokeColor = UIColor.red
+    
+    fileprivate var strokeWidth: Float = 15
+    
+    //MARK: Methods
     func setStrokeColor(color: UIColor){
         self.strokeColor = color 
     }
@@ -27,10 +37,25 @@ class CanvasView: UIView {
         if canvasObject.canvasLines.count > 0 {
             
             //remove last line
+            guard let element = canvasObject.canvasLines.last else {return}
+            
             canvasObject.canvasLines.removeLast()
+            
+            removedCanvasLines.append(element)
             //going to execute draw func again
             setNeedsDisplay()
         }
+    }
+    
+    func redo(){
+        //remove last line
+        guard let element = removedCanvasLines.last else {return}
+        
+        removedCanvasLines.removeLast()
+        
+        canvasObject.canvasLines.append(element)
+        //going to execute draw func again
+        setNeedsDisplay()
     }
     
     func clear() {
@@ -39,10 +64,6 @@ class CanvasView: UIView {
         //going to execute draw func again
         setNeedsDisplay()
     }
-    
-    //object that fits to realm
-    var canvasObject = CanvasNote()
-
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -54,7 +75,7 @@ class CanvasView: UIView {
     
         canvasObject.canvasLines.forEach { (line) in
             for (i, p) in line.singleLine.enumerated(){
-                let color = IntToStrokeColor(color: line.color)
+                let color = IntToStrokeColor(num: line.color)
 
                 context.setStrokeColor(color.cgColor)
                 context.setLineWidth(CGFloat(line.strokeWidth))
@@ -97,7 +118,7 @@ class CanvasView: UIView {
             
             canvasObject.canvasLines.forEach { (line) in
                 for (i, p) in line.singleLine.enumerated(){
-                    let color = IntToStrokeColor(color: line.color)
+                    let color = IntToStrokeColor(num: line.color)
                     
                     ctx.cgContext.setStrokeColor(color.cgColor)
                     ctx.cgContext.setLineWidth(CGFloat(line.strokeWidth))
@@ -127,6 +148,8 @@ class CanvasView: UIView {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //clear removed lines cache, as user starts drawing
+        removedCanvasLines.removeAll()
         canvasObject.canvasLines.append(SingleLineObject())
     }
     
@@ -159,32 +182,12 @@ class CanvasView: UIView {
     }
     
     private func strokeColorToInt(color: UIColor) -> Int {
-        switch color {
-        case UIColor.yellow:
-            return 0
-        case UIColor.red:
-            return 1
-        case UIColor.blue:
-            return 2
-        case UIColor.black:
-            return 3
-        default:
-            return 0
-        }
+        guard let number = colorPalette.colorToInt[color] else {return 0}
+        return number
     }
     
-    private func IntToStrokeColor(color: Int) -> UIColor {
-        switch color {
-        case 0:
-            return UIColor.yellow
-        case 1:
-            return UIColor.red
-        case 2:
-            return UIColor.blue
-        case 3:
-            return UIColor.black
-        default:
-            return UIColor.black
-        }
+    private func IntToStrokeColor(num: Int) -> UIColor {
+        guard let color = colorPalette.intToColor[num] else {return UIColor.green}
+        return color
     }
 }
