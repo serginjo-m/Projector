@@ -276,6 +276,10 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
         self.strokeSizeIndicator.strokeSizeIndicatorWidthAnchor.constant = sizeValue
         self.strokeSizeIndicator.strokeSizeIndicator.layer.cornerRadius = sizeValue / 2
         canvas.setStrokeWidth(width: Float(sizeValue))
+        
+        [stackView, stackBackgroundView].forEach { view in
+            view.isHidden = true
+        }
     }
     
     

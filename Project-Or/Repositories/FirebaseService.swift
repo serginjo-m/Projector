@@ -13,6 +13,14 @@ import FirebaseDatabase
 import FirebaseStorage
 
 
+enum UserDeletionError: Error {
+    case userNotAuthenticated
+    case genericError(error: String)
+}
+
+enum UserForgotPasswordError: Error {
+    case genericError(error: String)
+}
 
 class FirebaseService: NSObject {
         
@@ -67,6 +75,46 @@ class FirebaseService: NSObject {
             
         }
         
+    }
+    
+    func deleteUserAccount(completionHandler: @escaping (UserDeletionError?) -> Void){
+        
+        guard let user = Auth.auth().currentUser else {
+            completionHandler(.userNotAuthenticated)
+            return
+        }
+        
+        user.delete { error in
+            
+            if let error = error {
+                completionHandler(.genericError(error: error.localizedDescription))
+            }else{
+                //It is not the best solution but for this purpose it will be alright
+                //So the plan is when logged in create user and delete when logout
+                let users = ProjectListRepository.instance.getAllUsers()
+                //delete from database
+                for user in users {
+                    ProjectListRepository.instance.deleteUser(user: user)
+                }
+                //successfully deleted
+                completionHandler(nil)
+            }
+        }
+    }
+    
+    func handleForgotPasswordEmail(email: String, completionHandler: @escaping (UserForgotPasswordError?) -> Void){
+        //firebase auth
+        let auth = Auth.auth()
+        //try to send email
+        auth.sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                //error
+                completionHandler(.genericError(error: error.localizedDescription))
+            }else{
+                //success
+                completionHandler(nil)
+            }
+        }
     }
     
     func handleRegister(name: String, email: String, password: String, completionHandler: @escaping () -> Void ){

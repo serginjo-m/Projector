@@ -131,6 +131,15 @@ class AccessUserViewController: UIViewController {
 //                    }
 //                }
                 
+            }, didTapRestoreCompletionHandler: { [weak self] in
+                
+                guard let self = self else {return}
+                
+                let viewController = ForgotPasswordViewController()
+                viewController.modalPresentationStyle = .popover
+                viewController.view.backgroundColor = .white
+                self.present(viewController, animated: true)
+                
             }
         )
         view.passwordTextField.displayButton.isHidden = false
@@ -292,7 +301,7 @@ class AccessUserViewController: UIViewController {
         registerLoginNavStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -31).isActive = true
         registerLoginNavStack.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        userInputStack.heightAnchor.constraint(equalToConstant: 243).isActive = true
+        userInputStack.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         userInputStackLeftConstraint = userInputStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0)
         //...but this is not active now
         userInputStackRightConstraint = userInputStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0)

@@ -191,6 +191,10 @@ class SwipingCell: UICollectionViewCell{
 //                    }
 //                }
                 
+            }, didTapRestoreCompletionHandler: { [weak self] in
+                
+                guard let self = self, let unwrappedParentVC = self.parentVC else {return}
+                unwrappedParentVC.showRestoreVC()
             }
         )
         view.passwordTextField.displayButton.isHidden = false
@@ -273,10 +277,7 @@ class SwipingCell: UICollectionViewCell{
         addSubview(registerLoginNavStack)
         addSubview(userInputStack)
         
-        
-       
-        
-        userInputStack.heightAnchor.constraint(equalToConstant: 243).isActive = true
+        userInputStack.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         userInputStackLeftConstraint = userInputStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
         //...but this is not active now
         userInputStackRightConstraint = userInputStack.rightAnchor.constraint(equalTo: rightAnchor, constant: 0)

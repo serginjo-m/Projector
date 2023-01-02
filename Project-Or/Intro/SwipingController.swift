@@ -115,6 +115,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         pc.numberOfPages = pages.count
         pc.currentPageIndicatorTintColor = UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1)
         pc.pageIndicatorTintColor = UIColor.init(white: 213/255, alpha: 1)
+        pc.isUserInteractionEnabled = false
         return pc
     }()
     
@@ -280,6 +281,13 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         let currentPageIndex = Int(x / view.frame.width)
         pageControl.currentPage = currentPageIndex
         modifyButtonState(currentPageIndex: currentPageIndex)
+    }
+    
+    func showRestoreVC(){
+        let viewController = ForgotPasswordViewController()
+        viewController.modalPresentationStyle = .popover
+        viewController.view.backgroundColor = .white
+        self.present(viewController, animated: true)
     }
     
     //MARK: Collection View

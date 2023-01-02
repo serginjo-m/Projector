@@ -24,14 +24,23 @@ class RegisteredUserInputView: UIView{
         return button
     }()
     
+    lazy var restorePasswordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Forgot Password?", for: .normal)
+        button.setTitleColor(UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1), for: .normal)
+        button.addTarget(self, action: #selector(passwordRecovery), for: .touchUpInside)
+        return button
+    }()
     
     //login user
     let didTapLoginCompletionHandler: (() -> Void)
+    let didTapRestoreCompletionHandler: (() -> Void)
     
-    init(didTapLoginCompletionHandler: @escaping (() -> Void)) {
+    init(didTapLoginCompletionHandler: @escaping (() -> Void), didTapRestoreCompletionHandler: @escaping (() -> Void)) {
         
         self.didTapLoginCompletionHandler = didTapLoginCompletionHandler
-        
+        self.didTapRestoreCompletionHandler = didTapRestoreCompletionHandler
         super.init(frame: CGRect.zero)
         
         setupInputContainer()
@@ -60,6 +69,10 @@ class RegisteredUserInputView: UIView{
         }
     }
     
+    @objc func passwordRecovery(){
+        didTapRestoreCompletionHandler()
+    }
+    
     func setupInputContainer(){
 //        passwordTextField.textField.isSecureTextEntry = true
         hideKeyboardWhenTappedAround()
@@ -67,6 +80,7 @@ class RegisteredUserInputView: UIView{
         addSubview(emailTextField)
         addSubview(passwordTextField)
         addSubview(loginButton)
+        addSubview(restorePasswordButton)
         
         emailTextField.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20).isActive = true
@@ -81,6 +95,11 @@ class RegisteredUserInputView: UIView{
         loginButton.heightAnchor.constraint(equalToConstant: 43).isActive = true
         loginButton.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 57).isActive = true
+        
+        restorePasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 40).isActive = true
+        restorePasswordButton.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor).isActive = true
+        restorePasswordButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        restorePasswordButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
     }
 }
 

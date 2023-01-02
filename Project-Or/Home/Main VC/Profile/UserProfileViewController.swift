@@ -1,3 +1,4 @@
+
 //
 //  UserProfileViewController.swift
 //  Projector
@@ -12,12 +13,15 @@ import Firebase
 import FirebaseAuth
 
 class UserProfileViewController: UIViewController, CircleTransitionable {
-    
+    //MARK: Properties
     var user: User? {
         get{
             let users = ProjectListRepository.instance.getAllUsers()
             //only one user must be inside local database
             return users.first
+        }
+        set{
+            //update
         }
     }
     
@@ -55,6 +59,47 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
+    }()
+    
+    lazy var deleteUserAccountButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Delete Profile", for: .normal)
+        button.contentHorizontalAlignment = .right
+        button.addTarget(self, action: #selector(handleUserAccountDeletion(_:)), for: .touchUpInside)
+        button.setTitleColor(UIColor.init(white: 0, alpha: 0.7), for: .normal)
+        button.isHidden = self.user == nil ? true : false
+        return button
+    }()
+    
+    lazy var deleteButtonImage: UIImageView = {
+        let originalImage = UIImage(named: "binIcon")
+        let tintedImage = originalImage?.withRenderingMode(.alwaysTemplate)
+        
+        let image = UIImageView(image: tintedImage)
+        image.tintColor = UIColor.init(white: 0, alpha: 0.7)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.isHidden = self.user == nil ? true : false
+        return image
+    }()
+    
+    lazy var cloudIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "cloud"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = self.user == nil ? true : false
+        return imageView
+    }()
+    
+    lazy var syncTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Sync is not Available"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = UIColor.init(white: 55/255, alpha: 1)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = self.user == nil ? true : false
+        return label
     }()
         
     //login button dark circle
@@ -103,7 +148,8 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         textView.isSelectable = false
         return textView
     }()
-
+    
+    //MARK: Lifecycle
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -115,6 +161,10 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         view.addSubview(logoutButton)
         view.addSubview(loginButton)
         view.addSubview(contentTextView)
+        view.addSubview(deleteButtonImage)
+        view.addSubview(deleteUserAccountButton)
+        view.addSubview(cloudIcon)
+        view.addSubview(syncTitle)
         
         //setup constraints
         setupConstraints()
@@ -137,18 +187,8 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     @objc fileprivate func loginUser(_ sender: Any){
         //init view controller with callback function
         let accessUserViewController = AccessUserViewController { [weak self] in
-            
-            let user = ProjectListRepository.instance.getAllUsers().first
-            
-            guard let self = self, let userProfile = user  else {return}
-            
-            //update text
-            self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
-            //for some reasons, need to change it every time text was updated
-            self.contentTextView.textAlignment = .center
-            //hide button, so only logout button is visible.
-            self.loginButton.isHidden = true
-            
+            guard let self = self else {return}
+            self.reloadViewController()
             
             //MARK: SAILSJS
             //After login or register user, it tries to fetch users object, witch than should be saved for app
@@ -207,12 +247,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             
             //logout user
             FirebaseService.shared.handleLogout {
-                //reveal login button
-                self.loginButton.isHidden = false
-                //update text
-                self.contentTextView.attributedText = self.formatAttributedString(title: "Hello!", subtitle: "Access Your profile here.")
-                //center it
-                self.contentTextView.textAlignment = .center
+                self.reloadViewController()
             }
             
             
@@ -248,7 +283,90 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         
     }
     
+    @objc fileprivate func handleUserAccountDeletion(_ sender: Any){
+        
+        //create new alert window
+        let alertVC = UIAlertController(title: "Delete Profile?", message: "Are You sure You want to delete this user profile?", preferredStyle: .alert)
+        
+        //delete button
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
+            
+            FirebaseService.shared.deleteUserAccount { error in
+                
+                if let error = error {
+                    switch error {
+                    case .userNotAuthenticated:
+                        //user is not authenticated
+                        self.showServerResponseAlert(title: "Error", message: "User is not authenticated")
+                    case .genericError(error: let error):
+                        self.showServerResponseAlert(title: "Error", message: "\(error)")
+                    }
+                }else{
+                    //here is no error, so account was deleted successfully!
+                    //reload current view controller
+                    self.reloadViewController()
+                    //Send a message to user .................
+                    self.showServerResponseAlert(title: "Profile Deleted", message: "Your User Profile was Deleted Successfully!")
+                    
+                }
+            }
+            
+        })
+        
+        //cancel button
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alertVC.addAction(deleteAction)
+        alertVC.addAction(cancelAction)
+        
+        //shows an alert window
+        present(alertVC, animated: true, completion: nil)
+        
+    }
     
+    
+    private func showServerResponseAlert(title: String, message: String){
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
+    }
+    
+    private func reloadViewController(){
+        
+        let user = ProjectListRepository.instance.getAllUsers().first
+        
+        if let userProfile = user {
+            //reveal delete account button, because user is logged in
+            self.deleteUserAccountButton.isHidden = false
+            self.cloudIcon.isHidden = false
+            self.syncTitle.isHidden = false
+            self.deleteButtonImage.isHidden = self.deleteUserAccountButton.isHidden
+            //update text
+            self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
+            //for some reasons, need to change it every time text was updated
+            self.contentTextView.textAlignment = .center
+            //hide button, so only logout button is visible.
+            self.loginButton.isHidden = true
+            
+        }else{
+            //Here I assume that I try to reload page with no user
+            //clear previously saved user to view controller
+            self.user = nil
+            //hide delete account button, because user is not logged in
+            self.deleteUserAccountButton.isHidden = true
+            self.cloudIcon.isHidden = true
+            self.syncTitle.isHidden = true
+            self.deleteButtonImage.isHidden = self.deleteUserAccountButton.isHidden
+            //reveal login button
+            self.loginButton.isHidden = false
+            //update text
+            self.contentTextView.attributedText = self.formatAttributedString(title: "Hello!", subtitle: "Access Your profile here.")
+            //center it
+            self.contentTextView.textAlignment = .center
+        }
+    }
+    
+    //MARK: Constraints
     fileprivate func setupConstraints(){
         
         contentTextView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIScreen.main.bounds.height * 0.22).isActive = true
@@ -282,5 +400,25 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         transitionButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         transitionButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
         transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        
+        deleteButtonImage.centerYAnchor.constraint(equalTo: deleteUserAccountButton.centerYAnchor).isActive = true
+        deleteButtonImage.leadingAnchor.constraint(equalTo: deleteUserAccountButton.leadingAnchor).isActive = true
+        deleteButtonImage.widthAnchor.constraint(equalToConstant: 11).isActive = true
+        deleteButtonImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        
+        deleteUserAccountButton.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
+        deleteUserAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        deleteUserAccountButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        deleteUserAccountButton.widthAnchor.constraint(equalToConstant: 113).isActive = true
+        
+        cloudIcon.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 20).isActive = true
+        cloudIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        cloudIcon.widthAnchor.constraint(equalToConstant: 36).isActive = true
+        cloudIcon.heightAnchor.constraint(equalToConstant: 29).isActive = true
+        
+        syncTitle.topAnchor.constraint(equalTo: cloudIcon.bottomAnchor, constant: 0).isActive = true
+        syncTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        syncTitle.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        syncTitle.heightAnchor.constraint(equalToConstant: 35).isActive = true
     }
 }

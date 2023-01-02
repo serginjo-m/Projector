@@ -587,7 +587,7 @@ extension ProjectViewController {
 //
 //
 //            })
-//
+//            swipingController.modalPresentationStyle = .fullScreen
 //            navigationController?.present(swipingController, animated: true, completion: nil)
             
             
