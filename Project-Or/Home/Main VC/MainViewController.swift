@@ -491,15 +491,15 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         
         
-        statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 0).isActive = true
+        statisticsStackView.topAnchor.constraint(equalTo: statisticsTitle.bottomAnchor, constant: 11).isActive = true
         statisticsStackView.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         statisticsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: -15).isActive = true
         statisticsStackView.heightAnchor.constraint(equalToConstant: 192).isActive = true
         
-        statisticsTitle.topAnchor.constraint(equalTo: viewByCategoryCV.bottomAnchor, constant: 0).isActive = true
+        statisticsTitle.topAnchor.constraint(equalTo: viewByCategoryCV.bottomAnchor, constant: 11).isActive = true
         statisticsTitle.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
         statisticsTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        statisticsTitle.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        statisticsTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
         viewByCategoryCV.topAnchor.constraint(equalTo: viewByCategoryTitle.bottomAnchor, constant: 11).isActive = true
         viewByCategoryCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
