@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate{
     
     //MARK: Properties
     //TABLE VIEW CELL IDENTIFIER
@@ -42,10 +42,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     
     //container for all items on the page
-    var scrollViewContainer: UIScrollView = {
+    lazy var scrollViewContainer: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
         return scrollView
     }()
     var contentUIView = UIView()
@@ -157,6 +158,39 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
+    let reminderViewContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 11
+        view.layer.masksToBounds = true
+        view.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
+        view.isHidden = true
+        return view
+    }()
+    
+    let reminderLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.init(white: 242/255, alpha: 1)
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textAlignment = .center
+        label.text = "Reminder is not set"
+        return label
+    }()
+    
+    lazy var dismissReminderButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(dismissReminder), for: .touchUpInside)
+        let originalImage = UIImage(named: "close")
+        let tintedImage = originalImage?.withRenderingMode(.alwaysTemplate)
+        button.setImage(tintedImage, for: .normal)
+        button.tintColor = UIColor.init(white: 242/255, alpha: 1)
+        return button
+    }()
+
+    
+    
     //zooming stuff (because same items need different anchors for zoomingOUt and ZoomingIN)
     var stepCommentHeightConstraint: NSLayoutConstraint!
     var stepCommentTopAnchorHigherConstraint: NSLayoutConstraint!
@@ -178,6 +212,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,9 +225,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         scrollViewContainer.addSubview(contentUIView)
         
         //add items to a view
-        [dismissButton, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepComment, stepNameTitle, stepItemsTitle, stepTableView].forEach {
+        [dismissButton, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepComment, stepNameTitle, stepItemsTitle, stepTableView, reminderViewContainer].forEach {
             contentUIView.addSubview($0)
         }
+        reminderViewContainer.addSubview(reminderLabel)
+        reminderViewContainer.addSubview(dismissReminderButton)
         
         //constraints that are constant and don't need to be updated
         setupLayout()
@@ -291,6 +328,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //Add to Calendar Event
     @objc func addStepToCalendarEvent(button: UIButton) {
+        //hide reminder if it open
+        hideReminderView()
+        
         guard let step = projectStep else {return}
         //create new event view controller based on selected step
         let newEventViewController = NewEventViewController()
@@ -316,6 +356,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //DELETE STEP
     @objc func deleteStep( button: UIButton){
+        //hide reminder if it open
+        hideReminderView()
+        
         //create new alert window
         let alertVC = UIAlertController(title: "Delete Step?", message: "Are You sure want delete this step?", preferredStyle: .alert)
         //cancel button
@@ -372,11 +415,47 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func setReminder(button: UIButton){
-        print("Show events list?")
+        
+        
+        if let step = self.projectStep, let event = step.event, let notification = event.reminder  {
+            let formatter = DateFormatter()
+            
+            formatter.dateFormat = "dd MMM yyyy HH:mm"
+
+            let myString = formatter.string(from: notification.eventDate) // string purpose I add here
+            
+            if notification.eventDate < Date(){
+                
+                reminderLabel.text = "Expired: " + myString
+            }else{
+                reminderLabel.text = "Upcomming: " + myString
+            }
+            
+        }
+        
+        hideReminderView(button: true)
+    }
+    
+    @objc func dismissReminder(){
+        hideReminderView()
+    }
+    
+    private func hideReminderView(button: Bool? = nil){
+        
+        if let _ = button {
+            
+                reminderViewContainer.isHidden = !reminderViewContainer.isHidden
+            
+        }else{
+            reminderViewContainer.isHidden = true
+        }
     }
     
     //EDIT ACTION
     @objc func editButtonAction(_ sender: Any){
+        //hide reminder, if it opened
+        hideReminderView()
+        
         guard let step = projectStep else {return}
         
         let editStepViewController = NewStepViewController()
@@ -402,6 +481,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //configure expanding reminder active state
         if let event = step.event{
             if let reminder = event.reminder{
+                //reminder button configure from picker, not notification object
+                editStepViewController.expandingReminderView.timePicker.date = reminder.eventDate
+                editStepViewController.expandingReminderView.datePicker.date = reminder.eventDate
+                
                 editStepViewController.expandingReminderView.notification = reminder
             }
         }
@@ -433,6 +516,15 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.stepViewController = self
         return cell
     }
+    
+    
+    //MARK: Scroll View
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        //hide reminder if it's open
+        hideReminderView()
+    }
+    
+    
     //MARK: Constraints
     //perforn all positioning configurations
     private func setupLayout(){
@@ -493,6 +585,21 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         reminderStepButton.leftAnchor.constraint(equalTo: removeStepButton.rightAnchor, constant: 24).isActive = true
         reminderStepButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
         reminderStepButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        
+        reminderViewContainer.topAnchor.constraint(equalTo: reminderStepButton.bottomAnchor, constant: 10).isActive = true
+        reminderViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        reminderViewContainer.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        reminderViewContainer.widthAnchor.constraint(equalToConstant: 370).isActive = true
+        
+        reminderLabel.leadingAnchor.constraint(equalTo: reminderViewContainer.leadingAnchor).isActive = true
+        reminderLabel.trailingAnchor.constraint(equalTo: reminderViewContainer.trailingAnchor, constant: -30).isActive = true
+        reminderLabel.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        reminderLabel.centerYAnchor.constraint(equalTo: reminderViewContainer.centerYAnchor).isActive = true
+        
+        dismissReminderButton.widthAnchor.constraint(equalToConstant: 21).isActive = true
+        dismissReminderButton.heightAnchor.constraint(equalToConstant: 21).isActive = true
+        dismissReminderButton.centerYAnchor.constraint(equalTo: reminderViewContainer.centerYAnchor).isActive = true
+        dismissReminderButton.trailingAnchor.constraint(equalTo: reminderViewContainer.trailingAnchor, constant: -15).isActive = true
         
         stepImagesCV.topAnchor.constraint(equalTo: stepToEventButton.bottomAnchor, constant: 30).isActive = true
         stepImagesCV.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant:  16).isActive = true
@@ -653,6 +760,9 @@ extension StepViewController {
     
     func performZoomForCollectionImageView(startingImageView: UIView){
         
+        //hide reminder if it open
+        hideReminderView()
+        
         self.startingImageView = startingImageView
         self.startingImageView?.isHidden = true
         
@@ -714,6 +824,9 @@ extension StepViewController {
     }
     
     func performZoomForStartingEventView(stepItem: StepItem, startingView: UIView){
+        
+        //hide reminder if it open
+        hideReminderView()
         
         guard let stepTableViewCell = startingView as? StepTableViewCell else {return}
         

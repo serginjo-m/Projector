@@ -407,7 +407,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         deleteButtonImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
         
         deleteUserAccountButton.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
-        deleteUserAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        deleteUserAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
         deleteUserAccountButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         deleteUserAccountButton.widthAnchor.constraint(equalToConstant: 113).isActive = true
         
