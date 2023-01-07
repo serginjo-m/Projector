@@ -60,7 +60,7 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         let label = UILabel()
         label.text = "Save"
         label.font = UIFont.systemFont(ofSize: 11)
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -77,10 +77,12 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
     }()
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Item Title"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = UIColor.black
         label.translatesAutoresizingMaskIntoConstraints = false
+        let mutableString = NSMutableAttributedString(string: "Item Title *", attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.mainPink, range: NSRange(location: 11, length: 1))
+        label.attributedText = mutableString
         return label
     }()
     
@@ -145,6 +147,10 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         NotificationCenter.default.removeObserver(self)
     }
     
+    override func viewDidLayoutSubviews() {
+        updateSaveButtonState()
+    }
+    
     //MARK: Methods
     fileprivate func configureKeyboardObservers(){
         
@@ -179,6 +185,22 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         }
     }
     
+    private func updateSaveButtonState(){
+        guard let text = itemTitleTextField.text else {return}
+        saveButton.isEnabled = !text.isEmpty
+        saveButtonTitle.textColor = saveButton.isEnabled == true ? .darkGray : .lightGray
+    }
+    
+    //MARK: Text Field
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //Hide the keyboard
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    @objc func textFieldEditing(_ textfield: UITextField) {
+        updateSaveButtonState()
+    }
     
     private func setupLayout(){
         //calls closure for each item

@@ -22,7 +22,11 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
     //here I want to have an actual category selected by user
     var categoryName = ""
     
-    
+    var colors: [UIColor] = [UIColor.init(red: 90/255, green: 123/255, blue: 232/255, alpha: 1),
+                           UIColor.init(red: 32/255, green: 31/255, blue: 29/255, alpha: 1),
+                           UIColor.init(red: 235/255, green: 201/255, blue: 79/255, alpha: 1),
+                           UIColor.init(red: 236/255, green: 157/255, blue: 65/255, alpha: 1),
+                           UIColor.init(red: 227/255, green: 79/255, blue: 70/255, alpha: 1)]
     
     //MARK: Initialization
     override init(frame: CGRect) {

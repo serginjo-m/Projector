@@ -47,6 +47,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var stepSection: StepWaySection? {
         didSet{
             sectionButton.titleLabel?.textColor = .black
+            self.updateSaveButtonState()
         }
     }
     
@@ -153,6 +154,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         textField.translatesAutoresizingMaskIntoConstraints = false
         // Handle the text field's user input through delegate callback.
         textField.delegate = self
+        textField.addTarget(self, action:  #selector(textFieldEditing), for: .editingChanged)
         return textField
         
     }()
@@ -203,17 +205,21 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //Titles
     let nameTitle: UILabel = {
         let label = UILabel()
-        label.text = "Your Step Name"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
+        let mutableString = NSMutableAttributedString(string: "Your Step Name *", attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.mainPink, range: NSRange(location: 15, length: 1))
+        label.attributedText = mutableString
         return label
     }()
     
     let sectionTitle: UILabel = {
         let label = UILabel()
-        label.text = "Select Section"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
+        let mutableString = NSMutableAttributedString(string: "Select Section *", attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.mainPink, range: NSRange(location: 15, length: 1))
+        label.attributedText = mutableString
         return label
     }()
     
@@ -386,6 +392,15 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             contentViewHeightAnchor.constant = additionalHeight > 0 ? subviewsHeightSum + (additionalHeight * 2) : totalContentHeight
             
         }
+        
+        updateSaveButtonState()
+    }
+    
+    //fix memory leak issue
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //prevent multiple keyboard observers
+        NotificationCenter.default.removeObserver(self)
     }
     
     //MARK: Methods
@@ -449,13 +464,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 }
             }
         }
-    }
-    
-    //fix memory leak issue
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        //prevent multiple keyboard observers
-        NotificationCenter.default.removeObserver(self)
     }
     
     //animate add item menu
@@ -641,30 +649,23 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return event
     }
     
-    //MARK: NAME TEXT FIELD
+    private func updateSaveButtonState(){
+        guard let text = stepNameTextField.text, let _ = stepSection else {return}
+        saveButton.isEnabled = !text.isEmpty
+    }
+    
+    //MARK: Text Field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
         textField.resignFirstResponder()
         return true
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    @objc func textFieldEditing(_ textfield: UITextField) {
         updateSaveButtonState()
-        navigationItem.title = textField.text
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //Disable the Save button while editing.
-        saveButton.isEnabled = false
-    }
-    
-    //MARK: Private Methods
-    private func updateSaveButtonState(){
-        //Disable the Save button when text field is empty.
-        let text = stepNameTextField.text ?? ""
-        saveButton.isEnabled = !text.isEmpty
-    }
-    
+    //MARK: Picker
     func showImagePicker() {
 
         // Hide the keyboard.

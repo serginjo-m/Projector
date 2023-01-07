@@ -13,6 +13,7 @@ import Photos
 
 class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
+    //MARK: Properties
     //unique project id for updating
     var projectId: String?
     
@@ -23,7 +24,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
     
-    //MARK: Properties
     //define current date
     let createdDate: String = {
         let calendar = Calendar(identifier: .gregorian)
@@ -53,9 +53,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         label.textAlignment = .center
         return label
     }()
-    
-    //MARK: Properties
-    
+        
     lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
@@ -71,15 +69,18 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var projectNameTitle: UILabel = {
         let label = UILabel()
-        label.text = "Project Name"
         label.font = UIFont.boldSystemFont(ofSize: 20)
+        let mutableString = NSMutableAttributedString(string: "Project Name *", attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)])
+        mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.mainPink, range: NSRange(location: 13, length: 1))
+        label.attributedText = mutableString
         return label
     }()
     
-    let nameTextField: UITextField = {
+    lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        textField.addTarget(self, action:  #selector(textFieldEditing), for: .editingChanged)
         textField.placeholder = "Write Your Project Name Here"
         textField.font = UIFont.boldSystemFont(ofSize: 15)
         return textField
@@ -91,9 +92,9 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return view
     }()
     
-    lazy var imagePickerButton: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.init(displayP3Red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
+    lazy var imagePickerButton: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "newEventDefault"))
+        view.contentMode = .scaleAspectFill
         view.isUserInteractionEnabled = true
         view.layer.cornerRadius = 11
         view.clipsToBounds = true
@@ -104,9 +105,25 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     var imagePickerTitle: UILabel = {
         let label = UILabel()
-        label.text = "Add an Image to Your Project"
+        label.text = "Add Image"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
+        label.textColor = .white
+        label.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
+        label.layer.cornerRadius = 6
+        label.layer.masksToBounds = true
+        return label
+    }()
+    
+    var pickerTitleShadow: UILabel = {
+        let label = UILabel()
+        label.text = "Add Image"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textAlignment = .center
+        label.textColor = .black
+        label.layer.cornerRadius = 6
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.masksToBounds = true
         return label
     }()
     
@@ -124,7 +141,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
     }()
     
     
-    
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -138,6 +155,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         view.addSubview(lineUIView)
         
         view.addSubview(imagePickerButton)
+        imagePickerButton.addSubview(pickerTitleShadow)
         imagePickerButton.addSubview(imagePickerTitle)
         imagePickerButton.addSubview(projectImage)
         
@@ -150,9 +168,11 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         //set delegate to name text field
         nameTextField.delegate = self
+        
+        updateSaveButtonState()
     }
     
-   
+   //MARK: Methods
     //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -223,28 +243,23 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         return projectTemplate
     }
     
+    private func updateSaveButtonState(){
+        guard let text = nameTextField.text else {return}
+        saveButton.isEnabled = !text.isEmpty
+    }
+    
     //MARK: UITextFieldDelegate
+    @objc func textFieldEditing(_ textfield: UITextField) {
+        updateSaveButtonState()
+    }
+    
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
         textField.resignFirstResponder()
         return true
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        updateSaveButtonState()
-        navigationItem.title = textField.text
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //Disable the Save button while editing.
-        saveButton.isEnabled = false
-    }
-    
-    private func updateSaveButtonState(){
-        //Disable the Save button when text field is empty.
-        let text = nameTextField.text ?? ""
-        saveButton.isEnabled = !text.isEmpty
-    }
     
     //MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -336,7 +351,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         dismiss(animated: true, completion: nil)
     }
 
-    
+    //MARK: Constraints
     private func setupLayout(){
         
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
@@ -388,9 +403,14 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         imagePickerButton.heightAnchor.constraint(equalToConstant: 75).isActive = true
         
         imagePickerTitle.centerYAnchor.constraint(equalTo: imagePickerButton.centerYAnchor).isActive = true
-        imagePickerTitle.leftAnchor.constraint(equalTo: imagePickerButton.leftAnchor, constant: 0).isActive = true
-        imagePickerTitle.rightAnchor.constraint(equalTo: imagePickerButton.rightAnchor, constant: 0).isActive = true
-        imagePickerTitle.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        imagePickerTitle.leftAnchor.constraint(equalTo: imagePickerButton.leftAnchor, constant: 20).isActive = true
+        imagePickerTitle.rightAnchor.constraint(equalTo: imagePickerButton.rightAnchor, constant: -20).isActive = true
+        imagePickerTitle.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        pickerTitleShadow.centerYAnchor.constraint(equalTo: imagePickerTitle.centerYAnchor, constant: 2).isActive = true
+        pickerTitleShadow.widthAnchor.constraint(equalTo: imagePickerTitle.widthAnchor).isActive = true
+        pickerTitleShadow.heightAnchor.constraint(equalTo: imagePickerTitle.heightAnchor).isActive = true
+        pickerTitleShadow.leadingAnchor.constraint(equalTo: imagePickerTitle.leadingAnchor, constant: 2).isActive = true
         
         projectImage.topAnchor.constraint(equalTo: imagePickerButton.topAnchor, constant: 0).isActive = true
         projectImage.leftAnchor.constraint(equalTo: imagePickerButton.leftAnchor, constant: 0).isActive = true

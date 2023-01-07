@@ -230,6 +230,10 @@ class RecentActivitiesCollectionView: UIStackView,UICollectionViewDataSource, UI
         }
         return cell
     }
+    //scrolls back collection view after ...
+    func scrollBackCollectionView() {
+        recentActivitiesCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: true)
+    }
 }
 
 class RecentActivitiesCell: UICollectionViewCell {

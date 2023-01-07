@@ -84,7 +84,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(saveAction(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.isEnabled = false
         return button
     }()
     
@@ -98,14 +97,15 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return view
     }()
         
-    let nameTextField: UITextField = {
+    lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
         textField.clearButtonMode = UITextField.ViewMode.whileEditing
         textField.attributedPlaceholder = NSAttributedString(string: "Title",
                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(white: 96/255, alpha: 1)])
         textField.font = UIFont.boldSystemFont(ofSize: 22)
-        
+        textField.addTarget(self, action:  #selector(textFieldEditing), for: .editingChanged)
+        textField.delegate = self
         return textField
     }()
     
@@ -224,13 +224,21 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return textView
     }()
     
+    var requiredStarLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "*"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .mainPink
+        label.textAlignment = .left
+        return label
+    }()
+    
     var dismissButtonTopAnchor: NSLayoutConstraint!
     
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         view.backgroundColor = .white
         
         view.addSubview(dismissButton)
@@ -245,6 +253,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         view.addSubview(descriptionTextView)
         view.addSubview(pickerStackView)
         view.addSubview(titleStackView)
+        view.addSubview(requiredStarLabel)
         
         //constraints
         setupLayout()
@@ -254,8 +263,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         tapGestureReconizer.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGestureReconizer)
 
-        //set delegate to  text field
-        nameTextField.delegate = self
         configureKeyboardObservers()
         hideKeyboardWhenTappedAround()
         
@@ -276,6 +283,10 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         super.viewDidDisappear(animated)
         //prevent multiple keyboard observers
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        updateSaveButtonState()
     }
     
   
@@ -516,17 +527,17 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return true
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    @objc func textFieldEditing(_ textfield: UITextField) {
         updateSaveButtonState()
-        navigationItem.title = textField.text
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        //Disable the Save button while editing.
-        saveButton.isEnabled = false
-        //show date picker
+    private func updateSaveButtonState(){
+        guard let text = nameTextField.text else {return}
+        //let date = dateTextField.text ?? ""
+        saveButton.isEnabled = !text.isEmpty
+        requiredStarLabel.isHidden = saveButton.isEnabled
     }
-    
+        
     //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
         guard let startDate = eventStart, let endDate = eventEnd else {return}
@@ -594,24 +605,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return compiledDate
     }
     
-    private func updateSaveButtonState(){
-        //Disable the Save button when text field is empty.
-        let text = nameTextField.text ?? ""
-        //let date = dateTextField.text ?? ""
-        saveButton.isEnabled = !text.isEmpty//--------------------- && !date.isEmpty
-            
-        if startTimePicker.date > endTimePicker.date {
-            endTimeTitle.text = "Is less than start!"
-            endTimeTitle.textColor = .red
-
-            saveButton.isEnabled = false
-        }else{
-            endTimeTitle.text = " End"
-            endTimeTitle.textColor = UIColor.init(white: 96/255, alpha: 1)
-            saveButton.isEnabled = true
-        }
-    }
-    
     //MARK: Constraints
     private func setupLayout(){
         
@@ -648,6 +641,11 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         nameTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         nameTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        requiredStarLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        requiredStarLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: 48).isActive = true
+        requiredStarLabel.topAnchor.constraint(equalTo: nameTextField.topAnchor).isActive = true
+        requiredStarLabel.widthAnchor.constraint(equalToConstant: 10).isActive = true
         
         lineUIView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 4).isActive = true
         lineUIView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true

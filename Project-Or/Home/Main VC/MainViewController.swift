@@ -349,7 +349,12 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
-        })
+        }) { completion in
+            guard let min = self.minTopAnchor else {return}
+            if min.isActive == true{
+                self.recentActivitiesCV.scrollBackCollectionView()
+            }
+        }
         
     }
     
