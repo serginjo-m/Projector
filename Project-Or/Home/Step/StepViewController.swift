@@ -241,27 +241,22 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         performPageConfigurations()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-       updateContentHeight()
-    }
-    
     override func viewDidLayoutSubviews() {
         updateContentHeight()
     }
     
     //MARK: Methods
-    
     private func updateContentHeight(){
         
         guard let step = projectStep else {return}
+        let imagesCollectionViewHeight: CGFloat = stepImagesCV.isHidden == true ? 0 : 174
         
-        let totalContentHeight = stepNameTitle.frame.height + stepCommentHeightConstraint.constant + stepTableView.contentSize.height + 367
+        let totalContentHeight = stepNameTitle.frame.height + stepCommentHeightConstraint.constant + stepTableView.contentSize.height + 193 + imagesCollectionViewHeight
         //update content height first
         if stepItemsTitle.frame.origin.y > 0 {
-                    stepImagesCV.stepImagesCollectionView.reloadData()
-                    contentHeightAnchor.constant = totalContentHeight
+            stepImagesCV.stepImagesCollectionView.reloadData()
+            contentHeightAnchor.constant = totalContentHeight
         }
-        
         //secondary place title, that is the reference for other items constraints
         if step.comment.isEmpty == true {//if no comments
             if step.selectedPhotosArray.count == 0 {//if no photos

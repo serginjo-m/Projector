@@ -167,7 +167,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         picker.datePickerMode = UIDatePicker.Mode.time
         picker.contentHorizontalAlignment = .left
         picker.clipsToBounds = true
-        picker.date = formatTimeBasedDate(date: eventDate, anticipateHours: 1, anticipateMinutes: 0)
+        picker.date = formatTimeBasedDate(date: eventDate, anticipateHours: 0, anticipateMinutes: 30)
         picker.addTarget(self, action: #selector(endTimeChanged(_:)), for: .valueChanged)
         return picker
     }()
@@ -565,7 +565,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         
         //anticipate end time to 1 hour by default
-        self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 1, anticipateMinutes: 0)
+        self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 30)
         self.eventEnd = self.endTimePicker.date
         
         updateSaveButtonState()
@@ -582,27 +582,33 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         //---------> sender date is changed in picker
         //prevent error, when end time is less than start time
-        if sender.date < startTimePicker.date {
-            sender.date = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 1, anticipateMinutes: 0)
-        }
         
+        let minDuration = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 0, anticipateMinutes: 30)
+        
+        if sender.date < minDuration {
+            sender.date = minDuration
+        }
         //define exact time, when event should end
         self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
-        
         
         updateSaveButtonState()
     }
     
     //anticipate time 
     fileprivate func formatTimeBasedDate(date: Date, anticipateHours: Int, anticipateMinutes: Int) -> Date{
-        //extract hours and minutes from date parameter
-        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-        let hour = components.hour! + anticipateHours
-        let minute = components.minute! + anticipateMinutes
+    
+        let calendar = NSCalendar.current
         
-        //using current date and picker time for date formatting
-        guard let compiledDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: eventDate) else { return date}
-        return compiledDate
+        var anticipatedDate = date
+        
+        if anticipateMinutes > 0 {
+            anticipatedDate = calendar.date(byAdding: .minute, value: anticipateMinutes, to: date) ?? Date()
+        }
+        if anticipateHours > 0 {
+            anticipatedDate = calendar.date(byAdding: .hour, value: anticipateHours, to: date) ?? Date()
+        }
+        
+        return anticipatedDate
     }
     
     //MARK: Constraints

@@ -142,7 +142,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
-        button.setImage(UIImage(named: "crossIcon"), for: .normal)
+        button.setImage(UIImage(named: "whiteApply"), for: .normal)
         button.addTarget(self, action: #selector(applyModificationForSection(_:)), for: .touchUpInside)
         button.layer.cornerRadius = 5
         button.isHidden = true
@@ -152,8 +152,8 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     lazy var cancelRenameButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .lightGray
-        button.setImage(UIImage(named: "crossIcon"), for: .normal)
+        button.backgroundColor = .systemRed
+        button.setImage(UIImage(named: "whiteClose"), for: .normal)
         button.addTarget(self, action: #selector(backToOptionsMenu), for: .touchUpInside)
         button.layer.cornerRadius = 5
         button.isHidden = true
@@ -458,6 +458,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc func hideOptionsView(_ sender: UIButton) {
+        optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
     }
     
