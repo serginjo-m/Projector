@@ -64,12 +64,32 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     lazy var deleteUserAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Delete Profile", for: .normal)
-        button.contentHorizontalAlignment = .right
         button.addTarget(self, action: #selector(handleUserAccountDeletion(_:)), for: .touchUpInside)
-        button.setTitleColor(UIColor.init(white: 0, alpha: 0.7), for: .normal)
+//        button.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
         button.isHidden = self.user == nil ? true : false
         return button
+    }()
+    
+    lazy var circleView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderColor = UIColor.init(white: 0, alpha: 0.7).cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 17
+        view.isHidden = self.user == nil ? true : false
+        return view
+    }()
+    
+    lazy var deleteButtonLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Delete Profile"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.init(white: 55/255, alpha: 1)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.isHidden = self.user == nil ? true : false
+        return label
     }()
     
     lazy var deleteButtonImage: UIImageView = {
@@ -161,7 +181,9 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         view.addSubview(logoutButton)
         view.addSubview(loginButton)
         view.addSubview(contentTextView)
+        view.addSubview(circleView)
         view.addSubview(deleteButtonImage)
+        view.addSubview(deleteButtonLabel)
         view.addSubview(deleteUserAccountButton)
         view.addSubview(cloudIcon)
         view.addSubview(syncTitle)
@@ -341,6 +363,8 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             self.cloudIcon.isHidden = false
             self.syncTitle.isHidden = false
             self.deleteButtonImage.isHidden = self.deleteUserAccountButton.isHidden
+            self.circleView.isHidden = self.deleteButtonImage.isHidden
+            self.deleteButtonLabel.isHidden = self.deleteButtonImage.isHidden
             //update text
             self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
             //for some reasons, need to change it every time text was updated
@@ -401,24 +425,36 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         transitionButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
         transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
         
-        deleteButtonImage.centerYAnchor.constraint(equalTo: deleteUserAccountButton.centerYAnchor).isActive = true
-        deleteButtonImage.leadingAnchor.constraint(equalTo: deleteUserAccountButton.leadingAnchor).isActive = true
-        deleteButtonImage.widthAnchor.constraint(equalToConstant: 11).isActive = true
-        deleteButtonImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        
         
         deleteUserAccountButton.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
-        deleteUserAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
-        deleteUserAccountButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        deleteUserAccountButton.widthAnchor.constraint(equalToConstant: 113).isActive = true
+        deleteUserAccountButton.leadingAnchor.constraint(equalTo: circleView.leadingAnchor, constant: 0).isActive = true
+        deleteUserAccountButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        deleteUserAccountButton.widthAnchor.constraint(equalToConstant: 96).isActive = true
         
-        cloudIcon.topAnchor.constraint(equalTo: contentTextView.bottomAnchor, constant: 20).isActive = true
-        cloudIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        cloudIcon.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
+        cloudIcon.leadingAnchor.constraint(equalTo: transitionButton.trailingAnchor, constant: 70).isActive = true
         cloudIcon.widthAnchor.constraint(equalToConstant: 36).isActive = true
         cloudIcon.heightAnchor.constraint(equalToConstant: 29).isActive = true
         
-        syncTitle.topAnchor.constraint(equalTo: cloudIcon.bottomAnchor, constant: 0).isActive = true
-        syncTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        syncTitle.leadingAnchor.constraint(equalTo: cloudIcon.trailingAnchor, constant: 0).isActive = true
+        syncTitle.centerYAnchor.constraint(equalTo: cloudIcon.centerYAnchor).isActive = true
         syncTitle.widthAnchor.constraint(equalToConstant: 70).isActive = true
         syncTitle.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        circleView.leadingAnchor.constraint(equalTo: syncTitle.trailingAnchor, constant: 40).isActive = true
+        circleView.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor).isActive = true
+        circleView.widthAnchor.constraint(equalToConstant: 33).isActive = true
+        circleView.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        
+        deleteButtonImage.centerYAnchor.constraint(equalTo: circleView.centerYAnchor).isActive = true
+        deleteButtonImage.centerXAnchor.constraint(equalTo: circleView.centerXAnchor).isActive = true
+        deleteButtonImage.widthAnchor.constraint(equalToConstant: 11).isActive = true
+        deleteButtonImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        
+        deleteButtonLabel.leadingAnchor.constraint(equalTo: circleView.trailingAnchor, constant: 8).isActive = true
+        deleteButtonLabel.heightAnchor.constraint(equalToConstant: 33).isActive = true
+        deleteButtonLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        deleteButtonLabel.centerYAnchor.constraint(equalTo: circleView.centerYAnchor).isActive = true
     }
 }

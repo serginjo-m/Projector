@@ -101,6 +101,11 @@ class NewStepImages: UIStackView, UICollectionViewDataSource, UICollectionViewDe
     //MARK: Collection View
     //size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        
+//        let width = ((frame.width - 30) - 60) / 4
+//        return CGSize(width: width, height: 59)
+        
         //here we don't need to use view.frame.height because our CategoryCell have it
         return CGSize(width: 59, height: 59)
     }
@@ -184,7 +189,8 @@ class ImageCollectionViewCell: UICollectionViewCell, UIImagePickerControllerDele
         let button = UIButton()
         button.backgroundColor = UIColor.init(displayP3Red: 63/255, green: 63/255, blue: 63/255, alpha: 1)
         button.layer.cornerRadius = 5
-        button.setBackgroundImage(UIImage(named: "cross"), for: .normal)
+        button.setImage(UIImage(named: "whiteClose"), for: .normal)
+        button.contentMode = .scaleAspectFill
         button.clipsToBounds = true
         button.isHidden = true
         return button
