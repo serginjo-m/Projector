@@ -222,10 +222,10 @@ class StatisticsStackView: UIStackView {
         layer.addSublayer(thirdProgressShapeLayer)
         layer.addSublayer(fourthProgressShapeLayer)
 
+        addSubview(lineSeparator)
         addSubview(percentageLabel)
         addSubview(percentageUnitsLabel)
         addSubview(projectsCountLabel)
-        addSubview(lineSeparator)
         addSubview(descriptionLabel)
         addSubview(progressCategoriesStack)
         
@@ -250,12 +250,12 @@ class StatisticsStackView: UIStackView {
         percentageUnitsLabel.widthAnchor.constraint(equalToConstant: 36).isActive = true
         
         projectsCountLabel.topAnchor.constraint(equalTo: topAnchor, constant: 21).isActive = true
-        projectsCountLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 230).isActive = true
+        projectsCountLabel.leftAnchor.constraint(equalTo: progressCategoriesStack.leftAnchor).isActive = true
         projectsCountLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         projectsCountLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
         lineSeparator.topAnchor.constraint(equalTo: projectsCountLabel.bottomAnchor, constant: 16).isActive = true
-        lineSeparator.leftAnchor.constraint(equalTo: projectsCountLabel.leftAnchor, constant: -30).isActive = true
+        lineSeparator.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
         lineSeparator.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         lineSeparator.heightAnchor.constraint(equalToConstant: 2).isActive = true
         
@@ -264,11 +264,10 @@ class StatisticsStackView: UIStackView {
         descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
         descriptionLabel.heightAnchor.constraint(equalToConstant: 76).isActive = true
         
-        progressCategoriesStack.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        progressCategoriesStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        progressCategoriesStack.widthAnchor.constraint(equalToConstant: 135).isActive = true
         progressCategoriesStack.heightAnchor.constraint(equalToConstant: 120).isActive = true
         progressCategoriesStack.topAnchor.constraint(equalTo: lineSeparator.bottomAnchor, constant: 5).isActive = true
-        progressCategoriesStack.leadingAnchor.constraint(equalTo: lineSeparator.leadingAnchor, constant: 0).isActive = true
-        
     }
     
     //this is very interesting approach for:

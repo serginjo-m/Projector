@@ -110,7 +110,12 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
         categoryName = categories[indexPath.row]
         
         //that is how I can call a selected cell !!!
-        collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.lightGray
+        collectionView.cellForItem(at: indexPath)?.backgroundColor = self.colors[indexPath.item]
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? CategoriesCell {
+            cell.cellLabel.textColor = .white
+        }
+        
     }
     //makes cells deselectable
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
@@ -119,6 +124,10 @@ class CategoryCollectionView: UIStackView,UICollectionViewDataSource, UICollecti
     //define color of deselected cell
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         collectionView.cellForItem(at: indexPath)?.backgroundColor = UIColor.init(displayP3Red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? CategoriesCell {
+            cell.cellLabel.textColor = UIColor.init(displayP3Red: 55/255, green: 55/255, blue: 55/255, alpha: 1)
+        }
     }
 }
 

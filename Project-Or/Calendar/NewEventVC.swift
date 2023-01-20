@@ -337,15 +337,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         let event: Event = self.defineEventTemplate()
         
         if reminderSwitch.isOn == true {
-            
             //check if current event has previously created notification/reminder
-            //If so, remove previous one
-            if let currentEvent = self.event, let currentReminder = currentEvent.reminder {
-                if #available(iOS 13.0, *) {
-                    NotificationManager.shared.removeScheduledNotification(taskId: currentReminder.id)
-                }
-                ProjectListRepository.instance.deleteNotificationNote(note: currentReminder)
-            }
+            checkForPrevNotification()
             
             //Notification displays in Notification Tab
             event.reminder = createNotification(event: event)
@@ -364,14 +357,8 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             }
             
         }else{ //reminder switch.isOn == false
-
             //check if current event has previously created notification/reminder
-            if let currentEvent = self.event, let currentReminder = currentEvent.reminder {
-                if #available(iOS 13.0, *) {
-                    NotificationManager.shared.removeScheduledNotification(taskId: currentReminder.id)
-                }
-                ProjectListRepository.instance.deleteNotificationNote(note: currentReminder)
-            }
+            checkForPrevNotification()
         }
         
         //unwrap optional date for activity object
@@ -399,6 +386,17 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         }
         
         dismiss(animated: true, completion: nil)
+    }
+    
+    fileprivate func checkForPrevNotification(){
+        
+        guard let currentEvent = self.event, let currentReminder = currentEvent.reminder else {return}
+        print(currentReminder.id)
+        //check if current event has previously created notification/reminder
+        if #available(iOS 13.0, *) {
+            NotificationManager.shared.removeScheduledNotification(taskId: currentReminder.id)
+        }
+        ProjectListRepository.instance.deleteNotificationNote(note: currentReminder)
     }
     
     fileprivate func createNotification(event: Event) -> Notification {
@@ -445,7 +443,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         eventTemplate.projectId = self.projectId
         eventTemplate.stepId = self.stepId
         
-        
+        //define step event
         if let stepIdentifier = self.stepId{
             //if NewEventViewController has a step identifier, it means that event type is a project step
             eventTemplate.category = "projectStep"
@@ -453,17 +451,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
                 if step.selectedPhotosArray.count > 0{
                     eventTemplate.picture = step.selectedPhotosArray[0]
-                }
-                //remove existing Event, Notification, Push Notification
-                if let existingEvent = step.event{
-                    
-                    if let notification = existingEvent.reminder{
-                        if #available(iOS 13.0, *) {
-                            NotificationManager.shared.removeScheduledNotification(taskId: notification.id)
-                        }
-                        ProjectListRepository.instance.deleteNotificationNote(note: notification)
-                    }
-                    ProjectListRepository.instance.deleteEvent(event: existingEvent)
                 }
             }
         }
@@ -744,3 +731,4 @@ extension NewEventViewController{
         }
     }
 }
+
