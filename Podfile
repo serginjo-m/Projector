@@ -6,5 +6,5 @@ target 'Project-Or' do
 use_frameworks!
 
 # Pods for Projector
-pod "RealmSwift", "10.24.0"
+pod "RealmSwift", "10.34.1"
 end
