@@ -5,11 +5,11 @@
       "scale" : "1x"
     },
     {
+      "filename" : "launchScreenIcon.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "lounchScreenIcon.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
