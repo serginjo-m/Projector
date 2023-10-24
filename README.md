@@ -13,5 +13,5 @@
 * Core Animation
 * Core Graphics
 # Author Info
-* Website: (LinkedIn: http://www.linkedin.com/in/sergiymelnyk1)[http://www.linkedin.com/in/sergiymelnyk1]
-* UI/UX Design: [https://www.behance.net/tamaradonz8bef](https://www.behance.net/tamaradonz8bef)
+* Website: LinkedIn - http://www.linkedin.com/in/sergiymelnyk1
+* UI/UX Design: Behance - https://www.behance.net/tamaradonz8bef)
