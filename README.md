@@ -1,4 +1,5 @@
 # Project-Or
 ### Screen Shots
-![githubLarge](https://github.com/serginjo-m/Projector/assets/6564560/83628207-3e94-4095-a6ad-bac5d76506cc)
+![githubScreen](https://github.com/serginjo-m/Projector/assets/6564560/fa57910b-e876-4e97-9ae2-e1a23373682a)
+
 
