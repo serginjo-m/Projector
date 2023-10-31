@@ -8,13 +8,10 @@
 
 import UIKit
 
-//retreaveImageForProject && retreaveImageUsingURLString do the same thing
-//but retreaveImageUsingURLString has cache that is better
 class StringToImage {
     
     static let shared = StringToImage()
-    
-    //return UIImage by URL
+
     func retreaveImageForProject(myUrl: String) -> UIImage?{
         var projectImage: UIImage = UIImage(named: "scheduledStepEvent")!
         let url = URL(string: myUrl)

@@ -95,7 +95,6 @@ class EventBubbleView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = event.title
         label.numberOfLines = 0
-//        label.backgroundColor = .systemGreen
         label.isHidden = event.picture != nil ? false : true
         return label
     }()
@@ -134,15 +133,13 @@ class EventBubbleView: UIView {
         self.clipsToBounds = true
         
         switch style {
-            
-        //it so small, that can't realy visualize anything, apart from bubble view
+        //it so small that I can't realy display nothing, apart from bubble view
         case .small:
-            
             taskLabel.isHidden = true
             descriptionLabel.isHidden = true
             shadowLabel.isHidden = true
             timeLabel.isHidden = true
-            //because if it visible it has 12px padding from top by default
+            //because  it is visible, it has 12px padding from top by default
             taskLabelTopAnchorConstant = 0
         //can show only title and bubble view
         case .short://events.count > 2 == .thin, viewHeight <= 60 == .short
@@ -153,7 +150,7 @@ class EventBubbleView: UIView {
             taskLabelHeightConstant = titleHeight <= rect.height - 12 ? titleHeight : rect.height - 24
             descriptionLabel.isHidden = true
             timeLabel.isHidden = true
-        //can include anything. The only one thing, fonts must be into small size
+            //Can include anything. The only issue is that fonts must be of a small size.
         case .thin://events.count > 2 == .thin, viewHeight <= 60 == .short
             
             taskLabel.font = UIFont.boldSystemFont(ofSize: 14)
@@ -163,17 +160,15 @@ class EventBubbleView: UIView {
             taskLabelHeightConstant = calculateRectForLabel(size: 14, text: taskLabel.text!).height + CGFloat(10)
             timeLabelHeightConstant = calculateRectForLabel(size: 14, text: timeLabel.text!).height + CGFloat(10)
             descriptionLabelHeightConstant = calculateRectForLabel(size: 14, text: descriptionLabel.text!).height
-        //default style. Here I can show everything
+        //default style. Here I can display all elements
         case .fullSize://by default it is .fullSize
-            
             taskLabel.font = UIFont.boldSystemFont(ofSize: 16)
             shadowLabel.font = UIFont.boldSystemFont(ofSize: 16)
             descriptionLabel.font = UIFont.systemFont(ofSize: 16)
             taskLabelHeightConstant = calculateRectForLabel(size: 16, text: taskLabel.text!).height
             descriptionLabelHeightConstant = calculateRectForLabel(size: 16, text: descriptionLabel.text!).height
-        //this style can visualize anything. But I should be accurate with view height
-        case .halfWidth://by default it is .fullSize
-            
+        //this style can display anything.
+        case .halfWidth:
             taskLabel.font = UIFont.boldSystemFont(ofSize: 16)
             shadowLabel.font = UIFont.boldSystemFont(ofSize: 16)
             descriptionLabel.font = UIFont.systemFont(ofSize: 16)

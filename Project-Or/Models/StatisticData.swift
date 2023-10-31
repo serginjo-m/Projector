@@ -11,13 +11,11 @@ import RealmSwift
 
 class StatisticData: Object {
     
-    //MARK: Properties
     @objc dynamic var positiveNegative = 0
     @objc dynamic var number = 0
     @objc dynamic var comment = ""
     @objc dynamic var category = ""
     @objc dynamic var date = Date()
-    //id
     @objc dynamic var id = UUID().uuidString
     
     override static func primaryKey() -> String {

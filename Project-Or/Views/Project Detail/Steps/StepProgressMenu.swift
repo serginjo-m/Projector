@@ -10,13 +10,11 @@ import UIKit
 
 class StepProgressMenu: UIView {
     
-    //perform configurations & updates in parent view controller
+    
     weak var delegate: EditViewControllerDelegate?
     var projectStep: ProjectStep?{
         didSet{
-//            if let step = projectStep{
-//                print("Progress menu step object is: \(step.name)")
-//            }
+            //
         }
     }
     //menu white container
@@ -100,10 +98,10 @@ class StepProgressMenu: UIView {
         }
         
        self.isHidden = true
-        //because changing has been made
+        
         ProjectListRepository.instance.updateStepProgressStatus(step: step, status: status)
         UserActivitySingleton.shared.createUserActivity(description: "\(step) status was changed to \(status)")
-        //call DetailViewController for update database and reload views
+        
         delegate.reloadViews()
     }
     

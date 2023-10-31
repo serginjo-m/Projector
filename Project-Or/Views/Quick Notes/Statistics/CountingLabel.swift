@@ -8,10 +8,8 @@
 
 import UIKit
 
-//Label that perform counting animation
 class CountingLabel: UILabel {
-    
-    //animation logic
+
     var labelDisplayLink: AnimationDisplayLink?
     
     init(startValue: Double, actualValue:Double, animationDuration: Double, units: String? = "") {
@@ -20,7 +18,6 @@ class CountingLabel: UILabel {
         self.textColor = UIColor.init(red: 126/255, green: 86/255, blue: 177/255, alpha: 1)
         self.font = UIFont.boldSystemFont(ofSize: 29)
         self.textAlignment = .center
-        //passing all data required for animation
         self.labelDisplayLink = AnimationDisplayLink(label: self, shape: nil, startValue: startValue, actualValue: actualValue, animationDuration: animationDuration, units: units)
     }
     required init?(coder aDecoder: NSCoder) {

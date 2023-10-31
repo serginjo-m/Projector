@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//MARK: OK
 class GenericController<T: GenericCell<U>, U, H: UICollectionReusableView>: UICollectionViewController {
     
     var items = [U]()

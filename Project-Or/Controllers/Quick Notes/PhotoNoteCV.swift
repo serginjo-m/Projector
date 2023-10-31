@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNoteCell, CameraNote> {
     
     //MARK: Properties
@@ -17,7 +17,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
             return ProjectListRepository.instance.getCameraNotes()
         }
         set{
-            //need this option for updating after delete
+            //update after delete...
         }
     }
     
@@ -40,7 +40,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
     }
     
     //MARK: Methods
-    //reload everything
     override func updateDatabase() {
         //update data base
         cameraNotes = ProjectListRepository.instance.getCameraNotes()
@@ -50,7 +49,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         itemsCollectionView.reloadData()
     }
     
-    //convert Realm Result<...> to an array of object.
+    //convert Realm Result<...> to an array of objects
     func setupDatabase() {
         //clear old data from array
         items.removeAll()
@@ -60,7 +59,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
     override func convertNoteToStep(index: Int, project: ProjectList) {
         
         let cameraNote = cameraNotes[index]
-        
         let newStepViewController = NewStepViewController()
         newStepViewController.newStepImages.photoArray.append(cameraNote.picture)
         newStepViewController.projectId = project.id
@@ -70,7 +68,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
         present(newStepViewController, animated: true)
-        
     }
     
     @objc override func convertToEvent(_ sender: UIButton){
@@ -85,7 +82,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         newEventViewController.pictureUrl = quickNote.picture
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
-        //show new event view controller
         present(newEventViewController, animated: true, completion: nil)
        
     }
@@ -110,8 +106,6 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
         
         alertVC.addAction(deleteAction)
         alertVC.addAction(cancelAction)
-        
-        //shows an alert window
         present(alertVC, animated: true, completion: nil)
     }
    
@@ -146,7 +140,7 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            //math? of proportion with one side
+            //proportion with one side
             //h2 / w2 = h1 / w1
             //h2 = h1 / w1 * w2
             
@@ -182,89 +176,5 @@ class PhotoNotesCollectionViewController: BaseCollectionViewController<PhotoNote
                 self.startingImageView?.isHidden = false
             }
         }
-    }
-}
-//MARK: Extension
-// Pinterest Layout Configurations
-extension PhotoNotesCollectionViewController: PinterestLayoutDelegate {
-    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return CGFloat(items[indexPath.item].height)
-    }
-    func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return CGFloat(items[indexPath.item].width)
-    }
-}
-
-//MARK: Cell
-//Photo note cell
-class PhotoNoteCell: BaseCollectionViewCell<CameraNote> {
-    
-    //It'll be like a template for our cell
-    override var item: CameraNote! {
-        //didSet uses for logic purposes!
-        didSet{
-            titleLabel.text = item.title != "" ? item.title : ""
-            //shared func for all items that need to convert a url to an image
-            image.retreaveImageUsingURLString(myUrl: item.picture)
-        }
-    }
-    
-    lazy var image: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "scheduledStepEvent")
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
-        image.isUserInteractionEnabled = true
-        image.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.numberOfLines = 0
-        label.textColor = UIColor.white
-        return label
-    }()
- 
-    //call to zoom in logic
-    @objc func handleZoomTap(sender: UITapGestureRecognizer){
-        guard let delegate = self.delegate else {return}
-        if let imageView = sender.view as? UIImageView{
-            //parent func that run all logic
-            delegate.performZoomInForStartingImageView(startingImageView: imageView)
-        }
-    }
-    
-    //initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupViews(){
-        layer.masksToBounds = true
-        layer.cornerRadius = 5
-        
-        addSubview(image)
-        addSubview(titleLabel)
-        
-        image.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        image.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        image.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        image.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        image.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 9).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -9).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
     }
 }

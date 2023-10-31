@@ -10,27 +10,21 @@ import UIKit
 
 class ExpandingReminder: UIView {
     
-    //MARK: Variables
-    //---> call from init or apply button
-    //notification model
+    //MARK: Properties
     var notification: Notification? {
-        didSet{//can be set from database during page init or from reminder
-            //convert reminder to active state
-            //---> calls from init or when tap apply button
+        didSet{
             setReminderToActiveState()
-            //unwrap optional value
+            
             if let notification = self.notification {
-                //because name can only be defined by previously saved in database reminder
+            
                 if notification.name.isEmpty == false{
-                    //hold inside var, because I know that object saved to database & should be removed if user
+                
                     self.notificationId = notification.id
                 }
             }
         }
     }
     
-    //saved to realm Notification object id, so it can be removed when user do so
-    //----> creates by didSet notification variable
     var notificationId: String?
     
     let reminderTitle: UILabel = {
@@ -128,10 +122,8 @@ class ExpandingReminder: UIView {
     }()
     
     //MARK: Initialization
-    //expand
-    //handle animate based on applyButton.isSelected
     let didTapExpandCompletionHandler: (() -> Void)
-    //apply reminder
+    
     let didTapApplyCompletionHandler: (() -> Void)
     
     let presentAlertView: (() -> Void)
@@ -147,73 +139,54 @@ class ExpandingReminder: UIView {
     }
     
     //MARK: Methods
-    //-----> call from expand button
     @objc func didTapExpandButton() {
         
         if #available(iOS 13.0, *) {
             if NotificationManager.shared.settings?.authorizationStatus == .authorized{
-                //print("authorized")
             }else if NotificationManager.shared.settings?.authorizationStatus == .notDetermined{
-                //print(".notDetermined")
             }else{
-                //print("probably denied")
-                //present alert message, that invites user for enable notifications
                 presentAlertView()
                 return
-                
             }
         } else {
-            // Fallback on earlier versions
+            //
         }
         
-        //hide or reveal all reminder form
-        //----> calls when apply or expand
         hideRevealContent(active: applyReminderButton.isSelected)
-        
-        //animate from parent (constraints)
         didTapExpandCompletionHandler()
     }
     
-    //apply button function
     @objc func didTapApplyButton(button: UIButton) {
-        
-        //hide or reveal all reminder form
-        //----> calls when apply or expand
+    
         hideRevealContent(active: applyReminderButton.isSelected)
         
-        //if apply create an instance of Notification object
         self.notification = Notification()
         
-        //call parent function
         didTapApplyCompletionHandler()
     }
     
-    //reminder final string
-    //-----> call from notification didSet --> setReminderToActiveState --> to here
+    
     fileprivate func setReminderString() {
         
         guard let notification = self.notification else {return}
         
-//            set Notification event date
-//            if user specified reminder time
             if timePicker.isSelected == true{
-                //notify that time is applied
+
                 notification.eventTime = true
-                //take date from date picker
+
                 let date = datePicker.date
-                //time
+
                 let components = Calendar.current.dateComponents([.hour, .minute], from: timePicker.date)
                 if let hour = components.hour, let minute = components.minute{
-                    //final event date notification formated from date picker(date) & time picker (time only)
+                
                     notification.eventDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: date)!
                 }
-            }else if datePicker.isSelected == true{//if date without time point
+            }else if datePicker.isSelected == true{
                 notification.eventDate = datePicker.date
             }
-            
-            //final string
+        
             var string = "Reminder: "
-            //check which date should be taken
+            
             let date = timePicker.isSelected ? timePicker.date : datePicker.date
         
             let components = Calendar.current.dateComponents([.year, .month, .day, .weekday, .hour, .minute], from: date)
@@ -228,9 +201,9 @@ class ExpandingReminder: UIView {
                     }
             }
         
-            //first title color
+        
             reminderTitle.textColor = UIColor.init(red: 95/255, green: 178/255, blue: 130/255, alpha: 1)
-            //second part with diff color
+        
             reminderTitle.attributedText = prepareMutableString(
                 string: string,
                 fontSize: 15,
@@ -240,53 +213,39 @@ class ExpandingReminder: UIView {
             
     }
     
-    //convert reminder to active state
-    //---> call from notification didSet
     func setReminderToActiveState(){
-        
-        //IMPORTANT: indicates that user confirmed reminder !!!!
+    
         applyReminderButton.isSelected = true
-        //unwrap optional value
+
         if let notification = self.notification {
-            //green color
+
             backgroundColor = UIColor.init(red: 211/255, green: 250/255, blue: 227/255, alpha: 1)
-            //convert Notification event date to reminder title string
+
             setReminderString()
             
-            //edit mode requires plus icon transformation when view controller is init
             if notification.stepId.isEmpty == false{
                 reminderExpandIcon.transform = reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
             }
         }
     }
     
-    
-    //hide or reveal content
-    //------> call from expand button or apply button
     fileprivate func hideRevealContent(active: Bool){
-        
-        //else block executes when reminder applied & user try to remove it
+    
         guard  active == false else {
-            
-            //remove previously created notification object,
+        
             self.notification = nil
             
-            //remove notification object from data base, if it exist
             if let id = self.notificationId{
-                //get object by id
+
                 if let reminderObject = ProjectListRepository.instance.getNotification(id: id) {
-                    //remove push notification before remove object
+
                     if #available(iOS 13.0, *) {
                         NotificationManager.shared.removeScheduledNotification(taskId: reminderObject.id)
                     }
-                    //remove object
+
                     ProjectListRepository.instance.deleteNotificationNote(note: reminderObject)
-                    
                 }
             }
-            
-            //expect call here only from expand button & while apply == true
-            //so before unblock set all views to default value
             self.reminderTitle.text = "Set a Reminder?"
             self.reminderTitle.textColor = UIColor.init(white: 42/255, alpha: 1)
             self.datePicker.date = Date()
@@ -294,45 +253,34 @@ class ExpandingReminder: UIView {
             self.datePicker.isSelected = false
             self.timePicker.isSelected = false
             self.applyReminderButton.isEnabled = false
-            //reminder background to gray color
+
             backgroundColor = UIColor.init(white: 239/255, alpha: 1)
-            
-            //rotate icon 45 degrees
+
             reminderExpandIcon.transform = reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
-            
             return
         }
         
-        //hide views for compact view mode & reveal for full mode
         [self.largeReminderTitle, self.dateLabel, self.datePicker, self.timeLabel, self.timePicker, self.applyReminderButton].forEach {
             $0.isHidden = !$0.isHidden
         }
     }
     
-    //configure attributed string
     fileprivate func prepareMutableString(string: String, fontSize: CGFloat, color: UIColor, location: Int, numberValue: Int) -> NSMutableAttributedString{
         
         let mutableString = NSMutableAttributedString(string: string, attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: fontSize)])
-        
         
         mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: location, length: numberValue))
         
         return mutableString
     }
     
-    
-    
-    //date picker action
     @objc func dateChanged(_ sender: UIDatePicker) {
         datePicker.isSelected = true
-        //unblock apply button
         applyReminderButton.isEnabled = true
     }
     
-    //start time picker action
     @objc func timeChanged(_ sender: UIDatePicker) {
         timePicker.isSelected = true
-        //unblock apply button
         applyReminderButton.isEnabled = true
     }
     

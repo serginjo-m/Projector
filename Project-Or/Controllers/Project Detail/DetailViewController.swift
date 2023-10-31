@@ -9,13 +9,10 @@
 import UIKit
 import RealmSwift
 import Photos
-
+//MARK: OK
 class DetailViewController: UIViewController, UITextFieldDelegate, EditViewControllerDelegate{
-    
-    //most for reload data
+    //reload data
     weak var delegate: DetailViewControllerDelegate?
-    
-    //MARK: scroll view container
     //container for all items on the page
     var scrollViewContainer: UIScrollView = {
         let scrollView = UIScrollView()
@@ -25,18 +22,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     }()
     var contentUIView: UIView = {
         let view = UIView()
-//        view.backgroundColor = .yellow
         return view
     }()
     
     var contentHeightAnchor: NSLayoutConstraint!
-    
-    //MARK: Project Numbers
     //Project Numbers Side Panel
     let sideView = SidePanelView()
     //project statistics (money, distance..)
-    // 'lazy' give access to self & set controller once
-    //give it some wrap to avoid error
     lazy var projectNumbersCV: ProjectNumbersCollectionView = {
         let projectNumbersCV = ProjectNumbersCollectionView(
             didTapMoneyCompletionHandler: { [weak self] in
@@ -56,7 +48,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         })
         return projectNumbersCV
     }()
-    
     //transparent black view that covers all content
     lazy var blackView: UIView = {
         let view = UIView()
@@ -65,22 +56,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         view.alpha = 0
         return view
     }()
-    
-    //Instance of Selected Project by User
+
     var projectInstance: ProjectList? {
         get{
-            //Retrieve a single object with unique identifier (projectListIdentifier)
             return ProjectListRepository.instance.getProjectList(id: projectListIdentifier)
         }
     }
-    //Identifier of selected project
     var projectListIdentifier = String()
-    
-    
     lazy var stepsCollections: Steps = {
-        //it isn't optional, so I need to set something to view
         guard let project = ProjectListRepository.instance.getProjectList(id: projectListIdentifier) else {
-            return Steps(project: ProjectList(), delegate: self, projectWayFilter: self.displayStepsSwitchButton.isSelected)//empty instace
+            return Steps(project: ProjectList(), delegate: self, projectWayFilter: self.displayStepsSwitchButton.isSelected)
         }
         let steps = Steps(project: project, delegate: self, projectWayFilter: self.displayStepsSwitchButton.isSelected)
         return steps
@@ -110,9 +95,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     //adds contrast to project title
     let gradient: CAGradientLayer =  {
         let gradient = CAGradientLayer()
-        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
-        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.21).cgColor//black 16% opacity
-        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.55).cgColor//black 56% opacity
+        let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor
+        let middleColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0.21).cgColor
+        let bottomColor = UIColor.init(red: 2/255, green: 2/255, blue: 2/255, alpha: 0.55).cgColor
         gradient.colors = [topColor, middleColor, bottomColor]
         gradient.locations = [0.55, 0.75, 1.0]
         return gradient
@@ -175,13 +160,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //MARK: Lifecycle
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-    
         view.backgroundColor = .white
-        //apply because side panel visible during animation btwn view controllers
+        //apply because side panel is visible during animation btwn view controllers
         view.layer.masksToBounds = true
-        
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(projectImageView)
@@ -194,13 +176,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         contentUIView.addSubview(stepsTitle)
         contentUIView.addSubview(stepsCollections)
         contentUIView.addSubview(displayStepsSwitchButton)
-        
         view.addSubview(blackView)
         view.addSubview(sideView)
-        
         //adds gradient to image view
         projectImageView.layer.insertSublayer(gradient, at: 0)
-        
         //setup constraints
         setupLayout()
         //includes keyboard dismiss func from extension
@@ -244,12 +223,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
     
     //set project image, name, statistics DB
     func performAllConfigurations(){
-        //GET IMAGE from url
         if let validUrl = projectInstance?.selectedImagePathUrl {
-            //thankfully to my delegate mechanism I can path url of my project image & return image
             projectImageView.image = self.delegate?.retreaveImageForProject(myUrl: validUrl)
         }else{
-            //in case image wasn't selected
             projectImageView.image = UIImage(named: "newEventDefault")
         }
         
@@ -260,7 +236,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
             sideView.projectId = self.projectListIdentifier
             stepsCollections.project = project
             projectName.text = project.name
-            //displayed steps number
+            //displaying steps number
             let stepsToDisplay = project.projectStep.filter { step in
                 step.displayed == true
             }
@@ -268,8 +244,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
             displayStepsSwitchButton.setTitle("  \(project.projectStep.count)/\(project.projectStep.count) displayed", for: .normal)
             //Filter turned on
             displayStepsSwitchButton.setTitle("  \(stepsToDisplay.count)/\(project.projectStep.count) displayed", for: .selected)
-            
-            //is it really good idea to update every time step is set to hidden inside StepWayVC?
             displayStepsSwitchButton.isSelected = project.filterIsActive
             stepsCollections.projectWayFilter = project.filterIsActive
             stepsCollections.updateAllStepCollectionViews()
@@ -282,37 +256,30 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         self.present(projectWayVC, animated: true)
     }
     
-    //EDIT BUTTON ACTION
+    
     @objc func editButtonAction(_ sender: Any){
         guard let project = projectInstance else {return}
-        //instance of project edit mode VC
+    
         let editProjectViewController = NewProjectViewController()
         editProjectViewController.modalTransitionStyle = .coverVertical
         editProjectViewController.modalPresentationStyle = .fullScreen
-        
         editProjectViewController.viewControllerTitle.text = "Edit Project"
         editProjectViewController.nameTextField.text = projectName.text
         editProjectViewController.projectImage.image = projectImageView.image
         //set project category
         for (index, item) in editProjectViewController.newProjectCategories.categories.enumerated() {
-           
             if project.category == item {
-             
                 editProjectViewController.newProjectCategories.categoryCollectionView.selectItem(at: [0, index], animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
             }
         }
         
         editProjectViewController.newProjectCategories.categoryName = project.category
-        
-        
         //information about project object need to be transfered
         editProjectViewController.selectedImageURLString = project.selectedImagePathUrl
         editProjectViewController.projectId = project.id
-      
         self.present(editProjectViewController, animated: true, completion: nil)
     }
-    
-    //UPDATES AFTER CHaNGINGS
+    //perform updates after changings
     func reloadViews(){
         
         //here we call mainVC delegate function to reload its data
@@ -324,15 +291,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, EditViewContr
         }
         //reload statistics collection view
         projectNumbersCV.projectNumbersCollectionView.reloadData()
-        
     }
     //calls by customDelegate StepsCategoryCollectionView
     func pushToViewController(stepId: String) {
-        
         let stepViewController = StepViewController(stepId: stepId)
         stepViewController.stepID = stepId
         stepViewController.projectId = projectListIdentifier
-        
         navigationController?.pushViewController(stepViewController, animated: true)
     }
     

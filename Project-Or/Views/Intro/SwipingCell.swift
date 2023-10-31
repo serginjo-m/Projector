@@ -33,7 +33,7 @@ class SwipingCell: UICollectionViewCell{
             }
             
             var centerY: CGFloat = 0
-            //login page requires percentage based calculation
+            
             if unwrappedPage.bodyText == "" {
                 let screenHeight = UIScreen.main.bounds.height
                 centerY = screenHeight <= 667 ? -(screenHeight * 0.26) : -(screenHeight * 0.23)
@@ -114,44 +114,23 @@ class SwipingCell: UICollectionViewCell{
         stack.isHidden = true
         return stack
     }()
-    // view that contains all inputs and button needed for registration of a new user
+    
     lazy var newUserInputContainer: NewUserInputView = {
         let view = NewUserInputView(
-            //register button
-            didTapRegisterCompletionHandler: { [weak self] in//weak self helps to avoid retaining cycles
+    
+            didTapRegisterCompletionHandler: { [weak self] in
                 
                 guard let self = self,
-                      //SwipingController link
+                      
                       let unwrappedParentVC = self.parentVC,
                       let inputPassword = self.newUserInputContainer.passwordTextField.textField.text,
                       let inputEmail = self.newUserInputContainer.emailTextField.textField.text,
                       let inputName = self.newUserInputContainer.nameTextField.textField.text else {return}
                 
                 FirebaseService.shared.handleRegister(name: inputName, email: inputEmail, password: inputPassword) {
-                    //call to update parent vc
                     unwrappedParentVC.didTapDismissCompletionHandler()
-                    //call dismiss on parent vc
                     unwrappedParentVC.dismiss(animated: true, completion: nil)
                 }
-                
-                //MARK: SAILSJS
-                
-                
-                //REST API Service called. Here I try to create user inside Mongo DB using Sails.js
-//                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
-//                    switch res {
-//                    case .success(let apiRes):
-//
-//                        //call parent VC to create and update user in MainViewController
-//                        unwrappedParentVC.didTapDismissCompletionHandler()
-//                        //
-//                        unwrappedParentVC.dismiss(animated: true, completion: nil)
-//                    case .failure(let err):
-//                        //here I need to create pop-up message to user
-//                        print("Error message pop-up", err)
-//                    }
-//                }
-                
             }
         )
         view.passwordTextField.displayButton.isHidden = false
@@ -159,12 +138,12 @@ class SwipingCell: UICollectionViewCell{
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    //contains all inputs for registered user login
+    
     lazy var registeredUserInputContainer: RegisteredUserInputView = {
         let view = RegisteredUserInputView(
-            //register button
-            didTapLoginCompletionHandler: { [weak self] in//weak self helps to avoid retaining cycles
-                //unwrap optionals
+
+            didTapLoginCompletionHandler: { [weak self] in
+
                 guard let self = self,
                     let unwrappedParentVC = self.parentVC,
                     let inputPassword = self.registeredUserInputContainer.passwordTextField.textField.text,
@@ -174,22 +153,6 @@ class SwipingCell: UICollectionViewCell{
                     unwrappedParentVC.didTapDismissCompletionHandler()
                     unwrappedParentVC.dismiss(animated: true)
                 }
-                
-                //MARK: SAILSJS
-                
-                //Try to login user inside Mongo DB using Sails.js app.
-//                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
-//                    switch res {
-//                    case .success(let apiResponse):
-//                        print(apiResponse.message)
-//                        //call parent to call parent :) (MainViewController) for updates
-//                        unwrappedParentVC.didTapDismissCompletionHandler()
-//                        
-//                        unwrappedParentVC.dismiss(animated: true, completion: nil)
-//                    case .failure(let err):
-//                        print("Failed to fetch user: ", err)
-//                    }
-//                }
                 
             }, didTapRestoreCompletionHandler: { [weak self] in
                 
@@ -202,7 +165,7 @@ class SwipingCell: UICollectionViewCell{
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    //login or register views
+    
     lazy var userInputStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [newUserInputContainer,registeredUserInputContainer])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -211,12 +174,10 @@ class SwipingCell: UICollectionViewCell{
         return stack
     }()
     
-    //constraints for animation
-    
     var imageHeightConstraint: NSLayoutConstraint!
     var imageCenterYAnchorConstraint: NSLayoutConstraint!
     var imageCenterXAnchorConstraint: NSLayoutConstraint!
-    //inputs animation approach
+    
     var userInputStackLeftConstraint: NSLayoutConstraint!
     var userInputStackRightConstraint: NSLayoutConstraint!
     
@@ -226,7 +187,6 @@ class SwipingCell: UICollectionViewCell{
         setupLayout()
     }
     
-    //activate register button and disable login button
     @objc func toggleRegisterButton(_ sender: UIButton){
         guard sender.isSelected == false else {return}
         sender.isSelected = true
@@ -246,7 +206,6 @@ class SwipingCell: UICollectionViewCell{
         
     }
     
-    //activate login button and disable register button
     @objc func toggleLoginButton(_ sender: UIButton){
         
         guard sender.isSelected == false else {return}
@@ -266,8 +225,6 @@ class SwipingCell: UICollectionViewCell{
         })
     }
     
-    
-    //setup constraints
     func setupLayout(){
         
         hideKeyboardWhenTappedAround()
@@ -279,13 +236,9 @@ class SwipingCell: UICollectionViewCell{
         
         userInputStack.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         userInputStackLeftConstraint = userInputStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
-        //...but this is not active now
         userInputStackRightConstraint = userInputStack.rightAnchor.constraint(equalTo: rightAnchor, constant: 0)
-        
         userInputStack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
-        
         userInputStack.topAnchor.constraint(equalTo: registerLoginNavStack.bottomAnchor, constant: 20).isActive = true
-        
         userInputStackLeftConstraint.isActive = true
         
         NSLayoutConstraint.activate([
@@ -295,7 +248,6 @@ class SwipingCell: UICollectionViewCell{
             registerLoginNavStack.heightAnchor.constraint(equalToConstant: 50),
         ])
         
-//        image.widthAnchor.constraint(equalTo: widthAnchor, constant: -60)
         imageHeightConstraint = image.heightAnchor.constraint(equalToConstant: 150)
         imageCenterYAnchorConstraint = image.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100)
         imageCenterXAnchorConstraint = image.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 30)

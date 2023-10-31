@@ -10,18 +10,13 @@ import Foundation
 import UIKit
 
 class ProjectCell: UICollectionViewCell{
-
-    //It'll be like a template for our cell
+    
     var template: ProjectList? {
-        //didSet uses for logic purposes!
         didSet{
-            
             if let name = template?.name {
-                
-                //description label height
+               
                 let rectangle = NSString(string: name).boundingRect(with: CGSize(width: self.frame.width - CGFloat(26), height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 17)], context: nil)
 
-//                rounded away from zero original values
                 let rect = CGRect(x: rectangle.origin.x, y: rectangle.origin.y, width: rectangle.width.rounded(.awayFromZero), height: rectangle.height.rounded(.awayFromZero))
                 
                 projectTitleAnchor.constant = rect.height
@@ -73,7 +68,7 @@ class ProjectCell: UICollectionViewCell{
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
-    //adds contrast to project title
+    
     let gradient: CAGradientLayer =  {
         let gradient = CAGradientLayer()
         let topColor = UIColor.init(red: 1/255, green: 1/255, blue: 1/255, alpha: 0).cgColor//black transparent
@@ -98,14 +93,10 @@ class ProjectCell: UICollectionViewCell{
     func setupViews(){
         
         backgroundColor = UIColor(red: 0.73, green: 0.73, blue: 0.73, alpha: 1)
-        
-        //deleteButton.frame = CGRect(x:frame.width - 25, y: 9, width:16, height: 16)
-        
         addSubview(projectImage)
         addSubview(titleShadowSublayer)
         addSubview(projectName)
         
-        //gradient under project title
         layer.insertSublayer(gradient, at: 1)
         gradient.frame = CGRect(x: 0, y: 188, width: frame.width, height: frame.height - 188)
         
@@ -131,6 +122,5 @@ class ProjectCell: UICollectionViewCell{
         projectImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
         projectImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         projectImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-        
     }
 }

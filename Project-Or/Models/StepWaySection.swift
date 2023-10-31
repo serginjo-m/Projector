@@ -12,8 +12,6 @@ import RealmSwift
 class StepWaySection: Object {
     
     @objc dynamic var id = UUID().uuidString
-    
-    //Description
     @objc dynamic var name = ""
     @objc dynamic var indexNumber = 0
     @objc dynamic var projectId = ""

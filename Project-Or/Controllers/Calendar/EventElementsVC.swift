@@ -8,16 +8,16 @@
 
 import Foundation
 import RealmSwift
-
+//MARK: OK
 class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSource{
     //MARK: Properties
-    //TABLE VIEW CELL IDENTIFIER
+    
     let cellIdentifier = "eventsTableViewCell"
     //CalendarViewConroller -> EventElementsView -> EventTableViewCell -> performZoomForStartingEventView()
     var calendarViewController: CalendarViewController?
     //need for tableViewCell height calculations
     var timeInterval: TimeInterval?
-    //if opened day is current day, perform some configurations
+    //if displaying day is current day, perform some configurations
     let calendar = Calendar(identifier: .gregorian)
     var currentDate: Date? {
         didSet{
@@ -33,11 +33,11 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
                     
                     //TODO: Need to adjust timeLine, currentLine, and events properly (+5)
                     currentTimeLineViewTopAnchor?.constant = topAnchorConstant
-                    //if user open current date side panel, table view scrolls to current time point
+                    //if user opens current date side panel, table view scrolls to current time point
                     scrollViewContainer.setContentOffset(CGPoint(x: 0, y: topAnchorConstant - 200), animated: false)
                 }else{
                     currentTimeLineViewTopAnchor?.constant = -20
-                    // if day is not current day side panel scrolls to begin
+                    // if day is not current day side panel scrolls to the top
                     scrollViewContainer.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
                 }
                 //set timeLine indicator to current time
@@ -101,8 +101,7 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         return label
     }()
     
-    //TABLE VIEW
-    lazy var eventsTableView: UITableView = {//<------------ TABLE VIEW is HERE!
+    lazy var eventsTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
@@ -124,21 +123,15 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         return stack
     }()
     
-    
-    
     //MARK: Methods
-    //parent already has this function and call to it, so the only thing I need is to override it!
     override func setupTableView(){
         backgroundColor = .white
         
         for number in 1...24{
             configureTimeline(number: number)
         }
-        
-        
         addSubview(selectedDateLabel)
         addSubview(scrollViewContainer)
-        
         scrollViewContainer.addSubview(contentUIView)
         contentUIView.addSubview(timelineStack)
         contentUIView.addSubview(eventsTableView)
@@ -163,7 +156,8 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         timelineStack.addArrangedSubview(timeLineCell)
     }
     
-    //move to visible area or hide it. It depends from selected day. If it is current day......
+    //move to visible area or hide it. It depends from selected day.
+    //If it is current day
     var currentTimeLineViewTopAnchor: NSLayoutConstraint?
     //MARK: Constraints
     func setupConstraints(){
@@ -176,14 +170,13 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         scrollViewContainer.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         scrollViewContainer.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
         scrollViewContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-
-        //Here is so many constraints, because it won't scrolls without it
+        //scroll
         contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
         contentUIView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor).isActive = true
         contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
         contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
         contentUIView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor).isActive = true
-        //It is exactly 1440 because I want that 1 hour is 60px height (24 * 60)
+
         contentUIView.heightAnchor.constraint(equalToConstant: 1440).isActive = true
         
         currentTimeLineView.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor).isActive = true
@@ -219,20 +212,18 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         let count = events.count
         return count
     }
-    
-    //cell configuration
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier , for: indexPath) as? EventTableViewCell else {
             fatalError( "The dequeued cell is not an instance of EventTableViewCell." )
         }
         
         let eventsArr = events[indexPath.row]
-        
-        //for first item padding point is a table view bound
+
+        //for the first item, padding point is a TableView bound
         if indexPath.row == 0 {
-           //calculation from current date always give 0
+            //calculation from the current date always gives 0
             cell.prevCellDate = currentDate
-            
         }else{
             //sort prev cell events by date
             let prevEvents = events[indexPath.row - 1]
@@ -262,24 +253,19 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
         let dailyTimeInterval: Double = 86400
         // cell height to return
         var height: CGFloat = 0
-        
-        
         // padding from table view margin or previous event
         var eventPadding = Date()
-        
-        //for first item padding point is a table view bound
+        //for the first item, padding point is a TableView bound
         if indexPath.row == 0 {
-           //calculation from current date always give 0
+            //calculation from the current date always gives 0
             eventPadding = currentDate
-            
         }else{
             //sort prev cell events by date
             let previousEvent = events[indexPath.row - 1]
-            //take last item, because it's latest one, so it will be a start point for current cell
+            //take last item, because it's the latest one, so it will be the start point for current cell
             if let lastItem = previousEvent.last, let endTime = lastItem.endTime{
                 eventPadding = endTime
             }else{
-                //just in case something went wrong
                 eventPadding = currentDate
             }
         }
@@ -294,7 +280,6 @@ class EventElementsView: ElementsView, UITableViewDelegate, UITableViewDataSourc
             //cell height
             height = heightPercentage
         }
-        
         return height
     }
 }

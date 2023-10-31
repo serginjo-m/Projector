@@ -10,6 +10,5 @@ import UIKit
 import RealmSwift
 
 class HolidayEvent: Event {
-    //var year represents a year when it was downloaded.
     @objc dynamic var year: Int = 0
 }

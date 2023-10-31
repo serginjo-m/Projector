@@ -23,8 +23,6 @@ class StatisticsStackView: UIStackView {
         }
     }
 
-    
-    //categories shapes must be ordered, in order to avoid overlapping each other
     var sortedCategoryPercentageArray: [Double] = []
     var categoryByInt: [Double:String] = [:]
     let colorsByCategory: [String: CGColor] = [
@@ -47,9 +45,8 @@ class StatisticsStackView: UIStackView {
         setupStackView()
     }
     
-    //app lounch point
     var animationStartDate = Date()
-    //Grey section background
+    
     let backgroundUIView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(red: 165/255, green: 202/255, blue:215/255 , alpha: 1)
@@ -58,8 +55,6 @@ class StatisticsStackView: UIStackView {
         return view
     }()
     
-
-    //percentage label inside track layer
     let percentageLabel = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2, units: "")
     
     let percentageUnitsLabel: UILabel = {
@@ -72,8 +67,6 @@ class StatisticsStackView: UIStackView {
         return label
     }()
     
-    
-    //progress shapes
     let firstProgressShapeLayer = ProgressShapeLayer(
         strokeColor: UIColor.init(red: 22/255, green: 118/255, blue: 215/255, alpha: 1).cgColor,
         arcCenter: .zero,
@@ -109,9 +102,7 @@ class StatisticsStackView: UIStackView {
         actualValue: 0,
         animationDuration: 2
     )
-
     
-    //track for progress shapes
     let trackLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
         shape.path = UIBezierPath(arcCenter: .zero , radius: 60 , startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true).cgPath
@@ -121,7 +112,6 @@ class StatisticsStackView: UIStackView {
         shape.fillColor = UIColor.clear.cgColor
         return shape
     }()
-    
     
     let whiteCircle: CAShapeLayer = {
         let shape = CAShapeLayer()
@@ -209,7 +199,6 @@ class StatisticsStackView: UIStackView {
     
     func setupStackView(){
         
-        //gray background
         addSubview(backgroundUIView)
         backgroundUIView.layer.addSublayer(brightCircle)
         backgroundUIView.layer.addSublayer(darkCircle)
@@ -229,7 +218,6 @@ class StatisticsStackView: UIStackView {
         addSubview(descriptionLabel)
         addSubview(progressCategoriesStack)
         
-        //tap animation feature
         backgroundUIView.translatesAutoresizingMaskIntoConstraints = false
         backgroundUIView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(progressAnimation)))
         percentageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -270,8 +258,6 @@ class StatisticsStackView: UIStackView {
         progressCategoriesStack.topAnchor.constraint(equalTo: lineSeparator.bottomAnchor, constant: 5).isActive = true
     }
     
-    //this is very interesting approach for:
-    //define coordinates after layers was positioned and sized
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -296,12 +282,12 @@ class StatisticsStackView: UIStackView {
             
             if array.count > 0 {
                 guard let item = array.first else {return}
-                //find category percentage
+                
                 let percentage: Double = (Double(array.count) / Double(steps.count)) * 100
                  
                 percentsArray.append(percentage)
                 let category = item.category
-                //associate category percentage with category string
+                
                 categoryByInt[percentage] = category
                 
                 switch category {
@@ -325,18 +311,14 @@ class StatisticsStackView: UIStackView {
         
     }
     
-    //function calls by tap gesture & by viewDidLoad method in MainViewController
     @objc func progressAnimation(){
 
-        //ordered shapes
         let strokesArray = [firstProgressShapeLayer, secondProgressShapeLayer, thirdProgressShapeLayer, fourthProgressShapeLayer]
-        
-        //reset value for each category
+    
         categoryViewsArray.forEach { view in
             view.sectionValueNumber = 0
         }
         
-        //reset value for each shape
         strokesArray.forEach { shapeLayer in
             shapeLayer.shapeDisplayLink?.actualValue = 0
         }
@@ -373,10 +355,8 @@ class StatisticsStackView: UIStackView {
         
         let mutableString = NSMutableAttributedString(string: string, attributes: [NSMutableAttributedString.Key.font: UIFont.boldSystemFont(ofSize: fontSize)])
         
-        //length of completed step number
         var numberLength = 1
         
-        //complete steps color configuration
         if numberValue >= 1000 {
             numberLength = 4
         }else if numberValue >= 100{
@@ -388,87 +368,5 @@ class StatisticsStackView: UIStackView {
         mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:location, length:numberLength))
         
         return mutableString
-    }
-}
-
-class ProgressWidgetCategoryView: UIView {
-    
-    var sectionValueWidthConstraint: NSLayoutConstraint!
-    
-    var sectionValueNumber = 0 {
-        didSet{
-            self.sectionValue.labelDisplayLink?.actualValue = Double(sectionValueNumber)
-            
-            if self.sectionValueNumber < 10 {
-                sectionValueWidthConstraint.constant = 14
-            }else if self.sectionValueNumber > 9 {
-                sectionValueWidthConstraint.constant = 24
-            }else if self.sectionValueNumber > 99 {
-                sectionValueWidthConstraint.constant = 34
-            }
-        }
-    }
-    
-    let sectionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = .white
-        label.textAlignment = .right
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "TODO:"
-        return label
-    }()
-    
-    let sectionValue: CountingLabel = {
-        let label = CountingLabel(startValue: 0, actualValue: 0, animationDuration: 2)
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "14"
-        return label
-    }()
-    
-    var valueBackgroundShape: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 12
-        view.layer.masksToBounds = true
-        view.backgroundColor = .systemTeal
-        return view
-    }()
-    
-    
-    init(title: String, color: UIColor, frame: CGRect) {
-        super.init(frame: frame)
-        
-        sectionLabel.text = title
-        valueBackgroundShape.backgroundColor = color
-
-        addSubview(sectionLabel)
-        addSubview(valueBackgroundShape)
-        addSubview(sectionValue)
-        
-        sectionLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        sectionLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        sectionLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        sectionLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.6).isActive = true
-        
-        sectionValue.leadingAnchor.constraint(equalTo: sectionLabel.trailingAnchor, constant: 15).isActive = true
-        sectionValue.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        sectionValue.heightAnchor.constraint(equalToConstant: 14).isActive = true
-        sectionValueWidthConstraint = sectionValue.widthAnchor.constraint(equalToConstant: 14)//10
-        sectionValueWidthConstraint.isActive = true
-        
-        valueBackgroundShape.centerYAnchor.constraint(equalTo: sectionValue.centerYAnchor).isActive = true
-        valueBackgroundShape.centerXAnchor.constraint(equalTo: sectionValue.centerXAnchor).isActive = true
-        valueBackgroundShape.widthAnchor.constraint(equalTo: sectionValue.widthAnchor, constant: 10).isActive = true
-        
-        valueBackgroundShape.heightAnchor.constraint(equalTo: sectionValue.heightAnchor, constant: 10).isActive = true
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

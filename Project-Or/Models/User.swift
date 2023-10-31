@@ -12,19 +12,12 @@ import RealmSwift
 
 class User: Object {
     
-    //user name
     @objc dynamic var name = ""
-    //user email
     @objc dynamic var email = ""
-    //user password
     @objc dynamic var password = ""
-    //user image
     @objc dynamic var imageString = ""
-    //login
     @objc dynamic var isLogined = false
-    //id
     @objc dynamic var id = UUID().uuidString
-    
     
     override static func primaryKey() -> String {
         return "id"

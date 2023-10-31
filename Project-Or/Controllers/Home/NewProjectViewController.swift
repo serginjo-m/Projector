@@ -11,10 +11,12 @@ import Foundation
 import os
 import Photos
 
+//MARK: OK
+
 class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     //MARK: Properties
-    //unique project id for updating
+    //update requires unique project id
     var projectId: String?
     
     // need for indicating a selected image inside PHAsset array
@@ -29,7 +31,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         let calendar = Calendar(identifier: .gregorian)
         let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
         guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-        let myDate = "Created: \(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
+        let myDate = "Created: \(day)/\(month)/\(year)"
         return myDate
     }()
     
@@ -41,7 +43,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
-        
         return button
     }()
     
@@ -185,8 +186,7 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         if let ID = self.projectId{
             
             let project: ProjectList = self.defineProjectTemplate(id: ID)
-            
-            //because project with that id exist it perform update
+            //perform update
             ProjectListRepository.instance.updateProjectList(list: project)
             
             UserActivitySingleton.shared.createUserActivity(description: "Updated \(project.name) project")
@@ -210,19 +210,14 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         //empty object
         let projectTemplate = ProjectList()
-    
-        
-        //---------------- probably, without name shouldn't be active save button? --------------------
         projectTemplate.name = nameTextField.text ?? ""
-        //---------------------- takes category from collection view -------------------------------------
         projectTemplate.category = newProjectCategories.categoryName
-        //---------------------- image path ----------------------------------------------------------
         projectTemplate.selectedImagePathUrl = selectedImageURLString
         
         
         if let ID = id {
             if let project = ProjectListRepository.instance.getProjectList(id: ID){
-                //UPDATE EXISTING COPY TO WHAT USER WAS SPECIFIED
+                //update existing copy
                 projectTemplate.id = ID
                 projectTemplate.date = project.date
                 projectTemplate.filterIsActive = project.filterIsActive
@@ -237,7 +232,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         }else{//unique to new instance
             //created date is just now!
             projectTemplate.date = createdDate
-            
         }
         
         return projectTemplate
@@ -316,10 +310,8 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
         var selectedImageFromPicker: UIImage?
         
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage{
-            //print("editedImage: \(editedImage)")
             selectedImageFromPicker = editedImage
         } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
-            //print("originalImage: \(originalImage)")
             selectedImageFromPicker = originalImage
         }
         
@@ -329,7 +321,6 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
             imgPHAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
                 if imgPHAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
-                        //print("IMAGE URL: ", strURL)
                         assignUrl(url: strURL)
                     }
                 }
@@ -340,14 +331,11 @@ class NewProjectViewController: UIViewController, UITextFieldDelegate, UITextVie
             selectedImageURLString = url
         }
         
-        //it was preaty useful feature to make a breakpoint here
-        //print(info)
-        
         // Set photoImageView to display the selected image.
         if let selectedImage = selectedImageFromPicker {
             projectImage.image = selectedImage
         }
-        //Dismiss the picker.
+        //Dismiss picker
         dismiss(animated: true, completion: nil)
     }
 

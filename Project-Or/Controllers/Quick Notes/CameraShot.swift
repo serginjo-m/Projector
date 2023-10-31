@@ -11,7 +11,7 @@ import RealmSwift
 import os
 import Photos
 
-
+//MARK: OK
 class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     var cameraStatus: Bool = false
@@ -166,7 +166,7 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
     }
  
     
-    private func updateSaveButtonState(){
+    func updateSaveButtonState(){
         //Disable the Save button.
         saveButton.isEnabled = true
     }
@@ -219,7 +219,6 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
             })
         case .restricted:
             print("restricted")
-            // probably alert the user that photo access is restricted
         case .limited:
             print("limited")
         @unknown default:
@@ -256,11 +255,9 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
             showAlertWith(title: "Save error", message: error.localizedDescription)
         } else {
             fetchLastImage(completion: selectedImageURL)
-//            showAlertWith(title: "Saved!", message: "Your image has been saved to your photos.")
         }
     }
     
-    //find an address of the last image in photo library
     func fetchLastImage(completion: String?){
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -270,15 +267,12 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
         
         if (fetchResult.firstObject != nil){
             let lastImageAsset: PHAsset = fetchResult.firstObject as! PHAsset
-            //have to transfer it here, so I can grab image dimensions
             self.selectedImageHeight = lastImageAsset.pixelHeight
             self.selectedImageWidth = lastImageAsset.pixelWidth
-            
-            //retreave image URL
+        
             lastImageAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
                 if lastImageAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
-                        //print("IMAGE URL: ", strURL)
                         assignUrl(url: strURL)
                     }
                 }
@@ -349,25 +343,3 @@ class CameraShot: UIViewController,  UINavigationControllerDelegate, UITextField
 }
 
 
-extension CameraShot: UIImagePickerControllerDelegate{
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
-        
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            print("Image not found!")
-            return
-        }
-        
-        //save action
-        UIImageWriteToSavedPhotosAlbum(selectedImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-        
-        updateSaveButtonState()
-        
-        //assign image to imageView
-        photoView.image = selectedImage
-        
-        imagePicker.dismiss(animated: true, completion: nil)
-        
-    }
-    
-}

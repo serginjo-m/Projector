@@ -35,16 +35,14 @@ struct DateTime:Decodable {
 
 extension DateTime {
     var dateObject: Date? {
-        // Specify date components
+        
         var dateComponents = DateComponents()
         dateComponents.year = self.year
         dateComponents.month = self.month
         dateComponents.day = self.day
         dateComponents.hour = 0
         dateComponents.minute = 00
-        
-        // Create date from components
-        let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
+        let userCalendar = Calendar(identifier: .gregorian)
         let date = userCalendar.date(from: dateComponents)
         return date
     }

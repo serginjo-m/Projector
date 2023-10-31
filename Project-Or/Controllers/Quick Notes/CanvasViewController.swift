@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Photos
-
+//MARK: OK
 class CanvasViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //MARK: Properties
@@ -25,37 +25,19 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
     let colorPalette = ColorPalette()
     
     lazy var colorPaletteCollectionView: UICollectionView = {
-        
-        
-        //instance for UICollectionView purposes
         let layout = UICollectionViewFlowLayout()
-        
-        //changing default direction of scrolling
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        
-        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
-        // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
         collectionView.backgroundColor = UIColor.white
-        
-        //deactivate default constraints
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        //hide scrollbar
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        
-        //Class is need to be registered in order of using inside
         collectionView.register(ColorPaletteCell.self, forCellWithReuseIdentifier: cellIdent)
-        
         collectionView.isHidden = true
-        
         return collectionView
     }()
     
@@ -233,16 +215,13 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     //MARK: Methods
     private func configureStrokeButtons(){
-        
         for number in 1...6 {
-            
             let button = StrokeSizeButton()
             let size = CGFloat((number + 1) * 3)
             button.strokeSizeIndicatorWidthAnchor.constant = size
             button.strokeSizeIndicatorHeightAnchor.constant = size
             button.strokeSizeIndicator.layer.cornerRadius = size / 2
             button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleStrokeChange)))
-            
             stackView.addArrangedSubview(button)
         }
     }
@@ -342,12 +321,8 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         if (fetchResult.firstObject != nil){
             let lastImageAsset: PHAsset = fetchResult.firstObject as! PHAsset
-            //have to transfer it here, so I can grab image dimensions
             let imageHeight = lastImageAsset.pixelHeight
             let imageWidth = lastImageAsset.pixelWidth
-            
-            
-            //retreave image URL
             lastImageAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
                 if lastImageAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
@@ -356,17 +331,12 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
                 }
             })
         }
-        
-        
     }
 
     func completeSaving(imageHeight: Int, imageWidth: Int, url: String, note: CanvasNote){
         ProjectListRepository.instance.updateCanvasUrl(height: imageHeight, width: imageWidth, url: url, note: note)
-        //save to data base
         ProjectListRepository.instance.createCanvasNote(canvasNote: note)
-        //add action to activity journal
         UserActivitySingleton.shared.createUserActivity(description: "Canvas Note was Created")
-        //exit from view
         self.dismiss(animated: true)
     }
     
@@ -468,105 +438,5 @@ class CanvasViewController: UIViewController, UICollectionViewDataSource, UIColl
         stackBackgroundView.topAnchor.constraint(equalTo: stackView.topAnchor, constant: -10).isActive = true
         stackBackgroundView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant:  10).isActive = true
         
-    }
-}
-
-//MARK: Cell
-class ColorPaletteCell: UICollectionViewCell{
-    //MARK: Cell Properties
-    var template: UIColor? {
-        didSet{
-            guard let unwrappedTemplate = template else {return}
-    
-            colorButton.backgroundColor = unwrappedTemplate
-        }
-    }
-    
-    var colorButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        return button
-    }()
-    
-    
-    
-    //MARK: Cell Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.cornerRadius = 8
-        layer.masksToBounds = true
-        setupViews()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    //MARK: Cell Methods
-    func setupViews(){
-        
-        addSubview(colorButton)
-        
-        colorButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        colorButton.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        colorButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        colorButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-    }
-}
-
-class StrokeSizeButton: UIView {
-    
-    lazy var strokeView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 16
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.borderWidth = 1
-        view.layer.masksToBounds = true
-        view.backgroundColor = .white
-        return view
-    }()
-    
-    var strokeSizeIndicator: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.init(red: 249/255, green: 65/255, blue: 68/255, alpha: 1)
-        view.layer.cornerRadius = 7.5
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    var strokeSizeIndicatorWidthAnchor: NSLayoutConstraint!
-    var strokeSizeIndicatorHeightAnchor: NSLayoutConstraint!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        isUserInteractionEnabled = true
-        addSubview(strokeView)
-        addSubview(strokeSizeIndicator)
-        
-        
-        configureView()
-    }
-    
-    private func configureView(){
-        strokeView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        strokeView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        strokeView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        strokeView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        
-        strokeSizeIndicator.centerXAnchor.constraint(equalTo: strokeView.centerXAnchor).isActive = true
-        strokeSizeIndicator.centerYAnchor.constraint(equalTo: strokeView.centerYAnchor).isActive = true
-        strokeSizeIndicatorWidthAnchor = strokeSizeIndicator.widthAnchor.constraint(equalToConstant: 15)
-        strokeSizeIndicatorHeightAnchor = strokeSizeIndicator.heightAnchor.constraint(equalToConstant: 15)
-        strokeSizeIndicatorHeightAnchor.isActive = true
-        strokeSizeIndicatorWidthAnchor.isActive = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

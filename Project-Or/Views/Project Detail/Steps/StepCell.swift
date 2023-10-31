@@ -9,7 +9,7 @@
 import UIKit
 
 class StepCell: UICollectionViewCell{
-    //position options menu next to the selected cell button
+    
     weak var delegate: StepsCollectionViewDelegate?
     
     var template: ProjectStep? {
@@ -20,7 +20,7 @@ class StepCell: UICollectionViewCell{
             stepNameShadow.text = stepNameLabel.text
             
             if unwrappedTemplate.selectedPhotosArray.count > 0 {
-                //use UIImageView extension func that retreaves image by url
+                
                 imageView.retreaveImageUsingURLString(myUrl: unwrappedTemplate.selectedPhotosArray[0])
             }else{
                 imageView.image = nil
@@ -88,7 +88,6 @@ class StepCell: UICollectionViewCell{
     
     func setupViews(){
         
-        //insert gradient
         layer.masksToBounds = true
         layer.cornerRadius = 5
         backgroundColor = UIColor.init(white: 0.80, alpha: 1)

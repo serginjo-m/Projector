@@ -8,12 +8,10 @@
 
 import UIKit
 
-//Progress shape
 class ProgressShapeLayer: CAShapeLayer {
     override init(layer: Any) {
         super.init(layer: layer)
     }
-    //animation logic
     var shapeDisplayLink: AnimationDisplayLink?
     
     init(strokeColor: CGColor, arcCenter: CGPoint, strokeEnd: CGFloat, startValue: Double, actualValue:Double, animationDuration: Double) {
@@ -22,7 +20,7 @@ class ProgressShapeLayer: CAShapeLayer {
         self.strokeColor = strokeColor
         self.lineWidth = 12
         self.lineCap = CAShapeLayerLineCap.round
-        //rotate layer
+
         self.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         self.fillColor = UIColor.clear.cgColor
         self.strokeEnd = strokeEnd

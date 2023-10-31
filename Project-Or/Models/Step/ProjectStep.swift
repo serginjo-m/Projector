@@ -10,11 +10,7 @@ import UIKit
 import RealmSwift
 
 class ProjectStep: Object{
-    
-    //MARK: Properties
     @objc dynamic var name = ""
-    
-    
     @objc dynamic var category = "todo"
     @objc dynamic var section: StepWaySection?
     @objc dynamic var displayed = true
@@ -23,17 +19,14 @@ class ProjectStep: Object{
     @objc dynamic var complete = false
     @objc dynamic var date = "07/06/2020"
     
+    var selectedPhotosArray = List<String>()
     
-    //an array of images url
-    var selectedPhotosArray = List<String>()//[String]()
-    
-    //old approach
     var itemsArray = List<String>()
-    //new approach
+    
     var stepItemsList = List<StepItem>()
-    //use like breadcrums
+    
     var viewControllersStack = List<String>()
-    //id
+    
     @objc dynamic var id = UUID().uuidString
     
     override static func primaryKey() -> String {

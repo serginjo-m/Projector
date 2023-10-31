@@ -14,26 +14,19 @@ class ViewByCategoryCell: UICollectionViewCell {
         didSet{
             if let setting = configureCell{
                 
-                //constraints func , because elements needs to be positioned differently
                 configureConstraints(width: setting.imageWidth, height: setting.imageHeight, top: setting.imageTopAnchor, left: setting.imageLeftAnchor, titleLeft: setting.titleLeftAnchor)
                 
-                //background color
                 backgroundColor = setting.cellColor
                 
-                //title
                 buttonTitleLabel.text = setting.buttonTitle
                 
-                //image
                 buttonBackgroundImage.image = UIImage(named: setting.imageName)
             }
         }
     }
     
-    //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //layer.cornerRadius = 3
-        //layer.masksToBounds = true
         setupViews()
     }
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +50,6 @@ class ViewByCategoryCell: UICollectionViewCell {
     
     func setupViews(){
         
-        //mask content outside cell
         layer.masksToBounds = true
         layer.cornerRadius = 8
         

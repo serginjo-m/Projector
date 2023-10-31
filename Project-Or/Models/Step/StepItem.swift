@@ -12,14 +12,9 @@ import RealmSwift
 class StepItem: Object {
     
     @objc dynamic var id = UUID().uuidString
-    
-    //title
     @objc dynamic var text = ""
-    
-    //text
     @objc dynamic var title = ""
     
-    //MARK: Methods
     override static func primaryKey() -> String {
         return "id"
     }

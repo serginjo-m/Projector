@@ -8,7 +8,7 @@
 
 
 import UIKit
-
+//MARK: OK
 class SwipingController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     //data for individual page configuration
@@ -18,7 +18,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
             headerString: "Easy steps to organize your project",
             bodyText: "Dive into your project very easily. Achieve your goals and be happy.",
             imageConstraints:
-            SwipingImageConstraints(imageHeight: 0.9873,//311,//1,0833333
+            SwipingImageConstraints(imageHeight: 0.9873,
                                     imageCenterYAnchor: -121,
                                     imageCenterXAnchor: 0)),
         SwipingPage(
@@ -26,7 +26,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
             headerString: "Create your project management tool",
             bodyText: "By using Project-Or, the project you are working on can be managed easily.",
             imageConstraints:
-            SwipingImageConstraints(imageHeight: 0.91390,//276,//0,91390
+            SwipingImageConstraints(imageHeight: 0.91390,
                                     imageCenterYAnchor: -103,
                                     imageCenterXAnchor: 0)),
         SwipingPage(
@@ -34,7 +34,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
             headerString: "Project Management\nMade Simple.",
             bodyText: "Organize your daily project easily and manage your time well and neatly",
             imageConstraints:
-            SwipingImageConstraints(imageHeight:0.91496, //269,//0,91496
+            SwipingImageConstraints(imageHeight:0.91496,
                                     imageCenterYAnchor: -100,
                                     imageCenterXAnchor: 0)),
         SwipingPage(
@@ -42,22 +42,19 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
             headerString: "",
             bodyText: "",
             imageConstraints:
-            SwipingImageConstraints(imageHeight: 0.4572, //139,//0,4572
+            SwipingImageConstraints(imageHeight: 0.4572,
                                     imageCenterYAnchor: -175,
                                     imageCenterXAnchor: 0))
     ]
     
     let cellId = "cellId"
-    
     var pagesCollectionViewTopAnchor: NSLayoutConstraint!
-    
-    //keyboard animation need to hide image when it at the top, so we save reference here
+    //keyboard animation need to hide image when it at the top, so I save reference here
     var imageView: UIImageView?
     
     lazy var pagesCollectionView: UICollectionView = {
         
-        let layout = UICollectionViewFlowLayout()//BEWARE!!!! UICollectionViewLayout != UICollectionViewFlowLayout
-        //changing default direction of scrolling
+        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +62,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         collectionView.isPagingEnabled = true
         collectionView.dataSource = self
         collectionView.delegate = self
-        //this is really good solution for this error that leaves a gap in cell!
+        //cell gap fix
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -107,7 +104,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         button.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
         return button
     }()
-    //indicates current page
+    //current page indicator
     private lazy var pageControl: UIPageControl = {
         let pc = UIPageControl()
         pc.currentPage = 0
@@ -130,14 +127,10 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
     var didTapDismissCompletionHandler: (() -> Void)
     
     //MARK: init
-    
-    
     init(didTapDismissCompletionHandler: @escaping (() -> Void),  nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         
         self.didTapDismissCompletionHandler = didTapDismissCompletionHandler
-        
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
         view.backgroundColor = .white
     }
     
@@ -145,7 +138,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    //MARK: Lifecycle
     override func viewDidLoad() {
 
         view.addSubview(pagesCollectionView)
@@ -290,7 +283,7 @@ class SwipingController: UIViewController, UICollectionViewDataSource, UICollect
         self.present(viewController, animated: true)
     }
     
-    //MARK: Collection View
+    //MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }

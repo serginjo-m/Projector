@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//this extension included to translate shadows from Sketch easyer
+
 extension  CALayer {
     func applySketchShadow(
         color: UIColor = .black,

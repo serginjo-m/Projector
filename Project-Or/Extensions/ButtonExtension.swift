@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIButton {
-    //change background color based on button state
   func setBackgroundColor(_ color: UIColor, forState controlState: UIControl.State) {
     let colorImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in
       color.setFill()

@@ -11,7 +11,7 @@ import UIKit
 import RealmSwift
 import Firebase
 import FirebaseAuth
-
+//MARK: OK
 class UserProfileViewController: UIViewController, CircleTransitionable {
     //MARK: Properties
     var user: User? {
@@ -25,7 +25,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         }
     }
     
-    lazy var transitionButton: UIButton = {
+    lazy var profileConfigurationButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 18
         button.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
@@ -65,7 +65,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleUserAccountDeletion(_:)), for: .touchUpInside)
-//        button.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
         button.isHidden = self.user == nil ? true : false
         return button
     }()
@@ -139,7 +138,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         return view
     }()
  
-    //----- Probably uses to create view snapshot? ---------
     var mainView: UIView {
         return view
     }
@@ -175,7 +173,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         super.viewDidLoad()
         view.backgroundColor = UIColor.init(red: 159/255, green: 195/255, blue: 208/255, alpha: 1)
 
-        view.addSubview(transitionButton)
+        view.addSubview(profileConfigurationButton)
         view.addSubview(darkCircleView)
         view.addSubview(lightCircleView)
         view.addSubview(logoutButton)
@@ -193,7 +191,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
     }
     
     //MARK: Methods
-    
     //back to previous view
     @objc func backAction(_ sender: UIButton) {
        
@@ -211,30 +208,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         let accessUserViewController = AccessUserViewController { [weak self] in
             guard let self = self else {return}
             self.reloadViewController()
-            
-            //MARK: SAILSJS
-            //After login or register user, it tries to fetch users object, witch than should be saved for app
-//            Service.shared.fetchUserProfile { (res) in
-//                switch res{
-//                case .success(let user):
-//                    let userProfile = User()
-//                    userProfile.name = user.fullName
-//                    userProfile.email = user.emailAddress
-//                    userProfile.isLogined = true
-//                    
-//                    //It is not the best solution but for this purpose it will be alright
-//                    //So the plan is when logged in, create user and delete when logout
-//                    ProjectListRepository.instance.createUser(user: userProfile)
-//                    //update text
-//                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
-//                    //for some reasons, need to change it every time text was updated
-//                    self.contentTextView.textAlignment = .center
-//                    //hide button, so only logout button is visible.
-//                    self.loginButton.isHidden = true
-//                case .failure(let err):
-//                    print("Failed to fetch user profile: ", err)
-//                }
-//            }
         }
         accessUserViewController.modalPresentationStyle = .fullScreen
         self.present(accessUserViewController, animated: true)
@@ -271,36 +244,10 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             FirebaseService.shared.handleLogout {
                 self.reloadViewController()
             }
-            
-            
-            //MARK: SAILSJS
-//            Service.shared.handleLogout { (res) in
-//                switch res {
-//                case .success(let res):
-//                    print("user logout status is: ", res.message)
-//                    //It is not the best solution but for this purpose it will be alright
-//                    //So the plan is when logged in create user and delete when logout
-//                    let users = ProjectListRepository.instance.getAllUsers()
-//                    //delete from database
-//                    for user in users {
-//                        ProjectListRepository.instance.deleteUser(user: user)
-//                    }
-//                    
-//                    //reveal login button
-//                    self.loginButton.isHidden = false
-//                    //update text
-//                    self.contentTextView.attributedText = self.formatAttributedString(title: "Hi there!", subtitle: "Access Your profile here.")
-//                    //center it
-//                    self.contentTextView.textAlignment = .center
-//                case .failure(let err):
-//                    print(err)
-//                }
-//            }
         })
         
         alertVC.addAction(cancelAction)
         alertVC.addAction(logoutAction)
-        //shows an alert window
         present(alertVC, animated: true, completion: nil)
         
     }
@@ -340,10 +287,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         
         alertVC.addAction(deleteAction)
         alertVC.addAction(cancelAction)
-        
-        //shows an alert window
         present(alertVC, animated: true, completion: nil)
-        
     }
     
     
@@ -367,16 +311,14 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             self.deleteButtonLabel.isHidden = self.deleteButtonImage.isHidden
             //update text
             self.contentTextView.attributedText = self.formatAttributedString(title: "Hello \(userProfile.name)!", subtitle: "\(userProfile.email)")
-            //for some reasons, need to change it every time text was updated
+            //change it after text update
             self.contentTextView.textAlignment = .center
-            //hide button, so only logout button is visible.
+            //hide login button, so only logout button is visible.
             self.loginButton.isHidden = true
-            
         }else{
-            //Here I assume that I try to reload page with no user
             //clear previously saved user to view controller
             self.user = nil
-            //hide delete account button, because user is not logged in
+            //hide delete account button, when user is not logged in
             self.deleteUserAccountButton.isHidden = true
             self.cloudIcon.isHidden = true
             self.syncTitle.isHidden = true
@@ -385,7 +327,6 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
             self.loginButton.isHidden = false
             //update text
             self.contentTextView.attributedText = self.formatAttributedString(title: "Hello!", subtitle: "Access Your profile here.")
-            //center it
             self.contentTextView.textAlignment = .center
         }
     }
@@ -420,20 +361,16 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         lightCircleView.widthAnchor.constraint(equalToConstant: 188).isActive = true
         lightCircleView.heightAnchor.constraint(equalToConstant: 188).isActive = true
         
-        transitionButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19).isActive = true
-        transitionButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        transitionButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
-        
-        
-        
-        deleteUserAccountButton.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
+        profileConfigurationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 19).isActive = true
+        profileConfigurationButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        profileConfigurationButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        profileConfigurationButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        deleteUserAccountButton.centerYAnchor.constraint(equalTo: profileConfigurationButton.centerYAnchor, constant: 0).isActive = true
         deleteUserAccountButton.leadingAnchor.constraint(equalTo: circleView.leadingAnchor, constant: 0).isActive = true
         deleteUserAccountButton.heightAnchor.constraint(equalToConstant: 33).isActive = true
         deleteUserAccountButton.widthAnchor.constraint(equalToConstant: 96).isActive = true
-        
-        cloudIcon.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
-        cloudIcon.leadingAnchor.constraint(equalTo: transitionButton.trailingAnchor, constant: 70).isActive = true
+        cloudIcon.centerYAnchor.constraint(equalTo: profileConfigurationButton.centerYAnchor, constant: 0).isActive = true
+        cloudIcon.leadingAnchor.constraint(equalTo: profileConfigurationButton.trailingAnchor, constant: 70).isActive = true
         cloudIcon.widthAnchor.constraint(equalToConstant: 36).isActive = true
         cloudIcon.heightAnchor.constraint(equalToConstant: 29).isActive = true
         
@@ -443,7 +380,7 @@ class UserProfileViewController: UIViewController, CircleTransitionable {
         syncTitle.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
         circleView.leadingAnchor.constraint(equalTo: syncTitle.trailingAnchor, constant: 40).isActive = true
-        circleView.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor).isActive = true
+        circleView.centerYAnchor.constraint(equalTo: profileConfigurationButton.centerYAnchor).isActive = true
         circleView.widthAnchor.constraint(equalToConstant: 33).isActive = true
         circleView.heightAnchor.constraint(equalToConstant: 33).isActive = true
         

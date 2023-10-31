@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class TextNoteViewController: UIViewController,  UINavigationControllerDelegate, UITextViewDelegate{
     //MARK: Properties
     lazy var dismissButton: UIButton = {
@@ -112,7 +112,6 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
     
     //create text note object
     func createTextNote(text: String) -> TextNote{
-        //        guard let height = self.selectedImageHeight, let width = selectedImageWidth else {fatalError()}
         let textNote = TextNote()
         
         let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width / 2.2, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
@@ -133,12 +132,9 @@ class TextNoteViewController: UIViewController,  UINavigationControllerDelegate,
     }
     
     fileprivate func configureKeyboardObservers(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
-
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
     }
     
     @objc fileprivate func handleKeyboardWillHide(notification: NSNotification){

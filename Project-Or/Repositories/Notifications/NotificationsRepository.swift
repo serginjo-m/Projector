@@ -11,13 +11,12 @@ import UIKit
 
 class NotificationsRepository {
     
-    static let shared = NotificationsRepository()//initializer
-
-    //constructs views & VC architecture
+    static let shared = NotificationsRepository()
+    
     func configureVCStack(category: String, eventDate: Date, stepId: String? = nil, projectId: String? = nil){
         
         guard let window = UIApplication.shared.keyWindow else { return }
-        //That is probably how I get all view controllers stack
+    
         let controller = window.rootViewController
         let calendar = Calendar(identifier: .gregorian)
         switch category {
@@ -50,15 +49,15 @@ class NotificationsRepository {
                     if let nav = second as? UINavigationController {
                         let calendarViewController = (nav.viewControllers.first as? CalendarViewController)
                         if let calendarVC = calendarViewController {
-                            //notification date
+                            
                             let notificationDate = calendar.startOfDay(for: eventDate)
-                            //set notification date that should be displayed after VC did appear
+                            
                             calendarVC.dateToDisplay = notificationDate
                         }
                         
                     }
                 }
-                //switch to calendar
+                
                 tab.selectedIndex = 1
             }
             
@@ -67,16 +66,14 @@ class NotificationsRepository {
         }
     }
     
-    //updates tab bar item & app icon badge number
     func updateTabBarItemBudge(applyBadge: Bool){
 
         if let window = UIApplication.shared.keyWindow {
                 if let tabController = window.rootViewController as? UITabBarController{
                     if let tabItems = tabController.tabBar.items {
-                        // In this case we want to modify the badge number of the fifth tab:
+                        
                         let tabItem = tabItems[4]
                         
-                        //apply badge or remove?
                         if applyBadge{
                             tabItem.badgeValue = "1"
                         }else{
@@ -86,6 +83,5 @@ class NotificationsRepository {
                     }
                 }
             }
-
     }
 }

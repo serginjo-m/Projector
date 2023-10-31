@@ -9,10 +9,7 @@
 import UIKit
 
 struct RecentDay {
-    // Date represents a given day in a month.
     let date: Date
-    //The number to display on the collection view cell.
     let number: String
-    //Date string that will be used for comparison
     let dateString: String
 }

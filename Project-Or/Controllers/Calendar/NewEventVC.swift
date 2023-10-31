@@ -13,22 +13,16 @@ import Foundation
 import os
 import Photos
 
-
+//MARK: OK
 class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
-    //---------------------------- temporary solution --------------------------------------
-    //there I can have many options, because event can last more then 1 day or a couple of hours
     //MARK: Properties
-    
-    //start & end time can be different from datePicker Date()
-    //so I use function to format the same Date() for all
     var eventDate = Date()
     var eventStart: Date?
     var eventEnd: Date?
-    //project step events need some configuration
     var stepId: String?
     var projectId: String?
-    //quick notes save image url here
+    //quick notes saves image url here
     var pictureUrl: String?
     
     private lazy var dateFormatterFullDate: DateFormatter = {
@@ -37,9 +31,9 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return dateFormatter
     }()
     
-    //update event needs some information about event
+    //update requires information about event
     var event: Event?
-    //unique project id for updating
+    
     var eventId: String? {
         didSet{
             if let eventId = eventId {
@@ -57,9 +51,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
-        
         button.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
-       
         button.adjustsImageWhenHighlighted = false
         button.addTarget(self, action: #selector(backAction(_:)), for: .touchUpInside)
         return button
@@ -146,12 +138,10 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         let picker = UIDatePicker()
         picker.contentHorizontalAlignment = .left
         picker.datePickerMode = UIDatePicker.Mode.date
-        
         picker.clipsToBounds = true
         picker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         return picker
     }()
-    
     
     lazy var startTimePicker: UIDatePicker = {
         let picker = UIDatePicker()
@@ -236,7 +226,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     var dismissButtonTopAnchor: NSLayoutConstraint!
     
-    //MARK: VC Lifecycle
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -269,7 +259,6 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         //request permission for sending notifications
         if #available(iOS 13.0, *) {
             NotificationManager.shared.requestAuthorization { granted in
-                
                 if granted {
                     //showNotificationSettingsUI = true
                 }
@@ -288,10 +277,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     override func viewDidLayoutSubviews() {
         updateSaveButtonState()
     }
-    
-  
     //MARK: Methods
-    
     fileprivate func configureKeyboardObservers(){
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -316,7 +302,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @objc fileprivate func handleKeyboardWillShow(notification: NSNotification){
                 
         let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
-        //keyboard pop-up animation time
+        //keyboard pop-up animation duration
         if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
             if let keyboardRectangle = keyboardFrame?.cgRectValue {
                 
@@ -335,16 +321,12 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @objc func saveAction(_ sender: Any) {
         //creates new or update existing
         let event: Event = self.defineEventTemplate()
-        
         if reminderSwitch.isOn == true {
             //check if current event has previously created notification/reminder
             checkForPrevNotification()
-            
             //Notification displays in Notification Tab
             event.reminder = createNotification(event: event)
-            
             if #available(iOS 13.0, *) {
-                
                 //Task object, that passing in NotificationManager, contains reminder
                 let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
                 //if Event contains Notification (unwrap optional value)
@@ -365,26 +347,20 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         guard let eventDate = event.date else {return}
         //new event
         if self.eventId == nil{
-            
             //creates new project instance
             ProjectListRepository.instance.createEvent(event: event)
-            
             UserActivitySingleton.shared.createUserActivity(description: "New Event on \(self.dateFormatterFullDate.string(from: eventDate)): \(event.title)")
         }else{
-            //because event with that id exist it perform update
+            //because an event with that ID stored it performs an update
             ProjectListRepository.instance.updateEvent(event: event)
-            //save event  to activity
             UserActivitySingleton.shared.createUserActivity(description: "\(event.title) on \(self.dateFormatterFullDate.string(from: eventDate)) was updated")
         }
         
         if let stepIdentifier = self.stepId{
-            //assign image to step event
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
-
                 ProjectListRepository.instance.updateStepEvent(step: step, event: event)
             }
         }
-        
         dismiss(animated: true, completion: nil)
     }
     
@@ -418,7 +394,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return notification
     }
     
-    //creates event instance
+    //creates an event instance
     func defineEventTemplate() -> Event{
         
         let eventTemplate = Event()
@@ -427,46 +403,35 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
             eventTemplate.title = text
         }
         
-        //as picker change it save Date to this var
         eventTemplate.date = eventDate
         
-        //startTime must have the same Date as eventDate
         eventTemplate.startTime = eventStart != nil ? eventStart : eventDate
         
-        //whatever eventTemplate start time is, if end time is not defined it anticipates 1 hour from event start
         if let eventStartTime = eventTemplate.startTime{
-            //if end time is not defined, define event duration as 1 hour event
             eventTemplate.endTime = eventEnd != nil ? eventEnd : formatTimeBasedDate(date: eventStartTime, anticipateHours: 1, anticipateMinutes: 0)
         }
-        
-        //try to set properties
+    
         eventTemplate.projectId = self.projectId
         eventTemplate.stepId = self.stepId
-        
-        //define step event
+    
         if let stepIdentifier = self.stepId{
-            //if NewEventViewController has a step identifier, it means that event type is a project step
+
             eventTemplate.category = "projectStep"
-            //assign image to step event
             if let step = ProjectListRepository.instance.getProjectStep(id: stepIdentifier){
                 if step.selectedPhotosArray.count > 0{
                     eventTemplate.picture = step.selectedPhotosArray[0]
                 }
             }
         }
-        
         if let eventIdentifier = eventId {
             eventTemplate.id = eventIdentifier
         }
-        
         if let description = descriptionTextView.text{
             eventTemplate.descr = description
         }
-        //quick notes with images define url
         if let url = pictureUrl {
             eventTemplate.picture = url
         }
-        
         return eventTemplate
     }
     
@@ -497,14 +462,7 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //MARK: TextField
     //close date picker after touch outside textField
     @objc func tap(sender: UITapGestureRecognizer) {
-        //calls textFieldDidEndEditing
         view.endEditing(true)
-        // or use
-        //        noteTextView.resignFirstResponder()
-        // or use
-        //        view.super().endEditing(true)
-        // or use
-        //        view.keyboardDismissMode = .onDrag
     }
     
     
@@ -520,81 +478,49 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     private func updateSaveButtonState(){
         guard let text = nameTextField.text else {return}
-        //let date = dateTextField.text ?? ""
         saveButton.isEnabled = !text.isEmpty
         requiredStarLabel.isHidden = saveButton.isEnabled
     }
-        
-    //date picker action
+    //date picker
     @objc func dateChanged(_ sender: UIDatePicker) {
         guard let startDate = eventStart, let endDate = eventEnd else {return}
-        
         self.eventDate = sender.date
-        
         self.startTimePicker.date = formatTimeBasedDate(date: startDate, anticipateHours: 0, anticipateMinutes: 0)
         self.eventStart = self.startTimePicker.date
-        
-        
         self.endTimePicker.date = formatTimeBasedDate(date: endDate, anticipateHours: 0, anticipateMinutes: 0)
         self.eventEnd = self.endTimePicker.date
     }
 
-    //start time picker action
+    //start time picker
     @objc func startTimeChanged(_ sender: UIDatePicker) {
-        
-        //because format function takes event date like a day parameter, set picker date first
         self.datePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
         self.eventDate = self.datePicker.date
-        
-        //-------------> start time picker is changed
-        //define exact time, when event should begin
         self.eventStart = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
-        
-        
-        //anticipate end time to 1 hour by default
         self.endTimePicker.date = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 30)
         self.eventEnd = self.endTimePicker.date
-        
         updateSaveButtonState()
     }
 
-    //end time picker action
+    //end time picker
     @objc func endTimeChanged(_ sender: UIDatePicker) {
-        
-        //--------> so it did not change the main date
-        // that's why I should leave it as it is
-        
-        //---------> it did not affect start time
-        //so even here I haven't to do something
-        
-        //---------> sender date is changed in picker
-        //prevent error, when end time is less than start time
-        
         let minDuration = formatTimeBasedDate(date: startTimePicker.date, anticipateHours: 0, anticipateMinutes: 30)
-        
         if sender.date < minDuration {
             sender.date = minDuration
         }
-        //define exact time, when event should end
         self.eventEnd = formatTimeBasedDate(date: sender.date, anticipateHours: 0, anticipateMinutes: 0)
-        
         updateSaveButtonState()
     }
     
     //anticipate time 
     fileprivate func formatTimeBasedDate(date: Date, anticipateHours: Int, anticipateMinutes: Int) -> Date{
-    
         let calendar = NSCalendar.current
-        
         var anticipatedDate = date
-        
         if anticipateMinutes > 0 {
             anticipatedDate = calendar.date(byAdding: .minute, value: anticipateMinutes, to: date) ?? Date()
         }
         if anticipateHours > 0 {
             anticipatedDate = calendar.date(byAdding: .hour, value: anticipateHours, to: date) ?? Date()
         }
-        
         return anticipatedDate
     }
     
@@ -675,60 +601,4 @@ class NewEventViewController: UIViewController, UITextFieldDelegate, UITextViewD
         descriptionTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         descriptionTextView.heightAnchor.constraint(equalToConstant: 126).isActive = true
     }
-    
-    
 }
-extension NewEventViewController{
-    private func dayOfWeekLetter(for dayNumber: Int) -> String {
-        switch dayNumber {
-        case 1:
-            return "Sunday"
-        case 2:
-            return "Monday"
-        case 3:
-            return "Tuesday"
-        case 4:
-            return "Wednesday"
-        case 5:
-            return "Thursday"
-        case 6:
-            return "Friday"
-        case 7:
-            return "Saturday"
-        default:
-            return ""
-        }
-    }
-    
-    private func monthString(for monthNumber: Int) -> String {
-        switch monthNumber {
-        case 1:
-            return "Jan"
-        case 2:
-            return "Feb"
-        case 3:
-            return "Mar"
-        case 4:
-            return "Apr"
-        case 5:
-            return "May"
-        case 6:
-            return "Jun"
-        case 7:
-            return "Jul"
-        case 8:
-            return "Aug"
-        case 9:
-            return "Sep"
-        case 10:
-            return "Oct"
-        case 11:
-            return "Nov"
-        case 12:
-            return "Dec"
-        default:
-            return ""
-        }
-    }
-}
-

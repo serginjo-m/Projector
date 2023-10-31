@@ -11,14 +11,9 @@ import RealmSwift
 class DayActivity: Object {
     
     @objc dynamic var id = UUID().uuidString
-    
-    // Date represents a given day in a month.
     @objc dynamic var date: String = " 1 Mar 2021"
-    
-    //an array of all user activities during the day
     let userActivities = List<UserActivity>()
     
-    //MARK: Methods
     override static func primaryKey() -> String {
         return "id"
     }

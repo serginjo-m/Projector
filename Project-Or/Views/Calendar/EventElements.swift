@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-//reuse it inside SidePanelView
+
 class ElementsView: UIView {
     
     //MARK: Initialization

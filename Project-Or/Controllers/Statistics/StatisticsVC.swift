@@ -8,9 +8,9 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class StatisticsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
-   
+    //MARK: Properties
     var cellIdentifier = "cellId"
     
     //table view
@@ -90,7 +90,6 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
         return label
     }()
     
-    
     //configure categories numbers
     fileprivate func setupCategories() {
         
@@ -132,49 +131,40 @@ class StatisticsViewController: UIViewController, UITableViewDelegate, UITableVi
             number: String(totalFuel),
             units: "L")
         
-        
         //add to stack view
         [moneyNumberStackView, timeNumberStackView, fuelNumberStackView].forEach {
             categoriesStackView.addArrangedSubview($0)
         }
     }
     
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        
         view.backgroundColor = .white
-        
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
-        
         [pageTitle, categoriesTitle, categoriesStackView, chartTitle, barChartView, projectsTVTitle, statisticTableView].forEach {
             contentUIView.addSubview($0)
         }
-        
         setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        
         //update project database
         projects = ProjectListRepository.instance.getProjectLists()
         //configure categories numbers
         setupCategories()
-        
         barChartView.barChartController.setStatisticsDictionary()
         barChartView.barChartController.setCategoriesMaximumValue()
         barChartView.barChartController.defineItemsArray()
         barChartView.barChartController.collectionView.reloadData()
-        
         statisticTableView.reloadData()
     }
     
 
     //MARK: Table View Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return projects.count
     }
     

@@ -10,16 +10,11 @@ import UIKit
 import RealmSwift
 
 class TextNote: Object {
-    
+
     @objc dynamic var id = UUID().uuidString
-    
-    //TextNote text
     @objc dynamic var text = ""
-    
-    //text block height
     @objc dynamic var height = 0
     
-    //MARK: Methods
     override static func primaryKey() -> String {
         return "id"
     }

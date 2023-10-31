@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//MARK: OK
 
 //container for total category values
 class StatisticContainer: UIView {

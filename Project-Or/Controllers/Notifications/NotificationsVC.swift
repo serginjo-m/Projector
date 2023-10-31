@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-
+//MARK: OK
 class NotificationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: Properties
@@ -23,10 +23,9 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     var items: [Notification] = []
-    
-    //cell identifier
+
     let cellIdentifier = "cellIdentifier"
-    //TABLE VIEW
+    
     lazy var notificationTableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -46,20 +45,15 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         return view
     }()
     
-    
-    
     //MARK: VCLifecycle
     override func viewDidLoad() {
-        
         view.backgroundColor = UIColor.init(white: 247/255, alpha: 1)
-        
         view.addSubview(headerContainerView)
         view.addSubview(notificationTableView)
-       
         setupConstraints()
     }
     
-    //view controller update point :)
+    //view controller update
     override func viewWillAppear(_ animated: Bool) {
          //once NotificationsVC opened reset all badges
         UserDefaults(suiteName: "notificationsDefaultsBadgeCount")?.set(1, forKey: "count")
@@ -80,7 +74,6 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         items = notifications.sorted(by: { (a, b) in return a.eventDate > b.eventDate })
         
         notificationTableView.reloadData()
-        
     }
    
 
@@ -109,7 +102,7 @@ class NotificationsViewController: UIViewController, UITableViewDelegate, UITabl
         let notification = items[indexPath.row]
         
         ProjectListRepository.instance.updateNotificationCompletionStatus(notification: notification, isComplete: true)
-        //depending on notification type define navigation VC stack
+        //depending on notification type, define navigation VC stack
         if notification.category == "step" {
             NotificationsRepository.shared.configureVCStack(category: "step", eventDate: Date(), stepId: notification.stepId, projectId: notification.projectId)
         } else if notification.category == "event" {

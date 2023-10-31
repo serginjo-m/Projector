@@ -8,7 +8,6 @@
 
 import UIKit
 
-// template that holds configuration for every cell
 class CategoryButtonSetting: NSObject{
     let imageName: String
     let cellColor: UIColor

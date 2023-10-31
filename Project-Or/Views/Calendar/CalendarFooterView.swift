@@ -19,9 +19,8 @@ class CalendarFooterView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        //align image to the right side
+        //aligns an image to the right side
         button.semanticContentAttribute = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
-        
         
         button.setImage(UIImage.init(named: "calendarNextArrow"), for: .normal)
         button.setTitle("NEXT  ", for: .normal)
@@ -66,7 +65,6 @@ class CalendarFooterView: UIView {
         let calendarCellHalfWidth = round((self.frame.width / 7)/2)
         //day label spacing :>)
         let properButtonPadding = calendarCellHalfWidth - dayLabelHalfWidth
-        
         
         let smallDevice = UIScreen.main.bounds.width <= 350
         

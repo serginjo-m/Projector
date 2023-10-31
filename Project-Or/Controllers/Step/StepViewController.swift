@@ -9,28 +9,19 @@
 import UIKit
 import RealmSwift
 
+//MARK: OK
+
 class StepViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate{
     
     //MARK: Properties
-    //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "stepTableViewCell"
-    
-    //All this stuff is for zooming items
-    //hold dimension of event view displayed in side panel before zoomimg it to full dimension
     var startingFrame: CGRect?
-    //background behind full dimension event, after it zooms in
     var zoomBackgroundView: UIView?
-    //need to hide it before animation starts
     var startingView: UIView?
-    
-    //animation start point
     var startingImageFrame: CGRect?
-    //black bg
     var blackBackgroundView: UIView?
-    //view to zoom in
     var startingImageView: UIView?
     
-    //TABLE VIEW
     lazy var stepTableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -51,7 +42,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     var contentUIView = UIView()
     
-    //Instance of Project Selected by User
     var projectStep: ProjectStep? {
         get{
             //Retrieve a single object with unique identifier (stepID)
@@ -62,7 +52,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     var projectId: String?
-    
     //step id passed by detail VC
     var stepID: String
     
@@ -189,9 +178,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         return button
     }()
 
-    
-    
-    //zooming stuff (because same items need different anchors for zoomingOUt and ZoomingIN)
     var stepCommentHeightConstraint: NSLayoutConstraint!
     var stepCommentTopAnchorHigherConstraint: NSLayoutConstraint!
     var stepCommentTopAnchorLowerConstraint: NSLayoutConstraint!
@@ -216,24 +202,16 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //by default - black
         view.backgroundColor = .white
-        
-        //add scroll containers
+        //scroll containers
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
-        
-        //add items to a view
         [dismissButton, stepImagesCV, categoryLabel, circleImage, stepToEventButton,editStepButton, removeStepButton, reminderStepButton, stepComment, stepNameTitle, stepItemsTitle, stepTableView, reminderViewContainer].forEach {
             contentUIView.addSubview($0)
         }
         reminderViewContainer.addSubview(reminderLabel)
         reminderViewContainer.addSubview(dismissReminderButton)
-        
-        //constraints that are constant and don't need to be updated
         setupLayout()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -257,20 +235,20 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepImagesCV.stepImagesCollectionView.reloadData()
             contentHeightAnchor.constant = totalContentHeight
         }
-        //secondary place title, that is the reference for other items constraints
-        if step.comment.isEmpty == true {//if no comments
-            if step.selectedPhotosArray.count == 0 {//if no photos
-                //place it under buttons
+
+        if step.comment.isEmpty == true {
+            if step.selectedPhotosArray.count == 0 {
+                //under buttons
                 stepItemsTitleTopAnchorMiddleConstraint.isActive = false
                 stepItemsTitleTopAnchorLowerConstraint.isActive = false
                 stepItemsTitleTopAnchorHigherConstraint.isActive = true
             }else{
-                //place it under photos
+                //under photos
                 stepItemsTitleTopAnchorHigherConstraint.isActive = false
                 stepItemsTitleTopAnchorLowerConstraint.isActive = false
                 stepItemsTitleTopAnchorMiddleConstraint.isActive = true
             }
-        }else{//place it under comment
+        }else{//under comment
             stepItemsTitleTopAnchorHigherConstraint.isActive = false
             stepItemsTitleTopAnchorMiddleConstraint.isActive = false
             stepItemsTitleTopAnchorLowerConstraint.constant = -(stepTableView.contentSize.height  + 40)
@@ -287,10 +265,8 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         stepNameTitle.text = step.name
         stepComment.text = step.comment
         stepToEventButton.isSelected = step.complete
-        //hide or not, if no content is available for element
         stepComment.isHidden = step.comment.isEmpty == true ? true : false
         stepImagesCV.isHidden = step.selectedPhotosArray.count == 0 ? true : false
-        
         
         if let event = step.event{
             if event.reminder != nil{
@@ -299,7 +275,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         }else{
             reminderStepButton.isSelected = false
         }
-        
         //hide if no data available
         if step.selectedPhotosArray.count == 0 {
             stepImagesCV.isHidden = true
@@ -309,7 +284,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             stepImagesCV.isHidden = false
         }
         
-        //constraints and visibility of some views, that needs update after each update
+        //constraints and visibility of some views, that needs to be reloaded after each update
         updateDynamicConstraints()
         self.stepTableView.reloadData()
     }
@@ -319,11 +294,9 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.popViewController(animated: true)
     }
     
-    
-    
     //Add to Calendar Event
     @objc func addStepToCalendarEvent(button: UIButton) {
-        //hide reminder if it open
+
         hideReminderView()
         
         guard let step = projectStep else {return}
@@ -336,33 +309,28 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let projId = projectId {
             newEventViewController.projectId = projId
         }
-        //if step has some images define event image
+        //if step has images, define event image
         if step.selectedPhotosArray.count > 0 {
             //use UIImageView extension function that retreaves image from URL
             newEventViewController.imageHolderView.retreaveImageUsingURLString(myUrl: step.selectedPhotosArray[0])
         }
-        //define event name
         newEventViewController.nameTextField.text = step.name
-        //define comment
         newEventViewController.descriptionTextView.text = step.comment
-        //show new event view controller
         navigationController?.present(newEventViewController, animated: true, completion: nil)
     }
     
-    //DELETE STEP
     @objc func deleteStep( button: UIButton){
         //hide reminder if it open
         hideReminderView()
         
-        //create new alert window
         let alertVC = UIAlertController(title: "Delete Step?", message: "Are You sure want delete this step?", preferredStyle: .alert)
-        //cancel button
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        //delete button
+
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
             
             guard let step = self.projectStep, let projectId = self.projectId else {return}
-//            check if step contain a reminder
+            //check if step contains a reminder
             if step.reminderEnabled == true{
                 if #available(iOS 13.0, *) {
                     
@@ -383,7 +351,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             
             UserActivitySingleton.shared.createUserActivity(description: "Deleted \(step.name)")
-            //fetch project for deleting step inside it
+            
             var project: ProjectList? {
                 get{
                     return ProjectListRepository.instance.getProjectList(id: projectId)
@@ -405,13 +373,10 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         alertVC.addAction(cancelAction)
         alertVC.addAction(deleteAction)
-        //shows an alert window
         present(alertVC, animated: true, completion: nil)
     }
     
     @objc func setReminder(button: UIButton){
-        
-        
         if let step = self.projectStep, let event = step.event, let notification = event.reminder  {
             let formatter = DateFormatter()
             
@@ -435,7 +400,7 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         hideReminderView()
     }
     
-    private func hideReminderView(button: Bool? = nil){
+    func hideReminderView(button: Bool? = nil){
         
         if let _ = button {
             
@@ -448,7 +413,6 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //EDIT ACTION
     @objc func editButtonAction(_ sender: Any){
-        //hide reminder, if it opened
         hideReminderView()
         
         guard let step = projectStep else {return}
@@ -456,39 +420,30 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         let editStepViewController = NewStepViewController()
         editStepViewController.modalTransitionStyle = .coverVertical
         editStepViewController.modalPresentationStyle = .fullScreen
-        //define step id
         editStepViewController.stepID = stepID
-        //define project id
         if let projId = projectId {
             editStepViewController.projectId = projId
         }
         editStepViewController.projectId = projectId
         editStepViewController.viewControllerTitle.text = "Edit Step"
         editStepViewController.stepNameTextField.text = step.name
-        
-        //trick: if cv array modified it tries to modify data source object, so need to add item by item
         for item in step.selectedPhotosArray{
             editStepViewController.newStepImages.photoArray.append(item)
         }
         editStepViewController.stepItems.append(objectsIn: step.stepItemsList)
-        
         editStepViewController.stepComplete = step.complete
-        //configure expanding reminder active state
         if let event = step.event{
             if let reminder = event.reminder{
-                //reminder button configure from picker, not notification object
+                //*reminder button configured from picker, but not from notification object
                 editStepViewController.expandingReminderView.timePicker.date = reminder.eventDate
                 editStepViewController.expandingReminderView.datePicker.date = reminder.eventDate
-                
                 editStepViewController.expandingReminderView.notification = reminder
             }
         }
-        
         self.present(editStepViewController, animated: true, completion: nil)
     }
     
     //MARK: Table View
-    //table view section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let num = projectStep?.stepItemsList.count  {
             return num
@@ -628,11 +583,11 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
         //diff size string need width calculation for constraints
         guard let categoryLabelString = categoryLabel.text, let step = projectStep else {return}
             
-       //calculates precise label width needed
+       //calculates precise label width
         let categoryLabelSize = ceil(categoryLabelString.size(withAttributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)]).width)
         categoryLabel.widthAnchor.constraint(equalToConstant: categoryLabelSize).isActive = true
         
-        //this logic makes stepNamelabel size correct
+        //logic that makes stepNamelabel size correct
         let rect = NSString(string: step.name).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)], context: nil)
         
         stepNameTitleHeightAnchor.constant = rect.height + 20
@@ -651,352 +606,3 @@ class StepViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 }
 
-//MARK: Table View Cell
-class StepTableViewCell: UITableViewCell {
-    
-    //use for zooming delgate
-    var stepViewController: StepViewController?
-    
-    var template: StepItem? {
-        didSet {
-            guard let template = template else {return}
-            itemTitle.text = template.title
-            descriptionLabel.text = template.text
-        }
-    }
-
-    let titleIcon: UIImageView = {
-       let image = UIImageView()
-        image.image = UIImage(named: "descriptionNote")
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    let itemTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Something"
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.text = "First of all I need to clean and inspect all surface."
-        //label.backgroundColor = UIColor.lightGray
-        label.textColor = UIColor.init(white: 0.3, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    let backgroundBubble: UIView = {
-        let bg = UIView()
-        bg.backgroundColor = UIColor(displayP3Red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
-        bg.layer.cornerRadius = 12
-        bg.translatesAutoresizingMaskIntoConstraints = false
-        bg.layer.masksToBounds = true
-        return bg
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        //turn of change background color on selected cell
-        selectionStyle = UITableViewCell.SelectionStyle.none
-        let tap = UITapGestureRecognizer(target: self, action: #selector(zoomIn))
-        addGestureRecognizer(tap)
-        
-        addSubview(itemTitle)
-        addSubview(titleIcon)
-        addSubview(backgroundBubble)
-        addSubview(descriptionLabel)
-        
-        titleIcon.centerYAnchor.constraint(equalTo: itemTitle.centerYAnchor).isActive = true
-        titleIcon.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
-        titleIcon.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        titleIcon.heightAnchor.constraint(equalToConstant: 14).isActive = true
-        
-        itemTitle.leftAnchor.constraint(equalTo: titleIcon.rightAnchor, constant: 7).isActive = true
-        itemTitle.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        itemTitle.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        itemTitle.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        descriptionLabel.topAnchor.constraint(equalTo: itemTitle.bottomAnchor, constant: 20).isActive = true
-        descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
-        descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        
-        backgroundBubble.topAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -16).isActive = true
-        backgroundBubble.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor, constant: -16).isActive = true
-        backgroundBubble.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16).isActive = true
-        backgroundBubble.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor, constant: 16).isActive = true
-        
-        //Small tip
-        //NSLayoutConstraint.activate([CONSTRAINTS])
-    }
-    
-    //from cell to view controller
-    @objc func zoomIn(tapGesture: UITapGestureRecognizer){
-        
-        guard let stepItem = template, let viewController = stepViewController else { return }
-        viewController.performZoomForStartingEventView(stepItem: stepItem, startingView: self)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-}
-
-extension StepViewController {
-    
-    func performZoomForCollectionImageView(startingImageView: UIView){
-        
-        //hide reminder if it open
-        hideReminderView()
-        
-        self.startingImageView = startingImageView
-        self.startingImageView?.isHidden = true
-        
-        startingImageFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
-
-        let zoomingImageView = UIImageView(frame: startingImageFrame!)
-        zoomingImageView.isUserInteractionEnabled = true
-        zoomingImageView.contentMode = .scaleAspectFill
-        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleImageZoomOut)))
-        zoomingImageView.backgroundColor = .red
-        if let cellImageView = startingImageView as? StepImageCell, let url = cellImageView.template {
-            zoomingImageView.retreaveImageUsingURLString(myUrl: url)
-        }
-
-        if let keyWindow = UIApplication.shared.keyWindow{
-            blackBackgroundView = UIView(frame: keyWindow.frame)
-            blackBackgroundView?.alpha = 0
-            blackBackgroundView?.backgroundColor = .black
-
-            keyWindow.addSubview(blackBackgroundView!)
-            keyWindow.addSubview(zoomingImageView)
-
-            //math? of proportion with one side
-            //h2 / w2 = h1 / w1
-            //h2 = h1 / w1 * w2
-
-            let height = self.startingImageFrame!.height / self.startingImageFrame!.width * keyWindow.frame.width
-
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-
-                self.blackBackgroundView?.alpha = 1
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                zoomingImageView.center = keyWindow.center
-
-            }, completion: nil)
-
-        }
-
-    }
-    
-    @objc func handleImageZoomOut(tapGesture: UITapGestureRecognizer){
-        if let zoomOutImageView = tapGesture.view {
-            
-            zoomOutImageView.layer.cornerRadius = 5
-            zoomOutImageView.clipsToBounds = true
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                
-                zoomOutImageView.frame = self.startingImageFrame!
-                self.blackBackgroundView?.alpha = 0
-                
-            }) { (completed: Bool) in
-                
-                //remove it completely
-                zoomOutImageView.removeFromSuperview()
-                self.startingImageView?.isHidden = false
-            }
-        }
-    }
-    
-    func performZoomForStartingEventView(stepItem: StepItem, startingView: UIView){
-        
-        //hide reminder if it open
-        hideReminderView()
-        
-        guard let stepTableViewCell = startingView as? StepTableViewCell else {return}
-        
-        //save reference to the View() , so it can be used later
-        self.startingView = stepTableViewCell
-        //hide original view
-        self.startingView?.isHidden = true
-
-        guard let itemTemplate = stepTableViewCell.template,
-              //it is a whole view frame
-              let unwStartingFrame = startingView.superview?.convert(startingView.frame, to: nil) else {return}
-
-        //bubble frame
-        let zoomFrame = CGRect(x: unwStartingFrame.origin.x, y: unwStartingFrame.origin.y, width: unwStartingFrame.width, height: unwStartingFrame.height)
-        //save frame for future use
-        startingFrame = zoomFrame
-
-        //expanded view size should start from small
-        let zoomingView = StepItemZoomingView(stepItem: itemTemplate, frame: zoomFrame)
-        //dismiss is not a button. It is a view
-        zoomingView.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOutItem)))
-        
-        zoomingView.title.text = stepTableViewCell.itemTitle.text
-        zoomingView.descriptionLabel.text = stepTableViewCell.descriptionLabel.text
-        zoomingView.descriptionTextView.text = zoomingView.descriptionLabel.text
-        
-        //button actions are located in parent viewController
-        zoomingView.removeButton.addTarget(self, action: #selector(removeStepItem(_:)), for: .touchUpInside)
-        zoomingView.editButton.addTarget( self, action: #selector(editStepItem(_:)), for: .touchUpInside)
-        
-        if let keyWindow = UIApplication.shared.keyWindow {
-
-            //black transpared background
-            self.zoomBackgroundView = UIView(frame: keyWindow.frame)
-
-            zoomBackgroundView?.backgroundColor = UIColor.init(white: 0, alpha: 0.7)
-            zoomBackgroundView?.alpha = 0
-            keyWindow.addSubview(zoomBackgroundView!)
-            //add expanded event view body
-            keyWindow.addSubview(zoomingView)
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-                
-                zoomingView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width * 0.9, height: keyWindow.frame.height * 0.9)
-                
-                self.zoomBackgroundView?.alpha = 1
-                zoomingView.dismissView.alpha = 1
-                zoomingView.removeButton.alpha = 1
-                zoomingView.editButton.alpha = 1
-                
-                zoomingView.layoutIfNeeded()
-                
-                //wherever view is, make view pleced in the center of window
-                zoomingView.center = keyWindow.center
-                
-            } completion: { (completed: Bool) in
-                //do something here later .....
-            }
-        }
-    }
-    
-    // zoom out logic
-    @objc func zoomOutItem(tapGesture: UITapGestureRecognizer){
-        
-        //extract view from tap gesture
-        if let zoomOutView = tapGesture.view?.superview{
-            //corner configuration
-            zoomOutView.layer.cornerRadius = 11
-            zoomOutView.clipsToBounds = true
-            
-            guard  let zoom = zoomOutView as? StepItemZoomingView else {return}
-            
-            zoom.dismissView.alpha = 0
-            zoom.removeButton.alpha = 0
-            zoom.editButton.alpha = 0
-            zoom.thinUnderline.alpha = 0
-            zoom.descriptionTextView.alpha = 0
-            zoom.descriptionLabel.alpha = 1
-            
-            //zoom out animation
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-                //back to initial size
-                zoomOutView.frame = self.startingFrame!
-                //set back to transparent background
-                self.zoomBackgroundView?.alpha = 0
-                
-                    if let startingView = self.startingView as? StepTableViewCell {
-                        
-                        zoom.bubbleBottomAnchor.isActive = false
-                        zoom.bubbleBottomLabelAnchor.isActive = true
-                        
-                        zoom.bubbleTopAnchor.isActive = false
-                        zoom.bubbleTopLabelAnchor.isActive = true
-                        
-                        zoom.iconLeftAnchor.isActive = false
-                        zoom.iconLeftCompactAnchor.isActive = true
-                        
-                        zoom.titleTopAnchor.constant = 0
-                        zoom.descriptionTopAnchor.constant = 20
-                        
-                        zoom.descriptionHeightAnchor.isActive = false
-                        zoom.descriptionBottomAnchor.isActive = true
-                        
-                        //zoom out fonts before animate
-                        zoom.title.font = startingView.itemTitle.font
-                        zoom.descriptionLabel.font = startingView.descriptionLabel.font
-                        
-                        if startingView.descriptionLabel.isHidden == true{
-                            zoom.descriptionLabel.alpha = 0
-                        }
-                        
-                    }
-                
-                zoomOutView.layoutIfNeeded()
-                
-            } completion: { (completed: Bool) in
-                //remove temporary created view from superview
-                zoomOutView.removeFromSuperview()
-                //show back original event (bubble) view
-                self.startingView?.isHidden = false
-            }
-
-        }
-    }
-    
-    @objc func removeStepItem(_ sender: UIButton){
-        
-        guard let cell = self.startingView as? StepTableViewCell,
-              let stepItem = cell.template,
-              let zoomingItemView = sender.superview as? StepItemZoomingView else {return}
-        
-        //create new alert window
-        let alertVC = UIAlertController(title: "Delete Step Item?", message: "Are You sure You want to delete this Step Item?", preferredStyle: .alert)
-                
-        //delete button
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
-            
-            zoomingItemView.removeFromSuperview()
-            //set back to transparent background
-            self.zoomBackgroundView?.alpha = 0
-            self.startingView?.isHidden = false
-            
-            ProjectListRepository.instance.deleteStepItem(stepItem: stepItem)
-
-            self.stepTableView.reloadData()
-        })
-        
-        alertVC.addAction(deleteAction)
-        //cancel button
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        alertVC.addAction(cancelAction)
-        
-        //shows an alert window
-        present(alertVC, animated: true, completion: nil)
-    }
-    
-    @objc func editStepItem(_ sender: UIButton){
-        guard let cell = self.startingView as? StepTableViewCell,
-              let stepItem = cell.template,
-              let zoomingItemView = sender.superview as? StepItemZoomingView else {return}
-        
-        let newStepItemVC = StepItemViewController()
-        newStepItemVC.stepItem = stepItem
-        newStepItemVC.itemTitleTextField.text = stepItem.title
-        newStepItemVC.noteTextView.text = stepItem.text
-        newStepItemVC.stepID = self.stepID
-        newStepItemVC.modalPresentationStyle = .fullScreen
-        
-        
-        
-        zoomingItemView.removeFromSuperview()
-        //set back to transparent background
-        self.zoomBackgroundView?.alpha = 0
-        self.startingView?.isHidden = false
-        
-        present(newStepItemVC, animated: true)
-    }
-}

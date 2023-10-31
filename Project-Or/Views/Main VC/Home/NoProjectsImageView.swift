@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NoProjectsBannerView: UIView {
+class NoProjectsImageView: UIView {
     
     let bannerTitleWords = ["Start", "Your", "First", "Project"]
    
@@ -72,20 +72,17 @@ class NoProjectsBannerView: UIView {
         super.init(frame: CGRect.zero)
         
         configureView()
-        //appends four views to stackView, that resolves line spacing configuration
+        
         for word in bannerTitleWords {
-            
             let title = UILabel()
             title.textColor = .white
             title.font = UIFont.boldSystemFont(ofSize: 48)
             title.text = word
             title.textAlignment = .left
-            
             bannerTitleStack.addArrangedSubview(title)
         }
         
     }
-    
     
     fileprivate func configureView(){
         addSubview(firstView)
@@ -136,8 +133,6 @@ class NoProjectsBannerView: UIView {
         bannerTitleStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 168).isActive = true
         bannerTitleStack.widthAnchor.constraint(equalToConstant: 163).isActive = true
         bannerTitleStack.heightAnchor.constraint(equalToConstant: 170).isActive = true
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

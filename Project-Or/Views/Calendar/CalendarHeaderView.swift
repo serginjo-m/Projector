@@ -34,30 +34,18 @@ class CalendarHeaderView: UIView {
         }
     }
     
-    
-    
     init() {
         super.init(frame: CGRect.zero)
-        
         translatesAutoresizingMaskIntoConstraints = false
-        
         addSubview(monthLabel)
         addSubview(dayOfWeekStackView)
 
-        
         for dayNumber in 1...7 {
             let dayLabel = UILabel()
             dayLabel.font = .systemFont(ofSize: 12, weight: .bold)
             dayLabel.textColor = UIColor.init(displayP3Red: 164/255, green: 180/255, blue: 202/255, alpha: 1)
             dayLabel.textAlignment = .center
             dayLabel.text = dayOfWeekLetter(for: dayNumber)
-
-            
-            
-            // VoiceOver users don't need to hear these days of the week read to them, nor do SwitchControl or Voice Control users need to select them
-            // If fact, they get in the way!
-            // When a VoiceOver user highlights a day of the month, the day of the week is read to them.
-            // That method provides the same amount of context as this stack view does to visual users
             dayLabel.isAccessibilityElement = false
             dayOfWeekStackView.addArrangedSubview(dayLabel)
         }

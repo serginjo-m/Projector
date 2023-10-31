@@ -26,14 +26,9 @@ struct HolidayRequest {
         self.resourceURL = resourceURL
     }
     
-    
-    //once we have information, completion closure calls
-    //escaping calls after func returns
     func getHolidays(completion: @escaping([HolidayDetail]) -> Void){
-        //receive data, response, error
-        //this all happens assincr (not in main thread), because it takes some time to get inform from web
         let dataTask = URLSession.shared.dataTask(with: resourceURL){data, _, _ in
-            //check if we actually received data
+    
             guard let jsonData = data else {
                 print("No Data Available")
                 return

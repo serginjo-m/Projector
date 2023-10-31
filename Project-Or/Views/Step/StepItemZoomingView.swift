@@ -66,7 +66,6 @@ class StepItemZoomingView: UIView {
         return view
     }()
     
-    //scrollable version of description label
     lazy var descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.boldSystemFont(ofSize: 20)
@@ -96,10 +95,7 @@ class StepItemZoomingView: UIView {
         return bg
     }()
     
-    
-    
     var dismissButtonRightPaddingAnchor: NSLayoutConstraint!
-    
     //active
     var bubbleBottomAnchor: NSLayoutConstraint!
     var bubbleTopAnchor: NSLayoutConstraint!
@@ -107,7 +103,6 @@ class StepItemZoomingView: UIView {
     var titleTopAnchor: NSLayoutConstraint!
     var descriptionHeightAnchor: NSLayoutConstraint!
     var descriptionTopAnchor: NSLayoutConstraint!
-    
     //unActive
     var bubbleTopLabelAnchor: NSLayoutConstraint!
     var bubbleBottomLabelAnchor: NSLayoutConstraint!
@@ -117,13 +112,10 @@ class StepItemZoomingView: UIView {
     init(stepItem: StepItem, frame: CGRect) {
         self.stepItem = stepItem
         super.init(frame: frame)
-        
         configureViewDisplay()
-        
     }
     
     func configureViewDisplay(){
-        
         
         self.backgroundColor = .clear
         
@@ -136,8 +128,7 @@ class StepItemZoomingView: UIView {
         addSubview(thinUnderline)
         addSubview(descriptionLabel)
         addSubview(descriptionTextView)
-        
-        
+
         titleIcon.centerYAnchor.constraint(equalTo: title.centerYAnchor).isActive = true
         iconLeftAnchor = titleIcon.leftAnchor.constraint(equalTo: leftAnchor, constant: 22)
         iconLeftAnchor.isActive = true

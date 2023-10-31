@@ -111,10 +111,6 @@ class CalendarCell: UICollectionViewCell{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        // This allows for rotations and trait collection
-        // changes (e.g. entering split view on iPad) to update constraints correctly.
-        // Removing old constraints allows for new ones to be created
-        // regardless of the values of the old ones
         NSLayoutConstraint.deactivate(selectionBackgroundView.constraints)
         
         let size = traitCollection.horizontalSizeClass == .compact ?

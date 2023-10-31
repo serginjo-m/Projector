@@ -18,7 +18,6 @@ class StepImageCell: UICollectionViewCell{
         }
     }
     
-    //Properties
     var stepImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "interior")
@@ -27,8 +26,6 @@ class StepImageCell: UICollectionViewCell{
         return image
     }()
     
-    
-    //initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 8

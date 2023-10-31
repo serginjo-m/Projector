@@ -9,7 +9,8 @@
 import UIKit
 import RealmSwift
 
-//Base for collection View controller
+//MARK: OK
+
 class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, BaseCollectionViewDelegate, UIScrollViewDelegate{
     
     func performZoomInForStartingImageView(startingImageView: UIView) {
@@ -60,70 +61,46 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
     }()
     
    
-    //here creates a horizontal collectionView
+    //horizontal CollectionView
     let itemsCollectionView: UICollectionView = {
-        
-        //instance for UICollectionView purposes
         let layout = PinterestLayout()
-        
-        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this instance
-        // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
         collectionView.backgroundColor = UIColor.clear
-        
-        //deactivate default constraints
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         return collectionView
     }()
     
     lazy var collectionStackView: UIStackView = {
-        
         let stack = UIStackView()
-        
         stack.addSubview(itemsCollectionView)
-        
-        //specify delegate & datasourse for generating our individual horizontal cells
         itemsCollectionView.dataSource = self
         itemsCollectionView.delegate = self
-        
         itemsCollectionView.showsHorizontalScrollIndicator = false
         itemsCollectionView.showsVerticalScrollIndicator = false
-        
-        //Class is need to be registered in order of using inside
         itemsCollectionView.register(T.self, forCellWithReuseIdentifier: cellId)
-        
-        //CollectionView constraints
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": itemsCollectionView]))
-        
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0": itemsCollectionView]))
-        
         return stack
     }()
     
-    //variable constraints for animation
+    //animation constraints
     var sectionOptionsRightConstraint: NSLayoutConstraint!
     var sectionOptionsTopConstraint: NSLayoutConstraint!
-    //inputs animation approach
     var sectionOptionsCenterXConstraint: NSLayoutConstraint!
     var sectionOptionsWidthConstraint: NSLayoutConstraint!
     var sectionOptionsHeightConstraint: NSLayoutConstraint!
 
-    
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super .viewDidLoad()
-        
+
         view.backgroundColor = .white
-        
         view.addSubview(collectionStackView)
         view.addSubview(dismissButton)
         view.addSubview(viewControllerTitle)
         view.addSubview(sectionOptionsContainer)
         
          setupConstraints()
-        
-        //---------------------------- why here?? --------------------------------
         if let layout = itemsCollectionView.collectionViewLayout as? PinterestLayout {
             layout.delegate = self as? PinterestLayoutDelegate
         }
@@ -187,19 +164,14 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
     
     //menu position next to the selected cell button
     @objc func showOptions(_ sender: UIButton) {
-        
-            //------- Really important thing because it defines object for options menu -----------
+            //defines object for options menu
             sectionOptionsContainer.currentNoteIndex = sender.tag
-        
             optionsMenuToggle(toggle: true)
             let buttonFrame = sender.superview?.convert(sender.frame, to: nil)
             guard let topOffset = buttonFrame?.origin.y, let rightOffset = buttonFrame?.origin.x, let buttonWidth = buttonFrame?.width else {return}
-            
             sectionOptionsTopConstraint?.constant = topOffset
             sectionOptionsRightConstraint?.constant = rightOffset + buttonWidth
-            
             sectionOptionsContainer.isHidden = false
-        
     }
     
     func convertNoteToStep(index: Int, project: ProjectList) {
@@ -231,7 +203,7 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
         sectionOptionsRightConstraint = sectionOptionsContainer.rightAnchor.constraint(equalTo: view.leftAnchor)
         sectionOptionsTopConstraint = sectionOptionsContainer.topAnchor.constraint(equalTo: view.topAnchor)
         sectionOptionsWidthConstraint = sectionOptionsContainer.widthAnchor.constraint(equalToConstant: (self.view.frame.width / 2) - 26)
-        sectionOptionsCenterXConstraint = sectionOptionsContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)//not active for now
+        sectionOptionsCenterXConstraint = sectionOptionsContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)//not active
         sectionOptionsHeightConstraint = sectionOptionsContainer.heightAnchor.constraint(equalToConstant: 183)
         sectionOptionsHeightConstraint?.isActive = true
         sectionOptionsRightConstraint?.isActive = true
@@ -263,33 +235,4 @@ class BaseCollectionViewController<T: BaseCollectionViewCell<U>, U >: UIViewCont
     
 }
 
-class BaseCollectionViewCell<U>: UICollectionViewCell {
-    
-    var delegate: BaseCollectionViewDelegate?
-    
-    var item: U!
-    
-    lazy var menuButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.init(white: 217/255, alpha: 1)
-        button.layer.cornerRadius = 10
-        button.setImage(UIImage(named: "horizontal_dots"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .center
-        button.imageView?.contentMode = .scaleAspectFit
-        return button
-    }()
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        addSubview(menuButton)
-        
-        menuButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
-        menuButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        menuButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -7).isActive = true
-        menuButton.topAnchor.constraint(equalTo: topAnchor, constant: 7).isActive = true
-    }
-    
-}
 

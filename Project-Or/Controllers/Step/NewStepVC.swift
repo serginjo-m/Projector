@@ -10,7 +10,7 @@ import RealmSwift
 import os.log
 import Photos
 
-
+//MARK: OK
 class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NewStepImagesDelegate {
     
     //MARK: Properties
@@ -18,9 +18,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
     //push to view controller, reloadViews , perform configurations
     weak var delegate: EditViewControllerDelegate?
-    //set the project, that step is belongs to
+    
     var projectId: String?
-    //step id passed by detail VC
+
     var stepID: String? {
         didSet{
             if let id = self.stepID{
@@ -36,7 +36,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     var projectStep: ProjectStep?
-    
     //step completion status
     var stepComplete: Bool?
     // list of items in step
@@ -63,7 +62,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         }
     }
     
-    var realm: Realm!//create a var
+    var realm: Realm!
 
     let colorArr = [
         UIColor.init(red: 56/255, green: 136/255, blue: 255/255, alpha: 1),//blue color
@@ -128,14 +127,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     lazy var newStepImages: NewStepImages = {
         var stepImages = NewStepImages()
         // handle image picker appearance, through delegate callback!! :>)
-        //it is very important to define, what instances of view controllers are
-        //notice that I have this optional delegate var
         stepImages.delegate = self
         stepImages.translatesAutoresizingMaskIntoConstraints = false
         return stepImages
     }()
 
-    //scroll view container
     var scrollViewContainer: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -152,7 +148,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         textField.placeholder = "Write Your Step Name Here"
         textField.font = UIFont.boldSystemFont(ofSize: 15)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        // Handle the text field's user input through delegate callback.
         textField.delegate = self
         textField.addTarget(self, action:  #selector(textFieldEditing), for: .editingChanged)
         return textField
@@ -202,7 +197,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return label
     }()
     
-    //Titles
     let nameTitle: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -227,7 +221,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(selectSection), for: .touchUpInside)
-//        button.backgroundColor = .systemBlue
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 5
         button.setTitle("   Select Section for Your Step", for: .normal)
@@ -258,11 +251,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let calendar = Calendar(identifier: .gregorian)
         let ymd = calendar.dateComponents([.year, .month, .day], from: Date())
         guard let year = ymd.year, let month = ymd.month, let day = ymd.day else {return ""}
-        let myDate = "\(day)/\(month)/\(year)"// compiler gives me an error type? is it because of guard?
+        let myDate = "\(day)/\(month)/\(year)"
         return myDate
     }()
     
-    //wrap to avoid error
+    //wrap fixes error
     lazy var expandingReminderView: ExpandingReminder = {
         let reminder = ExpandingReminder(
             //expand,close & remove button (3 in 1)
@@ -272,11 +265,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
                 let applyButton = self.expandingReminderView.applyReminderButton
                 let expandButton = self.expandingReminderView.reminderExpandIcon
     
-                //Check what kind of animation should run
+                //Check what kind of animation should use
                 if applyButton.isSelected == false {
                     self.handleAnimate(active: false)
                 }else{
-                    //if apply button is not selected, it means remove notification action
+                    //if apply button is not selected -> remove notification action
                     applyButton.isSelected = false
                     if let unwStep = self.projectStep, let stepEvent = unwStep.event{
                         ProjectListRepository.instance.deleteEvent(event: stepEvent)
@@ -331,10 +324,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     var additionalHeight: CGFloat = 0
     var totalContentHeight: CGFloat = 0
     
-    //define selected project for adding steps to it
+    //define a selected project to add steps to it
     var projectList: ProjectList? {
         get{
-            //Retrieve a single object with unique identifier (projectListIdentifier)
             return realm.object(ofType: ProjectList.self, forPrimaryKey: projectId)
         }
     }
@@ -344,10 +336,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         super.viewDidLoad()
         
         
-        //request permission for sending notifications
+        //request permission, to send notifications
         if #available(iOS 13.0, *) {
             NotificationManager.shared.requestAuthorization { granted in
-                
                 if granted {
                     //showNotificationSettingsUI = true
                 }
@@ -360,19 +351,16 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
         
-        //add all subviews
         [stepNameTextField, lineUIView, saveButton, dismissButton, viewControllerTitle, nameTitle,sectionTitle, sectionButton, categoryTitle, progressCategoryStackView, photoTitle, newStepImages, expandingReminderView, descriptionTitle , descriptionTextView].forEach {
             contentUIView.addSubview($0)
         }
         
         //constraints configuration
         setupLayout()
-        
-        
         //Enable the Save button only if the text field has a valid project name.
         updateSaveButtonState()
         
-        realm = try! Realm()//create an instance of object
+        realm = try! Realm()
         //keyboard configurations
         setupKeyboardObservers()
         hideKeyboardWhenTappedAround()
@@ -380,19 +368,15 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     override func viewDidLayoutSubviews() {
         
-        //it is a bit less than I need, because this sum is not accurate enough, but that's ok
+        
         let subviewsHeightSum = (contentUIView.subviews.map { $0.frame.height }).reduce(0, +)
-        //calls two times, and first is 0
+        //calls two times, and the first is 0
         if subviewsHeightSum > 0 {
-            //103 is a correct value (771 is a content size)
             
             totalContentHeight = subviewsHeightSum + 103
             additionalHeight = totalContentHeight - self.view.frame.height
-            
             contentViewHeightAnchor.constant = additionalHeight > 0 ? subviewsHeightSum + (additionalHeight * 2) : totalContentHeight
-            
         }
-        
         updateSaveButtonState()
     }
     
@@ -409,7 +393,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         [todoButton, inProgressButton, doneButton, blockedButton].forEach { (button) in
             button.isSelected = false
         }
-        //change button selected state
         sender.isSelected = true
         //user progress category selection
         selectedStepProgress = sender.tag
@@ -420,26 +403,20 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         let newStepSectionsList = NewStepSectionsList(projectId: projectId)
         newStepSectionsList.parentViewControllerExtension = self
         newStepSectionsList.modalPresentationStyle = .fullScreen
-        
         newStepSectionsList.projectId = projectId
         present(newStepSectionsList, animated: true)
     }
     
     private func setupKeyboardObservers(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc func handleKeyboardWillHide(notification: NSNotification){
-        //only description requires pushing animation
+        //only description requires push animation
         guard descriptionTextView.isFirstResponder == true else {return}
-        
         if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            
             scrollViewTopAnchor.constant = 0
-            
             UIView.animate(withDuration: keyboardDuration, delay: 0) {
                 self.view.layoutIfNeeded()
             }
@@ -447,18 +424,13 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func handleKeyboardWillShow(notification: NSNotification){
-        //only description requires pushing animation
+        //only description requires push animation
         guard descriptionTextView.isFirstResponder == true else {return}
-        
         let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
-        
         if let keyboardDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
             if let keyboardRectangle = keyboardFrame?.cgRectValue {
-                
                 let extraHeightBit = additionalHeight * 2
-                
                 scrollViewTopAnchor.constant = additionalHeight > 0 ? -(keyboardRectangle.height) - extraHeightBit : -(keyboardRectangle.height)
-                
                 UIView.animate(withDuration: keyboardDuration, delay: 0) {
                     self.view.layoutIfNeeded()
                 }
@@ -470,12 +442,9 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     fileprivate func handleAnimate(active: Bool){
     
         guard let minHeight = minHeightAnchor else {return}
-        
-        
         if minHeight.isActive == true{
             //hide title
             self.expandingReminderView.reminderTitle.alpha = 0
-            
             minHeightAnchor?.isActive = false
             maxHeightAnchor?.isActive = true
         }else{
@@ -485,8 +454,7 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         //"active" can be true only when apply button is tapped
         if active == false {
-            
-            //rotate icon 45 degrees
+            //rotate icon to 45 degrees
             self.expandingReminderView.reminderExpandIcon.transform = self.expandingReminderView.reminderExpandIcon.transform.rotated(by: CGFloat(Double.pi/4))
         }
         
@@ -496,41 +464,34 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             let greenColor = UIColor.init(red: 53/255, green: 204/255, blue: 117/255, alpha: 1)
             let blackColor = UIColor.init(white: 55/255, alpha: 1)
             
-            //change color of close button
+            //change the color of the close button
             if let maxHeight = self.maxHeightAnchor {
                 self.expandingReminderView.reminderExpandIcon.tintColor = maxHeight.isActive ? blackColor : .white
                 self.expandingReminderView.reminderExpandButton.backgroundColor = maxHeight.isActive ? grayColor : greenColor
             }
-            //if apply button is tapped, changes background color to green
+            //if the apply button is selected, change the background color to green
             if active == true {
                 self.expandingReminderView.backgroundColor = UIColor.init(red: 211/255, green: 250/255, blue: 227/255, alpha: 1)
             }
-            //show reminder title
+            //show reminders title
             if minHeight.isActive == true{
                 self.expandingReminderView.reminderTitle.alpha = 1
             }
-            
             self.view.layoutIfNeeded()
-            
         }, completion: nil)
-        
-        
     }
     
-    //back to previous view
     @objc func backAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-    //This is my save button action!?
     @objc func saveButtonAction(_ sender: Any){
-        //check for section
+        
         if self.stepSection == nil {
             sectionButton.titleLabel?.textColor = .red
             return
         }
         
-        //prepare object ready to save
         let stepTemplate: ProjectStep = self.defineStepTemplate()
         
         if #available(iOS 13.0, *) {
@@ -541,13 +502,10 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
 
             if let event = stepTemplate.event{
                 
-                //Task include reminder
                 let reminder = Reminder(timeInterval: nil, date: event.date, location: nil, reminderType: .calendar, repeats: false)
-                //check if event includes reminder
                 if let eventReminder = event.reminder{
-                    //Task is basically an event clone, but uses different property types supported in notifications and not supported in realmSwift :(
                     let task = Task(reminder: reminder, eventDate: eventReminder.eventDate, eventTime: eventReminder.eventTime, startDate: eventReminder.eventDate, name: eventReminder.name, category: eventReminder.category, complete: eventReminder.complete, projectId: eventReminder.projectId, stepId: eventReminder.stepId, id: eventReminder.id)
-                    //set notification
+                    
                     NotificationManager.shared.scheduleNotification(task: task)
                 }
             }
@@ -555,65 +513,51 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             // Fallback on earlier versions
         }
         
-        //update existing step
         if self.stepID != nil{
             ProjectListRepository.instance.editStep(step: stepTemplate)
             UserActivitySingleton.shared.createUserActivity(description: "Updated \(stepTemplate.name) step")
-        }else{//save new step instance
-            //
-            try! self.realm!.write ({//here we actually add a new object called projectStep
+        }else{
+            try! self.realm!.write ({
                 self.projectList?.projectStep.append(stepTemplate)
             })
-            
             UserActivitySingleton.shared.createUserActivity(description: "Added new step: \(stepTemplate.name)")
         }
-        
         dismiss(animated: true, completion: nil)
     }
     
-    //prepare object before saving or updating inside DB
+    //prepare object before save or update
     func defineStepTemplate() -> ProjectStep{
-        //create project step instance
         let stepTemplate = ProjectStep()
         //if id exist(edit mode), replace it
         if let id = stepID {
-            
             stepTemplate.id = id
             //update step displayed status
             if let step = projectStep{
                 stepTemplate.displayed = step.displayed
             }
         }
-        
         stepTemplate.date = createdDate
-
         stepTemplate.name = stepNameTextField.text ?? ""
-
         stepTemplate.comment = self.descriptionTextView.text ?? ""
-        //section uses for ProjectWayViewController construction
+        //section uses for ProjectWayViewController configuration
         stepTemplate.section = stepSection
         //categories
-        let categories = ["todo", "inProgress", "done", "blocked"]//switch maybe?
+        let categories = ["todo", "inProgress", "done", "blocked"]
         stepTemplate.category = categories[selectedStepProgress]
         //photos
         for item in newStepImages.photoArray {
             stepTemplate.selectedPhotosArray.append(item)
         }
-        
-        
         //items
         stepTemplate.stepItemsList.append(objectsIn: stepItems)
         //complete
         if let complete = stepComplete{
             stepTemplate.complete = complete
         }
-        
         return stepTemplate
     }
     
-    
     fileprivate func defineStepEvent(stepTemplate: ProjectStep, notification: Notification) -> Event{
-       
         let event = Event()
         
         event.title = stepTemplate.name
@@ -624,28 +568,23 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         event.date = notification.eventDate
         event.startTime = notification.eventDate
         event.category = "projectStep"
-        //extract hours and minutes from date parameter
         let components = Calendar.current.dateComponents([.hour, .minute], from: notification.eventDate)
-        //Because expanding reminder don't have an end time, just anticipate 1 hour for it by default
+        //Because expanding reminder don't have an end time, anticipate 1 hour for it by default
         if let hour = components.hour, let minute = components.minute {
-            
             //using current date and picker time for date formatting
             event.endTime = Calendar.current.date(bySettingHour: hour + 1, minute: minute, second: 0, of: notification.eventDate)
         }
         
-        //take some data from step object
         notification.name = stepTemplate.name
         notification.category = "step"
         
         if let projectId = projectId {
             notification.projectId = projectId
         }
-        //edit or new, stepTemplate  always has a correct id
+        //edit or new, stepTemplate should always has a correct id
         notification.stepId = stepTemplate.id
-        
-        //finally assign reminder to event
+        //assign reminder to event
         event.reminder = notification
-
         return event
     }
     
@@ -668,7 +607,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     //MARK: Picker
     func showImagePicker() {
 
-        // Hide the keyboard.
         stepNameTextField.resignFirstResponder()
         
         //check for library authorization, that allows PHAsset option using in picker
@@ -679,11 +617,11 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             //lets a user pick media from their photo library.
             let imagePickerController = UIImagePickerController()
             
-            // Only allow photos to be picked, not taken.
+            // Only allow photos to be picked, not taken
             imagePickerController.sourceType = .photoLibrary
             imagePickerController.allowsEditing = true
             
-            // Make sure ViewController is notified when the user picks an image.
+            // Make sure ViewController is notified when the user picks an image
             imagePickerController.delegate = self
             
             self.present(imagePickerController, animated: true, completion: nil)
@@ -696,7 +634,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             })
         case .restricted:
             print("restricted")
-            // probably alert the user that photo access is restricted
         case .limited:
             print("limited")
         @unknown default:
@@ -816,7 +753,6 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     //MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // Dismiss the picker if the user canceled.
         dismiss(animated: true, completion: nil)
     }
     
@@ -827,21 +763,16 @@ class NewStepViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             imgPHAsset.requestContentEditingInput(with: PHContentEditingInputRequestOptions(), completionHandler: { (contentEditingInput, dictInfo) in
                 if imgPHAsset.mediaType == .image {
                     if let strURL = contentEditingInput?.fullSizeImageURL?.description {
-                        //print("IMAGE URL: ", strURL)
                         assignUrl(url: strURL)
                     }
                 }
             })
         }
         
-        //a bit trick, because can't append item to array directly, so need to call func
         func assignUrl(url: String){
-            //add new item
             newStepImages.photoArray.append(url)
-            //reload when picker closes
             newStepImages.imageCollectionView.reloadData()
         }
-         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
     

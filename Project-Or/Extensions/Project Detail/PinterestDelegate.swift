@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-// Pinterest Layout Configurations
 extension StepsCategoryCollectionView : PinterestLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
         

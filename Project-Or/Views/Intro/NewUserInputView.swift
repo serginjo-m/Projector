@@ -8,101 +8,6 @@
 
 import UIKit
 
-class RegisteredUserInputView: UIView{
-    
-    let emailTextField = CustomTextField(textFieldPlaceholder: "Email address")
-    let passwordTextField = CustomTextField(textFieldPlaceholder: "Password")
-    
-    lazy var loginButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Login", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(loginUser), for: .touchUpInside)
-        button.backgroundColor = UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1)
-        return button
-    }()
-    
-    lazy var restorePasswordButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Forgot Password?", for: .normal)
-        button.setTitleColor(UIColor.init(red: 28/255, green: 198/255, blue: 224/255, alpha: 1), for: .normal)
-        button.addTarget(self, action: #selector(passwordRecovery), for: .touchUpInside)
-        return button
-    }()
-    
-    //login user
-    let didTapLoginCompletionHandler: (() -> Void)
-    let didTapRestoreCompletionHandler: (() -> Void)
-    
-    init(didTapLoginCompletionHandler: @escaping (() -> Void), didTapRestoreCompletionHandler: @escaping (() -> Void)) {
-        
-        self.didTapLoginCompletionHandler = didTapLoginCompletionHandler
-        self.didTapRestoreCompletionHandler = didTapRestoreCompletionHandler
-        super.init(frame: CGRect.zero)
-        
-        setupInputContainer()
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func loginUser(){
-        
-        guard let email = emailTextField.textField.text,
-              let password = passwordTextField.textField.text else {return}
-        
-        let greyColor = UIColor.init(white: 215/255, alpha: 1)
-        
-        
-        emailTextField.lineView.backgroundColor = email.isEmpty == true ? .red : greyColor
-        passwordTextField.lineView.backgroundColor = password.isEmpty == true ? .red : greyColor
-        
-        if email.isEmpty || password.isEmpty{
-            return
-        }else{
-            didTapLoginCompletionHandler()
-        }
-    }
-    
-    @objc func passwordRecovery(){
-        didTapRestoreCompletionHandler()
-    }
-    
-    func setupInputContainer(){
-//        passwordTextField.textField.isSecureTextEntry = true
-        hideKeyboardWhenTappedAround()
-        
-        addSubview(emailTextField)
-        addSubview(passwordTextField)
-        addSubview(loginButton)
-        addSubview(restorePasswordButton)
-        
-        emailTextField.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20).isActive = true
-        
-        [emailTextField, passwordTextField].forEach{ (view) in
-            view.heightAnchor.constraint(equalToConstant: 37).isActive = true
-            view.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 31).isActive = true
-            view.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -31).isActive = true
-        }
-        
-        loginButton.widthAnchor.constraint(equalToConstant: 131).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 43).isActive = true
-        loginButton.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 57).isActive = true
-        
-        restorePasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 40).isActive = true
-        restorePasswordButton.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor).isActive = true
-        restorePasswordButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
-        restorePasswordButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
-    }
-}
-
 class NewUserInputView: UIView{
     
     let nameTextField = CustomTextField(textFieldPlaceholder: "Name")
@@ -120,7 +25,6 @@ class NewUserInputView: UIView{
         return button
     }()
     
-    //expand
     let didTapRegisterCompletionHandler: (() -> Void)
     
      init(didTapRegisterCompletionHandler: @escaping (() -> Void)) {
@@ -153,10 +57,8 @@ class NewUserInputView: UIView{
         }
     }
     
-    
-    
     func setupNewUserInputContainer(){
-//        passwordTextField.textField.isSecureTextEntry = true
+
         hideKeyboardWhenTappedAround()
     
         addSubview(nameTextField)
@@ -179,97 +81,5 @@ class NewUserInputView: UIView{
         registerButton.heightAnchor.constraint(equalToConstant: 43).isActive = true
         registerButton.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
         registerButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 57).isActive = true
-    }
-}
-
-class CustomTextField: UIView, UITextFieldDelegate {
-    
-    lazy var textField: UITextField = {
-        let tField = UITextField()
-        tField.translatesAutoresizingMaskIntoConstraints = false
-        //hides words suggestions
-        tField.keyboardType = .alphabet//<-
-        tField.autocorrectionType = .no//<-
-        tField.clearButtonMode = UITextField.ViewMode.never
-        tField.font = UIFont.boldSystemFont(ofSize: 15)
-        tField.autocapitalizationType = .none
-        tField.delegate = self
-        return tField
-    }()
-    
-    lazy var displayButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "greenEye"), for: .normal)
-        button.setImage(UIImage(named: "redEye"), for: .selected)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .top
-        button.addTarget(self, action: #selector(handlePasswordDisplayAppearance(_:)), for: .touchUpInside)
-        let lightRedColor = UIColor.init(displayP3Red: 255/255, green: 227/255, blue: 227/255, alpha: 1)
-        button.setBackgroundColor(lightRedColor, forState: .selected)
-        button.layer.cornerRadius = 10
-        button.layer.masksToBounds = true
-        button.isHidden = true
-        return button
-    }()
-    
-    let lineView: UIView = {
-        let line = UIView()
-        line.translatesAutoresizingMaskIntoConstraints = false
-        line.backgroundColor = UIColor.init(white: 0.85, alpha: 1)
-        return line
-    }()
-    
-    //same input diff placeholder
-    init(textFieldPlaceholder: String) {
-        super.init(frame: CGRect.zero)
-        //textFieldPlaceholder
-        textField.attributedPlaceholder = NSAttributedString(
-            string: textFieldPlaceholder,
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
-        )
-        setupLayout()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func handlePasswordDisplayAppearance(_ sender: UIButton){
-        
-        sender.isSelected = !sender.isSelected
-        
-        textField.isSecureTextEntry = !textField.isSecureTextEntry
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //Hide the keyboard
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func setupLayout(){
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        hideKeyboardWhenTappedAround()
-        
-        addSubview(textField)
-        addSubview(lineView)
-        addSubview(displayButton)
-        
-        textField.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-        textField.heightAnchor.constraint(equalToConstant: 36).isActive = true
-        
-        displayButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor).isActive = true
-        displayButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        displayButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
-        displayButton.heightAnchor.constraint(equalToConstant: 26).isActive = true
-        
-        lineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        lineView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 0).isActive = true
-        lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
     }
 }

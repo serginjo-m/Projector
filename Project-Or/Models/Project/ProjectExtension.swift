@@ -10,18 +10,13 @@ import UIKit
 import RealmSwift
 
 extension ProjectList {
-    
-    //[ String : [StatisticData]]
     var groupedDictionary: [ String : [StatisticData]]? {
-        
         let dictionary = Dictionary(grouping: projectStatistics) { (statistic) -> String in
             return statistic.category
         }
-        
         return dictionary
     }
     
-    //total project spent by category
     var time: Int? {
         return categorySum(key: "time")
     }
@@ -34,21 +29,16 @@ extension ProjectList {
         return categorySum(key: "fuel")
     }
     
-    //calculate sum of numbers
     func categorySum(key: String) -> Int{
-        
-        //unwrap optional
+    
         guard let dictionary = groupedDictionary else {return 0}
         
-        // ? objects for particular key ?
         guard let array = dictionary[key] else {return 0}
         
-        //total
         var sum = 0
         
-        //iterate
         for item in array{
-            //because I'm interested in spendings
+        
             if item.positiveNegative == 0 {
                 sum += item.number
             }

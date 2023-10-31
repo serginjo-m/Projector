@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate {
     
     //MARK: Properties
@@ -100,17 +100,13 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
     //MARK: Initialization
     init(projectId: String, nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         self.projectId = projectId
-        
         let allSections = ProjectListRepository.instance.getAllStepSections()
-        
         let sectionsDictionary = Dictionary(grouping: allSections) { section -> String in
             return section.projectId
         }
-        
         if let currentProjectSections = sectionsDictionary[projectId] {
             self.sections = currentProjectSections
         }
-
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -211,42 +207,4 @@ class NewStepSectionsList: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         setStepSectionAndDismiss(stepWaySection: self.sections[indexPath.row])
     }
-}
-
-//MARK: Cell
-class SectionCell: UITableViewCell {
-    
-    let sectionNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 20)
-        return label
-    }()
-    
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        setupCell()
-    }
-    
-    
-    func setupCell(){
-        addSubview(sectionNameLabel)
-        
-        sectionNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        sectionNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        sectionNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        sectionNameLabel.heightAnchor.constraint(equalToConstant: 70).isActive = true
-    }
-    
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
 }

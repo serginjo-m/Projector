@@ -8,7 +8,6 @@
 
 import UIKit
 
-// this extension hide keyboard when user
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
@@ -21,7 +20,6 @@ extension UIViewController {
     }
 }
 
-// this extension hide keyboard when user
 extension UIView {
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIView.dismissKeyboard))

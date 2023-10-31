@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCell, TextNote>{
     
     //MARK: Properties
@@ -17,7 +17,7 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
             return ProjectListRepository.instance.getTextNotes()
         }
         set{
-            //need this option for updating after delete
+            //update after delete
         }
     }
     
@@ -66,19 +66,15 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
     }
     
     @objc override func convertToEvent(_ sender: UIButton){
-        
         guard let index = self.sectionOptionsContainer.currentNoteIndex else {return}
         let quickNote = items[index]
         let newEventViewController = NewEventViewController()
         newEventViewController.modalTransitionStyle = .coverVertical
         newEventViewController.modalPresentationStyle = .fullScreen
-                //define event name
         newEventViewController.descriptionTextView.text = quickNote.text
         optionsMenuToggle(toggle: true)
         sectionOptionsContainer.isHidden = true
-        //show new event view controller
         present(newEventViewController, animated: true, completion: nil)
-       
     }
     
     override func removeQuickNote(_ sender: UIButton) {
@@ -168,7 +164,7 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingTextView)
 
-            //math? of proportion with one side
+            //proportion with one side
             //h2 / w2 = h1 / w1
             //h2 = h1 / w1 * w2
 
@@ -206,8 +202,6 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
                     constraint.isActive = true
                 }
                 
-                
-                
                 zoom.frame = self.startingFrame!
                 self.blackBackgroundView?.alpha = 0
                 
@@ -220,163 +214,4 @@ class TextNotesCollectionViewController: BaseCollectionViewController<TextNoteCe
         }
     }
 }
-//MARK: Cell
-//Photo note cell
-class TextNoteCell: BaseCollectionViewCell<TextNote> {
-    
-    //It'll be like a template for our cell
-    override var item: TextNote! {
-        //didSet uses for logic purposes!
-        didSet{
-            textLabel.text = item.text
-        }
-    }
-    
-    lazy var textLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.textAlignment = NSTextAlignment.left
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = UIColor.black
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    //call to zoom in logic
-    @objc func handleZoomTap(sender: UITapGestureRecognizer){
 
-        guard let delegate = self.delegate else {return}
-        
-        if let view = sender.view {
-            delegate.performZoomInForStartingImageView(startingImageView: view)
-        }
-    }
-    
-    //initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupViews(){
-        backgroundColor = UIColor.init(white: 229/255, alpha: 1)
-        layer.masksToBounds = true
-        layer.cornerRadius = 5
-        
-        isUserInteractionEnabled = true
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
-        
-        addSubview(textLabel)
-  
-      
-        textLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        textLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        textLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        textLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-
-    }
-}
-//MARK: Pinterest Extension
-// Pinterest Layout Configurations
-extension TextNotesCollectionViewController: PinterestLayoutDelegate {
-    func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        
-        let text = items[indexPath.row].text
-        
-        let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 30, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
-        
-        return rect.height + 30
-    }
-    func collectionView(_ collectionView: UICollectionView, widthForPhotoAtIndexPath indexPath: IndexPath) -> CGFloat {
-        
-        return 100
-    }
-}
-
-class TextNoteView: UIView {
-    
-    var textLabelTopAnchorConstraint: NSLayoutConstraint!
-    var textLabelLeadingAnochorConstraint: NSLayoutConstraint!
-    var textLabelTrailingAnchorConstraint: NSLayoutConstraint!
-    var textLabelBottomAnchorConstraint: NSLayoutConstraint!
-    
-    var textLabelHeightAnchorConstraint: NSLayoutConstraint!
-    var textLabelWidthAnchorConstraint: NSLayoutConstraint!
-    var textLabelCenterYAnchorConstraint: NSLayoutConstraint!
-    var textLabelCenterXAnchorConstraint: NSLayoutConstraint!
-        
-    //container for all items on the page
-    var scrollViewContainer: UIScrollView = {
-        let scroll = UIScrollView()
-        scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.showsVerticalScrollIndicator = false
-        return scroll
-    }()
-    
-    var contentUIView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    let textLabel: UILabel = {
-        let label = UILabel()
-        
-        label.textAlignment = NSTextAlignment.left
-        label.font = UIFont.boldSystemFont(ofSize: 25)
-        label.textColor = UIColor.black
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    init(text: String, frame: CGRect) {
-        super.init(frame: frame)
-        
-        isUserInteractionEnabled = true
-        backgroundColor = UIColor.init(white: 229/255, alpha: 1)
-        textLabel.text = text
-
-        addSubview(scrollViewContainer)
-        scrollViewContainer.addSubview(contentUIView)
-        contentUIView.addSubview(textLabel)
-        
-        scrollViewContainer.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollViewContainer.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        scrollViewContainer.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        scrollViewContainer.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
-        
-        let rect = NSString(string: text).boundingRect(with: CGSize(width: frame.width, height: frame.height * 1.2), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25)], context: nil)
-
-        contentUIView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
-        contentUIView.leftAnchor.constraint(equalTo: scrollViewContainer.leftAnchor).isActive = true
-        contentUIView.rightAnchor.constraint(equalTo: scrollViewContainer.rightAnchor).isActive = true
-        contentUIView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
-        contentUIView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
-        contentUIView.heightAnchor.constraint(equalToConstant: rect.height + 10).isActive = true
-        
-        textLabelTopAnchorConstraint = textLabel.topAnchor.constraint(equalTo: contentUIView.topAnchor, constant: 10)
-        textLabelLeadingAnochorConstraint = textLabel.leadingAnchor.constraint(equalTo: contentUIView.leadingAnchor, constant: 10)
-        textLabelTrailingAnchorConstraint = textLabel.trailingAnchor.constraint(equalTo: contentUIView.trailingAnchor, constant: -10)
-        textLabelBottomAnchorConstraint = textLabel.bottomAnchor.constraint(equalTo: contentUIView.bottomAnchor, constant: 10)
-        
-        textLabelTopAnchorConstraint.isActive = true
-        textLabelLeadingAnochorConstraint.isActive = true
-        textLabelTrailingAnchorConstraint.isActive = true
-        textLabelBottomAnchorConstraint.isActive = true
-        
-        textLabelWidthAnchorConstraint = textLabel.widthAnchor.constraint(equalTo: widthAnchor)
-        textLabelHeightAnchorConstraint = textLabel.heightAnchor.constraint(equalTo: heightAnchor)
-        textLabelCenterYAnchorConstraint = textLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        textLabelCenterXAnchorConstraint = textLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}

@@ -65,12 +65,10 @@ class NotificationTableViewCell: UITableViewCell {
                     categoryIcon.image = setImageToCategory(category: object.category, expired: true)
                 }
                 
-                //constraints update approach
                 categoryIconWidthAnchor?.isActive = false
                 categoryIconHeightAnchor?.isActive = false
                 progressBarWidthAnchor?.isActive = false
                 
-                //icon size
                 switch object.category{
                     case "event":
                         categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 21)
@@ -83,7 +81,6 @@ class NotificationTableViewCell: UITableViewCell {
                         categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 21)
                 }
                 
-                //progress
                 progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: progressPercentageValue)
                 
                 progressBarWidthAnchor?.isActive = true
@@ -183,7 +180,6 @@ class NotificationTableViewCell: UITableViewCell {
         
     }
     
-    //time to event string
     func convertComponentsToString(dateComponents: DateComponents) -> String {
         var string = ""
         
@@ -269,7 +265,6 @@ class NotificationTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate(constraints)
         
-        //update approach
         categoryIconWidthAnchor = categoryIcon.widthAnchor.constraint(equalToConstant: 22)
         categoryIconHeightAnchor = categoryIcon.heightAnchor.constraint(equalToConstant: 32)
         progressBarWidthAnchor = progressBar.widthAnchor.constraint(equalTo: progressBarTrack.widthAnchor, multiplier: 0.65)

@@ -12,11 +12,11 @@ import RealmSwift
 class ProjectListRepository {
     private var realm: Realm!
     
-    private init (){//initializer
+    private init (){
         try! realm = Realm()
     }
 
-    static let instance = ProjectListRepository()//initializer
+    static let instance = ProjectListRepository()
     
     
     func getProjectLists() -> Results<ProjectList> {
@@ -53,15 +53,12 @@ class ProjectListRepository {
         }
     }
     
-    //here we actualy add a new object
-    // list: - is a param & can have any name
     func createProjectList(list: ProjectList){
         try! realm.write ({
             realm.add(list)
         })
     }
-
-    //update - project
+    
     func updateProjectList(list: ProjectList){
         try! realm.write ({
             realm.add(list, update: Realm.UpdatePolicy.modified)
@@ -109,7 +106,6 @@ class ProjectListRepository {
         })
     }
     
-    //edit step function
     func editStep(step: ProjectStep){
         try! self.realm.write({
             realm.add(step, update: Realm.UpdatePolicy.modified)
@@ -118,7 +114,7 @@ class ProjectListRepository {
     
     func deleteProjectList(list: ProjectList){
         try! realm.write ({
-            //this will also remove all ProjectStep objects from data Base
+    
             for step in list.projectStep {
                 realm.delete(step)
             }
@@ -129,7 +125,7 @@ class ProjectListRepository {
     
     func deleteStepFromProject(list: ProjectList, stepAtIndex: Int){
         try! realm.write ({
-            //projectDetail?.projectStep.remove(at: indexPath.row)
+            
             list.projectStep.remove(at: stepAtIndex)
         })
     }
@@ -146,14 +142,12 @@ class ProjectListRepository {
         })
     }
     
-    //create an event object
     func createEvent(event: Event){
         try! realm.write ({
             realm.add(event)
         })
     }
     
-    //update an event object
     func updateEvent(event: Event){
         try! realm.write ({
             realm.add(event, update: Realm.UpdatePolicy.modified)
@@ -175,8 +169,6 @@ class ProjectListRepository {
         return realm.object(ofType: Event.self, forPrimaryKey: id)
     }
    
-    
-    //create an event object
     func createDayActivity(dayActivity: DayActivity){
         try! realm.write ({
             realm.add(dayActivity)
@@ -188,12 +180,11 @@ class ProjectListRepository {
     }
     
     func appendNewItemToDayActivity(dayActivity: DayActivity, userActivity: UserActivity) {
-        try! self.realm!.write ({//here we actualy add a new object called userActivity
+        try! self.realm!.write ({
             dayActivity.userActivities.append(userActivity)
         })
     }
     
-    //create camera note
     func createCameraNote(cameraNote: CameraNote){
         try! realm.write ({
             realm.add(cameraNote)
@@ -238,7 +229,6 @@ class ProjectListRepository {
         })
     }
     
-    //create TextNote note
     func createTextNote(textNote: TextNote){
         try! realm.write ({
             realm.add(textNote)
@@ -271,14 +261,12 @@ class ProjectListRepository {
         })
     }
     
-    //create Notification
     func createNotification(notification: Notification){
         try! realm.write ({
             realm.add(notification)
         })
     }
     
-    //update an event object
     func updateNotification(notification: Notification){
         try! realm.write ({
             realm.add(notification, update: Realm.UpdatePolicy.modified)
@@ -299,7 +287,6 @@ class ProjectListRepository {
         return realm.object(ofType: Notification.self, forPrimaryKey: id)
     }
     
-    //create user
     func createUser(user: User){
         try! realm.write ({
             realm.add(user)
@@ -322,7 +309,6 @@ class ProjectListRepository {
         }
     }
     
-    //create holiday object
     func createHoliday(holidayEvent: HolidayEvent){
         try! realm.write ({
             realm.add(holidayEvent)
@@ -339,7 +325,6 @@ class ProjectListRepository {
         })
     }
     
-    //step way section
     func createSection(section: StepWaySection){
         try! realm.write ({
             realm.add(section)
@@ -368,7 +353,6 @@ class ProjectListRepository {
         }
     }
     
-    //step way section
     func createStepItem(stepItem: StepItem){
         try! realm.write ({
             realm.add(stepItem)

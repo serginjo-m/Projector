@@ -11,51 +11,35 @@ import RealmSwift
 
 class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate  {
     
-    
-    //need to modify an array of existing project
-    var realm: Realm!//create a var
-    
-    
-    //Fetch Selected Project for Step CV modifications
+    var realm: Realm!
     var project: ProjectList?
-    
-    // as project id is defined, creates existing categories array
     var projectId = String() {
         didSet{
-            //as ID defined, retreave project from DB
             project = ProjectListRepository.instance.getProjectList(id: projectId)
         }
     }
     
-    //picker values list
     let valuePickerDataSource = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-    //TABLE VIEW CELL IDENTIFIER
     let cellIdentifier = "eventsTableViewCell"
     
-    //selected value in picker
     var selectedValue: Int?
-    
-    //investments value for label
     var investedValue = 0
     var spendedValue = 0
     
     var tableViewDataSource = [StatisticData](){
         didSet{
-            //reset every time array changed
             investedValue = 0
             spendedValue  = 0
-            
-            //perform calculations
+        
             for item in tableViewDataSource{
                 if item.positiveNegative == 1{
-                    investedValue += item.number// "+" value
+                    investedValue += item.number
                 }else{
-                    spendedValue += item.number// "-" value
+                    spendedValue += item.number
                 }
             }
             
-            //only money category has double value
             switch categoryKey{
             case "money":
                 totalValueLabel.text = "\(investedValue)$ | \(spendedValue)$"
@@ -70,17 +54,10 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
         }
     }
     
-    //once category defined, configure side panel elements and data source
     var categoryKey = "" {
         didSet{
-            
-            //visual configurations
             configurationByCategory(category: categoryKey)
-            
-            //data source for table view
             createTableViewDataSource(key: categoryKey)
-            
-            //reset all picker components
             plusMinusSegmentedControl.selectedSegmentIndex = 0
             valuePicker.selectRow(0, inComponent: 0, animated: false)
             valuePicker.selectRow(0, inComponent: 1, animated: false)
@@ -88,7 +65,6 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
             commentTextField.text = ""
             selectedValue = nil
             saveButton.isEnabled = false
-            
         }
     }
     
@@ -132,11 +108,9 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
         return imageView
     }()
     
-    //constraints animation approach
     var maxHeightAnchor: NSLayoutConstraint?
     var minHeightAnchor: NSLayoutConstraint?
     
-    //TABLE VIEW
     lazy var panelTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PanelTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -147,7 +121,6 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
         return tableView
     }()
     
-    //UIView that contains all elements for creating new value in tableView
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.init(displayP3Red: 65/255, green: 50/255, blue: 67/255, alpha: 1)
@@ -195,7 +168,6 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
     let valuePicker: UIPickerView = {
         let picker = UIPickerView()
         picker.backgroundColor = .clear
-//        picker.selectedRow(inComponent: 5)
         return picker
     }()
     
@@ -212,7 +184,7 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
     }()
     
     override func setupTableView() {
-        realm = try! Realm()//create an instance of object
+        realm = try! Realm()
         
         backgroundColor = .white
         
@@ -237,8 +209,7 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
 
         setupConstraints()
     }
-
-    //configure side panel by selected category
+    
     func configurationByCategory(category: String){
         switch category {
         case "money" :
@@ -267,53 +238,34 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
         }
     }
     
-    //this func creates datasource for my table view from groupedDataDictionary or clear data and then reaload
     func createTableViewDataSource(key: String){
-        
         guard let project = project else {return}
-        
-        //clear
         tableViewDataSource.removeAll()
         
         if let dictionary = project.groupedDictionary{
-            //check if data exist (also avoid optionals)
             guard let array = dictionary[key] else {
                 panelTableView.reloadData()
                 return
             }
-            
-            //assign data to array
             tableViewDataSource = array
         }
-        //reload
         panelTableView.reloadData()
     }
     
-    //back to previous view
     @objc func saveAction(_ sender: Any) {
         guard let proj = project else {return}
-        //template
         let statisticData: StatisticData = self.defineStatisticDataTemplate()
-        //save to database
         try! self.realm!.write ({
-
             proj.projectStatistics.append(statisticData)
-            
         })
-        
         let addSubtract = statisticData.positiveNegative == 0 ? "-" : "+"
-        //add an action to activity list
         UserActivitySingleton.shared.createUserActivity(description: "\(proj.name):\n \(addSubtract)\(statisticData.number)  to \(statisticData.category)")
-        
-        //---------------------- It definitely need some improvement -------------------------------------------
-        //assign the same values lead to reload of data and view
         let id = projectId
         projectId = id
         let key = categoryKey
         categoryKey = key
-        
     }
-    //animate add item menu
+
     @objc func handleAnimate(){
         guard let minHeight = minHeightAnchor else {return}
         if minHeight.isActive == true{
@@ -329,14 +281,10 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
             self.layoutIfNeeded()
         }, completion: nil)
     }
-    
-    //creates event instance
+
     func defineStatisticDataTemplate() -> StatisticData{
-        
         let statisticData = StatisticData()
-        
         statisticData.positiveNegative = plusMinusSegmentedControl.selectedSegmentIndex
-        
         if let number = selectedValue{
             statisticData.number = number
         }
@@ -344,7 +292,6 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
             statisticData.comment = text
         }
         statisticData.category = categoryKey
-        
         return statisticData
     }
     
@@ -357,86 +304,58 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        //this part changes height of picker separator
         for view in pickerView.subviews{
             var frame = view.frame
             frame.size.height = 2
             view.frame = frame
             view.backgroundColor = UIColor.init(white: 0, alpha: 0.3)
         }
-        
         let row = String(valuePickerDataSource[row])
         return NSAttributedString(string: row, attributes: [NSAttributedString.Key.foregroundColor:UIColor.white])
     }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let val1 = valuePickerDataSource[pickerView.selectedRow(inComponent: 0)]
         let val2 = valuePickerDataSource[pickerView.selectedRow(inComponent: 1)]
         let val3 = valuePickerDataSource[pickerView.selectedRow(inComponent: 2)]
-        
         selectedValue = val1*100 + val2*10 + val3
         updateSaveButtonState()
     }
     
-    
-    
-    //table view section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return tableViewDataSource.count
     }
     
-    //cell configuration
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        // create a new cell if needed or reuse an old one
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier , for: indexPath) as? PanelTableViewCell else {
             fatalError( "The dequeued cell is not an instance of EventTableViewCell." )
         }
-        
         cell.data = tableViewDataSource[indexPath.row]
         return cell
     }
     
-    
-    //text field
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateSaveButtonState()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //Hide the keyboard
         textField.resignFirstResponder()
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        //Disable the Save button while editing.
         saveButton.isEnabled = false
     }
-
     
     private func updateSaveButtonState(){
-        //Disable the Save button when text field is empty.
         let text = commentTextField.text ?? ""
         let value = selectedValue ?? 0
         saveButton.isEnabled = !text.isEmpty && value > 0
     }
     
     func setupConstraints(){
-    
-        selectedStatisticsLabel.translatesAutoresizingMaskIntoConstraints = false
-        panelTableView.translatesAutoresizingMaskIntoConstraints = false
-        commentTextField.translatesAutoresizingMaskIntoConstraints  = false
-        valuePicker.translatesAutoresizingMaskIntoConstraints = false
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
-        totalValueLabel.translatesAutoresizingMaskIntoConstraints = false
-        statisticImage.translatesAutoresizingMaskIntoConstraints = false
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        valuePickerTitle.translatesAutoresizingMaskIntoConstraints = false
-        lineUIView.translatesAutoresizingMaskIntoConstraints = false
+        [selectedStatisticsLabel, panelTableView, commentTextField, valuePicker, saveButton, totalValueLabel, statisticImage, containerView,valuePickerTitle, lineUIView].forEach {$0.translatesAutoresizingMaskIntoConstraints = false}
        
-        
-        
         statisticImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
         statisticImage.topAnchor.constraint(equalTo: selectedStatisticsLabel.topAnchor, constant: 0).isActive = true
         statisticImage.widthAnchor.constraint(equalToConstant: 69).isActive = true
@@ -505,51 +424,5 @@ class SidePanelView: ElementsView, UITableViewDelegate, UITableViewDataSource, U
         panelTableView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24).isActive = true
         panelTableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
         panelTableView.separatorStyle = .none
-        
-        
     }
-}
-
-class PanelTableViewCell: UITableViewCell {
-    
-    //template
-    var data: StatisticData? {
-        didSet {
-            //check if ...
-            guard let data = data else { return }
-            //-------------- maybe there is better solution -----------------
-            if data.positiveNegative == 0{
-                plusMinusSymbol = "-"
-            }else{
-                plusMinusSymbol = "+"
-            }
-            
-            taskLabel.text = "\(plusMinusSymbol)\(data.number)  \(data.comment)"
-        }
-    }
-    
-    var plusMinusSymbol = ""
-  
-    let taskLabel: UILabel = {
-        let label = UILabel()
-        label.text = "-100$ Surface Cleaner"
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = .white
-        return label
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .clear
-
-        addSubview(taskLabel)
-
-        taskLabel.frame = CGRect(x: 0, y: 0, width: 250, height: 30)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }

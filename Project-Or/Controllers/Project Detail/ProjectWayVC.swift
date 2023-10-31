@@ -9,6 +9,8 @@
 import UIKit
 import RealmSwift
 
+//MARK: OK
+
 class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITextFieldDelegate {
     
     //MARK: Properties
@@ -24,15 +26,14 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     //requested for section index midification
     var stepsByIndexes: [Int : [ProjectStep]] = [:]
     
-    //Project Image created programatically
-     var projectImageView: UIImageView = {
-         let PIV = UIImageView()
-         PIV.translatesAutoresizingMaskIntoConstraints = false
-         PIV.contentMode = UIImageView.ContentMode.scaleAspectFill
-         PIV.clipsToBounds = true
-         PIV.layer.cornerRadius = 13
-         return PIV
-     }()
+    var projectImageView: UIImageView = {
+        let PIV = UIImageView()
+        PIV.translatesAutoresizingMaskIntoConstraints = false
+        PIV.contentMode = UIImageView.ContentMode.scaleAspectFill
+        PIV.clipsToBounds = true
+        PIV.layer.cornerRadius = 13
+        return PIV
+    }()
     
     lazy var dismissButton: UIButton = {
         let button = UIButton()
@@ -67,7 +68,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         return title
     }()
     
-    //table view
     lazy var projectWayTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ProjectWayCell.self, forCellReuseIdentifier: cellIdentifier)
@@ -160,7 +160,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         return button
     }()
     
-    //name text field
     lazy var sectionTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
@@ -172,7 +171,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         textField.font = UIFont.boldSystemFont(ofSize: 15)
         textField.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        // Handle the text field's user input through delegate callback.
         textField.delegate = self
         textField.isHidden = true
         return textField
@@ -186,10 +184,9 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         return view
     }()
     
-    //variable constraints for animation
+    //constraints for animation
     var sectionOptionsRightConstraint: NSLayoutConstraint?
     var sectionOptionsTopConstraint: NSLayoutConstraint?
-    //inputs animation approach
     var sectionOptionsLeadingConstraint: NSLayoutConstraint!
     var sectionOptionsWidthConstraint: NSLayoutConstraint!
     var sectionOptionsHeightConstraint: NSLayoutConstraint!
@@ -197,18 +194,13 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     
     //MARK: Init
     init(projectId: String, nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
-                
         self.project = ProjectListRepository.instance.getProjectList(id: projectId)
-        
         if let project = project {
             steps.append(contentsOf: project.projectStep)
-            
             if let projectImageUrl = project.selectedImagePathUrl {
                 projectImageView.retreaveImageUsingURLString(myUrl: projectImageUrl)
             }
-            
         }
-        
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -216,13 +208,10 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     //MARK: Lifecycle
     override func viewDidLoad() {
         
         view.backgroundColor = .white
-        
         view.addSubview(projectImageView)
         view.addSubview(dismissButton)
         view.addSubview(projectTitleShadow)
@@ -230,7 +219,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         view.addSubview(lineView)
         view.addSubview(projectWayTableView)
         view.addSubview(sectionOptionsContainer)
-        
         
         sectionOptionsContainer.addSubview(dismissContainerButton)
         sectionOptionsContainer.addSubview(editSectionNameButton)
@@ -241,7 +229,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         sectionOptionsContainer.addSubview(cancelRenameButton)
         //title & database
         configureViewController()
-
         setupConstraints()
     }
     
@@ -250,9 +237,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     fileprivate func configureViewController(){
         //important: call it to make extension working
         self.hideKeyboardWhenTappedAround()
-        
         self.projectWayTableView.sectionHeaderHeight = 50
-        
         if let project = project{
             projectTitle.text = project.name
             projectTitleShadow.text = projectTitle.text
@@ -298,73 +283,47 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     @objc func removeSection(_ sender: UIButton){
         
         let section = self.projectSections[sender.tag]
-        
-        //create new alert window
         let alertVC = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        
-        
         if let selectedSectionArray = groupedSteps[section.name] {
-            
             if selectedSectionArray.isEmpty == true {
-                
                 alertVC.title = "Delete Section?"
                 alertVC.message = "Are You sure You want to delete this section?"
-                
                 //delete button
                 let deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: {(UIAlertAction) -> Void in
-                    
                     ProjectListRepository.instance.deleteSection(section: section)
-                    
                     self.sectionOptionsContainer.isHidden = true
-                    
                     self.updateDatabase()
-                    
                     self.projectWayTableView.reloadData()
                 })
-                
-                
                 alertVC.addAction(deleteAction)
-                
             }else{
-                
                 alertVC.title = "Section Still Contains Steps!"
                 alertVC.message = "Please move or delete steps previously."
-                
             }
         }
 
         //cancel button
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        
         alertVC.addAction(cancelAction)
-        
-        
-        //shows an alert window
         present(alertVC, animated: true, completion: nil)
-        
     }
     
     @objc func changeSectionIndex(_ sender: UIButton){
-        
         sectionTextField.attributedPlaceholder = NSAttributedString(
             string: "\(projectSections[sender.tag].indexNumber)",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
         )
         sectionTextField.keyboardType = .numberPad
-        
         applySectionModificationButton.tag = 0
         optionsMenuToggle(toggle: false)
     }
     
     @objc func editSectionName(_ sender: UIButton){
-        
-        
         sectionTextField.attributedPlaceholder = NSAttributedString(
             string: "New Section Name",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
         )
         sectionTextField.keyboardType = .default
-        
         applySectionModificationButton.tag = 1
         optionsMenuToggle(toggle: false)
     }
@@ -378,15 +337,10 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func applyNewIndexForSection(){
-        
         if let intText = sectionTextField.text, let integerValue = Int(intText){
-            
             let dictionaryResult = stepsByIndexes[integerValue]
-            
             if dictionaryResult == nil {
-                
                 ProjectListRepository.instance.updateSectionIndex(indexNumber: integerValue, section: projectSections[changeSectionIndexButton.tag])
-                
             }else{
                 let currentSectionIndex = projectSections[changeSectionIndexButton.tag].indexNumber
                 let resoponseMessage = integerValue == currentSectionIndex ? "\(integerValue) is current number" : "number \(intText) is in use"
@@ -397,42 +351,29 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
                 )
             }
         }
-        
         sectionTextField.text = nil
-        
         self.updateDatabase()
-        
         projectWayTableView.reloadData()
-        
         hideOptionsView(self.dismissContainerButton)
-        
         optionsMenuToggle(toggle: true)
-        
     }
     
     private func applyNewNameForSection(){
         
         guard let textFieldText = sectionTextField.text else {return}
-        
         ProjectListRepository.instance.updateSectionName(name: textFieldText, section: projectSections[editSectionNameButton.tag])
-        
         sectionTextField.text = nil
-        
         self.updateDatabase()
-        
         projectWayTableView.reloadData()
-        
         optionsMenuToggle(toggle: true)
     }
     
     @objc func backToOptionsMenu(){
         optionsMenuToggle(toggle: true)
-        
         sectionTextField.text = nil
     }
     
     fileprivate func optionsMenuToggle(toggle: Bool ){
-        
         //order is important for constraints
         if toggle == true {
             sectionOptionsLeadingConstraint.isActive = !toggle
@@ -441,10 +382,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
             sectionOptionsWidthConstraint.isActive = toggle
             sectionOptionsLeadingConstraint.isActive = !toggle
         }
-        
-        
         sectionOptionsHeightConstraint.constant = toggle == true ? 183 : 80
-        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
         })
@@ -462,7 +400,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         sectionOptionsContainer.isHidden = true
     }
     
-    //menu position next to the selected cell button
+    //position menu next to the selected cell button
     @objc func showOptions(_ sender: UIButton) {
 
         self.editSectionNameButton.tag = sender.tag
@@ -480,7 +418,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     
     //MARK: Constraints
     func setupConstraints(){
-        
         sectionOptionsRightConstraint = sectionOptionsContainer.rightAnchor.constraint(equalTo: view.leftAnchor)
         sectionOptionsTopConstraint = sectionOptionsContainer.topAnchor.constraint(equalTo: view.topAnchor)
         sectionOptionsWidthConstraint = sectionOptionsContainer.widthAnchor.constraint(equalToConstant: 227)
@@ -516,9 +453,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         sectionTextField.centerYAnchor.constraint(equalTo: sectionOptionsContainer.centerYAnchor).isActive = true
         sectionTextField.leadingAnchor.constraint(equalTo: applySectionModificationButton.trailingAnchor, constant:  20).isActive = true
         sectionTextField.trailingAnchor.constraint(equalTo: sectionOptionsContainer.trailingAnchor, constant: -15).isActive = true
-        
-        
-        
         cancelRenameButton.centerYAnchor.constraint(equalTo: sectionTextField.centerYAnchor).isActive = true
         cancelRenameButton.leadingAnchor.constraint(equalTo: sectionOptionsContainer.leadingAnchor, constant: 20).isActive = true
         cancelRenameButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
@@ -558,7 +492,6 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
         projectImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
         projectImageView.bottomAnchor.constraint(equalTo: projectTitle.bottomAnchor, constant: 20).isActive = true
         
-        
         projectWayTableView.topAnchor.constraint(equalTo: projectTitle.bottomAnchor, constant: 32).isActive = true
         projectWayTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15).isActive = true
         projectWayTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
@@ -571,9 +504,8 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     //MARK: TextField
-    //text field
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        updateSaveButtonState()
+        //updateSaveButtonState()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -584,7 +516,7 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         //Disable the Save button while editing.
-//        saveButton.isEnabled = false
+        //saveButton.isEnabled = false
     }
     
     
@@ -594,34 +526,23 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let text = projectSections[section].name
-        
         //this logic makes stepnamelabel size correct
         let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 130, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
-        
-        
         let padding: CGFloat = rect.height < 18 ? 32 : 10
-        
         let headerView = SectionHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: rect.height + padding))
         headerView.menuButton.addTarget(self, action: #selector(showOptions(_:)), for: .touchUpInside)
         headerView.menuButton.tag = section
-        
-        
         headerView.sectionIndexLabel.text = String(projectSections[section].indexNumber)
-        
-        
         headerView.sectionTitle.text = text
         return headerView
-        
-        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 
         let text = projectSections[section].name
         
-        //this logic makes stepnamelabel size correct
+        //this logic makes stepNameLabel size correct
         let rect = NSString(string: text).boundingRect(with: CGSize(width: view.frame.width - 130, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], context: nil)
 
         let padding: CGFloat = rect.height < 18 ? 32 : 10
@@ -641,34 +562,18 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        
-        
         if var stepsArrayForSection = groupedSteps[projectSections[sourceIndexPath.section].name] {
-            
             //hold step reference for updating inside database
             let targetStep = stepsArrayForSection[sourceIndexPath.row]
-            
             let mover = stepsArrayForSection.remove(at: sourceIndexPath.row)
-            
             groupedSteps[projectSections[sourceIndexPath.section].name] = stepsArrayForSection
-            
             if var destinationArrayForSection = groupedSteps[projectSections[destinationIndexPath.section].name]{
-                
                 destinationArrayForSection.insert(mover, at: destinationIndexPath.row)
-
                 groupedSteps[projectSections[destinationIndexPath.section].name] = destinationArrayForSection
                 
-                
-                
                 let section = projectSections[destinationIndexPath.section]
-                
                 ProjectListRepository.instance.updateStepSection(step: targetStep, section: section)
-                
             }
-            
-            
-            
         }
     }
     
@@ -681,186 +586,13 @@ class ProjectWayViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // create a new cell if needed or reuse an old one
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier , for: indexPath) as? ProjectWayCell else {fatalError( "The dequeued cell is not an instance of ProjectTableViewCell." )}
         
         if let stepsArrayForSection = groupedSteps[projectSections[indexPath.section].name] {
             cell.template = stepsArrayForSection[indexPath.row]
         }
         
-        cell.contentView.isUserInteractionEnabled = false//<-- solution why cell button is not triggered
-        
+        cell.contentView.isUserInteractionEnabled = false//<-- solution to why the cell button is not triggered
         return cell
-    }
-    
-    
-}
-//MARK: Cell
-class ProjectWayCell: UITableViewCell {
-    
-    var template: ProjectStep? {
-        didSet{
-            guard let template = template else {return}
-            stepTitleLabel.text = template.name
-            displayButton.isSelected = template.displayed == true ? false : true
-            stepTitleLabel.textColor = template.displayed == true ? .black : .red
-        }
-    }
-    
-    lazy var stepTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    lazy var displayButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "greenEye"), for: .normal)
-        button.setImage(UIImage(named: "redEye"), for: .selected)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .top
-        button.addTarget(self, action: #selector(handleStepDisplayStatus(_:)), for: .touchUpInside)
-        let lightRedColor = UIColor.init(displayP3Red: 255/255, green: 227/255, blue: 227/255, alpha: 1)
-        button.setBackgroundColor(lightRedColor, forState: .selected)
-        button.layer.cornerRadius = 10
-        button.layer.masksToBounds = true
-        
-        return button
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        setupCell()
-    }
-    
-    @objc func handleStepDisplayStatus(_ sender: UIButton){
-        
-        sender.isSelected = !sender.isSelected
-        
-        stepTitleLabel.textColor = sender.isSelected == true ? .red : .black
-        
-        guard let step = template else {return}
-        
-        ProjectListRepository.instance.updateStepDisplayedStatus(step: step, displayedStatus: !sender.isSelected)
-        
-        //it is more experimental thing
-        //so what I'm trying to do is activate filter inside DetailViewController when one of steps is set to hidden
-        if sender.isSelected == true, let section = step.section {
-            if let project = ProjectListRepository.instance.getProjectList(id: section.projectId){
-                ProjectListRepository.instance.updateProjectFilterStatus(project: project, filterIsActive: true)
-            }
-        }
-    }
-    
-    func setupCell(){
-        addSubview(stepTitleLabel)
-        addSubview(displayButton)
-        
-        displayButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-        displayButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        displayButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
-        displayButton.heightAnchor.constraint(equalToConstant: 26).isActive = true
-        
-        stepTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15).isActive = true
-        stepTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50).isActive = true
-        stepTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -36).isActive = true
-        stepTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15).isActive = true
-    }
-    
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-}
-//MARK: Section Header View
-class SectionHeaderView: UIView {
-    
-    let sectionTitle: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.init(white: 55/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "This is dummy text for debug purpose only"
-        label.backgroundColor = .white
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    let sectionIndexLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.init(white: 55/255, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "!"
-        return label
-    }()
-    
-    let circleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.init(white: 224/255, alpha: 1)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 11
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    lazy var menuButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor.init(white: 217/255, alpha: 1)
-        button.layer.cornerRadius = 10
-        button.setImage(UIImage(named: "horizontal_dots"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentMode = .center
-        button.imageView?.contentMode = .scaleAspectFit
-        return button
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupView()
-    }
-    
-    func setupView(){
-        
-        
-        addSubview(circleView)
-        addSubview(sectionTitle)
-        addSubview(sectionIndexLabel)
-        addSubview(menuButton)
-        
-        
-        circleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 13).isActive = true
-        circleView.centerYAnchor.constraint(equalTo: sectionTitle.centerYAnchor).isActive = true
-        circleView.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        circleView.widthAnchor.constraint(equalToConstant: 22).isActive = true
-        
-        sectionTitle.leadingAnchor.constraint(equalTo: circleView.trailingAnchor, constant: 15).isActive = true
-        sectionTitle.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        sectionTitle.trailingAnchor.constraint(equalTo: menuButton.leadingAnchor, constant: -15).isActive = true
-        sectionTitle.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        
-        sectionIndexLabel.centerYAnchor.constraint(equalTo: circleView.centerYAnchor).isActive = true
-        sectionIndexLabel.centerXAnchor.constraint(equalTo: circleView.centerXAnchor).isActive = true
-        sectionIndexLabel.heightAnchor.constraint(equalTo: circleView.heightAnchor).isActive = true
-        sectionIndexLabel.widthAnchor.constraint(equalTo: circleView.widthAnchor).isActive = true
-        
-        menuButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
-        menuButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        menuButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        menuButton.centerYAnchor.constraint(equalTo: sectionTitle.centerYAnchor).isActive = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

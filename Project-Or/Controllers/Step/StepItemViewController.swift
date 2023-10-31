@@ -8,23 +8,22 @@
 
 import UIKit
 import RealmSwift
-
+//MARK: OK
 class StepItemViewController: UIViewController, UITextViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    var realm: Realm!//create a var
+    var realm: Realm!
     
     var stepID: String?
-    //Instance of Project Selected by User
+    
     var projectStep: ProjectStep? {
         get{
             if let id = self.stepID {
-                //Retrieve a single object with unique identifier (stepID)
                 return ProjectListRepository.instance.getProjectStep(id: id)
             }
             return nil
         }
     }
-    //previously created step item, that needs to be updated
+
     var stepItem: StepItem?
     
     //cancel button
@@ -75,6 +74,7 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -86,7 +86,6 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         return label
     }()
     
-    //name text field
     lazy var itemTitleTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .default
@@ -94,10 +93,8 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         textField.placeholder = "Write Your Item Title Here"
         textField.font = UIFont.boldSystemFont(ofSize: 15)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        // Handle the text field's user input through delegate callback.
         textField.delegate = self
         return textField
-        
     }()
     
     let lineUIView: UIView = {
@@ -106,6 +103,7 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
     let descriptionTitle: UILabel = {
         let label = UILabel()
         label.text = "Add Your Note Here"
@@ -131,12 +129,8 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-
-        //perform adding & positioning of views
         setupLayout()
-        
-        realm = try! Realm()//create an instance of object
-        
+        realm = try! Realm()
         configureKeyboardObservers()
         hideKeyboardWhenTappedAround()
     }
@@ -191,6 +185,37 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         saveButtonTitle.textColor = saveButton.isEnabled == true ? .darkGray : .lightGray
     }
     
+    //Dismiss
+    @objc func backAction( button: UIButton){
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func saveAction(button: UIButton){
+        
+        guard let step = self.projectStep,
+              let title = self.itemTitleTextField.text,
+              let text = self.noteTextView.text else {return}
+        //update old one
+        if let item = self.stepItem  {
+            UserActivitySingleton.shared.createUserActivity(description: "Step Item : \(text) was updated in \(step.name)")
+            
+            ProjectListRepository.instance.updateStepItemTitle(stepItemTitle: title, stepItem: item)
+            ProjectListRepository.instance.updateStepItemText(text: text, stepItem: item)
+            
+        }else{//create new one
+            
+            UserActivitySingleton.shared.createUserActivity(description: "New Item: \(text) was added to \(step.name) step")
+            
+            let stepItem = StepItem()
+            stepItem.title = title
+            stepItem.text = text
+            
+            ProjectListRepository.instance.addItemToStep(item: stepItem, step: step)
+        }
+        
+        dismiss(animated: true)
+    }
+    
     //MARK: Text Field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
@@ -202,8 +227,8 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         updateSaveButtonState()
     }
     
+    //MARK: Constraints
     private func setupLayout(){
-        //calls closure for each item
         [viewControllerTitle, dismissButton, dismissButtonTitle, saveButton, saveButtonTitle, titleLabel, itemTitleTextField, lineUIView, descriptionTitle, noteTextView].forEach {
             view.addSubview($0)
         }
@@ -258,53 +283,5 @@ class StepItemViewController: UIViewController, UITextViewDelegate, UINavigation
         noteTextView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
         noteTextViewBottomAnchor = noteTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         noteTextViewBottomAnchor.isActive = true
-        
-        
-//        noteTitle.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 80, left: 16, bottom: 0, right: 0), size: .init(width: 170, height: 30))
-//        //note text view
-//        noteTextView.anchor(top: noteTitle.bottomAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: nil, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 7, left: 16, bottom: 0, right: 16))
-//        noteTextView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-//
-//        saveButton.anchor(top: nil, leading: nil, bottom: titleLabel.bottomAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 4, right: 16), size: .init(width: 30, height: 24))
-//        saveButtonTitle.anchor(top: saveButton.bottomAnchor, leading: nil, bottom: nil, trailing: saveButton.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 30, height: 15))
-//
-//        closeButton.anchor(top: nil, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: titleLabel.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 16, bottom: 4, right: 0), size: .init(width: 30, height: 24))
-//        closeButtonTitle.anchor(top: closeButton.bottomAnchor, leading: closeButton.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 30, height: 15))
-//
-//        //title
-//        titleLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: .init(width: 250, height: 30))
-//        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
-    
-    //Dismiss
-    @objc func backAction( button: UIButton){
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func saveAction(button: UIButton){
-        
-        guard let step = self.projectStep,
-              let title = self.itemTitleTextField.text,
-              let text = self.noteTextView.text else {return}
-        //update old one
-        if let item = self.stepItem  {
-            UserActivitySingleton.shared.createUserActivity(description: "Step Item : \(text) was updated in \(step.name)")
-            
-            ProjectListRepository.instance.updateStepItemTitle(stepItemTitle: title, stepItem: item)
-            ProjectListRepository.instance.updateStepItemText(text: text, stepItem: item)
-            
-        }else{//create new one
-            
-            UserActivitySingleton.shared.createUserActivity(description: "New Item: \(text) was added to \(step.name) step")
-            
-            let stepItem = StepItem()
-            stepItem.title = title
-            stepItem.text = text
-            
-            ProjectListRepository.instance.addItemToStep(item: stepItem, step: step)
-        }
-        
-        dismiss(animated: true)
-    }
-    
 }

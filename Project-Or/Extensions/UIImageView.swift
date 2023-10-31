@@ -13,7 +13,6 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 extension UIImageView {
     
-    //return UIImage by URL
     func retreaveImageUsingURLString(myUrl: String){
         
         if let imageFromCache = imageCache.object(forKey: myUrl as AnyObject) as? UIImage{
@@ -30,11 +29,6 @@ extension UIImageView {
             imageCache.setObject(imageToCache, forKey: myUrl as AnyObject)
         
             self.image = imageToCache
-            
         }
-        
-        
     }
-    
-    
 }

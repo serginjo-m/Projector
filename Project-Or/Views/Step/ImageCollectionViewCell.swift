@@ -88,7 +88,5 @@ class ImageCollectionViewCell: UICollectionViewCell, UIImagePickerControllerDele
         canvas.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 15).isActive = true
         canvas.widthAnchor.constraint(equalToConstant: 236).isActive = true//59
         canvas.heightAnchor.constraint(equalToConstant: 512).isActive = true//128
-
-
     }
 }

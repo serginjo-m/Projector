@@ -14,12 +14,15 @@ import Photos
 import Firebase
 import FirebaseCore
 
+//MARK: OK
+
 class ProjectViewController: UIViewController, DetailViewControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CircleTransitionable  {
+
+    //MARK: Properties
     
     //global database reference
     var ref: DatabaseReference?
-    
-    //MARK: Properties
+
     //user defines title format
     var user: User?
 
@@ -35,7 +38,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         return collectionView
     }()
     
-    //constraints animation approach
+    //uses for animation
     var maxTopAnchor: NSLayoutConstraint?
     var minTopAnchor: NSLayoutConstraint?
     var maxHeightAnchor: NSLayoutConstraint?
@@ -55,11 +58,11 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             return ProjectListRepository.instance.getProjectLists()
         }
         set {
-            //update!
+            //update
         }
     }
     
-    //Widget data source & to find out: is object already exist or need to create new one
+    //Activity History Data Source / check for object existence
     var dayActivities: Results<DayActivity> {
         get {
             return ProjectListRepository.instance.getDayActivities()
@@ -75,13 +78,14 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
+    
     var contentUIView = UIView()
     
     //stack view for recent projects collection view
     var recentProjectsStackView = UIStackView()
     
-    lazy var noProjectsBannerView: NoProjectsBannerView = {
-        let view = NoProjectsBannerView()
+    lazy var noProjectsImageView: NoProjectsImageView = {
+        let view = NoProjectsImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentViewController)))
@@ -92,7 +96,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }()
     
     //Profile Button
-    lazy var transitionButton: UIButton = {
+    lazy var profileConfigurationButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.init(white: 55/255, alpha: 1)
         button.layer.cornerRadius = 18
@@ -102,6 +106,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         button.clipsToBounds = true
         return button
     }()
+    
     //Titles
     var contentTextView: UITextView = {
         let textView = UITextView()
@@ -141,25 +146,13 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     //here creates a horizontal collectionView inside stackView
     let projectsCollectionView: UICollectionView = {
-        
-        //instance for UICollectionView purposes
         let layout = UICollectionViewFlowLayout()
-        
-        //changing default direction of scrolling
         layout.scrollDirection = .horizontal
-        
-        //because every UICollectionView needs to have UICollectionViewFlowLayout, we need to create this inctance
-        // & also we need to specify how "big" it needs to be
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
-        
         collectionView.backgroundColor = UIColor.clear
-        //deactivate default constraints
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
         return collectionView
     }()
-    
     
     //holds an authorization status to photo library
     //so app knows right from the beginning, that access is authorized.
@@ -174,17 +167,8 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
                 
         view.addSubview(scrollViewContainer)
         scrollViewContainer.addSubview(contentUIView)
-        contentUIView.addSubview(recentProjectsStackView)
-        contentUIView.addSubview(noProjectsBannerView)
-        contentUIView.addSubview(contentTextView)
-        contentUIView.addSubview(projectsTitle)
-        contentUIView.addSubview(transitionButton)
-        contentUIView.addSubview(recentActivitiesTitle)
-        contentUIView.addSubview(recentActivitiesCV)
-        contentUIView.addSubview(viewByCategoryTitle)
-        contentUIView.addSubview(viewByCategoryCV)
-        contentUIView.addSubview(statisticsTitle)
-        contentUIView.addSubview(statisticsStackView)
+        
+        [recentProjectsStackView, noProjectsImageView, contentTextView, projectsTitle, profileConfigurationButton, recentActivitiesTitle, recentActivitiesCV, viewByCategoryTitle, viewByCategoryCV, statisticsTitle, statisticsStackView].forEach {contentUIView.addSubview($0)}
         
         //setup constraints
         setupLayout()
@@ -201,7 +185,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //include number of projects to the title text
         projectsTitle.text = "Your Projects (\(projects.count))"
         //hide or reveal noProjetsBannerView if there is no project for now
-        noProjectsBannerView.isHidden = projects.count == 0 ? false : true
+        noProjectsImageView.isHidden = projects.count == 0 ? false : true
         //if user is logged in update view controllers title
         checkUserProfile()
         //transition progress inside statistics widget
@@ -214,15 +198,13 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     }
     
     //MARK: Methods
-    //this func is for elements that have no access to navigation controller
+    //delegate func that helps push view controller
     func pushToViewController(controllerType: Int){
-        
         let viewController = viewControllerType(for: controllerType)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     func viewControllerType(for contollerType: Int) -> UIViewController {
-        
         switch contollerType {
         case 0:
             return PhotoNotesCollectionViewController()//photo note
@@ -250,6 +232,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
             contentTextView.text = "Hi! Let's start projecting."
         }
     }
+    
     //transition to profile VC with custom animation
     @objc func openProfileSettings(){
         if let navController = navigationController{
@@ -268,10 +251,6 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
     
     //user activity object for today
     func createDayActivity (){
-        
-        //---------------------------------------------------------------------------------------------------
-        //Here I want to have a logic that keep my database up to 30 items
-        //---------------------------------------------------------------------------------------------------
         
         //keep recent activities CV always updated
         recentActivitiesCV.collectionViewDataSource = self.dayActivities
@@ -304,7 +283,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         // Add a collectionView to the stackView
         recentProjectsStackView.addSubview(projectsCollectionView)
         
-        // ?? here we specify delegate & datasourse for generating our individual horizontal cells
+        // here we specify delegate & datasourse for generating our individual horizontal cells
         projectsCollectionView.dataSource = self
         projectsCollectionView.delegate = self
         projectsCollectionView.showsHorizontalScrollIndicator = false
@@ -393,7 +372,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //update number of projects in projects CV title
         projectsTitle.text = "Your Projects (\(projects.count))"
         //hide or reveal noProjetsBannerView if there is no project for now
-        noProjectsBannerView.isHidden = projects.count == 0 ? false : true
+        noProjectsImageView.isHidden = projects.count == 0 ? false : true
         //update progress widget
         statisticsStackView.progressAnimation()
     }
@@ -460,7 +439,7 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         //because by default it is black
         view.backgroundColor = .white
         
-        [contentTextView, projectsTitle, scrollViewContainer, contentUIView, recentProjectsStackView, transitionButton, recentActivitiesTitle, recentActivitiesCV, viewByCategoryTitle, viewByCategoryCV, statisticsTitle, statisticsStackView].forEach { view in
+        [contentTextView, projectsTitle, scrollViewContainer, contentUIView, recentProjectsStackView, profileConfigurationButton, recentActivitiesTitle, recentActivitiesCV, viewByCategoryTitle, viewByCategoryCV, statisticsTitle, statisticsStackView].forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -516,13 +495,13 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         viewByCategoryTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
         viewByCategoryTitle.heightAnchor.constraint(equalToConstant: 24).isActive = true
     
-        transitionButton.bottomAnchor.constraint(equalTo: projectsTitle.topAnchor, constant: -29).isActive = true
-        transitionButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
-        transitionButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
-        transitionButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        profileConfigurationButton.bottomAnchor.constraint(equalTo: projectsTitle.topAnchor, constant: -29).isActive = true
+        profileConfigurationButton.leftAnchor.constraint(equalTo: contentUIView.leftAnchor, constant: 15).isActive = true
+        profileConfigurationButton.widthAnchor.constraint(equalToConstant: 37).isActive = true
+        profileConfigurationButton.heightAnchor.constraint(equalToConstant: 37).isActive = true
                 
-        contentTextView.centerYAnchor.constraint(equalTo: transitionButton.centerYAnchor, constant: 0).isActive = true
-        contentTextView.leftAnchor.constraint(equalTo: transitionButton.rightAnchor, constant: 5).isActive = true
+        contentTextView.centerYAnchor.constraint(equalTo: profileConfigurationButton.centerYAnchor, constant: 0).isActive = true
+        contentTextView.leftAnchor.constraint(equalTo: profileConfigurationButton.rightAnchor, constant: 5).isActive = true
         contentTextView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor, constant: 0).isActive = true
         contentTextView.heightAnchor.constraint(equalToConstant: 37).isActive = true
         
@@ -536,10 +515,10 @@ class ProjectViewController: UIViewController, DetailViewControllerDelegate, UIC
         recentProjectsStackView.rightAnchor.constraint(equalTo: contentUIView.rightAnchor).isActive = true
         recentProjectsStackView.heightAnchor.constraint(equalToConstant: 267).isActive = true
         
-        noProjectsBannerView.topAnchor.constraint(equalTo: recentProjectsStackView.topAnchor).isActive = true
-        noProjectsBannerView.bottomAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor).isActive = true
-        noProjectsBannerView.leadingAnchor.constraint(equalTo: recentProjectsStackView.leadingAnchor).isActive = true
-        noProjectsBannerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
+        noProjectsImageView.topAnchor.constraint(equalTo: recentProjectsStackView.topAnchor).isActive = true
+        noProjectsImageView.bottomAnchor.constraint(equalTo: recentProjectsStackView.bottomAnchor).isActive = true
+        noProjectsImageView.leadingAnchor.constraint(equalTo: recentProjectsStackView.leadingAnchor).isActive = true
+        noProjectsImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
     }
 }
 
@@ -550,52 +529,7 @@ extension ProjectViewController {
         let defaults = UserDefaults.standard
         
         if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
-//
-////           app is already launched once!
-//            let layout = UICollectionViewFlowLayout()
-//            layout.scrollDirection = .horizontal
-//
-//            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
-//                guard let self = self else {return}
-
-                
-                //MARK: SAILSJS
-//                Service.shared.fetchUserProfile { (res) in
-//                    switch res {
-//                    case .success(let res):
-//
-//                        //check for any user inside DB before creating new one
-//                        let users = ProjectListRepository.instance.getAllUsers()
-//                        if users.count > 0{
-//                            for user in users {
-//                                ProjectListRepository.instance.deleteUser(user: user)
-//                            }
-//                        }
-//
-//                        let user = User()
-//                        user.name = res.fullName
-//                        user.email = res.emailAddress
-//                        user.isLogined = true
-//
-//                        ProjectListRepository.instance.createUser(user: user)
-//
-//                        self.user = user
-//
-//                        self.contentTextView.text = "Hello \(user.name)!"
-//
-//
-//                    case .failure(let err):
-//                        print("Failed to fetch user: ", err)
-//
-//                    }
-//                }
-//
-//
-//            })
-//            swipingController.modalPresentationStyle = .fullScreen
-//            navigationController?.present(swipingController, animated: true, completion: nil)
-            
-            
+            //app is already launched once!
         } else {
             
             //App launched first time
@@ -606,43 +540,8 @@ extension ProjectViewController {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
 
-            let swipingController = SwipingController(didTapDismissCompletionHandler: { [weak self] in
-                
-                
-                
-                //MARK: SAILSJS
-//                guard let self = self else {return}
-                //as user is logged in, try to fetch user from WEB, create user inside local DB an update VC elem.
-//                Service.shared.fetchUserProfile { (res) in
-//                    switch res {
-//                    case .success(let res):
-//
-//                        //check and clear any user inside DB before creating new one
-//                        let users = ProjectListRepository.instance.getAllUsers()
-//                        if users.count > 0{
-//                            for user in users {
-//                                ProjectListRepository.instance.deleteUser(user: user)
-//                            }
-//                        }
-//                        //create
-//                        let user = User()
-//                        user.name = res.fullName
-//                        user.email = res.emailAddress
-//                        user.isLogined = true
-//
-//                        ProjectListRepository.instance.createUser(user: user)
-//                        //update user object inside VC
-//                        self.user = user
-//                        //update VC title
-//                        self.contentTextView.text = "Hello \(user.name)!"
-//
-//
-//                    case .failure(let err):
-//                        print("Failed to fetch user: ", err)
-//
-//                    }
-//                }
-                
+            let swipingController = SwipingController(didTapDismissCompletionHandler: {
+                //
             })
 
             swipingController.modalPresentationStyle = .fullScreen

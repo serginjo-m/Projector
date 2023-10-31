@@ -10,7 +10,6 @@ import UIKit
 
 class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, StepsCollectionViewDelegate{
     
-    //menu that contains progress options
     lazy var progressMenu: StepProgressMenu = {
         let menu = StepProgressMenu()
         menu.translatesAutoresizingMaskIntoConstraints = false
@@ -25,8 +24,6 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
         }
     }
     
-    //the only reason it here, it's because I need to have an access to navigationController.push...
-    //access DetailViewController (reload, push, setupViews)
     weak var customDelegate: EditViewControllerDelegate?{
         didSet{
             progressMenu.delegate = customDelegate
@@ -36,7 +33,6 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         setupLayout()
-        //define delegate in Pinterest Layout, so it change cell size
         if let layout = self.collectionViewLayout as? PinterestLayout {
             layout.delegate = self
         }
@@ -46,13 +42,9 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    //variable constraints for animation
     var statusOptionsRightConstraint: NSLayoutConstraint?
     var statusOptionsTopConstraint: NSLayoutConstraint?
     
-    
-    //menu position next to the selected cell button
     func showView(startingUIButton: UIButton) {
         //view position
         let properCoordinates = self.superview?.convert(self.frame, to: nil)
@@ -82,15 +74,12 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
         progressMenu.heightAnchor.constraint(equalToConstant: 160).isActive = true
         progressMenu.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
-        
-        //specify delegate & datasourse for generating our individual horizontal cells
         dataSource = self
         delegate = self
         
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         
-        //Class is need to be registered in order of using inside
         register(StepCell.self, forCellWithReuseIdentifier: cellId)
     }
     
@@ -101,7 +90,6 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! StepCell
         cell.delegate = self
-        //buttons tag corresponds to step index in projectSteps
         cell.optionsButton.tag = indexPath.item
         cell.template = projectSteps[indexPath.item]
         
@@ -113,7 +101,6 @@ class StepsCategoryCollectionView: UICollectionView, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //use DetailViewController for segue
         progressMenu.isHidden = true
         self.customDelegate?.pushToViewController(stepId: projectSteps[indexPath.item].id)
     }

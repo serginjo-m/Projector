@@ -9,19 +9,18 @@
 import UIKit
 import RealmSwift
 import Photos
-//Bottom Navigation
+//MARK: OK
 class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     //MARK: Properties
     
     var photoLibraryStatus = PHPhotoLibrary.authorizationStatus()
     
-    //date as a start point for calendar
+    //date as a starting point for the calendar
     let date = Date()
     
-    //list of holidays received from server
+    //list of holidays received from the server
     var listOfHolidays = [HolidayDetail](){
         didSet{
-            //Dispatch, so it works indipendently and not slow down all app
             DispatchQueue.main.async {
                 //creates grouped holidays dictionary
                 self.convertHolidaysToEvents()
@@ -29,17 +28,16 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
-    //get ALL events, for checking, is data base contain previously downloaded holidays from server
+    //get ALL events, to check, if database contains previously downloaded holidays from the server
     var events: Results<Event>{
         get{
             return ProjectListRepository.instance.getEvents()
         }
         set{
-            //update?
+            //update
         }
     }
     
-    //message that displays if plus button hasn't action to current viewController
     lazy var popoverMessageView: PopoverMessageView = {
         let view = PopoverMessageView()
         view.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height , width: 250, height: 50)
@@ -49,16 +47,16 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     //MARK: Lifecycle
     override func viewDidLoad() {
         
-        //check if holiday data was downloaded
+        //check if data was downloaded
         downloadHolidayEvents()
-        //tab bar style changes at the bottom of view controller, so define constant style to it
+        
         if #available(iOS 15.0, *) {
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
             self.tabBar.standardAppearance = appearance
             self.tabBar.scrollEdgeAppearance = appearance
         } else {
-            // Fallback on earlier versions
+            //
         }
         
         self.delegate = self
@@ -98,45 +96,30 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func configureAddItemAction(newObjectVC: [String: UIViewController]){
-        
-        //get my add items nav view controller for setting its stack view controllers in func
-         //let targetNavController = viewController as! UINavigationController
-        
-        //ALERT MENU
         let alert = UIAlertController(title: "Select Creation Type", message: "Please select the desired creation type", preferredStyle: .actionSheet)
-        
-        
         for (key, value) in newObjectVC {
             let action = UIAlertAction(title: key, style: .default) { (action: UIAlertAction) in
                 //so view did appear update detail view controller
                 value.modalPresentationStyle = .fullScreen
                 self.present(value, animated: true, completion: nil)
             }
-            
             alert.addAction(action)
         }
         
         let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            // Do nothing
+            //
         }
-        
-        
         alert.addAction(action3)
-        
         present(alert, animated: true, completion: nil)
     }
     
-    //Build Calendar and then calls create nav controller
     private func createCalendarViewController() -> UINavigationController {
         let calendarViewController = CalendarViewController(baseDate: date) { (date) in
-            
-            //Do Nothing here !!
-            //So maybe modify logic ?
+            //
         }
         return createNavControllerWithTitle(viewController: calendarViewController, title: "Calendar", imageName: "calendarIcon")
     }
     
-    //Template for navigation items
     private func createNavControllerWithTitle(viewController: UIViewController, title: String, imageName: String) -> UINavigationController {
         let navController = UINavigationController(rootViewController: viewController)
         navController.setNavigationBarHidden(true, animated: false)
@@ -146,17 +129,12 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private func handlePopoverMessageAnimation(){
-        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            
             self.popoverMessageView.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height - 170, width: 250, height: 50)
-            
         }) { completed in
-            
             UIView.animate(withDuration: 0.5, delay: 1, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut) {
                 self.popoverMessageView.frame = CGRect(x: (self.view.frame.width / 2) - 125, y: self.view.frame.height, width: 250, height: 50)
             }
-            
         }
     }
     
@@ -166,21 +144,17 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             return false
         }
         
-        // index == 2 corresponds to add button
+        // index == 2 (add button)
         if index == 2 {
             
-            //get current visualized view controller
+            //get the currently displaying ViewController
             guard let currentViewController = (self.selectedViewController as! UINavigationController).topViewController else {return false}
             
             //class identifier for logic purposes
             var lastVCClass: String = ""
             
-            //base for switch cases logic
             lastVCClass = "\(currentViewController.classForCoder)"
-            
-            
-            
-            //perform logic based on last visualized view controller class
+            //apply logic based on the last displayed ViewController class
             switch lastVCClass {
                 
             case "PhotoNotesCollectionViewController":
@@ -229,7 +203,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 
                 guard let detailVC = currentViewController as? DetailViewController else {return false}
                 
-                //because case: DetailViewController, I can access it property for adding or modification
+                //because case: DetailViewController,I can access its properties to perform modifications.
                 //let currentViewControllerId = ((self.selectedViewController as! UINavigationController).topViewController as! DetailViewController).projectListIdentifier ?? ""
                 
                 let newStep = NewStepViewController()
@@ -242,24 +216,18 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
                 configureAddItemAction(newObjectVC: viewControllers)
                 
             case "ProjectViewController":
-                
-                
+            
                 //create it out of Dictionary
                 let newProjectViewController = NewProjectViewController()
-                
-                
                 //Dictionary ["view controller name" : viewController]
                 let viewControllers = [
                     "New Project": newProjectViewController
                 ]
-                
                 //configure appearance
                 for (_, value) in viewControllers{
                     value.modalTransitionStyle = .coverVertical
                     value.modalPresentationStyle = .overCurrentContext
                 }
-                
-                
                 configureAddItemAction(newObjectVC: viewControllers)
                 
             case "StepViewController":

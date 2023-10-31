@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//MARK: OK
 class AccessUserViewController: UIViewController {
     
     lazy var skipButton: UIButton = {
@@ -77,21 +77,6 @@ class AccessUserViewController: UIViewController {
                     //call dismiss on parent vc
                     self.dismiss(animated: true, completion: nil)
                 }
-                
-                //MARK: SAILSJS
-//                Service.shared.createUser(emailAddress: inputEmail, password: inputPassword, fullName: inputName) { (res) in
-//                    switch res {
-//                    case .success(let apiRes):
-//                        //not so necessary but for now let's leave it so.....
-//                        print(apiRes.message)
-//                        //call to update parent vc
-//                        self.didTapDismissCompletionHandler()
-//                        //call dismiss on parent vc
-//                        self.dismiss(animated: true, completion: nil)
-//                    case .failure(let err):
-//                        print(err)
-//                    }
-//                }
             }
         )
         
@@ -115,22 +100,6 @@ class AccessUserViewController: UIViewController {
                     self.didTapDismissCompletionHandler()
                     self.dismiss(animated: true)
                 }
-                
-                
-                //MARK: SAILSJS
-//                Service.shared.handleLogin(email: inputEmail, password: inputPassword) { (res) in
-//                    switch res {
-//                    case .success(let apiResponse):
-//                        print(apiResponse.message as Any)
-//                        //call to update parent vc
-//                        self.didTapDismissCompletionHandler()
-//                        //dismiss
-//                        self.dismiss(animated: true, completion: nil)
-//                    case .failure(let err):
-//                        print("Failed to fetch user: ", err)
-//                    }
-//                }
-                
             }, didTapRestoreCompletionHandler: { [weak self] in
                 
                 guard let self = self else {return}
@@ -164,15 +133,12 @@ class AccessUserViewController: UIViewController {
     
     //update parent VC
     var didTapDismissCompletionHandler: (() -> Void)
-    
+    //MARK: Init
     //Good way to init view controller
     init(didTapDismissCompletionHandler: @escaping (() -> Void), nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         
-        
         //Call parent vc, so it tryies to update itself
         self.didTapDismissCompletionHandler = didTapDismissCompletionHandler
-        
-        
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -180,7 +146,7 @@ class AccessUserViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -190,8 +156,6 @@ class AccessUserViewController: UIViewController {
         view.addSubview(userInputStack)
         
         self.view.backgroundColor = .white
-        // Do any additional setup after loading the view.
-        
         setupConstraints()
         configureKeyboardObservers()
         hideKeyboardWhenTappedAround()

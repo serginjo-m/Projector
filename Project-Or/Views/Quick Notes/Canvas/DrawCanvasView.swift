@@ -9,8 +9,7 @@
 import UIKit
 
 class DrawCanvasView: UIView {
-    
-   //object that fits to realm
+   
     var canvasObject = CanvasNote()
     
     override func draw(_ rect: CGRect) {
@@ -28,19 +27,16 @@ class DrawCanvasView: UIView {
                 context.setStrokeColor(color.cgColor)
                 context.setLineWidth(CGFloat(line.strokeWidth))
                 context.setLineCap(.round)
-                
-                //convert object to CGPoint
+   
                 let point = CGPoint(x: CGFloat(p.x / 2.2), y: CGFloat(p.y / 2.2))
                 
-                //line first point
                 if i == 0{
-                    //starts
+                
                     context.move(to: point)
                     
                 }else{
-                    //ends
-                    context.addLine(to: point)
                     
+                    context.addLine(to: point)
                 }
             }
             

@@ -10,10 +10,7 @@ import UIKit
 import RealmSwift
 
 //MARK: DetailViewController Steps Section
-//It includes collectionView navigation, stackView that holds four collectionViews
 class Steps: UIView{
-    
-    //MARK: database
     
     weak var delegate: EditViewControllerDelegate?
     
@@ -25,44 +22,12 @@ class Steps: UIView{
         }
     }
     
-    func updateAllStepCollectionViews(){
-        
-        projectSteps = project.projectStep
-        groupedStepsByCategory = Dictionary(grouping: projectSteps) { (step) -> String in
-            return step.category
-        }
-        let lists = [todoList, inProgressList, doneList, blockedList]
-        let progressCategories = ["todo", "inProgress", "done", "blocked"]
-        for (index, list) in lists.enumerated(){
-            
-            list.projectSteps.removeAll()
-            //full list
-            if let unwrappedList = groupedStepsByCategory[progressCategories[index]]{
-                
-                //property set by parent VC from button.isSelected state
-                if self.projectWayFilter == true {
-                    //filter steps to show steps that are displayed to true
-                    list.projectSteps  = unwrappedList.filter { step in
-                        step.displayed == true
-                    }
-                } else {//or show everything if filter disabled
-                    list.projectSteps = unwrappedList
-                }
-                
-            }else{//or set to empty if no steps returned from database
-                list.projectSteps = []
-            }
-            
-            list.reloadData()
-        }
-    }
-    
     var projectSteps: List<ProjectStep>{
         get{
             return project.projectStep
         }
         set{
-            //update?
+            
         }
     }
     //[String : [ProjectStep]]
@@ -195,8 +160,40 @@ class Steps: UIView{
     var pointerViewLeftConstraint: NSLayoutConstraint?
     var stackLeadingAnchorConstraint: NSLayoutConstraint?
     
+    lazy var buttonsArr = [todoButton, inProgressButton, doneButton, blockedButton]
+    //holds current collection view & navigation position
     
-    //same func but dif button.tag, that helps define what button is tupped
+    func updateAllStepCollectionViews(){
+        
+        projectSteps = project.projectStep
+        groupedStepsByCategory = Dictionary(grouping: projectSteps) { (step) -> String in
+            return step.category
+        }
+        let lists = [todoList, inProgressList, doneList, blockedList]
+        let progressCategories = ["todo", "inProgress", "done", "blocked"]
+        for (index, list) in lists.enumerated(){
+            
+            list.projectSteps.removeAll()
+            
+            if let unwrappedList = groupedStepsByCategory[progressCategories[index]]{
+            
+                if self.projectWayFilter == true {
+                    list.projectSteps  = unwrappedList.filter { step in
+                        step.displayed == true
+                    }
+                } else {
+                    list.projectSteps = unwrappedList
+                }
+                
+            }else{
+                list.projectSteps = []
+            }
+            
+            list.reloadData()
+        }
+    }
+    
+    
     @objc func handleTodo(_ sender: UIButton){
         handleStepBlockAnimation(sender: sender)
         hideProgressMenu(progressMenu: todoList.progressMenu)
@@ -214,13 +211,10 @@ class Steps: UIView{
         hideProgressMenu(progressMenu: blockedList.progressMenu)
     }
     
-    //hide step progress menu when user scroll to other collection view
     fileprivate func hideProgressMenu(progressMenu: StepProgressMenu){
         progressMenu.isHidden = true
     }
     
-    lazy var buttonsArr = [todoButton, inProgressButton, doneButton, blockedButton]
-    //holds current collection view & navigation position
     var currentPosition = 0 {
         didSet{
             //pointer color
@@ -232,23 +226,6 @@ class Steps: UIView{
         }
     }
     
-    
-    //
-    fileprivate func handleStepBlockAnimation(sender: UIButton){
-        
-        //define offset distance
-        let contentOffsetX = frame.width * CGFloat(sender.tag)
-        //change constraint offset distance
-        stackLeadingAnchorConstraint?.constant = -contentOffsetX
-        pointerViewLeftConstraint?.constant = contentOffsetX / 4
-        //animate changes
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.layoutIfNeeded()
-        }, completion: nil)
-        
-        //update current position
-        currentPosition = sender.tag
-    }
     
     
     //MARK: Initialization
@@ -267,6 +244,23 @@ class Steps: UIView{
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    //MARK: Methods
+    fileprivate func handleStepBlockAnimation(sender: UIButton){
+        
+        //define offset distance
+        let contentOffsetX = frame.width * CGFloat(sender.tag)
+        //change constraint offset distance
+        stackLeadingAnchorConstraint?.constant = -contentOffsetX
+        pointerViewLeftConstraint?.constant = contentOffsetX / 4
+        //animate changes
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+        
+        //update current position
+        currentPosition = sender.tag
+    }
     
     fileprivate func setupLayout(){
         

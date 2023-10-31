@@ -10,18 +10,6 @@ import UIKit
 
 class RecentActivitiesCell: UICollectionViewCell {
    
-    //initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        //layer.cornerRadius = 3
-        //layer.masksToBounds = true
-        setupViews()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //template
     var cellTemplate: DayActivity? {
         didSet{
             if let setting = cellTemplate{
@@ -67,19 +55,21 @@ class RecentActivitiesCell: UICollectionViewCell {
         return label
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+   
     func setupViews(){
         
-        //mask content outside cell
         layer.masksToBounds = true
         
         addSubview(dayOfWeekLabel)
         addSubview(listLabel)
         addSubview(dayNumberLabel)
-        
-//        listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
-//        listLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
-//        listLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-//        listLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
         
         listLabel.topAnchor.constraint(equalTo: dayOfWeekLabel.bottomAnchor, constant: 10).isActive = true
         listLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
