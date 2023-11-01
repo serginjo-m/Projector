@@ -56,7 +56,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
             self.tabBar.standardAppearance = appearance
             self.tabBar.scrollEdgeAppearance = appearance
         } else {
-            //
+            
         }
         
         self.delegate = self
