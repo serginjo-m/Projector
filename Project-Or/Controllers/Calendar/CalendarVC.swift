@@ -75,7 +75,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate{
     var numberOfWeeksInBaseDate: Int {
         return calendar.range(of: .weekOfMonth, in: .month, for: baseDate)?.count ?? 0
     }
-    //once selected date changed need to pass closure
+    //once selected date changed need to pass closure 
     let selectedDateChanged: ((Date) -> Void)
     
     lazy var dateFormatter: DateFormatter = {
